@@ -1,21 +1,37 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * Spring Security 기본 설정
+ *
+ * @author 조현진, 양승아
+ */
 @Configuration
-public class SecurityConfig {
+@EnableWebSecurity(debug = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.formLogin()
-                .disable()
-                .logout()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin().disable()
+                .logout().disable()
+                .authorizeRequests()
+                .anyRequest()
+                .permitAll()
+                .and()
+                .csrf()
                 .disable();
-
-        return http.build();
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/resources/**", "/static/**","/webjars/**");
+    }
+
 }
