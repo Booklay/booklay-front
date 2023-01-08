@@ -13,11 +13,6 @@ public class IndexController {
     private final RestTemplate restTemplate;
     private final String gatewayIp;
 
-    @GetMapping("/index")
-    public String index() {
-        return "index";
-    }
-
     @ResponseBody
     @GetMapping("/shop")
     public String shop() {
@@ -25,8 +20,4 @@ public class IndexController {
         return testMember;
     }
 
-    @GetMapping("/detail")
-    public String detail() {
-        return "detail";
-    }
 }
