@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+
+<!-- Navbar Start -->
+<div class="container-fluid mb-5">
+  <div class="row border-top px-xl-5">
+    <div class="col-lg-3 d-none d-lg-block">
+      <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+        <h6 class="m-0">관리자메뉴</h6>
+        <i class="fa fa-angle-down text-dark"></i>
+      </a>
+      <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+        <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link" data-toggle="dropdown">쿠폰 <i class="fa fa-angle-down float-right mt-1"></i></a>
+            <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+              <a href="coupon/create" class="dropdown-item">쿠폰 등록</a>
+              <a href="coupon/list/0" class="dropdown-item">쿠폰 조회</a>
+              <a href="coupon/list/type/0" class="dropdown-item">등록 쿠폰 조회</a>
+            </div>
+          </div>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link" data-toggle="dropdown">멤버관리 <i class="fa fa-angle-down float-right mt-1"></i></a>
+            <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+              <a href="" class="dropdown-item">미등록</a>
+              <a href="" class="dropdown-item">미등록</a>
+              <a href="" class="dropdown-item">미등록</a>
+            </div>
+          </div>
+          <a href="" class="nav-item nav-link"></a>
+          <a href="" class="nav-item nav-link"></a>
+          <a href="" class="nav-item nav-link"></a>
+        </div>
+      </nav>
+    </div>
+
+
+    <!-- admin detail Start -->
+    <th:block th:include="${'admin/' + targetUrl}"/>
+    <!-- admin detail End -->
+  </div>
+</div>
+<!-- Navbar End -->
+</html>
