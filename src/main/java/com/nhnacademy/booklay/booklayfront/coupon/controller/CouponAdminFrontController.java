@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
 import com.nhnacademy.booklay.booklayfront.coupon.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.coupon.domain.Coupon;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponType;
 import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponTypeAddRequest;
@@ -30,20 +31,18 @@ public class CouponAdminFrontController {
     private final FrontURI frontURI;
     @GetMapping("")
     public String adminCouponPage(Model model){
-        model.addAttribute("targetUrl", "");
-        return "admin/coupon";
+        model.addAttribute("targetUrl", "coupon/empty");
+        return "admin/adminPage";
     }
 
     @GetMapping("create")
     public String createCouponTypeForm(Model model){
         model.addAttribute("targetUrl", "coupon/createCouponTypeForm");
-        return "admin/coupon";
+        return "admin/adminPage";
     }
 
     @PostMapping("create")
-    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest
-    ,@RequestParam("name")String name
-    ,@RequestParam("typeName")String typeName){
+    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest){
             Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponTypeAddRequest);
         ApiEntity<String>
@@ -63,7 +62,8 @@ public class CouponAdminFrontController {
         model.addAttribute("couponList", apiEntity.getBody());
         model.addAttribute("memberId", "");
         model.addAttribute("pageNum", pageNum);
-        return "admin/coupon/listView";
+        model.addAttribute("targetUrl", "coupon/listView");
+        return "admin/adminPage";
     }
 
     @GetMapping("list/type/{pageNum}")
@@ -74,7 +74,8 @@ public class CouponAdminFrontController {
         }
         model.addAttribute("couponList", apiEntity.getBody());
         model.addAttribute("pageNum", pageNum);
-        return "admin/coupon/typeListView";
+        model.addAttribute("targetUrl", "coupon/typeListView");
+        return "admin/adminPage";
     }
 
     @GetMapping("list/{memberId}")
@@ -85,34 +86,38 @@ public class CouponAdminFrontController {
     @GetMapping("list/{memberId}/{pageNum}")
     public String memberCouponList(Model model, @PathVariable String memberId,
                                    @PathVariable Integer pageNum){
-        ApiEntity<List<Coupon>> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/"+ memberId + "/" + pageNum, null, new ParameterizedTypeReference<>(){});
+        String url = buildString(frontURI.SHOPURI , "admin/coupon/", memberId , "/" , pageNum.toString());
+        ApiEntity<List<Coupon>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>(){});
         if (!apiEntity.isSuccess()){
             return "error";
         }
         model.addAttribute("couponList", apiEntity.getBody());
         model.addAttribute("memberId", memberId+"/");
         model.addAttribute("pageNum", pageNum);
-        return "admin/coupon/listView";
+        model.addAttribute("targetUrl", "coupon/listView");
+        return "admin/adminPage";
     }
 
     @GetMapping("view/{couponId}")
     public String viewCoupon(Model model, @PathVariable String couponId){
-        ApiEntity<Coupon> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/"+couponId, null, Coupon.class);
+        ApiEntity<CouponDetail> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/"+couponId, null, CouponDetail.class);
         if (!apiEntity.isSuccess()){
             return "error";
         }
-        model.addAttribute("coupon", apiEntity.getBody());
-        return "admin/coupon/view";
+        model.addAttribute("couponDetail", apiEntity.getBody());
+        model.addAttribute("targetUrl", "coupon/view");
+        return "admin/adminPage";
     }
 
     @GetMapping("update/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId){
-        ApiEntity<Coupon> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/"+couponId, null, Coupon.class);
+        ApiEntity<CouponDetail> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/"+couponId, null, CouponDetail.class);
         if (!apiEntity.isSuccess()){
             return "error";
         }
-        model.addAttribute("coupon", apiEntity.getBody());
-        return "admin/coupon/updateForm";
+        model.addAttribute("couponDetail", apiEntity.getBody());
+        model.addAttribute("targetUrl", "coupon/couponUpdateForm");
+        return "admin/adminPage";
     }
 
     @PostMapping("update/{couponId}")
@@ -142,8 +147,9 @@ public class CouponAdminFrontController {
         model.addAttribute("historyList", apiEntity.getBody());
         model.addAttribute("memberId", "");
         model.addAttribute("pageNum", pageNum);
+        model.addAttribute("targetUrl", "coupon/history");
+        return "admin/adminPage";
 
-        return "admin/coupon/history";
     }
 
     @GetMapping("history/{memberId}/{pageNum}")
@@ -154,18 +160,19 @@ public class CouponAdminFrontController {
         model.addAttribute("historyList", apiEntity.getBody());
         model.addAttribute("memberId", memberId+"/");
         model.addAttribute("pageNum", pageNum);
-        return "admin/coupon/history";
+        model.addAttribute("targetUrl", "coupon/history");
+        return "admin/adminPage";
     }
 
     @GetMapping("issue/{pageNum}")
     public String issueCoupon(Model model, @PathVariable String pageNum){
         String url = buildString(frontURI.SHOPURI, "admin/coupon/issue/", pageNum);
-        ApiEntity<CouponHistory> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
+        ApiEntity<CouponHistory> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>(){});
         model.addAttribute("historyList", apiEntity.getBody());
         model.addAttribute("memberId", "");
         model.addAttribute("pageNum", pageNum);
-
-        return "admin/coupon/issue";
+        model.addAttribute("targetUrl", "coupon/issue");
+        return "admin/adminPage";
     }
 
     @GetMapping("issue/{memberId}/{pageNum}")
@@ -174,10 +181,11 @@ public class CouponAdminFrontController {
         String url = buildString(frontURI.SHOPURI, "admin/coupon/issue/", memberId, "/", pageNum);
         ApiEntity<CouponHistory> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
         model.addAttribute("historyList", apiEntity.getBody());
-        model.addAttribute("memberId", "");
+        model.addAttribute("memberId", memberId+"/");
         model.addAttribute("pageNum", pageNum);
+        model.addAttribute("targetUrl", "coupon/issue");
+        return "admin/adminPage";
 
-        return "admin/coupon/issue";
     }
 
     @GetMapping("issuing/{couponPageNum}/{memberPageNum}")
@@ -198,7 +206,8 @@ public class CouponAdminFrontController {
         model.addAttribute("memberList", memberApiEntity.getBody());
         model.addAttribute("memberPageNum", memberPageNum);
 
-        return "admin/coupon/issuing";
+        model.addAttribute("targetUrl", "coupon/issuing");
+        return "admin/adminPage";
     }
 
     @PostMapping("issuing/{memberId}/{couponId}")
