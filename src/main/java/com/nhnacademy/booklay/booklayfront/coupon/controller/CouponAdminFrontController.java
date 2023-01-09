@@ -19,26 +19,32 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("admin/coupon")
 public class CouponAdminFrontController {
     private final RestService restService;
     private final FrontURI frontURI;
     @GetMapping("")
-    public String adminCouponPage(){
+    public String adminCouponPage(Model model){
+        model.addAttribute("targetUrl", "");
         return "admin/coupon";
     }
 
     @GetMapping("create")
-    public String createCouponTypeForm(){
-        return "admin/coupon/createCouponTypeForm";
+    public String createCouponTypeForm(Model model){
+        model.addAttribute("targetUrl", "coupon/createCouponTypeForm");
+        return "admin/coupon";
     }
 
     @PostMapping("create")
-    public String postCreateCouponType(@ModelAttribute CouponTypeAddRequest couponTypeAddRequest){
-        Map<String, Object> map = new HashMap<>();
+    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest
+    ,@RequestParam("name")String name
+    ,@RequestParam("typeName")String typeName){
+            Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponTypeAddRequest);
         ApiEntity<String>
             apiEntity = restService.post(frontURI.SHOPURI+"admin/coupon/add", map, String.class);
@@ -58,6 +64,17 @@ public class CouponAdminFrontController {
         model.addAttribute("memberId", "");
         model.addAttribute("pageNum", pageNum);
         return "admin/coupon/listView";
+    }
+
+    @GetMapping("list/type/{pageNum}")
+    public String allCouponTypeList(Model model, @PathVariable String pageNum){
+        ApiEntity<List<Coupon>> apiEntity = restService.get(frontURI.SHOPURI + "admin/coupon/" + pageNum, null, new ParameterizedTypeReference<>(){});
+        if (!apiEntity.isSuccess()){
+            return "error";
+        }
+        model.addAttribute("couponList", apiEntity.getBody());
+        model.addAttribute("pageNum", pageNum);
+        return "admin/coupon/typeListView";
     }
 
     @GetMapping("list/{memberId}")
