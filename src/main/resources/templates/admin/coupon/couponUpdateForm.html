@@ -1,19 +1,30 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 
+<div class="col-lg-9">
+    <!-- Navbar Start -->
+    <th:block th:include="admin/coupon/couponFragments/couponNavHead"/>
+    <!-- Navbar End -->
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form th:action="${'update/' + couponDetail.couponId}" method="post" enctype="multipart/form-data">
-            <label>쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.couponName}"> </label><br/>
-            <label>사용자 ID : <input type="number" name="userId" th:value="${couponDetail.userId}"></label><br/>
-            <label>쿠폰 종류 : <input type="text" name="typeName" th:value="${couponDetail.typeName}"></label><br/>
-            <label>할인 금액(정액) or 할인율(정율) : <input type="number" name="amount" th:value="${couponDetail.amount}"></label><br/>
-            <label>적용 카테고리 번호 : <input type="number" name="categoryId" th:value="${couponDetail.categoryId}"></label><br/>
-            <label>적용 상품 번호 : <input type="number" name="productId" th:value="${couponDetail.productId}"></label><br/>
-            <label>최소 사용 금액 : <input type="number" name="minimumUseAmount" th:value="${couponDetail.minimumUseAmount}"></label><br/>
-            <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount" th:value="${couponDetail.maximumDiscountAmount}"></label><br/>
-            <label>발급 기한 일시 : <input type="date" name="issuanceDeadlineAt" th:value="${couponDetail.issuanceDeadlineAt}"></label><br/>
-            <label>중복 사용 가능 여부 : <input type="checkbox" name="isDuplicatable" th:value="${couponDetail.isDuplicatable}"></label><br/>
+            쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.couponName}"> <br/>
+            사용자 ID : <input type="number" name="userId" th:value="${couponDetail.userId}"><br/>
+            쿠폰 종류 : <input type="text" name="typeName" th:value="${couponDetail.typeName}"><br/>
+            할인 금액(정액) or 할인율(정율) : <input type="number" name="amount" th:value="${couponDetail.amount}"><br/>
+            적용 카테고리 번호 : <input type="number" name="categoryId" th:value="${couponDetail.categoryId}"><br/>
+            적용 상품 번호 : <input type="number" name="productId" th:value="${couponDetail.productId}"><br/>
+            최소 사용 금액 : <input type="number" name="minimumUseAmount" th:value="${couponDetail.minimumUseAmount}"><br/>
+            최대 할인 금액 : <input type="number" name="maximumDiscountAmount" th:value="${couponDetail.maximumDiscountAmount}"><br/>
+            발급 기한 일시 : <input type="date" name="issuanceDeadlineAt" th:value="${couponDetail.issuanceDeadlineAt}"><br/>
+            중복 사용 가능 여부 : <input type="checkbox" name="isDuplicatable" th:value="${couponDetail.isDuplicatable}"><br/>
             <input type="submit">
         </form>
     </div>
+</div>
+</body>
 </html>

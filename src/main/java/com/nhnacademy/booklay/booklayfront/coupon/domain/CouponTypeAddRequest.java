@@ -1,10 +1,11 @@
 package com.nhnacademy.booklay.booklayfront.coupon.domain;
 
+import java.time.LocalDate;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @RequiredArgsConstructor
@@ -17,10 +18,9 @@ public class CouponTypeAddRequest {
     private final Long categoryId;
     private final Long minimumUseAmount;
     private final Long maximumDiscountAmount;
-    @Setter
-    private LocalDateTime issuanceDeadlineAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private final LocalDate issuanceDeadlineAt;
     private final Boolean isDuplicatable;
+
     private final Long issueAmount;
-
-
 }
