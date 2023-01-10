@@ -3,7 +3,7 @@
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <table>
-            <tr>
+            <th>
                 <td>쿠폰 ID</td>
                 <td>쿠폰 이름</td>
                 <td>쿠폰 타입</td>
@@ -11,18 +11,18 @@
                 <td>최소사용금액</td>
                 <td>최대할인금액</td>
                 <td></td>
-            </tr>
-        <tbody th:each="coupon:${couponList}">
-            <tr>
+            </th>
+        <th th:each="coupon:${couponList}">
+            <th>
                 <td><p th:text="${coupon.couponId}"></p></td>
                 <td><p th:text="${coupon.name}"></p></td>
                 <td><p th:text="${coupon.typeName}"></p></td>
                 <td><p th:text="${coupon.amount}"></p></td>
                 <td><p th:text="${coupon.minimumUseAmount}"></p></td>
                 <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
-                <td><a th:href="${'coupon/delete/'+coupon.couponId}">삭제</a></td>
-            </tr>
-        </tbody>
+                <td><a th:href="${'coupon/delete/'}+coupon.couponId">삭제</a></td>
+            </th>
+        </th>
 
         </table>
         <p th:if="${pageNum > 0}">

@@ -2,22 +2,22 @@
 <html lang="ko">
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
     <table>
-        <tr>
+        <th>
             <td>쿠폰 ID</td>
             <td>사용유저</td>
             <td>쿠폰 코드</td>
             <td>쿠폰 이름</td>
             <td>사용일</td>
-        </tr>
-    <tbody th:each="issue:${issueList}">
-        <tr>
+        </th>
+    <th th:each="issue:${issueList}">
+        <th>
             <td><p th:text="${issue.couponId}"></p></td>
             <td><p th:text="${issue.userId}"></p></td>
             <td><p th:text="${issue.code}"></p></td>
             <td><p th:text="${issue.name}"></p></td>
             <td><p th:text="${issue.issuedAt}"></p></td>
-        </tr>
-    </tbody>
+        </th>
+    </th>
 
     </table>
     <p th:if="${pageNum > 0}">
