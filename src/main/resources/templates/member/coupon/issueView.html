@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<div id="header-carousel" class="carousel slide" data-ride="carousel">
+    <table>
+        <th>
+            <td>쿠폰 ID</td>
+            <td>쿠폰 코드</td>
+            <td>쿠폰 이름</td>
+            <td>사용일</td>
+        </th>
+    <th th:each="issue:${issueList}">
+        <th>
+            <td><p th:text="${issue.couponId}"></p></td>
+            <td><p th:text="${issue.code}"></p></td>
+            <td><p th:text="${issue.name}"></p></td>
+            <td><p th:text="${issue.issuedAt}"></p></td>
+        </th>
+    </th>
+
+    </table>
+    <p th:if="${pageNum > 0}">
+        <a th:href="${'issue/' + memberNo + (pageNum - 1)}">이전</a>
+    </p>
+    <p th:if="${#lists.size(issueList) > 0}">
+        <a th:href="${'issue/' + memberNo + (pageNum + 1)}">다음</a>
+    </p>
+</div>
+</html>
