@@ -12,7 +12,7 @@
                 <td>최대할인금액</td>
                 <td></td>
             </th>
-        <th th:each="coupon:${couponList}">
+        <tbody th:each="coupon:${couponList}">
             <th>
                 <td><p th:text="${coupon.couponId}"></p></td>
                 <td><p th:text="${coupon.name}"></p></td>
@@ -22,7 +22,7 @@
                 <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
                 <td><a th:href="${'coupon/delete/'}+coupon.couponId">삭제</a></td>
             </th>
-        </th>
+        </tbody>
 
         </table>
         <p th:if="${pageNum > 0}">
