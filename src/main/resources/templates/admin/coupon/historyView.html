@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <table>
+            <th>
+                <td>쿠폰 ID</td>
+                <td>사용유저</td>
+                <td>쿠폰 코드</td>
+                <td>쿠폰 이름</td>
+                <td>주문번호</td>
+                <td>사용일</td>
+            </th>
+        <th th:each="history:${historyList}">
+            <th>
+                <td><p th:text="${history.couponId}"></p></td>
+                <td><p th:text="${history.userId}"></p></td>
+                <td><p th:text="${history.code}"></p></td>
+                <td><p th:text="${history.name}"></p></td>
+                <td><p th:text="${history.orderId}"></p></td>
+                <td><p th:text="${history.orderedAt}"></p></td>
+            </th>
+        </th>
+
+        </table>
+        <p th:if="${pageNum > 0}">
+            <a th:href="${'history/' + memberNo + (pageNum - 1)}">이전</a>
+        </p>
+        <p th:if="${#lists.size(historyList) > 0}">
+            <a th:href="${'history/' + memberNo + (pageNum + 1)}">다음</a>
+        </p>
+    </div>
+</html>
