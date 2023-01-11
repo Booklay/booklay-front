@@ -18,11 +18,11 @@
   </tr>
   </thead>
   <tbody>
-  <tblock th:each="tag : ${tagList}">
+  <th:block th:each="tag : ${tagList}">
     <tr>
       <td><span th:text="${tag.id}"/></td>
       <td>
-        <form>
+        <form method="put" action="/admin/product/tag/maintenance">
           <input type="number" th:value="${tag.id}" hidden/>
           <input class="name-input" type="text" th:value="${tag.name}" disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
@@ -30,7 +30,7 @@
         </form>
       </td>
     </tr>
-  </tblock>
+  </th:block>
   </tbody>
 
   <script>
@@ -49,7 +49,7 @@
 
 <hr>
 <h3>테그 등록</h3>
-<form>
+<form method="post" action="/admin/product/tag/maintenance">
   <p>테그명 : <input type="text" name="name">
     <input type="submit" value="등록"/></p>
 </form>
