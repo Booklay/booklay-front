@@ -6,4 +6,4 @@ spring:
     active: dev
 
   config:
-    import: "optional:configserver:http://133.186.218.11:8888/${spring.application.name}/${spring.profiles.active}"
+    import: "optional:configserver:http://133.186.218.11:8888"
