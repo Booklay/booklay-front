@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<form>
+  <input type="text">
+  <input type="submit" value="검색">
+</form>
+<hr>
+<table>
+  <thead>
+  <tr>
+    <th>테그 번호</th>
+    <th>테그 이름</th>
+    <th>수정</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tblock th:each="tag : ${tagList}">
+
+    <tr>
+      <td><span th:text="${tag.id}"/></td>
+      <td>
+        <form>
+          <input type="number" th:value="${tag.id}" hidden/>
+          <input id="name-input" type="text" th:value="${tag.name}" disabled="true"/>
+          <input id="submit-btn" type="submit" value="수정 제출" hidden="true"/>
+        </form>
+      </td>
+      <td>
+        <button name="update-button" class="update-button">수정</button>
+      </td>
+    </tr>
+  </tblock>
+  </tbody>
+
+  <script>
+    const updateBtns = document.querySelectorAll('.update-button');
+    updateBtns.forEach(function(item) {
+      item.addEventListener('click', function() { // 클릭 이벤트 발생시,
+        var form = this.closest('form'); // 클릭 이벤트가 발생한 버튼에 제일 가까운 폼을 찾고,
+        _this.update(form); // 해당 폼으로, 업데이트 수행한다!
+      });
+    });
+
+    function update(form){
+      form.querySelector('#name-input').setAttribute('disabled', false)
+      form.querySelector('#submit-btn').setAttribute('hidden', false)
+    };
+  </script>
+</table>
+
+
+<hr>
+<h3>테그 등록</h3>
+<form>
+  <p>테그명 : <input type="text" name="name">
+    <input type="submit" value="등록"/></p>
+</form>
+
+</body>
+</html>
