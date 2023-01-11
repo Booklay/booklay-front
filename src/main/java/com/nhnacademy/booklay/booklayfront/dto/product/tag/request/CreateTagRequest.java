@@ -1,5 +1,11 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.tag.request;
 
-public class CreateTagRequest {
+import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+public class CreateTagRequest {
+  @NotNull
+  String name;
 }

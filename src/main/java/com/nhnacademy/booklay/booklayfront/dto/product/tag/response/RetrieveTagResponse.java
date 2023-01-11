@@ -1,14 +1,13 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.tag.response;
 
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
 
-@Getter
+@Setter
 public class RetrieveTagResponse {
-  private Long id;
-  private String name;
-
-  public RetrieveTagResponse(Long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
+  @NotNull
+  Long id;
+  @NotNull
+  String name;
 }
