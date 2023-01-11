@@ -46,9 +46,15 @@ public class CouponAdminFrontController {
 
     @PostMapping("create")
     public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest
-    ,@RequestParam("issuanceDeadline") @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm") Date date){
-            Map<String, Object> map = new HashMap<>();
+    ,@RequestParam("issuanceDeadline") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date){
+        CouponTypeAddRequest couponTypeAddRequest2 = new CouponTypeAddRequest("coupon1", 1L, "정액", 1000L, 12L, 10000L, 1000L, true, 500L);
+        couponTypeAddRequest2.setIssuanceDeadlineAt(new Date(130, 9, 30, 12, 34, 0)
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("couponRequest", couponTypeAddRequest2);
+
         couponTypeAddRequest.setIssuanceDeadlineAt(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponTypeAddRequest);
         ApiEntity<String> apiEntity = restService.post(FrontURI.SHOPURI+"admin/coupon/add", map, String.class);
         if (!apiEntity.isSuccess()){
@@ -75,7 +81,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("list/type/{pageNum}")
     public String allCouponTypeList(Model model, @PathVariable String pageNum){
-        ApiEntity<List<Coupon>> apiEntity = restService.get(FrontURI.SHOPURI + "admin/coupon/" + pageNum, null, new ParameterizedTypeReference<>(){});
+        ApiEntity<List<CouponType>> apiEntity = restService.get(FrontURI.SHOPURI + "admin/coupon/" + pageNum, null, new ParameterizedTypeReference<>(){});
         if (!apiEntity.isSuccess()){
             return "error";
         }
@@ -83,11 +89,6 @@ public class CouponAdminFrontController {
         model.addAttribute("pageNum", pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/typeListView");
         return RETURN_PAGE;
-    }
-
-    @GetMapping("list/{memberNo}")
-    public String memberCouponList0(@PathVariable String memberNo){
-        return "redirect:list/"+memberNo+"/0";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")
