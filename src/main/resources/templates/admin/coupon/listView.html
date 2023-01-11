@@ -22,9 +22,9 @@
                 <td><p th:text="${coupon.amount}"></p></td>
                 <td><p th:text="${coupon.minimumUseAmount}"></p></td>
                 <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
-                <td><a th:href="${'coupon/detail/'}+coupon.couponId">상세</a></td>
-                <td><a th:href="${'coupon/update/'}+coupon.couponId">수정</a></td>
-                <td><a th:href="${'coupon/delete/'}+coupon.couponId">삭제</a></td>
+                <td><a th:href="${'coupon/detail/'+coupon.couponId}">상세</a></td>
+                <td><a th:href="${'coupon/update/'+coupon.couponId}">수정</a></td>
+                <td><a th:href="${'coupon/delete/'+coupon.couponId}">삭제</a></td>
             </th>
         </tbody>
 
