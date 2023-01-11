@@ -2,7 +2,7 @@
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <form th:action="${'update/' + couponDetail.couponId}" method="post" enctype="multipart/form-data">
+        <form th:action="${'update/' + couponId}" method="post" enctype="multipart/form-data">
             쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.couponName}"> <br/>
             사용자 ID : <input type="number" name="userId" th:value="${couponDetail.userId}"><br/>
             쿠폰 종류 : <input type="text" name="typeName" th:value="${couponDetail.typeName}"><br/>

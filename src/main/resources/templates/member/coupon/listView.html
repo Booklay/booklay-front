@@ -20,7 +20,7 @@
                 <td><p th:text="${coupon.amount}"></p></td>
                 <td><p th:text="${coupon.minimumUseAmount}"></p></td>
                 <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
-                <td><a th:href="${'coupon/delete/'}+coupon.couponId">삭제</a></td>
+                <td><a th:href="${'coupon/delete/'+coupon.couponId}">삭제</a></td>
             </th>
         </tbody>
 
