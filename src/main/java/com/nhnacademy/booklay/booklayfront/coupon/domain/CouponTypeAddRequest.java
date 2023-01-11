@@ -9,8 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @RequiredArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CouponTypeAddRequest {
 
     private final String name;
@@ -25,18 +23,5 @@ public class CouponTypeAddRequest {
     private final Boolean isDuplicatable;
     private final Long issueAmount;
 
-//    @Builder
-//    public CouponTypeAddRequest(String name, Long userId, String typeName, Long amount, Long categoryId, Long minimumUseAmount, Long maximumDiscountAmount, LocalDateTime issuanceDeadlineAt, Boolean isDuplicatable, Long issueAmount) {
-//        this.name = name;
-//        this.userId = userId;
-//        this.typeName = typeName;
-//        this.amount = amount;
-//        this.categoryId = categoryId;
-//        this.minimumUseAmount = minimumUseAmount;
-//        this.maximumDiscountAmount = maximumDiscountAmount;
-//        this.issuanceDeadlineAt = issuanceDeadlineAt;
-//        this.isDuplicatable = isDuplicatable;
-//        this.issueAmount = issueAmount;
-//    }
 
 }

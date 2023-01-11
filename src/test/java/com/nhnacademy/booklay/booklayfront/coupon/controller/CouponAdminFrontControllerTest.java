@@ -1,11 +1,10 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
-import com.nhnacademy.booklay.booklayfront.coupon.domain.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.coupon.domain.Coupon;
-import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponTypeAddRequest;
-import com.nhnacademy.booklay.booklayfront.coupon.domain.FrontURI;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
 import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +20,7 @@ import org.springframework.util.MultiValueMap;
 import java.time.ZoneId;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -65,25 +65,7 @@ class CouponAdminFrontControllerTest {
         ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
-        String url = FrontURI.SHOPURI + "member/coupon/list/" + 0;
-
-        CouponTypeAddRequest couponTypeAddRequest = CouponTypeAddRequest.builder()
-                .name("coupon1")
-                .userId(1L)
-                .typeName("정액")
-                .amount(1000L)
-                .categoryId(12L)
-                .minimumUseAmount(10000L)
-                .maximumDiscountAmount(1000L)
-                .issuanceDeadlineAt(new Date(2030, 10, 30, 12, 34, 0)
-                        .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
-                .isDuplicatable(true)
-                .issueAmount(500L).build();
-
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("couponRequest", couponTypeAddRequest);
-//        map.add("memberId", anyString());
-        when(restService.post(url, map2, String.class))
+        when(restService.post(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
                 .thenReturn(apiEntity);
 
         mockMvc.perform(post(URI_PREFIX+"/create").accept(MediaType.TEXT_HTML)
@@ -91,7 +73,6 @@ class CouponAdminFrontControllerTest {
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(result -> result.getResponse().getRedirectedUrl().equals(""));
-
     }
 
     @Test
@@ -117,25 +98,34 @@ class CouponAdminFrontControllerTest {
         ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
-        String url = FrontURI.SHOPURI + "member/coupon/list/" + 0;
-
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("memberId", anyString());
-        when(restService.get(url, map, new ParameterizedTypeReference<List<Coupon>>(){}))
+        when(restService.post(anyString(), anyMap(), ArgumentMatchers.<Class<List<Coupon>>>any()))
                 .thenReturn(apiEntity);
 
-        mockMvc.perform(get(URI_PREFIX+"/list").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX+"/list/0").accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk())
+                .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
+                .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/listView"))
+                .andReturn();
+    }
+
+    @Test
+    void allCouponTypeList() throws Exception {
+        List<CouponType> couponList = new ArrayList<>();
+
+        ApiEntity<List<CouponType>> apiEntity = new ApiEntity<>();
+        ResponseEntity<List<CouponType>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
+        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
+        //mocking
+        //Matchers.<ParameterizedTypeReference<List<CouponType>>>any())
+        ParameterizedTypeReference parameterizedTypeReference = new ParameterizedTypeReference<List<CouponType>>(){};
+//        when(restService.post(anyString(), anyMap(), ArgumentMatchers.<>any()))
+//                .thenReturn(apiEntity);
+
+        mockMvc.perform(get(URI_PREFIX+"/list/type/0").accept(MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(result -> result.getResponse().getRedirectedUrl().equals("list/0"));
     }
 
-    @Test
-    void allCouponTypeList() {
-    }
-
-    @Test
-    void memberCouponList0() {
-    }
 
     @Test
     void memberCouponList() {
