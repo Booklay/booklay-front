@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,8 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CouponMemberFrontControllerTest {
     @MockBean
     RestService restService;
-    @Autowired
-    CouponMemberFrontController couponMemberFrontController;
     @Autowired
     MockMvc mockMvc;
     private String RETURN_PAGE = "member/memberPage";

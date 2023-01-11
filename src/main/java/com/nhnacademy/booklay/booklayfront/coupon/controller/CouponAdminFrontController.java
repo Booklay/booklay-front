@@ -3,11 +3,15 @@ package com.nhnacademy.booklay.booklayfront.coupon.controller;
 import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
 import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
 import java.lang.reflect.Member;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +45,12 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("create")
-    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest){
+    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest
+    ,@RequestParam("issuanceDeadline") @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm") Date date){
             Map<String, Object> map = new HashMap<>();
+        couponTypeAddRequest.setIssuanceDeadlineAt(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         map.put("couponRequest", couponTypeAddRequest);
-        ApiEntity<String>
-            apiEntity = restService.post(FrontURI.SHOPURI+"admin/coupon/add", map, String.class);
+        ApiEntity<String> apiEntity = restService.post(FrontURI.SHOPURI+"admin/coupon/add", map, String.class);
         if (!apiEntity.isSuccess()){
             return "error";
         }
