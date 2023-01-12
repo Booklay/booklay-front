@@ -8,6 +8,7 @@ import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CouponAdminFrontController.class)
+@ComponentScan("com.nhnacademy.booklay.booklayfront.coupon.service")
 class CouponAdminFrontControllerTest {
     @MockBean
     RestService restService;
@@ -146,18 +148,9 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void viewCoupon() throws Exception {
-        CouponDetail couponDetail = CouponDetail.builder()
-                .couponName("c1")
-                .typeName("정액")
-                .productId(123L)
-                .userId(0L)
-                .categoryId(101L)
-                .issuanceDeadlineAt(LocalDate.now())
-                .amount(1000L)
-                .maximumDiscountAmount(1000L)
-                .minimumUseAmount(10000L)
-                .isDuplicatable(false)
-                .build();
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
+                , 101L, 123L, 10000L, 1000L,
+                LocalDate.now(),false, "");
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking
         ApiEntity<CouponDetail> object = new ApiEntity<>();
@@ -174,18 +167,9 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void updateCouponForm() throws Exception {
-        CouponDetail couponDetail = CouponDetail.builder()
-                .couponName("c1")
-                .typeName("정액")
-                .productId(123L)
-                .userId(0L)
-                .categoryId(101L)
-                .issuanceDeadlineAt(LocalDate.now())
-                .amount(1000L)
-                .maximumDiscountAmount(1000L)
-                .minimumUseAmount(10000L)
-                .isDuplicatable(false)
-                .build();
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
+                , 101L, 123L, 10000L, 1000L,
+                LocalDate.now(),false, "");
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking
         ApiEntity<CouponDetail> object = new ApiEntity<>();
