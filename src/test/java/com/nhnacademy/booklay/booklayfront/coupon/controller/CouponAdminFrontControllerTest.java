@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
 import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
+import com.nhnacademy.booklay.booklayfront.coupon.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -12,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,15 +32,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(CouponAdminFrontController.class)
-@ComponentScan("com.nhnacademy.booklay.booklayfront.coupon.service")
+@ActiveProfiles("test")
+@ComponentScan("com.nhnacademy.booklay.booklayfront.config")
 class CouponAdminFrontControllerTest {
     @MockBean
     RestService restService;
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    ImageUploader imageUploader;
     private String RETURN_PAGE = "admin/adminPage";
     private static final String URI_PREFIX = "/admin/coupon";
 
+    @Autowired
+    String gatewayIp;
     @Test
     void createCouponTypeForm() throws Exception {
         //then
