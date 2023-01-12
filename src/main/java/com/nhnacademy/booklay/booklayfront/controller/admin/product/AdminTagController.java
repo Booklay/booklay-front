@@ -23,8 +23,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
@@ -40,23 +38,23 @@ public class AdminTagController {
 
   @GetMapping()
   public String retrieveTag(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum,
-      @RequestParam(value = "size", required = false) Optional<Integer> size, Model model) {
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
     if (pageNum.isEmpty()) {
       pageNum = Optional.of(0);
     }
     if (pageNum.get() < 0) {
       pageNum = Optional.of(0);
     }
-    if (size.isEmpty()) {
-      size = Optional.of(20);
-    }
+
+    Long size = 20L;
+
+    pageNum = Optional.of(pageNum.get() - 1);
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size.get());
+        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -96,14 +94,30 @@ public class AdminTagController {
     log.info(requestEntity.getBody());
 
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
-    restTemplate.postForEntity(uri, request);
 
-    return "redirect:";
+    return "redirect:/admin/product/tag/maintenance";
   }
 
-  @PutMapping
-  public String updateTag(@Valid @ModelAttribute UpdateTagRequest request) {
+  @PostMapping("/update")
+  public String updateTag(@Valid @ModelAttribute UpdateTagRequest request)
+      throws JsonProcessingException {
+    log.info("진입 확인");
+    log.info("출력 : " + request.getName() + "   " + request.getId());
 
-    return "redirect:";
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.PUT, uri);
+
+    log.info(requestEntity.getBody());
+
+    restTemplate.exchange(requestEntity, UpdateTagRequest.class);
+
+    return "redirect:/admin/product/tag/maintenance";
   }
 }
