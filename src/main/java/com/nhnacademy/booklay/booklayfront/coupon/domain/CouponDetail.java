@@ -1,14 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.coupon.domain;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CouponDetail {
+    @Setter
+    private String couponId;
     private String couponName;
     private Long userId;
     private String typeName;
@@ -19,18 +23,6 @@ public class CouponDetail {
     private Long maximumDiscountAmount;
     private LocalDate issuanceDeadlineAt;
     private Boolean isDuplicatable;
+    private String couponImagePath;
 
-    @Builder
-    public CouponDetail(String couponName, Long userId, String typeName, Long amount, Long categoryId, Long productId, Long minimumUseAmount, Long maximumDiscountAmount, LocalDate issuanceDeadlineAt, Boolean isDuplicatable) {
-        this.couponName = couponName;
-        this.userId = userId;
-        this.typeName = typeName;
-        this.amount = amount;
-        this.categoryId = categoryId;
-        this.productId = productId;
-        this.minimumUseAmount = minimumUseAmount;
-        this.maximumDiscountAmount = maximumDiscountAmount;
-        this.issuanceDeadlineAt = issuanceDeadlineAt;
-        this.isDuplicatable = isDuplicatable;
-    }
 }
