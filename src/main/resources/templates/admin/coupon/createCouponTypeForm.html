@@ -4,16 +4,15 @@
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form action="create" method="post" enctype="multipart/form-data">
             <label>쿠폰 이름 : <input type="text" name="name"> </label> <br/>
-            <label>사용자 ID : <input type="number" name="userId"></label> <br/>
-            <label>쿠폰 종류 : <input type="text" name="typeName"></label> <br/>
+            <label>쿠폰 종류 : <input type="number" name="typeCode"></label> <br/>
             <label>할인 금액(정액) or 할인율(정율) : <input type="number" name="amount"></label> <br/>
-            <label>적용 카테고리 번호 : <input type="number" name="categoryId"></label> <br/>
-            <label>적용 상품 번호 : <input type="number" name="productId"></label> <br/>
+            <label>주문 쿠폰 여부 : <input type="checkbox" name="isOrderCoupon"></label> <br/>
+            <label>적용 카테고리 번호 : <input type="number" name="applyItemId"></label> <br/>
             <label>최소 사용 금액 : <input type="number" name="minimumUseAmount"></label> <br/>
             <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount"></label> <br/>
             <label>발급 기한 일시 : <input type="datetime-local" name="issuanceDeadline"></label> <br/>
             <label>중복 사용 가능 여부 : <input type="checkbox" name="isDuplicatable"></label> <br/>
-            <label>발급 수 : <input type="number" name="issueAmount"></label> <br/>
+            <label>발급 수 : <input type="number" name="quantity"></label> <br/>
             <label>쿠폰 이미지 : <input type="image" name="couponImage"></label><br/>
             <input type="submit">
         </form>

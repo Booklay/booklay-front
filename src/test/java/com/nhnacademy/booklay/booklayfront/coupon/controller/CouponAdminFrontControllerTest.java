@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
 import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
 import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;

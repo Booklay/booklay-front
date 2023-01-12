@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 public class CouponTypeAddRequest {
 
     private final String name;
-    private final Long userId;
-    private final String typeName;
+    private final Long typeCode;
     private final Long amount;
-    private final Long categoryId;
+    private final Boolean isOrderCoupon;
+    private final Long applyItemId;
     private final Long minimumUseAmount;
     private final Long maximumDiscountAmount;
     @Setter
     private LocalDateTime issuanceDeadlineAt;
     private final Boolean isDuplicatable;
-    private final Long issueAmount;
+    private final Long quantity;
 
 
 }

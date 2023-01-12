@@ -25,6 +25,7 @@ import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerString
 @RequestMapping("admin/coupon")
 public class CouponAdminFrontController {
     private final RestService restService;
+    private final String gatewayIp;
     private final ImageUploader imageUploader;
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String REST_PRE_FIX = "admin/coupon/";
@@ -53,7 +54,7 @@ public class CouponAdminFrontController {
         imageUploader.uploadImage(multipartFile, request);
         Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponTypeAddRequest);
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "add");
+        String url = buildString(gatewayIp, REST_PRE_FIX);
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
         if (!apiEntity.isSuccess()){
             return ERROR;
