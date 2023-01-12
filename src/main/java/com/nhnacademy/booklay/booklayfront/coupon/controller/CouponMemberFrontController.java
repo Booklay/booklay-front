@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("member/coupon")
 public class CouponMemberFrontController {
     private final RestService restService;
-    private static final String TARGET_VIEW = "targetUrl";
     private static final String RETURN_PAGE = "member/memberPage";
+    private static final String REST_PRE_FIX = "member/coupon/";
     @GetMapping("")
     public String memberCouponPage(Model model){
         model.addAttribute(TARGET_VIEW, "coupon/empty");
@@ -37,53 +38,51 @@ public class CouponMemberFrontController {
     }
     @GetMapping("list/{pageNum}")
     public String allCouponList(Model model, @PathVariable Integer pageNum){
-
-        String url = buildString(FrontURI.SHOPURI, "member/coupon/list/", pageNum.toString());
+        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "list/", pageNum.toString());
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("memberId", "0");
         ApiEntity<List<Coupon> > apiEntity = restService.get(url, map, new ParameterizedTypeReference<>(){});
         if (!apiEntity.isSuccess()){
-            return "error";
+            return ERROR;
         }
-        model.addAttribute("couponList", apiEntity.getBody());
-        model.addAttribute("memberNo", "");
-        model.addAttribute("pageNum", pageNum);
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
+        model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
         return RETURN_PAGE;
     }
 
     @GetMapping("detail/{couponId}")
     public String couponDetail(Model model, @PathVariable String couponId){
-        String url = buildString(FrontURI.SHOPURI, "member/coupon/detail/", couponId);
+        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "detail/", couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
         if (!apiEntity.isSuccess()){
-            return "error";
+            return ERROR;
         }
-        model.addAttribute("couponDetail", apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
         return RETURN_PAGE;
     }
 
     @GetMapping("history/{pageNum}")
     public String couponHistory(Model model, @PathVariable Integer pageNum){
-        String url = buildString(FrontURI.SHOPURI, "member/coupon/history/", pageNum.toString());
+        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "history/", pageNum.toString());
         ApiEntity<List<CouponHistory>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
         if (!apiEntity.isSuccess()){
-            return "error";
+            return ERROR;
         }
-        model.addAttribute("historyList", apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody());
         model.addAttribute(TARGET_VIEW, "coupon/historyView");
         return RETURN_PAGE;
     }
 
     @GetMapping("issue/{pageNum}")
     public String couponIssuing(Model model, @PathVariable Integer pageNum){
-        String url = buildString(FrontURI.SHOPURI, "member/coupon/issue/", pageNum.toString());
+        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "issue/", pageNum.toString());
         ApiEntity<List<CouponIssue>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
         if (!apiEntity.isSuccess()){
-            return "error";
+            return ERROR;
         }
-        model.addAttribute("issueList", apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
         model.addAttribute(TARGET_VIEW, "coupon/issueView");
         return RETURN_PAGE;
     }

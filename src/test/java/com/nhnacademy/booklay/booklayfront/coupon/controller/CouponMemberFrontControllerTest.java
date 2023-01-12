@@ -29,18 +29,8 @@ class CouponMemberFrontControllerTest {
     RestService restService;
     @Autowired
     MockMvc mockMvc;
-    private String RETURN_PAGE = "member/memberPage";
-    private static final String URI_PREFIX = "/member/coupon";
-
-//    @Test
-//    void memberCouponPage() {
-//
-//    }
-//
-//    @Test
-//    void addNavHead() {
-//
-//    }
+    private final String RETURN_PAGE = "member/memberPage";
+    private final String URI_PREFIX = "/member/coupon";
 
     @Test
     void allCouponList0() throws Exception {
@@ -56,7 +46,7 @@ class CouponMemberFrontControllerTest {
         ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
-        String url = FrontURI.SHOPURI + "member/coupon/list/" + 0;
+        String url = FrontURI.SHOP_URI + "member/coupon/list/" + 0;
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 //        map.add("memberId", anyString());
@@ -73,23 +63,15 @@ class CouponMemberFrontControllerTest {
 
     @Test
     void couponDetail() throws Exception {
-        CouponDetail couponDetail = CouponDetail.builder()
-                .couponName("c1")
-                .typeName("정액")
-                .productId(123L)
-                .userId(0L)
-                .categoryId(101L)
-                .issuanceDeadlineAt(LocalDate.now())
-                .amount(1000L)
-                .maximumDiscountAmount(1000L)
-                .minimumUseAmount(10000L)
-                .isDuplicatable(false)
-                .build();
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
+                , 101L, 123L, 10000L, 1000L,
+                LocalDate.now(),false, "");
+
         ApiEntity<CouponDetail> apiEntity = new ApiEntity<>();
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
-        String url = FrontURI.SHOPURI + "member/coupon/detail/" + 0;
+        String url = FrontURI.SHOP_URI + "member/coupon/detail/" + 0;
         when(restService.get(url, null, CouponDetail.class))
                 .thenReturn(apiEntity);
 
@@ -116,7 +98,7 @@ class CouponMemberFrontControllerTest {
         ApiEntity<List<CouponHistory>> apiEntity = new ApiEntity<>();
         ResponseEntity<List<CouponHistory>> responseEntity = new ResponseEntity(historyList, HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
-        String url = FrontURI.SHOPURI + "member/coupon/history/" + 0;
+        String url = FrontURI.SHOP_URI + "member/coupon/history/" + 0;
         //mocking
         when(restService.get(url, null, new ParameterizedTypeReference<List<CouponHistory>>(){}))
                 .thenReturn(apiEntity);
@@ -143,7 +125,7 @@ class CouponMemberFrontControllerTest {
         ApiEntity<List<CouponIssue>> apiEntity = new ApiEntity<>();
         ResponseEntity<List<CouponIssue>> responseEntity = new ResponseEntity(issueList, HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
-        String url = FrontURI.SHOPURI + "member/coupon/issue/" + 0;
+        String url = FrontURI.SHOP_URI + "member/coupon/issue/" + 0;
         //mocking
         when(restService.get(url, null, new ParameterizedTypeReference<List<CouponIssue>>(){}))
                 .thenReturn(apiEntity);

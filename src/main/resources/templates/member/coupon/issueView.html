@@ -2,19 +2,19 @@
 <html lang="ko">
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
     <table>
-        <th>
+        <tr>
             <td>쿠폰 ID</td>
             <td>쿠폰 코드</td>
             <td>쿠폰 이름</td>
             <td>사용일</td>
-        </th>
+        </tr>
     <tbody th:each="issue:${issueList}">
-        <th>
+        <tr>
             <td><p th:text="${issue.couponId}"></p></td>
             <td><p th:text="${issue.code}"></p></td>
             <td><p th:text="${issue.name}"></p></td>
             <td><p th:text="${issue.issuedAt}"></p></td>
-        </th>
+        </tr>
     </tbody>
 
     </table>
