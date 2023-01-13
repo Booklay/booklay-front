@@ -2,7 +2,8 @@
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        쿠폰 이름 : <div th:text="${couponDetail.couponName}"> </div>
+        <img th:src="${couponDetail.couponImagePath}">
+        쿠폰 이름 : <div th:text="${couponDetail.name}"> </div>
         쿠폰 종류 : <div th:text="${couponDetail.typeName}"></div>
         할인 금액(정액) or 할인율(정율) : <div th:text="${couponDetail.amount}"></div>
         적용 카테고리 번호 : <div th:text="${couponDetail.categoryId}"></div>
@@ -11,5 +12,6 @@
         최대 할인 금액 : <div th:text="${couponDetail.maximumDiscountAmount}"></div>
         발급 기한 일시 : <div th:text="${couponDetail.issuanceDeadlineAt}"></div>
         중복 사용 가능 여부 : <div th:text="${couponDetail.isDuplicatable}"></div>
+        발급 제한 여부 : <div th:text="${couponDetail.isLimited}"></div>
     </div>
 </html>

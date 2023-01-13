@@ -21,7 +21,7 @@ import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerString
 @RequestMapping("member/coupon")
 public class CouponMemberFrontController {
     private final RestService restService;
-    private static final String RETURN_PAGE = "member/memberPage";
+    private static final String RETURN_PAGE = "member/myPage";
     private static final String REST_PRE_FIX = "member/coupon/";
     @GetMapping("")
     public String memberCouponPage(Model model){

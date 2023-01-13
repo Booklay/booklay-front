@@ -2,19 +2,16 @@ package com.nhnacademy.booklay.booklayfront.coupon.service;
 
 
 import com.nhnacademy.booklay.booklayfront.coupon.domain.ApiEntity;
-import java.util.Collections;
-import java.util.Map;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Collections;
+import java.util.Map;
 
 @Service
 public class RestService {
@@ -66,7 +63,6 @@ public class RestService {
 
     public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params, ParameterizedTypeReference<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
-
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
 
         HttpHeaders headers = new HttpHeaders();

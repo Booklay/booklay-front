@@ -20,6 +20,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,17 +49,29 @@ class CouponAdminFrontControllerTest {
     @Autowired
     String gatewayIp;
     @Test
-    void createCouponTypeForm() throws Exception {
+    void createCouponForm() throws Exception {
+        List<CouponType> couponTypes = new ArrayList<>();
+        couponTypes.add(new CouponType(1L, "dummyType"));
+        PageResponse<CouponType> couponTypePageResponse = new PageResponse();
+        ReflectionTestUtils.setField(couponTypePageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponTypePageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponTypePageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponTypePageResponse, "data", couponTypes);
+        ResponseEntity<PageResponse<CouponType>> responseEntity = new ResponseEntity(couponTypePageResponse, HttpStatus.OK);
+        ApiEntity<Object> object = new ApiEntity<>();
+        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+        //mocking
+        when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any())).thenReturn(object);
         //then
         mockMvc.perform(get(URI_PREFIX+"/create").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-                .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/createCouponTypeForm"))
+                .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/createCouponForm"))
                 .andReturn();
     }
 
     @Test
-    void postCreateCouponType() throws Exception {
+    void postCreateCoupon() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("name", "coupon1");
         map.add("userId", "1");
@@ -95,21 +108,19 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void allCouponList() throws Exception {
-        Coupon coupon = Coupon.builder()
-                .couponId(0L)
-                .typeName("정액")
-                .name("coupon1")
-                .amount(1000L)
-                .maximumDiscountAmount(1000L)
-                .minimumUseAmount(10000L)
-                .build();
+        Coupon coupon = new Coupon(0L, "coupon1", "정액"
+                , 1000, 1000, 10000, false);
         List<Coupon> couponList = new ArrayList<>();
+        PageResponse<Coupon> couponPageResponse = new PageResponse<Coupon>();
         couponList.add(coupon);
-        ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
+        ReflectionTestUtils.setField(couponPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "data", couponList);
+        ResponseEntity<PageResponse<Coupon>> responseEntity = new ResponseEntity(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
-//        when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any())).thenReturn(object);
         when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
         mockMvc.perform(get(URI_PREFIX+"/list/0"))
@@ -122,8 +133,13 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void allCouponTypeList() throws Exception {
-        List<CouponType> couponList = new ArrayList<>();
-        ResponseEntity<List<CouponType>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
+        List<CouponType> couponTypes = new ArrayList<>();
+        PageResponse<CouponType> couponPageResponse = new PageResponse<CouponType>();
+        ReflectionTestUtils.setField(couponPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "data", couponTypes);
+        ResponseEntity<PageResponse<CouponType>> responseEntity = new ResponseEntity(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -157,7 +173,7 @@ class CouponAdminFrontControllerTest {
     void viewCoupon() throws Exception {
         CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
                 , 101L, 123L, 10000L, 1000L,
-                LocalDate.now(),false, "");
+                LocalDateTime.now(),false, "", false);
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking
         ApiEntity<CouponDetail> object = new ApiEntity<>();
@@ -176,7 +192,7 @@ class CouponAdminFrontControllerTest {
     void updateCouponForm() throws Exception {
         CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
                 , 101L, 123L, 10000L, 1000L,
-                LocalDate.now(),false, "");
+                LocalDateTime.now(),false, "", false);
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking
         ApiEntity<CouponDetail> object = new ApiEntity<>();
@@ -330,13 +346,5 @@ class CouponAdminFrontControllerTest {
                 .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/issueView"))
                 .andReturn();
     }
-
-//    @Test
-//    void issuingCouponForm() {
-//    }
-//
-//    @Test
-//    void memberIssuingCoupon() {
-//    }
 
 }
