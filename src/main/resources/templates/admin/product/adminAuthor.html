@@ -24,7 +24,6 @@
   </thead>
 
   <tbody>
-
   <th:block th:each="author : ${authorList}">
     <tr>
       <td><span th:text="${author.authorNo}"/></td>
@@ -33,8 +32,28 @@
       <td><a href="">작품 정보</a></td>
     </tr>
   </th:block>
-
   </tbody>
 </table>
+
+<div>
+  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}-2)}">
+    <span th:text="${nowPage}-1"/></a>
+  <a th:if="${nowPage >= 1}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}-1)}">
+    <span th:text="${nowPage}"/></a>
+
+  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage})}">
+    <span th:text="${nowPage}+1"/></a>
+
+  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}+1)}">
+    <span th:text="${nowPage}+2"/></a>
+  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}+2)}">
+    <span th:text="${nowPage}+3"/></a>
+
+  <span th:if="${nowPage + 3 < totalPage}">...</span>
+
+  <a th:href="@{/admin/product/tag/maintenance(page=${totalPage})}">
+    <span th:text="${totalPage}"/></a>
+</div>
+
 </body>
 </html>
