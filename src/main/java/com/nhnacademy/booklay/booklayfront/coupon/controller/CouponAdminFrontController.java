@@ -1,24 +1,42 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
-import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.ERROR;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.PAGE_NUM;
+import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.TARGET_VIEW;
+
+import com.nhnacademy.booklay.booklayfront.coupon.domain.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.Coupon;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponDetail;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponHistory;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponIssue;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponType;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.CouponTypeAddRequest;
+import com.nhnacademy.booklay.booklayfront.coupon.domain.FrontURI;
 import com.nhnacademy.booklay.booklayfront.coupon.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.*;
+import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +51,7 @@ public class CouponAdminFrontController {
     public String addNavHead(){
         return "coupon/couponFragments/couponNavHead";
     }
+
     @GetMapping("")
     public String adminCouponPage(Model model){
         model.addAttribute(TARGET_VIEW, "coupon/empty");
