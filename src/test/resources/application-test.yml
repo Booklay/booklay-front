@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: booklay-front
+
+booklay:
+  gateway-origin: http://localhost:8080

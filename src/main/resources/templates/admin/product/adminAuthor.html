@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>작가 관리 페이지</title>
+</head>
+<body>
+<h2>작가 검색 페이지</h2>
+
+<form>
+  <input type="text"/>
+  <input type="submit" value="검색"/>
+</form>
+<hr>
+
+<table>
+  <thead>
+  <tr>
+    <th>작가 번호</th>
+    <th>작가 이름</th>
+    <th>작가 아이디</th>
+    <th>작품 정보</th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+  <th:block th:each="author : ${authorList}">
+    <tr>
+      <td><span th:text="${author.authorNo}"/></td>
+      <td><span th:text="${author.name}"/></td>
+      <td><span th:text="${author.member.id}"/></td>
+      <td><a href="">작품 정보</a></td>
+    </tr>
+  </th:block>
+
+  </tbody>
+</table>
+</body>
+</html>

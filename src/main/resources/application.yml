@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: booklay-front
+
+  profiles:
+    active: dev
+
+  config:
+    import: "optional:configserver:http://133.186.218.11:8888"
