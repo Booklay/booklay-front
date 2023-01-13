@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.member.domain;
+package com.nhnacademy.booklay.booklayfront.dto.member.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

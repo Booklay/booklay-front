@@ -36,6 +36,7 @@ public class CouponAdminFrontController {
     public String addNavHead(){
         return "coupon/couponFragments/couponNavHead";
     }
+
     @GetMapping("")
     public String adminCouponPage(Model model){
         model.addAttribute(TARGET_VIEW, "coupon/empty");

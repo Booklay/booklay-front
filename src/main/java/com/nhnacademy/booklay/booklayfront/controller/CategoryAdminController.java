@@ -30,7 +30,6 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequestMapping("/admin/categories")
 public class CategoryAdminController {
-
     private final RestTemplate restTemplate;
     private final String redirecGatewayPrefix;
     private static final String REDIRECT_PREFIX = "redirect:/admin/categories";
