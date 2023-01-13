@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/members")
 public class MemberController {
     private final RestTemplate restTemplate;
-    private final FrontURI frontURI;
+//    private final FrontURI frontURI;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -29,30 +29,30 @@ public class MemberController {
         return "member/createMemberForm";
     }
 
-    @PostMapping
-    public String postCreateCouponType(@ModelAttribute MemberCreateRequest memberCreateRequest,
-                                       RedirectAttributes redirectAttributes) {
-        HttpEntity<MemberCreateRequest> request = new HttpEntity<>(memberCreateRequest);
-
-        /**
-         * localhost로 돌아가는 코드
-         * 후에 삭제
-         */
+//    @PostMapping
+//    public String postCreateCouponType(@ModelAttribute MemberCreateRequest memberCreateRequest,
+//                                       RedirectAttributes redirectAttributes) {
+//        HttpEntity<MemberCreateRequest> request = new HttpEntity<>(memberCreateRequest);
+//
+//        /**
+//         * localhost로 돌아가는 코드
+//         * 후에 삭제
+//         */
 //        ResponseEntity<Void> response =
 //            restTemplate.exchange("http://localhost:9090" + "/members", HttpMethod.POST, request,
 //                Void.class);
 
-        ResponseEntity<Void> response =
-            restTemplate.exchange(frontURI.SHOPURI + "/members", HttpMethod.POST, request,
-                Void.class);
-
-        //TODO 1: 에러처리
-        if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
-            redirectAttributes.addFlashAttribute("error", response.getStatusCode());
-            return "redirect:/error";
-        }
-
-        return "redirect:/shop";
-
-    }
+//        ResponseEntity<Void> response =
+//            restTemplate.exchange(frontURI.SHOP_URI + "/members", HttpMethod.POST, request,
+//                Void.class);
+//
+//        //TODO 1: 에러처리
+//        if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
+//            redirectAttributes.addFlashAttribute("error", response.getStatusCode());
+//            return "redirect:/error";
+//        }
+//
+//        return "redirect:/shop";
+//
+//    }
 }
