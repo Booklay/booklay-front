@@ -18,11 +18,8 @@
   <tr>
     <th>작가 번호</th>
     <th>작가 이름</th>
-    <th>펼치기</th>
-  </tr>
-  <tr>
-    <th>작품 번호</th>
-    <th>작품 이름</th>
+    <th>작가 아이디</th>
+    <th>작품 정보</th>
   </tr>
   </thead>
 
@@ -32,14 +29,9 @@
     <tr>
       <td><span th:text="${author.authorNo}"/></td>
       <td><span th:text="${author.name}"/></td>
-      <td>펼치기</td>
+      <td><span th:text="${author.member.id}"/></td>
+      <td><a href="">작품 정보</a></td>
     </tr>
-    <th:block th:each="book: ${author.bookList}">
-      <tr>
-        <td><span th:text="${book.productNo}" hidden="hidden"/></td>
-        <td><span th:text="${book.name}" hidden="hidden"/></td>
-      </tr>
-    </th:block>
   </th:block>
 
   </tbody>
