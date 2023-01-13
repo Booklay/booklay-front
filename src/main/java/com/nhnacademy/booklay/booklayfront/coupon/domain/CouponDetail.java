@@ -1,19 +1,23 @@
 package com.nhnacademy.booklay.booklayfront.coupon.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class CouponDetail {
     @Setter
-    private String couponId;
-    private String couponName;
+    private String id;
+    private String name;
     private Long userId;
     private String typeName;
     private Long amount;
@@ -21,8 +25,10 @@ public class CouponDetail {
     private Long productId;
     private Long minimumUseAmount;
     private Long maximumDiscountAmount;
-    private LocalDate issuanceDeadlineAt;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime issuanceDeadlineAt;
     private Boolean isDuplicatable;
     private String couponImagePath;
-
+    private Boolean isLimited;
 }

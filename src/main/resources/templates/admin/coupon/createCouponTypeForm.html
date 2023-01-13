@@ -1,20 +1,58 @@
 <!DOCTYPE html>
+<head>
+    <style>
+        .hidden{
+            visibility: hidden;
+        }
+    </style>
+</head>
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form action="create" method="post" enctype="multipart/form-data">
             <label>쿠폰 이름 : <input type="text" name="name"> </label> <br/>
-            <label>쿠폰 종류 : <input type="number" name="typeCode"></label> <br/>
+            쿠폰 종류 : <select type="number" name="typeCode">
+                    <arc th:each="couponType:${couponTypeList}">
+                        <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
+                    </arc>
+                </select><br/>
             <label>할인 금액(정액) or 할인율(정율) : <input type="number" name="amount"></label> <br/>
-            <label>주문 쿠폰 여부 : <input type="checkbox" name="isOrderCoupon"></label> <br/>
-            <label>적용 카테고리 번호 : <input type="number" name="applyItemId"></label> <br/>
+            <label>주문 쿠폰 여부 : <input id="isOrderCoupon" type="checkbox" name="isOrderCoupon"></label> <br/>
+            <label>적용 카테고리 번호 : <input id="categorySelector" type="number" name="disable" class="hidden"></label> <br/>
+            <label>적용 상품 번호 : <input id="itemSelector" type="number" name="applyItemId"></label> <br/>
             <label>최소 사용 금액 : <input type="number" name="minimumUseAmount"></label> <br/>
             <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount"></label> <br/>
             <label>발급 기한 일시 : <input type="datetime-local" name="issuanceDeadline"></label> <br/>
             <label>중복 사용 가능 여부 : <input type="checkbox" name="isDuplicatable"></label> <br/>
             <label>발급 수 : <input type="number" name="quantity"></label> <br/>
-            <label>쿠폰 이미지 : <input type="image" name="couponImage"></label><br/>
+            <label>쿠폰 이미지 : <input type="file" accept="image/*" name="couponImage"></label><br/>
             <input type="submit">
         </form>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        function createParagraph() {
+            console.log("event");
+            let categorySelector = document.getElementById("categorySelector")
+            let itemSelector = document.getElementById("itemSelector")
+            let isOrderCoupon = document.getElementById("isOrderCoupon")
+            if (isOrderCoupon.checked){
+                itemSelector.setAttribute("name", "disable");
+                itemSelector.classList.add("hidden");
+                categorySelector.setAttribute("name", "applyItemId");
+                categorySelector.classList.remove("hidden");
+            }else {
+                categorySelector.setAttribute("name", "disable");
+                categorySelector.classList.add("hidden");
+                itemSelector.setAttribute("name", "applyItemId");
+                itemSelector.classList.remove("hidden");
+            }
+        }
+        let button = document.getElementById("isOrderCoupon");
+        button.addEventListener("change", createParagraph);
+    });
+</script>
 </html>
+
+

@@ -14,4 +14,5 @@ public class ControllerStrings {
     public static final String ATTRIBUTE_NAME_HISTORY_LIST = "historyList";
     public static final String ATTRIBUTE_NAME_ISSUE_LIST = "issueList";
     public static final String ATTRIBUTE_NAME_COUPON_DETAIL = "couponDetail";
+    public static final String ATTRIBUTE_NAME_COUPON_TYPE_LIST = "couponTypeList";
 }

@@ -3,7 +3,8 @@
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <div><img th:src="${couponDetail.couponImagePath}"></div>
-        쿠폰 이름 : <div th:text="${couponDetail.couponName}"> </div>
+        쿠폰 ID : <div th:text="${couponDetail.id}"> </div>
+        쿠폰 이름 : <div th:text="${couponDetail.name}"> </div>
         사용자 ID : <div th:text="${couponDetail.userId}"></div>
         쿠폰 종류 : <div th:text="${couponDetail.typeName}"></div>
         할인 금액(정액) or 할인율(정율) : <div th:text="${couponDetail.amount}"></div>

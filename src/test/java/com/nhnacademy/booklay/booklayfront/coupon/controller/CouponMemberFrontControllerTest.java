@@ -18,6 +18,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ class CouponMemberFrontControllerTest {
     void couponDetail() throws Exception {
         CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
                 , 101L, 123L, 10000L, 1000L,
-                LocalDate.now(),false, "");
+                LocalDateTime.now(),false, "", false);
 
         ApiEntity<CouponDetail> apiEntity = new ApiEntity<>();
         ResponseEntity<CouponDetail> responseEntity = new ResponseEntity(couponDetail, HttpStatus.OK);
