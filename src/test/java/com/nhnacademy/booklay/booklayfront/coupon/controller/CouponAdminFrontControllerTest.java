@@ -49,10 +49,15 @@ class CouponAdminFrontControllerTest {
     @Autowired
     String gatewayIp;
     @Test
-    void createCouponTypeForm() throws Exception {
+    void createCouponForm() throws Exception {
         List<CouponType> couponTypes = new ArrayList<>();
         couponTypes.add(new CouponType(1L, "dummyType"));
-        ResponseEntity<List<CouponType>> responseEntity = new ResponseEntity(couponTypes, HttpStatus.OK);
+        PageResponse<CouponType> couponTypePageResponse = new PageResponse();
+        ReflectionTestUtils.setField(couponTypePageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponTypePageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponTypePageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponTypePageResponse, "data", couponTypes);
+        ResponseEntity<PageResponse<CouponType>> responseEntity = new ResponseEntity(couponTypePageResponse, HttpStatus.OK);
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         //mocking
@@ -61,12 +66,12 @@ class CouponAdminFrontControllerTest {
         mockMvc.perform(get(URI_PREFIX+"/create").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk())
                 .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-                .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/createCouponTypeForm"))
+                .andExpect(result -> result.getModelAndView().getModel().get("targetUrl").equals("coupon/createCouponForm"))
                 .andReturn();
     }
 
     @Test
-    void postCreateCouponType() throws Exception {
+    void postCreateCoupon() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("name", "coupon1");
         map.add("userId", "1");

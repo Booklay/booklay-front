@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.*;
 
@@ -28,6 +30,7 @@ public class CouponAdminFrontController {
     private final String gatewayIp;
     private final ImageUploader imageUploader;
     private static final String RETURN_PAGE = "admin/adminPage";
+    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupon/list/0";
     private static final String REST_PRE_FIX = "/shop/v1/admin/coupons/";
     @ModelAttribute("navHead")
     public String addNavHead(){
@@ -40,43 +43,53 @@ public class CouponAdminFrontController {
     }
 
     @GetMapping("create")
-    public String createCouponTypeForm(Model model){
+    public String createCouponForm(Model model){
         String url = buildString(gatewayIp, "/shop/v1/couponTypes");
-        ApiEntity<List<CouponType>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
+        ApiEntity<PageResponse<CouponType>> apiEntity = restService.get(url, getDefaultPageMap(0, Integer.MAX_VALUE), new ParameterizedTypeReference<>() {});
         if (!apiEntity.isSuccess()){
-//            return ERROR;
-            //todo test code
-            List<CouponType> couponTypes = new ArrayList<>();
-            couponTypes.add(new CouponType(1L, "dummyType"));
-            model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, couponTypes);
+            return ERROR;
         }
-        else {
-            model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody());
-        }
-        model.addAttribute(TARGET_VIEW, "coupon/createCouponTypeForm");
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
+        model.addAttribute(TARGET_VIEW, "coupon/createCouponForm");
         return RETURN_PAGE;
     }
 
     @PostMapping("create")
-    public String postCreateCouponType(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest
+    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest
                         ,@RequestParam("issuanceDeadline") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date
                         ,@RequestParam(name = "couponImage", required = false) MultipartFile multipartFile
                         ,HttpServletRequest request){
-        couponTypeAddRequest.setIssuanceDeadlineAt(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-        imageUploader.uploadImage(multipartFile, request);
+        couponAddRequest.setIssuanceDeadlineAt(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+        String imagePath = imageUploader.uploadImage(multipartFile, request);
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
-
+        Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
+        map.put("imagePath", imagePath);
         String url = buildString(gatewayIp, REST_PRE_FIX);
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
         if (!apiEntity.isSuccess()){
             return ERROR;
         }
-        return "redirect:";
+        return RETURN_PAGE_COUPON_LIST;
     }
+
+    @GetMapping("type/create")
+    public String createCouponTypeForm(Model model){
+        model.addAttribute(TARGET_VIEW, "coupon/createCouponTypeForm");
+        return RETURN_PAGE;
+    }
+
+    @PostMapping("type/create")
+    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest") CouponTypeAddRequest couponTypeAddRequest){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
+        String url = buildString(gatewayIp, "/shop/v1/couponTypes");
+        restService.post(url, map, String.class);
+        return "redirect:/admin/coupon/list/type/0";
+    }
+
     @GetMapping("list")
     public String allCouponList0(){
-        return "redirect:list/0";
+        return RETURN_PAGE_COUPON_LIST;
     }
     @GetMapping("list/{pageNum}")
     public String allCouponList(Model model, @PathVariable Integer pageNum){
@@ -104,6 +117,13 @@ public class CouponAdminFrontController {
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/typeListView");
         return RETURN_PAGE;
+    }
+
+    @GetMapping("type/delete/{couponId}")
+    public String couponTypeDelete(@PathVariable String couponId){
+        String url = buildString(gatewayIp, "/shop/v1/couponTypes/" , couponId);
+        restService.delete(url);
+        return "redirect:/admin/coupon/list/type/0";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")
@@ -149,23 +169,23 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("update/{couponId}")
-    public String postUpdateCouponForm(@ModelAttribute CouponTypeAddRequest couponTypeAddRequest,
+    public String postUpdateCouponForm(@ModelAttribute CouponAddRequest couponAddRequest,
                                        @PathVariable String couponId){
         String url = buildString(gatewayIp, REST_PRE_FIX, couponId);
         Map<String, Object> map = new HashMap<>();
-        map.put("couponRequest", couponTypeAddRequest);
+        map.put("couponRequest", couponAddRequest);
         ApiEntity<String> apiEntity = restService.put(url, map, String.class);
         if (!apiEntity.isSuccess()){
             return ERROR;
         }
-        return "redirect:";
+        return RETURN_PAGE_COUPON_LIST;
     }
 
     @GetMapping("delete/{couponId}")
     public String deleteCoupon(@PathVariable String couponId){
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX , couponId);
+        String url = buildString(gatewayIp, REST_PRE_FIX , couponId);
         restService.delete(url);
-        return "redirect:";
+        return RETURN_PAGE_COUPON_LIST;
     }
 
     @GetMapping("history/{pageNum}")
