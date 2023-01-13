@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.product.request;
+package com.nhnacademy.booklay.booklayfront.dto.product.product.request;
 
 import java.time.LocalDate;
 import java.util.List;
