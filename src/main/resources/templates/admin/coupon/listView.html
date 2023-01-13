@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <table>
+            <tr>
+                <td>쿠폰 ID</td>
+                <td>쿠폰 이름</td>
+                <td>쿠폰 타입</td>
+                <td>할인량</td>
+                <td>최소사용금액</td>
+                <td>최대할인금액</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        <tbody th:each="coupon:${couponList}">
+            <tr>
+                <td><p th:text="${coupon.couponId}"></p></td>
+                <td><p th:text="${coupon.name}"></p></td>
+                <td><p th:text="${coupon.typeName}"></p></td>
+                <td><p th:text="${coupon.amount}"></p></td>
+                <td><p th:text="${coupon.minimumUseAmount}"></p></td>
+                <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
+                <td><a th:href="${'coupon/detail/'+coupon.couponId}">상세</a></td>
+                <td><a th:href="${'coupon/update/'+coupon.couponId}">수정</a></td>
+                <td><a th:href="${'coupon/delete/'+coupon.couponId}">삭제</a></td>
+            </tr>
+        </tbody>
+
+        </table>
+        <p th:if="${pageNum > 0}">
+            <a th:href="${'coupon/list/' + (pageNum - 1)}">이전</a>
+        </p>
+        <p th:if="${#lists.size(couponList) > 0}">
+            <a th:href="${'coupon/list/' + (pageNum + 1)}">다음</a>
+        </p>
+    </div>
+</html>

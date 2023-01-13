@@ -27,15 +27,4 @@ ApiEntity<T> {
             );
     }
 
-//    public ResponseEntity<Map<String, Object>> getErrorResponse() {
-//        try {
-//            Map<String, Object> response = JsonUtils.getInstance().fromJson(httpClientErrorException.getResponseBodyAsString(), Map.class);
-//            return ResponseEntity.status(httpClientErrorException.getStatusCode()).body(response);
-//        } catch (JsonSyntaxException e) {
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("error", httpClientErrorException.getResponseBodyAsString());
-//            return ResponseEntity.status(httpClientErrorException.getStatusCode()).body(response);
-//        }
-//    }
-
 }

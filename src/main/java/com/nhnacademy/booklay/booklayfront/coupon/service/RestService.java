@@ -27,8 +27,6 @@ public class RestService {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-//        headers.addAll(header);
-
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         ApiEntity<T> apiEntity = new ApiEntity<>();

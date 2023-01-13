@@ -1,24 +1,26 @@
 package com.nhnacademy.booklay.booklayfront.coupon.domain;
 
-import java.time.LocalDate;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CouponTypeAddRequest {
 
-    private String name;
-    private Long userId;
-    private String typeName;
-    private Long amount;
-    private Long categoryId;
-    private Long minimumUseAmount;
-    private Long maximumDiscountAmount;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate issuanceDeadlineAt;
-    private Boolean isDuplicatable;
+    private final String name;
+    private final Long typeCode;
+    private final Long amount;
+    private final Boolean isOrderCoupon;
+    private final Long applyItemId;
+    private final Long minimumUseAmount;
+    private final Long maximumDiscountAmount;
+    @Setter
+    private LocalDateTime issuanceDeadlineAt;
+    private final Boolean isDuplicatable;
+    private final Long quantity;
+
+
 }

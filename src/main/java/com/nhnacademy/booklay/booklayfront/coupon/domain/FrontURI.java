@@ -1,14 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.coupon.domain;
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-
-@PropertySource("classpath:frontUrl.properties")
-@Component
 public class FrontURI {
-
-    @Value("${shopUrl}")
-    public String SHOPURI;
+    private FrontURI(){}
+    public static final String SHOP_URI = "http://localhost:8080/";
 }
