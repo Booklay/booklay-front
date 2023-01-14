@@ -6,6 +6,7 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.UpdateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.TagProductResponse;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -138,16 +139,16 @@ public class AdminTagController {
     URI uri = URI.create(
         gatewayIp + "/shop/v1/admin/product/tag/product?page=" + pageNum + "&size=" + size);
 
-    RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
+    RequestEntity<PageResponse<TagProductResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
 
-    ResponseEntity<PageResponse<RetrieveTagResponse>> testTags =
+    ResponseEntity<PageResponse<TagProductResponse>> testTags =
         restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
         });
 
     int totalPage = testTags.getBody().getTotalPages();
     int nowPage = testTags.getBody().getPageNumber();
-    List<RetrieveTagResponse> tagList = testTags.getBody().getData();
+    List<TagProductResponse> tagList = testTags.getBody().getData();
 
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("totalPage", totalPage);
@@ -155,5 +156,12 @@ public class AdminTagController {
     model.addAttribute("productNo", productNo);
 
     return "/admin/product/productTagConnector";
+  }
+
+  @PostMapping("/connection/{productNo}/{pageNum}")
+  public String tagProductConnect(@PathVariable("pageNum") Long pageNum, Model model,
+      @PathVariable("productNo") Long productNo){
+
+    return "/admin/product/connection/"+productNo+"/"+pageNum;
   }
 }
