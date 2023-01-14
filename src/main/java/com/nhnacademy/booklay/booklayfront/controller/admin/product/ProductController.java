@@ -11,9 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
   @GetMapping
-  public String getProductMaintain(){
+  public String getProductMainPage(){
     return "/admin/product/productMainManage";
   }
+
+  @GetMapping("/book/create")
+  public String getProductBookForm(){
+    return "/admin/product/createProductBookForm";
+  }
+
+  @GetMapping("/subscribe/create")
+  public String getProductSubscribeForm(){
+    return "/admin/product/createProductSubscribeForm";
+  }
+
 
   @GetMapping("/author")
   public String getAuthorMaintain(){

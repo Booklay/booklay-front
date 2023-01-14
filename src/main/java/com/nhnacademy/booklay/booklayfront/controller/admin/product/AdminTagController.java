@@ -30,13 +30,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/product/tag/maintenance")
+@RequestMapping("/admin/product/tag")
 public class AdminTagController {
 
   private final RestTemplate restTemplate;
   private final String gatewayIp;
 
-  @GetMapping()
+  @GetMapping("/maintenance")
   public String retrieveTag(
       @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
     if (pageNum.isEmpty()) {
@@ -74,7 +74,7 @@ public class AdminTagController {
     return "/admin/product/adminTag";
   }
 
-  @PostMapping
+  @PostMapping("/maintenance")
   public String createTag(@Valid @ModelAttribute CreateTagRequest request)
       throws JsonProcessingException {
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
@@ -98,7 +98,7 @@ public class AdminTagController {
     return "redirect:/admin/product/tag/maintenance";
   }
 
-  @PostMapping("/update")
+  @PostMapping("/maintenance/update")
   public String updateTag(@Valid @ModelAttribute UpdateTagRequest request)
       throws JsonProcessingException {
     log.info("진입 확인");
@@ -119,5 +119,44 @@ public class AdminTagController {
     restTemplate.exchange(requestEntity, UpdateTagRequest.class);
 
     return "redirect:/admin/product/tag/maintenance";
+  }
+
+  @GetMapping("/connection")
+  public String retrieveTagForProductConnect(@RequestParam("productNo") Long productNo,
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+    if (pageNum.isEmpty()) {
+      pageNum = Optional.of(0);
+    }
+    if (pageNum.get() < 0) {
+      pageNum = Optional.of(0);
+    }
+
+    Long size = 20L;
+
+    pageNum = Optional.of(pageNum.get() - 1);
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    URI uri = URI.create(
+        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size);
+
+    RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    ResponseEntity<PageResponse<RetrieveTagResponse>> testTags =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    int totalPage = testTags.getBody().getTotalPages();
+    int nowPage = testTags.getBody().getPageNumber();
+    List<RetrieveTagResponse> tagList = testTags.getBody().getData();
+
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("totalPage", totalPage);
+    model.addAttribute("tagList", tagList);
+    model.addAttribute("productNo", productNo);
+
+    return "/admin/product/productTagConnector";
   }
 }
