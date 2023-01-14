@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -104,7 +105,7 @@ public class AdminTagController {
     log.info("진입 확인");
     log.info("출력 : " + request.getName() + "   " + request.getId());
 
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/");
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -121,25 +122,21 @@ public class AdminTagController {
     return "redirect:/admin/product/tag/maintenance";
   }
 
-  @GetMapping("/connection")
-  public String retrieveTagForProductConnect(@RequestParam("productNo") Long productNo,
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
-    if (pageNum.isEmpty()) {
-      pageNum = Optional.of(0);
-    }
-    if (pageNum.get() < 0) {
-      pageNum = Optional.of(0);
+  @GetMapping("/connection/{productNo}/{pageNum}")
+  public String retrieveTagForProductConnect(
+      @PathVariable("pageNum") Long pageNum, Model model,
+      @PathVariable("productNo") Long productNo) {
+    if (pageNum < 0L) {
+      pageNum = 1L;
     }
 
-    Long size = 20L;
-
-    pageNum = Optional.of(pageNum.get() - 1);
+    Long size = 10L;
 
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/product/tag/product?page=" + pageNum + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
