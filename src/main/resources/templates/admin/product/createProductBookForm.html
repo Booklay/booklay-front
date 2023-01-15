@@ -5,87 +5,107 @@
   <title>Title</title>
 </head>
 <body>
+
+<script>
+  function showCategory() {
+    window.open("/admin/product/author/maintenance", "a",
+        "width=400, height=600, left=100, top=50");
+  }
+
+  let catNo = 1;
+
+  function addCategory() {
+    if (catNo < 4) {
+      const categorySpan = document.createElement("span")
+      const innerCategorySpan = "카테고리" + catNo + " : "
+      categorySpan.innerText = innerCategorySpan;
+
+      const categoryInput = document.createElement("input")
+      categoryInput.setAttribute('type', 'number')
+      categoryInput.setAttribute('name', 'categories[' + catNo - 1 + ']')
+
+      const br = document.createElement("br");
+
+      document.getElementById('categories').appendChild(categorySpan);
+      document.getElementById('categories').appendChild(categoryInput);
+      document.getElementById('categories').appendChild(br);
+
+      catNo = catNo + 1
+    }
+  }
+
+  function showAuthor() {
+    window.open("/admin/product/author/maintenance", "a",
+        "width=400, height=600, left=100, top=50");
+  }
+
+  let authorNo = 1;
+
+  function addAuthor() {
+    const authorSpan = document.createElement("span")
+    const innerAuthorSpan = "작가" + authorNo + " : "
+    authorSpan.innerText = innerAuthorSpan;
+
+    const authorInput = document.createElement("input")
+    authorInput.setAttribute('type', 'number')
+    authorInput.setAttribute('name', 'authors[' + (authorNo - 1) + ']')
+
+    const br = document.createElement("br");
+
+    document.getElementById('authors').appendChild(authorSpan);
+    document.getElementById('authors').appendChild(authorInput);
+    document.getElementById('authors').appendChild(br);
+
+    authorNo = authorNo + 1
+  }
+
+</script>
+
 <form>
   <p>제목 : <input type="text" name="title"/></p>
   <p>썸네일 : <input type="file" name="image"/></p>
   <p>가격 : <input type="number" min="0" name="price"/></p>
   <p>적립률 : <input type="number" min="0" name="pointRate" th:value="${defaultPointRate}"/> %</p>
   <p>적립 여부 : <input type="checkbox" name="pointMethod"/></p>
+
   <p>짧은 설명 : tui-editor</p>
+  <div id="shortDescription"></div>
+
+  <script>
+    const editor = new toastui.Editor({
+      el: document.querySelector('#shortDescription'),
+      previewStyle: 'vertical',
+      height: '500px',
+      initialValue: content
+    });
+  </script>
   <p>긴 설명 : tui-editor</p>
-  <p>판매 여부 : <input type="checkbox" name="isSelling"/><p>
+  <div id="longDescription"></div>
 
-  <input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showCategory();" />
   <script>
-    function showCategory() { window.open("/admin/product/author/maintenance" , "a", "width=400, height=600, left=100, top=50"); }
+    const editor = new toastui.Editor({
+      el: document.querySelector('#longDescription'),
+      previewStyle: 'vertical',
+      height: '500px',
+      initialValue: content
+    });
   </script>
 
-  <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
+  <p>판매 여부 : <input type="checkbox" name="isSelling"/>
+  <p>
+    <input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showCategory();"/>
+    &ensp; &ensp; &ensp;
+    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
   <div id="categories"></div>
-
-  <script>
-    let catNo = 1;
-
-    function addCategory(){
-      if(catNo < 4){
-        const categorySpan = document.createElement("span")
-        const innerCategorySpan = "카테고리" + catNo + " : "
-        categorySpan.innerText = innerCategorySpan;
-
-        const categoryInput = document.createElement("input")
-        categoryInput.setAttribute('type', 'number')
-        categoryInput.setAttribute('name', 'categories['+catNo-1+']')
-
-        const br = document.createElement("br");
-
-        document.getElementById('categories').appendChild(categorySpan);
-        document.getElementById('categories').appendChild(categoryInput);
-        document.getElementById('categories').appendChild(br);
-
-        catNo = catNo+1
-      }
-    }
-  </script>
-
 
   <p>ISBN : <input type="text" name="isbn"/></p>
   <p>페이지 수 : <input type="number" min="0" name="page"/></p>
   <p>출판사 : <input type="text" name="publisher"/></p>
   <p>출판일 : <input type="date" name="publishedDate"/></p>
-
-
-
-  <input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showAuthor();" />
-  <script>
-    function showAuthor() { window.open("/admin/product/author/maintenance" , "a", "width=400, height=600, left=100, top=50"); }
-  </script>
-
+  <input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showAuthor();"/>
   &ensp; &ensp; &ensp;
   <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
   <div id="authors"></div>
-
-  <script>
-    let authorNo = 1;
-
-    function addAuthor(){
-      const authorSpan = document.createElement("span")
-      const innerAuthorSpan = "작가" + authorNo + " : "
-      authorSpan.innerText = innerAuthorSpan;
-
-      const authorInput = document.createElement("input")
-      authorInput.setAttribute('type', 'number')
-      authorInput.setAttribute('name', 'authors['+(authorNo-1)+']')
-
-      const br = document.createElement("br");
-
-      document.getElementById('authors').appendChild(authorSpan);
-      document.getElementById('authors').appendChild(authorInput);
-      document.getElementById('authors').appendChild(br);
-
-      authorNo = authorNo+1
-    }
-  </script>
-
 
   <!--  둘 중 하나만 입력 가능해야함-->
   <p>재고량 : <input type="number" min="0" name="storage"/></p>
