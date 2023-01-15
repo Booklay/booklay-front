@@ -83,9 +83,7 @@ public class AdminTagController {
 
     log.info(request.getName());
 
-    //1
     HttpHeaders headers = new HttpHeaders();
-//    headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     ObjectMapper mapper = new ObjectMapper();

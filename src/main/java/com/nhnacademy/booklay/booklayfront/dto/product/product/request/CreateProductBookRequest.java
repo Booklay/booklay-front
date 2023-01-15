@@ -3,17 +3,17 @@ package com.nhnacademy.booklay.booklayfront.dto.product.product.request;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
 public class CreateProductBookRequest {
 
-  @Setter
-  private Long productId;
-//  @NotNull
-//  private Image image;
+  @NotNull
+  private MultipartFile image;
   @NotNull
   private String title;
   @NotNull
@@ -29,29 +29,30 @@ public class CreateProductBookRequest {
   @NotNull
   private boolean pointMethod;
 
-  @Setter
-  private Long productDetailId;
   @NotNull
   private String isbn;
   @NotNull
   private int page;
   @NotNull
   private String publisher;
+
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   @NotNull
   private LocalDate publishedDate;
-  @Setter
   private String ebookAddress;
-  @Setter
   private int storage;
   @NotNull
   private List<Long> authorIds;
   @NotNull
   private List<Long> categoryIds;
 
-  @Builder
-  public CreateProductBookRequest(String title, Long price, Long pointRate,
-      String shortDescription, String longDescription, boolean isSelling, boolean pointMethod,
-      String isbn, int page, String publisher, LocalDate publishedDate, List<Long> authorIds, List<Long> categoryIds) {
+
+  public CreateProductBookRequest(MultipartFile image, String title, Long price,
+      Long pointRate, String shortDescription, String longDescription, boolean isSelling,
+      boolean pointMethod, String isbn, int page, String publisher,
+      LocalDate publishedDate, List<Long> authorIds,
+      List<Long> categoryIds) {
+    this.image = image;
     this.title = title;
     this.price = price;
     this.pointRate = pointRate;
