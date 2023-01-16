@@ -46,6 +46,13 @@ public class CreateProductBookRequest {
   @NotNull
   private List<Long> categoryIds;
 
+  public boolean getIsSelling(){
+    return this.isSelling;
+  }
+
+  public boolean getPointMethod(){
+    return this.pointMethod;
+  }
 
   public CreateProductBookRequest(MultipartFile image, String title, Long price,
       Long pointRate, String shortDescription, String longDescription, boolean isSelling,
