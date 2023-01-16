@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Detail</title>
+</head>
+<body>
+<div>
+    <b>이름</b>: <span th:text="${member.getName()}"></span><br>
+    <b>아이디</b>: <span th:text="${member.getMemberId()}"></span><br>
+    <b>닉네임</b>: <span th:text="${member.getNickname()}"></span><br>
+    <b>성별</b>: <span th:text="${member.getGender()}"></span><br>
+    <b>생년월일</b>: <span th:text="${member.getBirthday()}"></span><br>
+    <b>전화번호</b>: <span th:text="${member.getPhoneNo()()}"></span><br>
+    <b>주소</b>:
+    <b>이메일주소</b>: <span th:text="${member.getEmail()}"></span><br>
+</div>
+</body>
+</html>

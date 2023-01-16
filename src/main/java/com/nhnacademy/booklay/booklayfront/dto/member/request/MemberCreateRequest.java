@@ -9,39 +9,39 @@ import java.time.LocalDate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class MemberCreateRequest {
     @NotBlank
-    private String gender;
+    private final String gender;
 
     @NotBlank
-    private String memberId;
+    private final String memberId;
 
     @NotBlank
-    private String password;
+    private final String password;
 
     @NotBlank
-    private String nickname;
+    private final String nickname;
 
     @NotBlank
-    private String name;
+    private final String name;
 
     @NotNull
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private final LocalDate birthday;
 
     @NotBlank
-    private String phoneNo;
+    private final String phoneNo;
 
     @Email
     @NotBlank
-    private String email;
+    private final String email;
 }

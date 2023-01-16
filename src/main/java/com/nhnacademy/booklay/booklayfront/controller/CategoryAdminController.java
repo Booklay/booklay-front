@@ -31,18 +31,18 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/admin/categories")
 public class CategoryAdminController {
     private final RestTemplate restTemplate;
-    private final String redirecGatewayPrefix;
+    private final String redirectGatewayPrefix;
     private static final String REDIRECT_PREFIX = "redirect:/admin/categories";
 
     public CategoryAdminController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
-        redirecGatewayPrefix = gateway + "/shop/v1" + "/admin/categories";
+        redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/categories";
     }
 
     @PostMapping
     public String createForm(@Valid @ModelAttribute CategoryCreateRequest createRequest,
                              Model model) throws JsonProcessingException {
-        URI uri = URI.create(redirecGatewayPrefix);
+        URI uri = URI.create(redirectGatewayPrefix);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -79,7 +79,7 @@ public class CategoryAdminController {
 
     @GetMapping("/test")
     public String test(Model model) {
-        URI uri = URI.create(redirecGatewayPrefix + "/test");
+        URI uri = URI.create(redirectGatewayPrefix + "/test");
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -108,7 +108,7 @@ public class CategoryAdminController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirecGatewayPrefix + query);
+        URI uri = URI.create(redirectGatewayPrefix + query);
 
         RequestEntity<PageResponse<CategoryResponse>> requestEntity =
             new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
@@ -127,7 +127,7 @@ public class CategoryAdminController {
 
     @GetMapping("/{categoryId}")
     public String deleteCategory(@PathVariable("categoryId") Long id) {
-        restTemplate.delete(redirecGatewayPrefix + "/" + id);
+        restTemplate.delete(redirectGatewayPrefix + "/" + id);
 
         return REDIRECT_PREFIX;
     }
