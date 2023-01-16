@@ -3,30 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 </head>
 <body>
-<form>
+
+<script>
+  function showCategory() {
+    window.open("/admin/product/category/maintenance", "a",
+        "width=400, height=600, left=100, top=50");
+  }
+
+  let catNo = 1;
+
+  function addCategory() {
+    if (catNo < 4) {
+      const categorySpan = document.createElement("span")
+      const innerCategorySpan = "카테고리" + catNo + " : "
+      categorySpan.innerText = innerCategorySpan;
+
+      const categoryInput = document.createElement("input")
+      categoryInput.setAttribute('type', 'number')
+      categoryInput.setAttribute('name', 'categoryIds[' + (catNo - 1) + ']')
+
+      const br = document.createElement("br");
+
+      document.getElementById('categories').appendChild(categorySpan);
+      document.getElementById('categories').appendChild(categoryInput);
+      document.getElementById('categories').appendChild(br);
+
+      catNo = catNo + 1
+    }
+  }
+
+  function showAuthor() {
+    window.open("/admin/product/author/maintenance", "a",
+        "width=400, height=600, left=100, top=50");
+  }
+
+  let authorNo = 1;
+
+  function addAuthor() {
+    const authorSpan = document.createElement("span")
+    const innerAuthorSpan = "작가" + authorNo + " : "
+    authorSpan.innerText = innerAuthorSpan;
+
+    const authorInput = document.createElement("input")
+    authorInput.setAttribute('type', 'number')
+    authorInput.setAttribute('name', 'authorIds[' + (authorNo - 1) + ']')
+
+    const br = document.createElement("br");
+
+    document.getElementById('authors').appendChild(authorSpan);
+    document.getElementById('authors').appendChild(authorInput);
+    document.getElementById('authors').appendChild(br);
+
+    authorNo = authorNo + 1
+  }
+</script>
+
+<form method="post" action="/admin/product/book/create" enctype="multipart/form-data">
+<!--<form enctype="multipart/form-data">-->
   <p>제목 : <input type="text" name="title"/></p>
-  <p>썸네일 : <input type="file" name="image"/></p>
+  <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
+  </p>
   <p>가격 : <input type="number" min="0" name="price"/></p>
-  <p>적립률 : <input type="number" min="0" name="pointRate"/> %</p>
+  <p>적립률 : <input type="number" min="0" name="pointRate" th:value="${defaultPointRate}"/> %</p>
   <p>적립 여부 : <input type="checkbox" name="pointMethod"/></p>
-  <p>짧은 설명 : tui-editor</p>
-  <p>긴 설명 : tui-editor</p>
-  <p>판매 여부 : <input type="checkbox" name="isSelling"/><p>
-  <p>카테고리 : 따로 페이지 뽑아서 거기서 받아오는 형식으로</p>
+
+  <p>짧은 설명</p>
+  <div id="shortEditor"></div>
+  <input id="shortDescription" name="shortDescription" type="text" hidden="hidden"/>
+
+  <p>긴 설명</p>
+  <div id="longEditor"></div>
+  <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
+
+
+  <p>판매 여부 : <input type="checkbox" name="isSelling"/>
+  <p>
+    <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
+    &ensp; &ensp; &ensp;
+    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
+  <div id="categories"></div>
 
   <p>ISBN : <input type="text" name="isbn"/></p>
   <p>페이지 수 : <input type="number" min="0" name="page"/></p>
   <p>출판사 : <input type="text" name="publisher"/></p>
   <p>출판일 : <input type="date" name="publishedDate"/></p>
-  <p>작가들 : 따로 페이지 뽑아서 거기서 받아오는 형식으로</p>
+  <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
+  &ensp;&ensp;&ensp;
+  <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
+  <div id="authors"></div>
 
   <!--  둘 중 하나만 입력 가능해야함-->
   <p>재고량 : <input type="number" min="0" name="storage"/></p>
   <p>이북 주소 : <input type="text" name="ebookAddress"></p>
 
-  <input type="submit"/>
+  <input type="submit" id="btn-submit"/>
+<!--  <input type="button" id="btn-submit" value="임시 버튼"/>-->
 </form>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const Editor = toastui.Editor;
+
+    const editor1 = new Editor({
+      el: document.querySelector('#shortEditor'),
+      height: '500px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical',
+      placeholder: '내용을 입력해주세요.',
+      autofocus: false
+    });
+    editor1.getMarkdown();
+
+    const editor2 = new Editor({
+      el: document.querySelector('#longEditor'),
+      height: '500px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical',
+      placeholder: '내용을 입력해주세요.',
+      autofocus: false
+    });
+    editor2.getMarkdown();
+
+    const submitButton = document.getElementById('btn-submit');
+
+    submitButton.addEventListener('click', (event) => {
+      const shortDescription = editor1.getHTML();
+      const longDescription = editor2.getHTML();
+
+      console.log(shortDescription);
+      console.log(longDescription);
+
+      document.getElementById('shortDescription').setAttribute('value', shortDescription)
+      document.getElementById('longDescription').setAttribute('value', longDescription)
+    });
+  });
+</script>
+
 </body>
 </html>

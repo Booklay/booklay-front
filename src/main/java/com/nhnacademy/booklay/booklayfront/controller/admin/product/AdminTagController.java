@@ -6,6 +6,7 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.UpdateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.TagProductResponse;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,13 +32,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/product/tag/maintenance")
+@RequestMapping("/admin/product/tag")
 public class AdminTagController {
 
   private final RestTemplate restTemplate;
   private final String gatewayIp;
 
-  @GetMapping()
+  @GetMapping("/maintenance")
   public String retrieveTag(
       @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
     if (pageNum.isEmpty()) {
@@ -74,16 +76,14 @@ public class AdminTagController {
     return "/admin/product/adminTag";
   }
 
-  @PostMapping
+  @PostMapping("/maintenance")
   public String createTag(@Valid @ModelAttribute CreateTagRequest request)
       throws JsonProcessingException {
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
 
     log.info(request.getName());
 
-    //1
     HttpHeaders headers = new HttpHeaders();
-//    headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     ObjectMapper mapper = new ObjectMapper();
@@ -98,13 +98,13 @@ public class AdminTagController {
     return "redirect:/admin/product/tag/maintenance";
   }
 
-  @PostMapping("/update")
+  @PostMapping("/maintenance/update")
   public String updateTag(@Valid @ModelAttribute UpdateTagRequest request)
       throws JsonProcessingException {
     log.info("진입 확인");
     log.info("출력 : " + request.getName() + "   " + request.getId());
 
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/");
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -119,5 +119,47 @@ public class AdminTagController {
     restTemplate.exchange(requestEntity, UpdateTagRequest.class);
 
     return "redirect:/admin/product/tag/maintenance";
+  }
+
+  @GetMapping("/connection/{productNo}/{pageNum}")
+  public String retrieveTagForProductConnect(
+      @PathVariable("pageNum") Long pageNum, Model model,
+      @PathVariable("productNo") Long productNo) {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+
+    Long size = 10L;
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    URI uri = URI.create(
+        gatewayIp + "/shop/v1/admin/product/tag/product?page=" + pageNum + "&size=" + size);
+
+    RequestEntity<PageResponse<TagProductResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    ResponseEntity<PageResponse<TagProductResponse>> testTags =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    int totalPage = testTags.getBody().getTotalPages();
+    int nowPage = testTags.getBody().getPageNumber();
+    List<TagProductResponse> tagList = testTags.getBody().getData();
+
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("totalPage", totalPage);
+    model.addAttribute("tagList", tagList);
+    model.addAttribute("productNo", productNo);
+
+    return "/admin/product/productTagConnector";
+  }
+
+  @PostMapping("/connection/{productNo}/{pageNum}")
+  public String tagProductConnect(@PathVariable("pageNum") Long pageNum, Model model,
+      @PathVariable("productNo") Long productNo){
+
+    return "/admin/product/connection/"+productNo+"/"+pageNum;
   }
 }

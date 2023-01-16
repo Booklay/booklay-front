@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--TODO: 맴버 끝나면 권한 식별해서 표시 유 무 식 넣을것-->
+
+<input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showPopup(id);" />
+
+
+<script>
+  function showPopup(productNo) { window.open("/admin/product/tag/connection/"+productNo+"/1" , "a", "width=400, height=550, left=100, top=50"); }
+</script>
+</body>
+</html>

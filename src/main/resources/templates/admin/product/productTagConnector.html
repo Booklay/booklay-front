@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+
+<form>
+  <input type="text">
+  <input type="submit" value="검색">
+</form>
+<hr>
+<table>
+  <thead>
+  <tr>
+    <th>태그 번호</th>
+    <th>태그 이름</th>
+    <th>등록 여부</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="tag : ${tagList}">
+    <tr>
+      <td><span th:text="${tag.id}"/></td>
+      <td><span th:text="${tag.name}"/></td>
+      <td>
+        <form th:if="${tag.isRegistered == false}">
+          <input type="number" th:value="${tag.id}" hidden="hidden"/>
+          <input type="text" th:value="${tag.name}" hidden="hidden"/>
+          <input type="number" th:value="${productNo}" hidden="hidden"/>
+          <input type="submit" value="등록">
+        </form>
+      </td>
+    </tr>
+  </th:block>
+  </tbody>
+
+</table>
+
+<div>
+  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/product/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
+    <span th:text="${nowPage}-1"/></a>
+  <a th:if="${nowPage >= 1}" th:href="@{/admin/product/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
+    <span th:text="${nowPage}"/></a>
+
+  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/product/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
+    <span th:text="${nowPage}+1"/></a>
+
+  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/product/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
+    <span th:text="${nowPage}+2"/></a>
+  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/product/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
+    <span th:text="${nowPage}+3"/></a>
+
+  <span th:if="${nowPage + 3 < totalPage}">...</span>
+
+  <a th:href="@{/admin/product/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
+    <span th:text="${totalPage}"/></a>
+</div>
+
+</body>
+</html>
