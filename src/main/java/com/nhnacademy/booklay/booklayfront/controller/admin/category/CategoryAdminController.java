@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.controller;
+package com.nhnacademy.booklay.booklayfront.controller.admin.category;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
