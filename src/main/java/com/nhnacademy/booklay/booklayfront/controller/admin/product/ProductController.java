@@ -14,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,6 +70,7 @@ public class ProductController {
 
     LinkedMultiValueMap<String, Object> multipartReqMap = new LinkedMultiValueMap<>();
     multipartReqMap.add("jsonString", mapper.writeValueAsString(jsonString));
+//    multipartReqMap.add("jsonString", jsonString);
     multipartReqMap.add("image", imageBytes);
 
     HttpHeaders headers = new HttpHeaders();
@@ -78,16 +78,17 @@ public class ProductController {
 
     HttpEntity<?> uploadEntity = new HttpEntity<>(multipartReqMap, headers);
 
-    RequestEntity<LinkedMultiValueMap<String, Object>> requestEntity = new RequestEntity<>(multipartReqMap,
-        headers, HttpMethod.POST, uri);
+    RequestEntity<LinkedMultiValueMap<String, Object>> requestEntity = new RequestEntity<>(
+        multipartReqMap, headers, HttpMethod.POST, uri);
 
-    log.info("출력 : "  + requestEntity.getBody().get("jsonString"));
-    log.info("출력 : "  + requestEntity.getBody().get("image"));
+    log.info("출력 : " + requestEntity.getBody().get("jsonString"));
+    log.info("출력 : " + requestEntity.getBody().get("image"));
 
-    ResponseEntity<Long> responseEntity = restTemplate.exchange(requestEntity, Long.class);
+//    ResponseEntity<Long> responseEntity =restTemplate.exchange(requestEntity, Long.class);
+    restTemplate.exchange(uri, HttpMethod.POST, uploadEntity, String.class);
 
-    Long productId = responseEntity.getBody();
-    log.info("생성된 상품 번호 : " + productId);
+//    Long productId = responseEntity.getBody();
+//    log.info("생성된 상품 번호 : " + productId);
     return "redirect:/admin/product";
   }
 
