@@ -1,7 +1,7 @@
-package com.nhnacademy.booklay.booklayfront.coupon.service;
+package com.nhnacademy.booklay.booklayfront.service;
 
 
-import com.nhnacademy.booklay.booklayfront.coupon.domain.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,8 @@ import java.util.Map;
 public class RestService {
 
 
-    public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody, Class<T> responseType){
+    public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody,
+                                 Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -29,16 +30,19 @@ public class RestService {
         ApiEntity<T> apiEntity = new ApiEntity<>();
 
         try {
-            ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
+            ResponseEntity<T> response =
+                restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
             apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             apiEntity.setHttpClientErrorException(e);
 
         }
 
         return apiEntity;
     }
-    public <T> ApiEntity<T> put(String url, Map<String, Object> requestBody, Class<T> responseType){
+
+    public <T> ApiEntity<T> put(String url, Map<String, Object> requestBody,
+                                Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -51,9 +55,10 @@ public class RestService {
         ApiEntity<T> apiEntity = new ApiEntity<>();
 
         try {
-            ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.PUT, entity, responseType);
+            ResponseEntity<T> response =
+                restTemplate.exchange(url, HttpMethod.PUT, entity, responseType);
             apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             apiEntity.setHttpClientErrorException(e);
 
         }
@@ -61,7 +66,8 @@ public class RestService {
         return apiEntity;
     }
 
-    public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params, ParameterizedTypeReference<T> responseType) {
+    public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params,
+                                ParameterizedTypeReference<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
 
@@ -75,7 +81,9 @@ public class RestService {
         ApiEntity<T> apiEntity = new ApiEntity<>();
 
         try {
-            ResponseEntity<T> response = restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity, responseType );
+            ResponseEntity<T> response =
+                restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity,
+                    responseType);
             apiEntity.setSuccessResponse(response);
         } catch (HttpClientErrorException e) {
             apiEntity.setHttpClientErrorException(e);
@@ -84,7 +92,8 @@ public class RestService {
         return apiEntity;
     }
 
-    public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params, Class<T> responseType) {
+    public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params,
+                                Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
@@ -99,7 +108,9 @@ public class RestService {
         ApiEntity<T> apiEntity = new ApiEntity<>();
 
         try {
-            ResponseEntity<T> response = restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity, responseType );
+            ResponseEntity<T> response =
+                restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity,
+                    responseType);
             apiEntity.setSuccessResponse(response);
         } catch (HttpClientErrorException e) {
             apiEntity.setHttpClientErrorException(e);

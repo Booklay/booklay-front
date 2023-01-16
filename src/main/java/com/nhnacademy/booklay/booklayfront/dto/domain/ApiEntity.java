@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.coupon.domain;
+package com.nhnacademy.booklay.booklayfront.dto.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ ApiEntity<T> {
         return successResponse != null &&
             (
                 successResponse.getStatusCode() == HttpStatus.OK
-                || successResponse.getStatusCode() == HttpStatus.CREATED
+                    || successResponse.getStatusCode() == HttpStatus.CREATED
             );
     }
 

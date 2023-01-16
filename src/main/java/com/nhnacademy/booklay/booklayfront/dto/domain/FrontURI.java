@@ -1,7 +1,9 @@
-package com.nhnacademy.booklay.booklayfront.coupon.domain;
+package com.nhnacademy.booklay.booklayfront.dto.domain;
 
 
 public class FrontURI {
-    private FrontURI(){}
+    private FrontURI() {
+    }
+
     public static final String SHOP_URI = "http://localhost:8080/";
 }

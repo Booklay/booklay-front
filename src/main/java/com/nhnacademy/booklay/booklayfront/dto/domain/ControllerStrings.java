@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.coupon.domain;
+package com.nhnacademy.booklay.booklayfront.dto.domain;
 
 
 import lombok.AccessLevel;

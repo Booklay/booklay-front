@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.coupon.domain;
+package com.nhnacademy.booklay.booklayfront.dto.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

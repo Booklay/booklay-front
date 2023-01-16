@@ -1,7 +1,12 @@
-package com.nhnacademy.booklay.booklayfront.coupon.controller;
+package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
-import com.nhnacademy.booklay.booklayfront.coupon.domain.*;
-import com.nhnacademy.booklay.booklayfront.coupon.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
+import com.nhnacademy.booklay.booklayfront.dto.domain.CouponDetail;
+import com.nhnacademy.booklay.booklayfront.dto.domain.CouponHistory;
+import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssue;
+import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -15,33 +20,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static com.nhnacademy.booklay.booklayfront.coupon.domain.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.*;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("member/coupon")
 public class CouponMemberFrontController {
     private final RestService restService;
     private static final String RETURN_PAGE = "member/myPage";
-    private static final String REST_PRE_FIX = "member/coupon/";
+    private static final String REST_PRE_FIX = "templates/mypage/member/coupon/";
+
     @GetMapping("")
-    public String memberCouponPage(Model model){
+    public String memberCouponPage(Model model) {
         model.addAttribute(TARGET_VIEW, "coupon/empty");
         return RETURN_PAGE;
     }
+
     @ModelAttribute("navHead")
-    public String addNavHead(){
+    public String addNavHead() {
         return "coupon/couponFragments/couponNavHead";
     }
+
     @GetMapping("list")
-    public String allCouponList0(){
+    public String allCouponList0() {
         return "redirect:list/0";
     }
+
     @GetMapping("list/{pageNum}")
-    public String allCouponList(Model model, @PathVariable Integer pageNum){
+    public String allCouponList(Model model, @PathVariable Integer pageNum) {
         String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "list/", pageNum.toString());
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        ApiEntity<List<Coupon> > apiEntity = restService.get(url, map, new ParameterizedTypeReference<>(){});
-        if (!apiEntity.isSuccess()){
+        ApiEntity<List<Coupon>> apiEntity =
+            restService.get(url, map, new ParameterizedTypeReference<>() {
+            });
+        if (!apiEntity.isSuccess()) {
             return ERROR;
         }
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
@@ -52,10 +64,10 @@ public class CouponMemberFrontController {
     }
 
     @GetMapping("detail/{couponId}")
-    public String couponDetail(Model model, @PathVariable String couponId){
+    public String couponDetail(Model model, @PathVariable String couponId) {
         String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "detail/", couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
-        if (!apiEntity.isSuccess()){
+        if (!apiEntity.isSuccess()) {
             return ERROR;
         }
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
@@ -64,10 +76,12 @@ public class CouponMemberFrontController {
     }
 
     @GetMapping("history/{pageNum}")
-    public String couponHistory(Model model, @PathVariable Integer pageNum){
+    public String couponHistory(Model model, @PathVariable Integer pageNum) {
         String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "history/", pageNum.toString());
-        ApiEntity<List<CouponHistory>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
-        if (!apiEntity.isSuccess()){
+        ApiEntity<List<CouponHistory>> apiEntity =
+            restService.get(url, null, new ParameterizedTypeReference<>() {
+            });
+        if (!apiEntity.isSuccess()) {
             return ERROR;
         }
         model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody());
@@ -76,10 +90,12 @@ public class CouponMemberFrontController {
     }
 
     @GetMapping("issue/{pageNum}")
-    public String couponIssuing(Model model, @PathVariable Integer pageNum){
+    public String couponIssuing(Model model, @PathVariable Integer pageNum) {
         String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "issue/", pageNum.toString());
-        ApiEntity<List<CouponIssue>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
-        if (!apiEntity.isSuccess()){
+        ApiEntity<List<CouponIssue>> apiEntity =
+            restService.get(url, null, new ParameterizedTypeReference<>() {
+            });
+        if (!apiEntity.isSuccess()) {
             return ERROR;
         }
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
@@ -88,10 +104,9 @@ public class CouponMemberFrontController {
     }
 
 
-
-    private String buildString(String ... strings){
+    private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
-        for (String s : strings){
+        for (String s : strings) {
             builder.append(s);
         }
         return builder.toString();
