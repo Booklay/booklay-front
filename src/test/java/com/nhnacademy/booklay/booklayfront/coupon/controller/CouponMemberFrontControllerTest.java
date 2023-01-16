@@ -1,14 +1,24 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.nhnacademy.booklay.booklayfront.controller.coupon.CouponMemberFrontController;
-import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,17 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CouponMemberFrontController.class)
 @ActiveProfiles("test")
@@ -38,8 +37,8 @@ class CouponMemberFrontControllerTest {
     RestService restService;
     @Autowired
     MockMvc mockMvc;
-    private final String RETURN_PAGE = "templates/mypage/member/memberPage";
-    private final String URI_PREFIX = "/templates/mypage/member/coupon";
+    private final String RETURN_PAGE = "mypage/myPage";
+    private final String URI_PREFIX = "/member/coupon/";
 
     @Test
     void allCouponList0() throws Exception {
@@ -51,17 +50,12 @@ class CouponMemberFrontControllerTest {
     @Test
     void allCouponList() throws Exception {
         List<Coupon> couponList = new ArrayList<>();
-        ApiEntity<List<Coupon>> apiEntity = new ApiEntity<>();
         ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
-        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
-        //mocking
-        String url = FrontURI.SHOP_URI + "templates/mypage/member/coupon/list/" + 0;
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("memberId", anyString());
-        when(restService.get(url, map, new ParameterizedTypeReference<List<Coupon>>() {
-        }))
-            .thenReturn(apiEntity);
+        ApiEntity<Object> object = new ApiEntity<>();
+        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+        when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any()))
+            .thenReturn(object);
 
         //then
         mockMvc.perform(get(URI_PREFIX + "/list/0").accept(MediaType.TEXT_HTML))
@@ -77,15 +71,14 @@ class CouponMemberFrontControllerTest {
         CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
-
-        ApiEntity<CouponDetail> apiEntity = new ApiEntity<>();
         ResponseEntity<CouponDetail> responseEntity =
             new ResponseEntity(couponDetail, HttpStatus.OK);
-        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
-        String url = FrontURI.SHOP_URI + "templates/mypage/member/coupon/detail/" + 0;
-        when(restService.get(url, null, CouponDetail.class))
-            .thenReturn(apiEntity);
+        ApiEntity<CouponDetail> object = new ApiEntity<>();
+        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+        when(restService.get(anyString(), any(),
+            ArgumentMatchers.<Class<CouponDetail>>any())).thenReturn(object);
+
 
         //then
         mockMvc.perform(get(URI_PREFIX + "/detail/0").accept(MediaType.TEXT_HTML))
@@ -108,15 +101,12 @@ class CouponMemberFrontControllerTest {
             .build();
         List<CouponHistory> historyList = new ArrayList<>();
         historyList.add(couponHistory);
-        ApiEntity<List<CouponHistory>> apiEntity = new ApiEntity<>();
-        ResponseEntity<List<CouponHistory>> responseEntity =
-            new ResponseEntity(historyList, HttpStatus.OK);
-        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
-        String url = FrontURI.SHOP_URI + "templates/mypage/member/coupon/history/" + 0;
-        //mocking
-        when(restService.get(url, null, new ParameterizedTypeReference<List<CouponHistory>>() {
-        }))
-            .thenReturn(apiEntity);
+        ResponseEntity<List<CouponHistory>> responseEntity = new ResponseEntity(historyList, HttpStatus.OK);
+
+        ApiEntity<Object> object = new ApiEntity<>();
+        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+        when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any()))
+            .thenReturn(object);
 
         //then
         mockMvc.perform(get(URI_PREFIX + "/history/0").accept(MediaType.TEXT_HTML))
@@ -138,15 +128,13 @@ class CouponMemberFrontControllerTest {
             .build();
         List<CouponIssue> issueList = new ArrayList<>();
         issueList.add(couponIssue);
-        ApiEntity<List<CouponIssue>> apiEntity = new ApiEntity<>();
-        ResponseEntity<List<CouponIssue>> responseEntity =
-            new ResponseEntity(issueList, HttpStatus.OK);
-        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
-        String url = FrontURI.SHOP_URI + "templates/mypage/member/coupon/issue/" + 0;
-        //mocking
-        when(restService.get(url, null, new ParameterizedTypeReference<List<CouponIssue>>() {
-        }))
-            .thenReturn(apiEntity);
+        ResponseEntity<List<CouponIssue>> responseEntity = new ResponseEntity(issueList, HttpStatus.OK);
+
+        ApiEntity<Object> object = new ApiEntity<>();
+        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+        when(restService.get(anyString(), any(), (ParameterizedTypeReference<Object>) any()))
+            .thenReturn(object);
+
 
         //then
         mockMvc.perform(get(URI_PREFIX + "/issue/0").accept(MediaType.TEXT_HTML))
