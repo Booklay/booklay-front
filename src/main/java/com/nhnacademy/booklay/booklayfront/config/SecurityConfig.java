@@ -28,9 +28,7 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.formLogin()
-                .loginPage("/members/login")
-                .loginProcessingUrl("/members/login");
+        http.formLogin().disable();
 
         http.authorizeRequests()
                 .anyRequest()
@@ -63,7 +61,7 @@ public class SecurityConfig {
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(null), mapper);
 
-        authenticationFilter.setFilterProcessesUrl("/members/login");
+        authenticationFilter.setFilterProcessesUrl("/members/doLogin");
 
         return authenticationFilter;
     }

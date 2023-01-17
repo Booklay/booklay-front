@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
-import com.nhnacademy.booklay.booklayauth.constant.Roles;
 import com.nhnacademy.booklay.booklayfront.constant.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

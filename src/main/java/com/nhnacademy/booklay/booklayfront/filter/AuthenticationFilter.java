@@ -1,9 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.controller.member.LoginRequest;
+import com.nhnacademy.booklay.booklayfront.auth.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,12 +29,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             log.info("start login");
-            log.info("uri = {}", request.getRequestURI());
+//            log.info("uri = {}", request.getRequestURI());
 
             LoginRequest loginRequest = mapper.readValue(request.getInputStream(), LoginRequest.class);
 
             UsernamePasswordAuthenticationToken token =
-                    new UsernamePasswordAuthenticationToken(loginRequest.getUserId(), loginRequest.getPassword());
+                    new UsernamePasswordAuthenticationToken(loginRequest.getMemberId(), loginRequest.getPassword());
 
             Authentication authentication = getAuthenticationManager().authenticate(token);
 
