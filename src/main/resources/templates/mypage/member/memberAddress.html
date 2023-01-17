@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Address</title>
+</head>
+<body>
+<h3>배송지 목록</h3><br>
+<table>
+    <tr>
+        <th scope="col">번호</th>
+        <th scope="col">이름</th>
+        <th scope="col">우편번호</th>
+        <th scope="col">상세 주소</th>
+        <th scope="col">기본 배송지 여부</th>
+    </tr>
+    <tr th:each="address:${addresses}">
+        <td></td>
+        <td th:text="${address.getName()}"></td>
+        <td th:text="${address.getZipCode()}"></td>
+        <td th:text="${address.getAddress()}"></td>
+        <td>
+            <span th:if="${address.getIsDefaultDestination()}">O</span>
+            <span th:unless="${address.getIsDefaultDestination()}">X</span>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

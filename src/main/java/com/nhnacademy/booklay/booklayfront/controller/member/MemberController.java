@@ -2,12 +2,14 @@ package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.delivery.response.DeliveryDestinationRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -100,14 +102,36 @@ public class MemberController {
 
         URI uri = URI.create(redirectGatewayPrefix);
 
-        RequestEntity<MemberRetrieveResponse> requestEntity =
+        RequestEntity<Void> requestEntity =
             new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
 
         ResponseEntity<MemberRetrieveResponse> response
             = restTemplate.exchange(requestEntity, MemberRetrieveResponse.class);
 
         model.addAttribute("member", response.getBody());
+        model.addAttribute("memberNo", memberNo);
 
-        return "member/memberDetail";
+        return "mypage/member/memberDetail";
+    }
+
+    @GetMapping("address/{memberNo}")
+    public String retrieveMemberAddress(@PathVariable Long memberNo, Model model) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        URI uri = URI.create(redirectGatewayPrefix);
+
+        RequestEntity<Void> requestEntity =
+            new RequestEntity<>(headers, HttpMethod.GET, uri);
+
+        ResponseEntity<List<DeliveryDestinationRetrieveResponse>> response =
+            restTemplate.exchange(requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        model.addAttribute("addresses", response.getBody());
+        model.addAttribute("memberNo", memberNo);
+
+        return "mypage/member/memberAddress";
     }
 }
