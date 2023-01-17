@@ -1,6 +1,10 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
+import com.nhnacademy.booklay.booklayfront.filter.AuthenticationFilter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,12 +25,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/members/login")
                 .loginProcessingUrl("/members/login")
                 .and()
+
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll()
                 .and()
+
                 .csrf()
-                .disable();
+                .disable()
+
+                .addFilter(getAuthenticationFilter());
+
     }
 
     @Override
@@ -35,5 +44,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**","/webjars/**");
     }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    private AuthenticationFilter getAuthenticationFilter() throws Exception {
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(null));
+
+        authenticationFilter.setFilterProcessesUrl("/members/login");
+
+        return authenticationFilter;
+    }
+
 
 }
