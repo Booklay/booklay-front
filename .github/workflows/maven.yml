@@ -40,7 +40,7 @@ jobs:
           -Dsonar.login=${{secrets.SONAR_TOKEN}}
 
       #################
-      # Shop Server 1 #
+      # Front Server 1 #
       #################
 
       - name: ready for deploy first server (execute shell script)
@@ -85,7 +85,7 @@ jobs:
           time: '30s'
 
       #################
-      # Shop Server 2 #
+      # Front Server 2 #
       #################
 
       - name: ready for deploy second server (execute shell script) 2
