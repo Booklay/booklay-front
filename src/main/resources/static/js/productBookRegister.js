@@ -26,7 +26,7 @@ function addCategory() {
 }
 
 function showAuthor() {
-  window.open("/admin/product/author/maintenance", "a",
+  window.open("/admin/author/maintenance", "a",
       "width=400, height=600, left=100, top=50");
 }
 

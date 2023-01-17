@@ -30,18 +30,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
 public class AdminProductController {
-
+  private final String PRE_FIX = "/admin/product";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
 
   @GetMapping
   public String getProductMainPage() {
-    return "/admin/product/productMainManage";
+    return PRE_FIX+"/productMainManage";
   }
 
   @GetMapping("/book/create")
   public String getProductBookForm() {
-    return "/admin/product/createProductBookForm";
+    return PRE_FIX+"/createProductBookForm";
   }
 
   @PostMapping("/book/create")
@@ -90,12 +90,12 @@ public class AdminProductController {
 
   @GetMapping("/subscribe/create")
   public String getProductSubscribeForm() {
-    return "/admin/product/createProductSubscribeForm";
+    return PRE_FIX+"/createProductSubscribeForm";
   }
 
 
   @GetMapping("/author")
   public String getAuthorMaintain() {
-    return "/admin/product/adminAuthor";
+    return PRE_FIX+"/adminAuthor";
   }
 }

@@ -22,7 +22,7 @@
     <tr>
       <td><span th:text="${tag.id}"/></td>
       <td>
-        <form method="post" action="/admin/product/tag/maintenance/update">
+        <form method="post" action="/admin/tag/maintenance/update">
           <input name="id" type="number" th:value="${tag.id}" hidden/>
           <input name="name" class="name-input" type="text" th:value="${tag.name}" disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
@@ -47,29 +47,29 @@
 </table>
 
 <div>
-  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}-2)}">
+  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/tag/maintenance(page=${nowPage}-2)}">
     <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}-1)}">
+  <a th:if="${nowPage >= 1}" th:href="@{/admin/tag/maintenance(page=${nowPage}-1)}">
     <span th:text="${nowPage}"/></a>
 
-  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage})}">
+  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage})}">
   <span th:text="${nowPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}+1)}">
+  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage}+1)}">
   <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/product/tag/maintenance(page=${nowPage}+2)}">
+  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage}+2)}">
   <span th:text="${nowPage}+3"/></a>
 
   <span th:if="${nowPage + 3 < totalPage}">...</span>
 
-  <a th:href="@{/admin/product/tag/maintenance(page=${totalPage})}">
+  <a th:href="@{/admin/tag/maintenance(page=${totalPage})}">
     <span th:text="${totalPage}"/></a>
 </div>
 
 <hr>
 
 <h3>테그 등록</h3>
-<form method="post" action="/admin/product/tag/maintenance">
+<form method="post" action="/admin/tag/maintenance">
   <p>테그명 : <input type="text" name="name">
     <input type="submit" value="등록"/></p>
 </form>

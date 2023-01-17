@@ -33,10 +33,10 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/product/tag")
+@RequestMapping("/admin/tag")
 public class AdminTagController {
 
-  private final String prePix = "/admin/product/tag";
+  private final String PRE_FIX = "/admin/tag";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
@@ -59,7 +59,7 @@ public class AdminTagController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/tag?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -84,7 +84,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     createTag(request);
 
-    return "redirect:" + prePix + "/maintenance";
+    return "redirect:" + PRE_FIX + "/maintenance";
   }
 
   @PostMapping("/maintenance/update")
@@ -92,7 +92,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     updateTag(request);
 
-    return "redirect:" + prePix + "/maintenance";
+    return "redirect:" + PRE_FIX + "/maintenance";
   }
 
   @GetMapping("/connection/{productNo}/{pageNum}")
@@ -109,7 +109,7 @@ public class AdminTagController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag/product/" + productNo + "?page=" + pageNum
+        gatewayIp + "/shop/v1/admin/tag/product/" + productNo + "?page=" + pageNum
             + "&size=" + size);
 
     RequestEntity<PageResponse<TagProductResponse>> requestEntity = new RequestEntity<>(
@@ -141,7 +141,7 @@ public class AdminTagController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/product");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
     RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
@@ -150,7 +150,7 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + prePix + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
   }
 
 
@@ -164,7 +164,7 @@ public class AdminTagController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/product");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
     RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
         headers, HttpMethod.DELETE, uri);
@@ -173,7 +173,7 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + prePix + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/create/{productNo}/{pageNum}")
@@ -184,7 +184,7 @@ public class AdminTagController {
       pageNum = 1L;
     }
     createTag(request);
-    return "redirect:" + prePix + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/update/{productNo}/{pageNum}")
@@ -195,13 +195,13 @@ public class AdminTagController {
     }
 
     updateTag(request);
-    return "redirect:" + prePix + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
   }
 
 
   //공통 부분 리팩토링
   public void createTag(CreateTagRequest request) throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag");
 
     log.info(request.getName());
 
@@ -217,7 +217,7 @@ public class AdminTagController {
   }
 
   public void updateTag(UpdateTagRequest request) throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/");
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
