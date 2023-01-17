@@ -33,6 +33,7 @@ public class AdminProductController {
   private final String PRE_FIX = "/admin/product";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
+  private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
   @GetMapping
   public String getProductMainPage() {
@@ -48,18 +49,7 @@ public class AdminProductController {
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
       MultipartFile image)
       throws IOException {
-    //잘못해서
-    log.info("제목 : " + request.getTitle());
-    log.info("ISBN : " + request.getIsbn());
-    log.info("긴설명 : " + request.getLongDescription());
-    log.info("짧설명 : " + request.getShortDescription());
-    log.info("페이지 : " + request.getPage());
-    log.info("작가리스트 : " + request.getAuthorIds().get(0));
-    log.info("사진 :" + image.getOriginalFilename() + image.getContentType());
-
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/register/book");
-
-    ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     CreateProductBookJson jsonString = new CreateProductBookJson(request);
 

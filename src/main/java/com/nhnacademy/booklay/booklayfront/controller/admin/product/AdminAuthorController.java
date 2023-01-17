@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.request.CreateAuthorRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import java.net.URI;
 import java.util.List;
@@ -33,9 +32,11 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 @RequestMapping("/admin/author/maintenance")
 public class AdminAuthorController {
-  private final String PRE_FIX ="/admin/author/maintenance";
+
+  private final String PRE_FIX = "/admin/author/maintenance";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
+  private final ObjectMapper mapper = new ObjectMapper();
 
 
   @GetMapping()
@@ -84,8 +85,6 @@ public class AdminAuthorController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    ObjectMapper mapper = new ObjectMapper();
-
     RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
 
@@ -93,6 +92,6 @@ public class AdminAuthorController {
 
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
 
-    return "redirect:"+PRE_FIX;
+    return "redirect:" + PRE_FIX;
   }
 }
