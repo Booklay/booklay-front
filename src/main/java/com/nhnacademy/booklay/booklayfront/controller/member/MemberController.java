@@ -38,6 +38,11 @@ public class MemberController {
         redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
     }
 
+    @GetMapping("/login")
+    public String retrieveLoginForm() {
+        return "member/loginForm";
+    }
+
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     public String test() {
@@ -79,18 +84,6 @@ public class MemberController {
 //
 //        return "redirect:/shop";
 
-    }
-
-    @GetMapping("/memberLogin")
-    public String retrieveLoginForm() {
-        return "member/login";
-    }
-
-    //TODO 1: Spring Security Login으로 사용할건지 수정하기
-    @PostMapping("/memberLogin")
-    @ResponseStatus(HttpStatus.OK)
-    public String memberLogin() {
-        return "redirect:/shop";
     }
 
     @GetMapping("/{memberNo}")
