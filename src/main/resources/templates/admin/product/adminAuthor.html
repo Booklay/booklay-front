@@ -36,29 +36,29 @@
 </table>
 
 <div>
-  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/product/author/maintenance(page=${nowPage}-2)}">
+  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/author/maintenance(page=${nowPage}-2)}">
     <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}" th:href="@{/admin/product/author/maintenance(page=${nowPage}-1)}">
+  <a th:if="${nowPage >= 1}" th:href="@{/admin/author/maintenance(page=${nowPage}-1)}">
     <span th:text="${nowPage}"/></a>
 
-  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/product/author/maintenance(page=${nowPage})}">
+  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage})}">
     <span th:text="${nowPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/product/author/maintenance(page=${nowPage}+1)}">
+  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage}+1)}">
     <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/product/author/maintenance(page=${nowPage}+2)}">
+  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage}+2)}">
     <span th:text="${nowPage}+3"/></a>
 
   <span th:if="${nowPage + 3 < totalPage}">...</span>
 
-  <a th:href="@{/admin/product/author/maintenance(page=${totalPage})}">
+  <a th:href="@{/admin/author/maintenance(page=${totalPage})}">
     <span th:text="${totalPage}"/></a>
 </div>
 
 <hr>
 <h3>작가 등록</h3>
 
-<form method="post" action="/admin/product/author/maintenance">
+<form method="post" action="/admin/author/maintenance">
   <table>
     <tr>
       <td>작가 이름 : </td>

@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UpdateTagRequest {
+public class CreateDeleteTagProductRequest {
 
   @NotNull
-  Long id;
+  Long tagId;
   @NotNull
-  String name;
+  Long productNo;
+
 }

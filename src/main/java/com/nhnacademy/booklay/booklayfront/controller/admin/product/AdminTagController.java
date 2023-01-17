@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.UpdateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.TagProductResponse;
@@ -32,11 +33,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/product/tag")
+@RequestMapping("/admin/tag")
 public class AdminTagController {
 
+  private final String PRE_FIX = "/admin/tag";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
+  private final ObjectMapper mapper = new ObjectMapper();
 
   @GetMapping("/maintenance")
   public String retrieveTag(
@@ -56,7 +59,7 @@ public class AdminTagController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/tag?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -77,48 +80,19 @@ public class AdminTagController {
   }
 
   @PostMapping("/maintenance")
-  public String createTag(@Valid @ModelAttribute CreateTagRequest request)
+  public String createTagAtMaintenance(@Valid @ModelAttribute CreateTagRequest request)
       throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag");
+    createTag(request);
 
-    log.info(request.getName());
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    ObjectMapper mapper = new ObjectMapper();
-
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.POST, uri);
-
-    log.info(requestEntity.getBody());
-
-    restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
-
-    return "redirect:/admin/product/tag/maintenance";
+    return "redirect:" + PRE_FIX + "/maintenance";
   }
 
   @PostMapping("/maintenance/update")
-  public String updateTag(@Valid @ModelAttribute UpdateTagRequest request)
+  public String updateTagAtMaintenance(@Valid @ModelAttribute UpdateTagRequest request)
       throws JsonProcessingException {
-    log.info("진입 확인");
-    log.info("출력 : " + request.getName() + "   " + request.getId());
+    updateTag(request);
 
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/tag/");
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    ObjectMapper mapper = new ObjectMapper();
-
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.PUT, uri);
-
-    log.info(requestEntity.getBody());
-
-    restTemplate.exchange(requestEntity, UpdateTagRequest.class);
-
-    return "redirect:/admin/product/tag/maintenance";
+    return "redirect:" + PRE_FIX + "/maintenance";
   }
 
   @GetMapping("/connection/{productNo}/{pageNum}")
@@ -135,7 +109,8 @@ public class AdminTagController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/tag/product?page=" + pageNum + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/tag/product/" + productNo + "?page=" + pageNum
+            + "&size=" + size);
 
     RequestEntity<PageResponse<TagProductResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -157,9 +132,99 @@ public class AdminTagController {
   }
 
   @PostMapping("/connection/{productNo}/{pageNum}")
-  public String tagProductConnect(@PathVariable("pageNum") Long pageNum, Model model,
-      @PathVariable("productNo") Long productNo){
+  public String tagProductConnect(@PathVariable("pageNum") Long pageNum,
+      @PathVariable("productNo") Long productNo,
+      @Valid @ModelAttribute CreateDeleteTagProductRequest request) throws JsonProcessingException {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-    return "/admin/product/connection/"+productNo+"/"+pageNum;
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.POST, uri);
+
+    log.info(requestEntity.getBody());
+
+    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
+
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+  }
+
+
+  @PostMapping("/connection/delete/{productNo}/{pageNum}")
+  public String tagProductDisconnect(@PathVariable("pageNum") Long pageNum,
+      @PathVariable("productNo") Long productNo,
+      @Valid @ModelAttribute CreateDeleteTagProductRequest request) throws JsonProcessingException {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.DELETE, uri);
+
+    log.info(requestEntity.getBody());
+
+    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
+
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+  }
+
+  @PostMapping("/connection/create/{productNo}/{pageNum}")
+  public String createTagAtConnector(@Valid @ModelAttribute CreateTagRequest request,
+      @PathVariable Long pageNum, @PathVariable Long productNo)
+      throws JsonProcessingException {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+    createTag(request);
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+  }
+
+  @PostMapping("/connection/update/{productNo}/{pageNum}")
+  public String updateTagAtConnector(@Valid @ModelAttribute UpdateTagRequest request,
+      @PathVariable Long pageNum, @PathVariable Long productNo) throws JsonProcessingException {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+
+    updateTag(request);
+    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+  }
+
+
+  //공통 부분 리팩토링
+  public void createTag(CreateTagRequest request) throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag");
+
+    log.info(request.getName());
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.POST, uri);
+
+    log.info(requestEntity.getBody());
+
+    restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
+  }
+
+  public void updateTag(UpdateTagRequest request) throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.PUT, uri);
+
+    restTemplate.exchange(requestEntity, UpdateTagRequest.class);
   }
 }

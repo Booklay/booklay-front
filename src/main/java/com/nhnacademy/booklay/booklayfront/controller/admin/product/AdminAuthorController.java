@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.request.CreateAuthorRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import java.net.URI;
 import java.util.List;
@@ -31,11 +30,13 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/product/author/maintenance")
+@RequestMapping("/admin/author/maintenance")
 public class AdminAuthorController {
 
+  private final String PRE_FIX = "/admin/author/maintenance";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
+  private final ObjectMapper mapper = new ObjectMapper();
 
 
   @GetMapping()
@@ -56,7 +57,7 @@ public class AdminAuthorController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/product/author?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/author?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -79,12 +80,10 @@ public class AdminAuthorController {
   @PostMapping
   public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request)
       throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/author");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/author");
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-
-    ObjectMapper mapper = new ObjectMapper();
 
     RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
@@ -93,6 +92,6 @@ public class AdminAuthorController {
 
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
 
-    return "redirect:/admin/product/author/maintenance";
+    return "redirect:" + PRE_FIX;
   }
 }
