@@ -17,8 +17,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin().disable()
-                .logout().disable()
+        http.formLogin()
+                .loginPage("/members/login")
+                .loginProcessingUrl("/members/login")
+                .and()
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll()
