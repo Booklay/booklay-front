@@ -35,7 +35,7 @@ import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.*
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("admin/coupon")
+@RequestMapping("/admin/coupon")
 public class CouponAdminFrontController {
     private final RestTemplate restTemplate;
     private final RestService restService;
@@ -107,7 +107,7 @@ public class CouponAdminFrontController {
                                    CouponTypeAddRequest couponTypeAddRequest) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
-        String url = buildString(gatewayIp, REST_PRE_FIX ,"/admin/couponTypes");
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/couponTypes");
         restService.post(url, map, String.class);
         return "redirect:/admin/coupon/list/type/0";
     }
@@ -160,7 +160,8 @@ public class CouponAdminFrontController {
     public String memberCouponList(Model model, @PathVariable String memberNo,
                                    @PathVariable Integer pageNum) {
         //todo
-        String url = buildString(gatewayIp, REST_PRE_FIX, "/members/", memberNo, "/", pageNum.toString());
+        String url =
+            buildString(gatewayIp, REST_PRE_FIX, "/members/", memberNo, "/", pageNum.toString());
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
@@ -277,9 +278,7 @@ public class CouponAdminFrontController {
         return RETURN_PAGE;
 
     }
-
-    @GetMapping("")
-
+    
     private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
         for (String s : strings) {

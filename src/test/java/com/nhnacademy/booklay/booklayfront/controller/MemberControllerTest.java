@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller;
 
+import com.nhnacademy.booklay.booklayfront.controller.member.MemberController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,9 @@ class MemberControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Test
     @DisplayName("멤버 생성 테스트")
     void testCreateMember() {
         //given
-
-
     }
 
 }

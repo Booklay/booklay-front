@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
  *
  * @author 조현진, 양승아
  */
-@Configuration
+//@Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -31,13 +31,13 @@ public class SecurityConfig {
         http.formLogin().disable();
 
         http.authorizeRequests()
-                .anyRequest()
-                .permitAll();
+            .anyRequest()
+            .permitAll();
 
         http.csrf()
-                .disable();
+            .disable();
 
-        http.addFilter(getAuthenticationFilter());
+//        http.addFilter(getAuthenticationFilter());
 
         return http.build();
     }
@@ -45,11 +45,12 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**");
+            .antMatchers("/resources/**", "/static/**", "/webjars/**");
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    //    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+        throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -59,7 +60,8 @@ public class SecurityConfig {
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(null), mapper);
+        AuthenticationFilter authenticationFilter =
+            new AuthenticationFilter(authenticationManager(null), mapper);
 
         authenticationFilter.setFilterProcessesUrl("/members/doLogin");
 
