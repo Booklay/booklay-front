@@ -98,6 +98,7 @@ public class ProductController {
   @PostMapping("/book/create")
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request)
       throws IOException {
+    //잘못해서
     log.info("제목 : " + request.getTitle());
     log.info("ISBN : " + request.getIsbn());
     log.info("긴설명 : " + request.getLongDescription());
