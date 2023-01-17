@@ -113,20 +113,26 @@ public class ProductController {
     ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     CreateProductBookJson jsonString = new CreateProductBookJson(request);
-
     MultipartFile image = request.getImage();
 
-    ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()){
+    ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
-      public String getFilename(){
+      public String getFilename() {
         return image.getOriginalFilename();
       }
     };
 
+    LinkedMultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
+    headerMap.add("Content-disposition",
+        "form-data; name=image; filename=" + image.getOriginalFilename());
+    headerMap.add("Content-type", "application/octet-stream");
+    HttpEntity<byte[]> imageBytes = new HttpEntity<>(image.getBytes(), headerMap);
+
     LinkedMultiValueMap<String, Object> multipartReqMap = new LinkedMultiValueMap<>();
-    multipartReqMap.add("jsonString", mapper.writeValueAsString(jsonString));
-//    multipartReqMap.add("jsonString", jsonString);
-    multipartReqMap.add("image", contentsAsResource);
+//    multipartReqMap.add("jsonString", mapper.writeValueAsString(jsonString));
+    multipartReqMap.add("imgFile", imageBytes);
+    multipartReqMap.add("request", jsonString);
+//    multipartReqMap.add("image", contentsAsResource);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -134,16 +140,25 @@ public class ProductController {
     RequestEntity<LinkedMultiValueMap<String, Object>> requestEntity = new RequestEntity<>(
         multipartReqMap, headers, HttpMethod.POST, uri);
 
-    log.info("출력 : " + requestEntity.getBody().get("jsonString"));
-    log.info("출력 : " + requestEntity.getBody().get("image"));
+    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity2 = new HttpEntity<>(
+        multipartReqMap, headers);
 
-    ResponseEntity<Long> responseEntity =restTemplate.exchange(requestEntity, Long.class);
+    log.info("출력 : " + requestEntity.getBody().get("request"));
+    log.info("출력 : " + requestEntity.getBody().get("imgFile"));
+
+
+//    ResponseEntity<Long> responseEntity = restTemplate.exchange(requestEntity, Long.class);
+    ResponseEntity<Long> exchange = restTemplate.exchange(
+        gatewayIp + "/shop/v1/admin/product/register/book", HttpMethod.POST, requestEntity2,
+        Long.class);
+
+    restTemplate.postForEntity()
 
 //    HttpEntity<?> uploadEntity = new HttpEntity<>(multipartReqMap, headers);
 //    restTemplate.exchange(uri, HttpMethod.POST, uploadEntity, String.class);
 
-    Long productId = responseEntity.getBody();
-    log.info("생성된 상품 번호 : " + productId);
+//    Long productId = responseEntity.getBody();
+//    log.info("생성된 상품 번호 : " + productId);
     return "redirect:/admin/product";
   }
 
