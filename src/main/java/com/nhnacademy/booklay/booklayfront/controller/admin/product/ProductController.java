@@ -16,8 +16,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,58 +47,8 @@ public class ProductController {
     return "/admin/product/createProductBookForm";
   }
 
-//  @PostMapping("/book/create")
-//  public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request)
-//      throws IOException {
-//    log.info("제목 : " + request.getTitle());
-//    log.info("ISBN : " + request.getIsbn());
-//    log.info("긴설명 : " + request.getLongDescription());
-//    log.info("짧설명 : " + request.getShortDescription());
-//    log.info("페이지 : " + request.getPage());
-//    log.info("작가리스트 : " + request.getAuthorIds().get(0));
-//    log.info(
-//        "사진 :" + request.getImage().getOriginalFilename() + request.getImage().getContentType());
-//
-//    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/register/book");
-//
-//    ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-//
-//    CreateProductBookJson jsonString = new CreateProductBookJson(request);
-//
-//    MultipartFile image = request.getImage();
-//
-//    LinkedMultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
-//    headerMap.add("Content-disposition",
-//        "form-data; name=image; filename=" + image.getOriginalFilename());
-//    headerMap.add("Content-type", "application/octet-stream");
-//    HttpEntity<byte[]> imageBytes = new HttpEntity<>(image.getBytes(), headerMap);
-//
-//    LinkedMultiValueMap<String, Object> multipartReqMap = new LinkedMultiValueMap<>();
-//    multipartReqMap.add("jsonString", mapper.writeValueAsString(jsonString));
-////    multipartReqMap.add("jsonString", jsonString);
-//    multipartReqMap.add("image", imageBytes);
-//
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//    RequestEntity<LinkedMultiValueMap<String, Object>> requestEntity = new RequestEntity<>(
-//        multipartReqMap, headers, HttpMethod.POST, uri);
-//
-//    log.info("출력 : " + requestEntity.getBody().get("jsonString"));
-//    log.info("출력 : " + requestEntity.getBody().get("image"));
-//
-//    ResponseEntity<Long> responseEntity =restTemplate.exchange(requestEntity, Long.class);
-//
-////    HttpEntity<?> uploadEntity = new HttpEntity<>(multipartReqMap, headers);
-////    restTemplate.exchange(uri, HttpMethod.POST, uploadEntity, String.class);
-//
-//    Long productId = responseEntity.getBody();
-//    log.info("생성된 상품 번호 : " + productId);
-//    return "redirect:/admin/product";
-//  }
-
   @PostMapping("/book/create")
-  public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request)
+  public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request, MultipartFile image)
       throws IOException {
     //잘못해서
     log.info("제목 : " + request.getTitle());
@@ -105,15 +57,13 @@ public class ProductController {
     log.info("짧설명 : " + request.getShortDescription());
     log.info("페이지 : " + request.getPage());
     log.info("작가리스트 : " + request.getAuthorIds().get(0));
-    log.info(
-        "사진 :" + request.getImage().getOriginalFilename() + request.getImage().getContentType());
+    log.info("사진 :" + image.getOriginalFilename() + image.getContentType());
 
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/register/book");
 
     ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     CreateProductBookJson jsonString = new CreateProductBookJson(request);
-    MultipartFile image = request.getImage();
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
@@ -122,43 +72,19 @@ public class ProductController {
       }
     };
 
-    LinkedMultiValueMap<String, String> headerMap = new LinkedMultiValueMap<>();
-    headerMap.add("Content-disposition",
-        "form-data; name=image; filename=" + image.getOriginalFilename());
-    headerMap.add("Content-type", "application/octet-stream");
-    HttpEntity<byte[]> imageBytes = new HttpEntity<>(image.getBytes(), headerMap);
-
-    LinkedMultiValueMap<String, Object> multipartReqMap = new LinkedMultiValueMap<>();
-//    multipartReqMap.add("jsonString", mapper.writeValueAsString(jsonString));
-    multipartReqMap.add("imgFile", imageBytes);
-    multipartReqMap.add("request", jsonString);
-//    multipartReqMap.add("image", contentsAsResource);
+    MultipartBodyBuilder resource = new MultipartBodyBuilder();
+    resource.part("request", mapper.writeValueAsString(jsonString), MediaType.APPLICATION_JSON);
+    resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-    RequestEntity<LinkedMultiValueMap<String, Object>> requestEntity = new RequestEntity<>(
-        multipartReqMap, headers, HttpMethod.POST, uri);
+    MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody, headers);
 
-    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity2 = new HttpEntity<>(
-        multipartReqMap, headers);
-
-    log.info("출력 : " + requestEntity.getBody().get("request"));
-    log.info("출력 : " + requestEntity.getBody().get("imgFile"));
-
-
-//    ResponseEntity<Long> responseEntity = restTemplate.exchange(requestEntity, Long.class);
-    ResponseEntity<Long> exchange = restTemplate.exchange(
-        gatewayIp + "/shop/v1/admin/product/register/book", HttpMethod.POST, requestEntity2,
+    ResponseEntity<Long> responseEntity = restTemplate.postForEntity(uri, httpEntity,
         Long.class);
 
-    restTemplate.postForEntity()
-
-//    HttpEntity<?> uploadEntity = new HttpEntity<>(multipartReqMap, headers);
-//    restTemplate.exchange(uri, HttpMethod.POST, uploadEntity, String.class);
-
-//    Long productId = responseEntity.getBody();
-//    log.info("생성된 상품 번호 : " + productId);
     return "redirect:/admin/product";
   }
 

@@ -13,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class CreateProductBookRequest {
 
   @NotNull
-  private MultipartFile image;
-  @NotNull
   private String title;
   @NotNull
   private Long price;
@@ -54,12 +52,11 @@ public class CreateProductBookRequest {
     return this.pointMethod;
   }
 
-  public CreateProductBookRequest(MultipartFile image, String title, Long price,
+  public CreateProductBookRequest(String title, Long price,
       Long pointRate, String shortDescription, String longDescription, boolean isSelling,
       boolean pointMethod, String isbn, int page, String publisher,
       LocalDate publishedDate, List<Long> authorIds,
       List<Long> categoryIds) {
-    this.image = image;
     this.title = title;
     this.price = price;
     this.pointRate = pointRate;
