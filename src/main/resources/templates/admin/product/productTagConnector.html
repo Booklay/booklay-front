@@ -26,22 +26,24 @@
     <tr>
       <td><span th:text="${tag.id}"/></td>
       <td>
-        <form method="post" th:action="@{/admin/tag/connection/update/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+        <form method="post"
+              th:action="@{/admin/tag/connection/update/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
           <input name="id" type="number" th:value="${tag.id}" hidden/>
-          <input name="name" class="name-input" type="text" th:value="${tag.name}" disabled="disabled"/>
+          <input name="name" class="name-input" type="text" th:value="${tag.name}"
+                 disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
           <span class="update-button">수정</span>
         </form>
       </td>
       <td>
-        <form th:if="${tag.isRegistered == true}" method="post"
-              th:action="@{/admin/tag/connection/delete/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+        <form th:if="${tag.isRegistered()==true}" method="post"
+              th:action="@{/admin/tag/connection/disconnect/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
           <input name="tagId" type="number" th:value="${tag.id}" hidden="hidden"/>
           <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
           <input type="submit" value="등록 취소">
         </form>
 
-        <form th:if="${tag.isRegistered == false}" method="post"
+        <form th:if="${tag.isRegistered()==false}" method="post"
               th:action="@{/admin/tag/connection/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
           <input name="tagId" type="number" th:value="${tag.id}" hidden="hidden"/>
           <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>

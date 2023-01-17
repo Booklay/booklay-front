@@ -11,7 +11,8 @@ public class CreateAuthorRequest {
 
   Long memberNo;
 
-  public CreateAuthorRequest(String name) {
+  public CreateAuthorRequest(String name, Long memberNo) {
     this.name = name;
+    this.memberNo = memberNo;
   }
 }

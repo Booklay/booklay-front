@@ -3,8 +3,8 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.UpdateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.TagProductResponse;
@@ -36,7 +36,8 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/admin/tag")
 public class AdminTagController {
 
-  private final String PRE_FIX = "/admin/tag";
+  private final String MAINTENANCE_PRE_FIX = "/admin/tag/maintenance";
+  private final String CONNECTION_PRE_FIX = "/admin/tag/connection";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
@@ -84,7 +85,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     createTag(request);
 
-    return "redirect:" + PRE_FIX + "/maintenance";
+    return "redirect:" + MAINTENANCE_PRE_FIX;
   }
 
   @PostMapping("/maintenance/update")
@@ -92,7 +93,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     updateTag(request);
 
-    return "redirect:" + PRE_FIX + "/maintenance";
+    return "redirect:" + MAINTENANCE_PRE_FIX;
   }
 
   @GetMapping("/connection/{productNo}/{pageNum}")
@@ -123,6 +124,12 @@ public class AdminTagController {
     int nowPage = testTags.getBody().getPageNumber();
     List<TagProductResponse> tagList = testTags.getBody().getData();
 
+
+    for(int i=0; i<tagList.size(); i++){
+      log.info(tagList.get(i).getName());
+      log.info("출력" + tagList.get(i).isRegistered());
+    }
+
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("tagList", tagList);
@@ -150,11 +157,11 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
 
-  @PostMapping("/connection/delete/{productNo}/{pageNum}")
+  @PostMapping("/connection/disconnect/{productNo}/{pageNum}")
   public String tagProductDisconnect(@PathVariable("pageNum") Long pageNum,
       @PathVariable("productNo") Long productNo,
       @Valid @ModelAttribute CreateDeleteTagProductRequest request) throws JsonProcessingException {
@@ -173,7 +180,7 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/create/{productNo}/{pageNum}")
@@ -184,7 +191,7 @@ public class AdminTagController {
       pageNum = 1L;
     }
     createTag(request);
-    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/update/{productNo}/{pageNum}")
@@ -195,9 +202,14 @@ public class AdminTagController {
     }
 
     updateTag(request);
-    return "redirect:" + PRE_FIX + "/connection/" + productNo + "/" + pageNum;
+    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
+  @PostMapping("/connection/delete/{productNo}/{pageNum}")
+  public String deleteTagAtConnector(@PathVariable Long pageNum, @PathVariable Long productNo) {
+
+    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+  }
 
   //공통 부분 리팩토링
   public void createTag(CreateTagRequest request) throws JsonProcessingException {
