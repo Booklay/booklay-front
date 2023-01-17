@@ -12,13 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
-public class ProductController {
+public class AdminProductController {
 
   private final RestTemplate restTemplate;
   private final String gatewayIp;
@@ -48,7 +45,8 @@ public class ProductController {
   }
 
   @PostMapping("/book/create")
-  public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request, MultipartFile image)
+  public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
+      MultipartFile image)
       throws IOException {
     //잘못해서
     log.info("제목 : " + request.getTitle());
@@ -80,12 +78,14 @@ public class ProductController {
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
     MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
-    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody, headers);
+    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
+        headers);
 
     ResponseEntity<Long> responseEntity = restTemplate.postForEntity(uri, httpEntity,
         Long.class);
 
-    return "redirect:/admin/product";
+    Long productNo = responseEntity.getBody();
+    return "redirect:/product/view/" + productNo;
   }
 
   @GetMapping("/subscribe/create")
