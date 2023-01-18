@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>작가 관리 페이지</title>
+  <link href="/css/author.css" rel="stylesheet"/>
 </head>
 <body>
 <h2>작가 검색 페이지</h2>
@@ -13,27 +14,74 @@
 </form>
 <hr>
 
-<table>
-  <thead>
-  <tr>
-    <th>작가 번호</th>
-    <th>작가 이름</th>
-    <th>작가 아이디</th>
-    <th>작품 정보</th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <th:block th:each="author : ${authorList}">
+<div class="authorTable">
+  <table>
+    <thead>
     <tr>
-      <td><span th:text="${author.authorNo}"/></td>
-      <td><span th:text="${author.name}"/></td>
-      <td><span th:if="${author.member != null}" th:text="${author.member.memberId}"/></td>
-      <td><a href="">작품 정보</a></td>
+      <th>작가 번호</th>
+      <th>작가 이름</th>
+      <th>작가 계정 번호</th>
+      <th>작가 아이디</th>
+      <th>수정</th>
+      <th>삭제</th>
+      <th>작품 정보</th>
     </tr>
-  </th:block>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+    <th:block th:each="author : ${authorList}">
+      <form method="post" action="/admin/author/maintenance/update">
+        <tr>
+          <td>
+            <input name="id" class="authorNo-info" type="number" th:value="${author.authorNo}"
+                   disabled="disabled"/>
+          </td>
+          <td>
+            <input name="name" class="update-info" type="text" th:value="${author.name}"
+                   disabled="disabled"/>
+          </td>
+          <td>
+            <th:block th:if="${author.member != null}">
+              <input name="memberNo" class="update-info" type="number"
+                     th:value="${author.member.memberNo}" disabled="disabled"/>
+            </th:block>
+            <th:block th:if="${author.member == null}">
+              <input name="memberNo" class="update-info" type="number" disabled="disabled"/>
+            </th:block>
+          </td>
+          <td>
+            <span th:if="${author.member != null}" th:text="${author.member.memberId}"/>
+          </td>
+          <td>
+            <input type="submit" value="수정 제출" hidden="hidden">
+            <span class="update-button">수정</span>
+          </td>
+          <td>
+            <form method="post" action="/admin/author/maintenance/delete">
+              <input name="id" type="number" th:value="${author.authorNo}"
+                     hidden="hidden"/>
+              <input type="submit" value="삭제"/>
+            </form>
+          </td>
+          <td><a href="">작품 정보</a></td>
+        </tr>
+      </form>
+    </th:block>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const updateBtns = document.querySelectorAll('.update-button');
+  updateBtns.forEach(function (item) {
+    item.addEventListener('click', function () { // 클릭 이벤트 발생시,
+      var form1 = this.parentNode.parentNode
+      console.log(form1)
+      form1.querySelector('.update-info').toggleAttribute('disabled')
+      form1.querySelector('.submit-btn').toggleAttribute('hidden')
+    });
+  });
+</script>
 
 <div>
   <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/author/maintenance(page=${nowPage}-2)}">
@@ -41,7 +89,7 @@
   <a th:if="${nowPage >= 1}" th:href="@{/admin/author/maintenance(page=${nowPage}-1)}">
     <span th:text="${nowPage}"/></a>
 
-  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage})}">
+  <a th:if="${nowPage+1 != totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage})}">
     <span th:text="${nowPage}+1"/></a>
 
   <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/author/maintenance(page=${nowPage}+1)}">
@@ -61,12 +109,12 @@
 <form method="post" action="/admin/author/maintenance">
   <table>
     <tr>
-      <td>작가 이름 : </td>
-      <td> <input name="name" type="text"/></td>
+      <td>작가 이름 :</td>
+      <td><input name="name" type="text"/></td>
     </tr>
     <tr>
-      <td>작가 계정 (선택사항) : </td>
-      <td> <input name="memberNo" type="number"/></td>
+      <td>작가 계정 (선택사항) :</td>
+      <td><input name="memberNo" type="number"/></td>
     </tr>
   </table>
 

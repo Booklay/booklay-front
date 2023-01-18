@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -37,18 +36,20 @@ public class CreateProductBookRequest {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @NotNull
   private LocalDate publishedDate;
+  @Setter
   private String ebookAddress;
+  @Setter
   private int storage;
   @NotNull
   private List<Long> authorIds;
   @NotNull
   private List<Long> categoryIds;
 
-  public boolean getIsSelling(){
+  public boolean getIsSelling() {
     return this.isSelling;
   }
 
-  public boolean getPointMethod(){
+  public boolean getPointMethod() {
     return this.pointMethod;
   }
 

@@ -9,19 +9,18 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class WebConfig {
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 
-    @Bean
-    public String gatewayIp(@Value("${booklay.gateway-origin}") String ip) {
+  @Bean
+  public String gatewayIp(@Value("${booklay.gateway-origin}") String ip) {
+    return ip;
+  }
 
-        return ip;
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
+  }
 }
