@@ -1,5 +1,16 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_TYPE_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ERROR;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.PAGE_NUM;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
@@ -82,11 +93,12 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("create")
-    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
-                                   @RequestParam("issuanceDeadline")
-                                   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
-                                   @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
-                                   HttpServletRequest request) {
+    public String postCreateCoupon(
+        @ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
+        @RequestParam("issuanceDeadline")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
+        @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
+        HttpServletRequest request) {
         couponAddRequest.setIssuanceDeadlineAt(
             date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         String imagePath = imageUploader.uploadImage(multipartFile, request);
@@ -223,7 +235,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("delete/{couponId}")
     public String deleteCoupon(@PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/" ,couponId);
+        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/", couponId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_LIST;
     }
