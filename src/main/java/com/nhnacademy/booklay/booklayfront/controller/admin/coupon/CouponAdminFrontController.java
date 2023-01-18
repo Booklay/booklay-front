@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssueRequest;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
@@ -13,6 +14,7 @@ import com.nhnacademy.booklay.booklayfront.dto.domain.CouponType;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponTypeAddRequest;
 import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
 import com.nhnacademy.booklay.booklayfront.dto.domain.PageResponse;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,6 +46,7 @@ public class CouponAdminFrontController {
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupon/list/0";
     private static final String REST_PRE_FIX = "/coupon/v1";
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @ModelAttribute("navHead")
     public String addNavHead() {
@@ -76,18 +79,19 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("create")
-    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
-                                   CouponAddRequest couponAddRequest
-        , @RequestParam("issuanceDeadline") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-                                   Date date
-        , @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile
-        , HttpServletRequest request) {
+    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
+                                   @RequestParam("issuanceDeadline")
+                                   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
+                                   @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
+                                   HttpServletRequest request) {
         couponAddRequest.setIssuanceDeadlineAt(
             date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         String imagePath = imageUploader.uploadImage(multipartFile, request);
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
-        map.put("imagePath", imagePath);
+
+        // FIXME Image 저장 후, 반환 값
+        map.put("imageId", 1L);
         String url = buildString(gatewayIp, REST_PRE_FIX);
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
         if (!apiEntity.isSuccess()) {
@@ -105,7 +109,7 @@ public class CouponAdminFrontController {
     @PostMapping("type/create")
     public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
-        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/couponTypes");
         restService.post(url, map, String.class);
@@ -126,6 +130,8 @@ public class CouponAdminFrontController {
         if (!apiEntity.isSuccess()) {
             return ERROR;
         }
+
+        // FIXME : Boolean is null.
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
@@ -190,7 +196,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("update/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PRE_FIX, couponId);
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/", couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
         if (!apiEntity.isSuccess()) {
             return ERROR;
@@ -278,6 +284,54 @@ public class CouponAdminFrontController {
         return RETURN_PAGE;
 
     }
+
+    @GetMapping("/issue")
+    public String issueCouponForm(Model model) {
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/pages");
+
+        // 쿠폰 모든 종류 찾아서 받아오고, 팝업창에서 선택에서 선택할 수 있게끔..
+        ApiEntity<PageResponse<Coupon>> apiEntity =
+            restService.get(url, getDefaultPageMap(0), new ParameterizedTypeReference<>() {
+            });
+
+        if (!apiEntity.isSuccess()) {
+            return ERROR;
+        }
+
+        model.addAttribute("couponList", apiEntity.getBody().getData());
+        model.addAttribute(TARGET_VIEW, "coupon/issueCouponForm");
+        return RETURN_PAGE;
+    }
+
+    @PostMapping("/issue")
+    public String issueCoupon(@Valid @ModelAttribute CouponIssueRequest couponRequest) {
+        Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
+
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/issue");
+        ApiEntity<String> apiEntity = restService.post(url, map, String.class);
+
+        if (!apiEntity.isSuccess()) {
+            return ERROR;
+        }
+
+        return RETURN_PAGE_COUPON_LIST;
+    }
+
+    @GetMapping("/popup/pages/{pageNum}")
+    public String couponPopup(@PathVariable int pageNum, Model model) {
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/pages");
+        ApiEntity<PageResponse<Coupon>> apiEntity =
+            restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
+            });
+        if (!apiEntity.isSuccess()) {
+            return ERROR;
+        }
+
+        model.addAttribute("couponList", apiEntity.getBody().getData());
+
+        return "/admin/coupon/couponPopup";
+    }
+
     
     private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
