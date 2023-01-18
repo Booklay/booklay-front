@@ -99,7 +99,6 @@ public class CouponAdminFrontController {
         couponAddRequest.setIssuanceDeadlineAt(
             date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         String imagePath = imageUploader.uploadImage(multipartFile, request);
-        ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
 
         // FIXME Image 저장 후, 반환 값
