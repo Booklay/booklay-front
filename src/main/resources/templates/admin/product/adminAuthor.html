@@ -15,7 +15,7 @@
 <hr>
 
 <div class="authorTable">
-  <table class="leftTable">
+  <table>
     <thead>
     <tr>
       <th>작가 번호</th>
@@ -23,6 +23,8 @@
       <th>작가 계정 번호</th>
       <th>작가 아이디</th>
       <th>수정</th>
+      <th>삭제</th>
+      <th>작품 정보</th>
     </tr>
     </thead>
 
@@ -54,35 +56,19 @@
             <input type="submit" value="수정 제출" hidden="hidden">
             <span class="update-button">수정</span>
           </td>
+          <td>
+            <form method="post" action="/admin/author/maintenance/delete">
+              <input name="id" type="number" th:value="${author.authorNo}"
+                     hidden="hidden"/>
+              <input type="submit" value="삭제"/>
+            </form>
+          </td>
+          <td><a href="">작품 정보</a></td>
         </tr>
       </form>
     </th:block>
     </tbody>
   </table>
-
-  <table class="rightTable">
-    <thead>
-    <tr>
-      <th>삭제</th>
-      <th>작품 정보</th>
-    </tr>
-    </thead>
-    <tbody>
-    <th:block th:each="author : ${authorList}">
-      <tr>
-        <td>
-          <form method="post" action="/admin/author/maintenance/delete">
-            <input name="id" type="number" th:value="${author.authorNo}"
-                   hidden="hidden"/>
-            <input type="submit" value="삭제"/>
-          </form>
-        </td>
-        <td><a href="">작품 정보</a></td>
-      </tr>
-    </th:block>
-    </tbody>
-  </table>
-
 </div>
 
 <script>
