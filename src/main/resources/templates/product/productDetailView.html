@@ -6,13 +6,26 @@
 </head>
 <body>
 
-<!--TODO: 맴버 끝나면 권한 식별해서 표시 유 무 식 넣을것-->
+<!--TODO: 맴버 끝나면 수정할것-->
+<!--<th:block th:if="${member !=null}">-->
+<!--  <input th:if="${member.authorize == 'admin'}" th:id="${productNo}" type="button" value="태그 등록 팝업창 호출" onclick="showPopup(id);"/>-->
+<!--</th:block>-->
 
-<input th:id="${productNo}" type="button" value="팝업창 호출" onclick="showPopup(id);" />
+<input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출" onclick="showPopup(id);"/>
 
+<!--<th:block th:if="${member !=null}">-->
+<form method="post" action="">
+  <input name="memberNo" type="number" th:if="${member != null}" th:value="${member.memberNo}"
+         hidden="hidden"/>
+  <input type="submit" value="찜 등록"/>
+</form>
+<!--</th:block>-->
 
 <script>
-  function showPopup(productNo) { window.open("/admin/tag/connection/"+productNo+"/0" , "a", "width=400, height=550, left=100, top=50"); }
+  function showPopup(productNo) {
+    window.open("/admin/tag/connection/" + productNo + "/0", "a",
+        "width=500, height=550, left=100, top=50");
+  }
 </script>
 </body>
 </html>

@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
 public class AdminProductController {
-  private final String PRE_FIX = "/admin/product";
+  private static final String PRE_FIX = "/admin/product";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -49,7 +49,7 @@ public class AdminProductController {
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
       MultipartFile image)
       throws IOException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/register/book");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/books");
 
     CreateProductBookJson jsonString = new CreateProductBookJson(request);
 

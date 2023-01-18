@@ -3,8 +3,14 @@ package com.nhnacademy.booklay.booklayfront.dto.product.product.request;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class CreateProductBookJson {
 
   @NotNull

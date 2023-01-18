@@ -2,10 +2,8 @@ package com.nhnacademy.booklay.booklayfront.dto.product.tag.request;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class CreateDeleteTagProductRequest {
 
   @NotNull
@@ -13,4 +11,8 @@ public class CreateDeleteTagProductRequest {
   @NotNull
   Long productNo;
 
+  public CreateDeleteTagProductRequest(Long tagId, Long productNo) {
+    this.tagId = tagId;
+    this.productNo = productNo;
+  }
 }
