@@ -42,7 +42,7 @@ public class AdminTagController {
   private static final String SHOP_URI_PRE_FIX="/shop/v1/admin/tag";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
-  private final ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper objectMapper;
 
   //페이지 조회
   @GetMapping("/maintenance")
@@ -163,7 +163,7 @@ public class AdminTagController {
 
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+    RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
 
     log.info(requestEntity.getBody());
@@ -186,7 +186,7 @@ public class AdminTagController {
 
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+    RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.DELETE, uri);
 
     log.info(requestEntity.getBody());
@@ -234,7 +234,7 @@ public class AdminTagController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+    RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
 
     log.info(requestEntity.getBody());
@@ -248,7 +248,7 @@ public class AdminTagController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+    RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.PUT, uri);
 
     restTemplate.exchange(requestEntity, UpdateTagRequest.class);
@@ -260,7 +260,7 @@ public class AdminTagController {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+    RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.DELETE, uri);
 
     restTemplate.exchange(requestEntity, String.class);
