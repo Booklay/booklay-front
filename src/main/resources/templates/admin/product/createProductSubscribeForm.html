@@ -3,18 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="/js/productBookRegister.js"></script>
 </head>
 <body>
 <form>
   <p>제목 : <input type="text" name="title"/></p>
-  <p>썸네일 : <input type="file" name="image"/></p>
+  <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
+  </p>
   <p>가격 : <input type="number" min="0" name="price"/></p>
-  <p>적립률 : <input type="number" min="0" name="pointRate"/> %</p>
+  <p>적립률 : <input type="number" min="0" name="pointRate" th:value="${defaultPointRate}"/> %</p>
   <p>적립 여부 : <input type="checkbox" name="pointMethod"/></p>
-  <p>짧은 설명 : tui-editor</p>
-  <p>긴 설명 : tui-editor</p>
-  <p>판매 여부 : <input type="checkbox" name="isSelling"/></p>
-  <p>카테고리 : 따로 페이지 뽑아서 거기서 받아오는 형식으로</p>
+
+  <p>짧은 설명</p>
+  <div id="shortEditor"></div>
+  <input id="shortDescription" name="shortDescription" type="text" hidden="hidden"/>
+
+  <p>긴 설명</p>
+  <div id="longEditor"></div>
+  <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
+
+
+  <p>판매 여부 : <input type="checkbox" name="isSelling"/>
+  <p>
+    <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
+    &ensp; &ensp; &ensp;
+    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
+  <div id="categories"></div>
 
   <p>발매 주차 : <input type="number" min="1" max="4"/></p>
   <p>발매 일자 : <input type="number" min="1" max="28"/></p>
