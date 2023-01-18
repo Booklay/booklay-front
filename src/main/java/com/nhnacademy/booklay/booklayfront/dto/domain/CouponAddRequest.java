@@ -28,7 +28,7 @@ public class CouponAddRequest {
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime issuanceDeadlineAt;
     private final Boolean isDuplicatable;
-    private final Long quantity;
+    private final Boolean isLimited;
 
 
 }
