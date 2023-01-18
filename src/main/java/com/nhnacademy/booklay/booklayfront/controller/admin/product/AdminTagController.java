@@ -39,6 +39,7 @@ public class AdminTagController {
 
   private final String MAINTENANCE_PRE_FIX = "/admin/tag/maintenance";
   private final String CONNECTION_PRE_FIX = "/admin/tag/connection";
+  private final String SHOP_URI_PRE_FIX="/shop/v1/admin/tag";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
@@ -62,7 +63,7 @@ public class AdminTagController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/tag?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + SHOP_URI_PRE_FIX+"?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -226,7 +227,7 @@ public class AdminTagController {
 
   //공통 부분 리팩토링
   public void createTag(CreateTagRequest request) throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag");
+    URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
     log.info(request.getName());
 
@@ -242,7 +243,7 @@ public class AdminTagController {
   }
 
   public void updateTag(UpdateTagRequest request) throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/");
+    URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -254,7 +255,7 @@ public class AdminTagController {
   }
 
   public void deleteTag(DeleteByIdRequest request) throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/");
+    URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

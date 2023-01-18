@@ -36,6 +36,7 @@ import org.springframework.web.client.RestTemplate;
 public class AdminAuthorController {
 
   private final String PRE_FIX = "/admin/author/maintenance";
+  private final String SHOP_PRE_FIX = "/shop/v1/admin/author";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
@@ -59,7 +60,7 @@ public class AdminAuthorController {
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/author?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + SHOP_PRE_FIX+"?page=" + pageNum.get() + "&size=" + size);
 
     RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
@@ -101,13 +102,13 @@ public class AdminAuthorController {
   public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request)
       throws JsonProcessingException {
     log.info("시험 출력 : " + request.getName() + request.getId(), request.getMemberNo());
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/author/");
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.POST, uri);
+        headers, HttpMethod.PUT, uri);
 
     restTemplate.exchange(requestEntity, String.class);
 
@@ -117,7 +118,7 @@ public class AdminAuthorController {
   @PostMapping("/delete")
   public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request)
       throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/author/");
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
