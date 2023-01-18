@@ -13,7 +13,7 @@
     <b>생년월일</b>: <span th:text="${member.getBirthday()}"></span><br>
     <b>전화번호</b>: <span th:text="${member.getPhoneNo()()}"></span><br>
     <b>이메일주소</b>: <span th:text="${member.getEmail()}"></span><br>
-    <b>주소</b>: <a th:href="@{/members/address/{memberNo}(memberNo=${memberNo})}" target="_blank">주소록이동</a>
+    <b>주소</b>: <a th:href="@{/address/{memberNo}(memberNo=${memberNo})}" target="_blank">주소록으로 이동</a>
 </div>
 </body>
 </html>

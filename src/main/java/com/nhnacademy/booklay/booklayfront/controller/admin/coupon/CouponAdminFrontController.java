@@ -1,15 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_TYPE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ERROR;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.PAGE_NUM;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
@@ -33,6 +23,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -352,7 +343,7 @@ public class CouponAdminFrontController {
         return "/admin/coupon/couponPopup";
     }
 
-    
+
     private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
         for (String s : strings) {
