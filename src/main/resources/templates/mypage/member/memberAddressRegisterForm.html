@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 주소 등록</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<h3>배송지 등록하기</h3><br>
+<div>
+    <form th:action="@{/address/register/{memberNo}(memberNo=${memberNo})}" method="post"
+          name="DeliveryDestinationCURequest">
+        <b>배송지 이름</b>: <input type="text" name="name"><br>
+        <b>우편번호</b>: <input type="text" name="zipCode"><br>
+        <b>상세주소</b>: <input type="text" name="address"><br>
+        <b>기본 배송지 여부</b> <input type="radio" name="isDefaultDestination"><br>
+        <input type="submit" value="등록하기"/>
+    </form>
+</div>
+</body>
+</html>

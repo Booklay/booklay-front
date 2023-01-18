@@ -1,8 +1,16 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_TYPE_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ERROR;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.PAGE_NUM;
+import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
-import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponAddRequest;
@@ -13,25 +21,28 @@ import com.nhnacademy.booklay.booklayfront.dto.domain.CouponType;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponTypeAddRequest;
 import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
 import com.nhnacademy.booklay.booklayfront.dto.domain.PageResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
+import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.*;
+import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -277,8 +288,6 @@ public class CouponAdminFrontController {
         return RETURN_PAGE;
 
     }
-
-    @GetMapping("")
 
     private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();

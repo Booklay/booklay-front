@@ -6,6 +6,8 @@
 </head>
 <body>
 <h3>배송지 목록</h3><br>
+<button><a th:href="@{/address/register/{memberNo}(memberNo=${memberNo})}">추가하기</a></button>
+<br>
 <table>
     <tr>
         <th scope="col">번호</th>
@@ -13,15 +15,27 @@
         <th scope="col">우편번호</th>
         <th scope="col">상세 주소</th>
         <th scope="col">기본 배송지 여부</th>
+        <th scope="col">수정 여부</th>
+        <th scope="col">삭제 여부</th>
     </tr>
-    <tr th:each="address:${addresses}">
-        <td></td>
+    <tr th:each="address, addressStat :${addresses}">
+        <td th:text="${addressStat.count}"></td>
         <td th:text="${address.getName()}"></td>
         <td th:text="${address.getZipCode()}"></td>
         <td th:text="${address.getAddress()}"></td>
         <td>
             <span th:if="${address.getIsDefaultDestination()}">O</span>
             <span th:unless="${address.getIsDefaultDestination()}">X</span>
+        </td>
+        <td>
+            <button th:href="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo})(addressNo=${address.getId()})}"
+                    target="_blank">삭제하기
+            </button>
+        </td>
+        <td>
+            <button th:href="@{/address/delete/{memberNo}/{addressNo}(memberNo=${memberNo})(addressNo=${address.getId()})}">
+                수정하기
+            </button>
         </td>
     </tr>
 </table>
