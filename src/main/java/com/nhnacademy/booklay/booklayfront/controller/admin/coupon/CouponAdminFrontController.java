@@ -92,7 +92,7 @@ public class CouponAdminFrontController {
 
         // FIXME Image 저장 후, 반환 값
         map.put("imageId", 1L);
-        String url = buildString(gatewayIp, REST_PRE_FIX);
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons");
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
         if (!apiEntity.isSuccess()) {
             return ERROR;
@@ -109,7 +109,6 @@ public class CouponAdminFrontController {
     @PostMapping("type/create")
     public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
-//        ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/couponTypes");
         restService.post(url, map, String.class);
@@ -222,7 +221,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("delete/{couponId}")
     public String deleteCoupon(@PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PRE_FIX, couponId);
+        String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/" ,couponId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_LIST;
     }
@@ -304,7 +303,7 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("/issue")
-    public String issueCoupon(@Valid @ModelAttribute CouponIssueRequest couponRequest) {
+    public String issueCouponCreate(@Valid @ModelAttribute CouponIssueRequest couponRequest) {
         Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
 
         String url = buildString(gatewayIp, REST_PRE_FIX, "/admin/coupons/issue");
@@ -314,6 +313,16 @@ public class CouponAdminFrontController {
             return ERROR;
         }
 
+        return RETURN_PAGE_COUPON_LIST;
+    }
+
+    @GetMapping("/member/issue")
+    public String issueCouponToMemberForm(Model model) {
+        return RETURN_PAGE;
+    }
+
+    @PostMapping("/member/issue")
+    public String issueCouponToMember(@Valid @ModelAttribute CouponIssueRequest couponRequest) {
         return RETURN_PAGE_COUPON_LIST;
     }
 
