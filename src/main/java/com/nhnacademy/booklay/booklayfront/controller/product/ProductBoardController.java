@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
-public class productBoardController {
+public class ProductBoardController {
 
   private final String gatewayIp;
   private final RestTemplate restTemplate;

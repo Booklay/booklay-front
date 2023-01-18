@@ -37,9 +37,9 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/admin/tag")
 public class AdminTagController {
 
-  private final String MAINTENANCE_PRE_FIX = "/admin/tag/maintenance";
-  private final String CONNECTION_PRE_FIX = "/admin/tag/connection";
-  private final String SHOP_URI_PRE_FIX="/shop/v1/admin/tag";
+  private static final String MAINTENANCE_PRE_FIX = "redirect:/admin/tag/maintenance";
+  private static final String CONNECTION_PRE_FIX = "redirect:/admin/tag/connection";
+  private static final String SHOP_URI_PRE_FIX="/shop/v1/admin/tag";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
@@ -89,7 +89,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     createTag(request);
 
-    return "redirect:" + MAINTENANCE_PRE_FIX;
+    return MAINTENANCE_PRE_FIX;
   }
 
   //수정
@@ -98,7 +98,7 @@ public class AdminTagController {
       throws JsonProcessingException {
     updateTag(request);
 
-    return "redirect:" + MAINTENANCE_PRE_FIX;
+    return MAINTENANCE_PRE_FIX;
   }
 
   //삭제
@@ -106,7 +106,7 @@ public class AdminTagController {
   public String deleteTagAtMaintenance(@Valid @ModelAttribute DeleteByIdRequest request)
       throws JsonProcessingException {
     deleteTag(request);
-    return "redirect:" + MAINTENANCE_PRE_FIX;
+    return MAINTENANCE_PRE_FIX;
   }
 
   //태그 등록 페이지 조회
@@ -170,7 +170,7 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
 
@@ -193,7 +193,7 @@ public class AdminTagController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/create/{productNo}/{pageNum}")
@@ -222,7 +222,7 @@ public class AdminTagController {
   public String deleteTagAtConnector(@PathVariable Long pageNum, @PathVariable Long productNo,
       @Valid @ModelAttribute DeleteByIdRequest request) throws JsonProcessingException {
     deleteTag(request);
-    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   //공통 부분 리팩토링
