@@ -52,7 +52,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupon")
 public class CouponAdminFrontController {
-    private final RestTemplate restTemplate;
     private final RestService restService;
     private final String gatewayIp;
     private final ImageUploader imageUploader;
