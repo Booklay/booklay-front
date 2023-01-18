@@ -1,12 +1,14 @@
 package com.nhnacademy.booklay.booklayfront.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -53,6 +55,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 
         log.info("로구인 성공");
+        CustomMember principal = (CustomMember) authResult.getPrincipal();
+        log.info(principal.getUsername());
     }
 
     @Override

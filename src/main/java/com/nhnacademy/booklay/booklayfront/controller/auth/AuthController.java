@@ -23,6 +23,6 @@ public class AuthController {
 
         authService.login(loginRequest);
 
-        return "/";
+        return "/index";
     }
 }

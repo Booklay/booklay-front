@@ -18,14 +18,16 @@ public class AuthService {
 
     private final String gatewayIp;
 
+    private final String PREFIX = "/auth/v1";
+
     public void login(LoginRequest loginRequest) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<LoginRequest> request = new HttpEntity<>(loginRequest, headers);
 
-        ResponseEntity<Object> response = restTemplate.exchange(gatewayIp + "/auth/v1/login", HttpMethod.POST, request, new ParameterizedTypeReference<>() {
-        });
+        ResponseEntity<Object> response =
+                restTemplate.exchange(gatewayIp + PREFIX + "/members/login", HttpMethod.POST, request, new ParameterizedTypeReference<>() {});
 
     }
 }
