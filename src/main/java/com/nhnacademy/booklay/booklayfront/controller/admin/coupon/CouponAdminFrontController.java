@@ -58,7 +58,7 @@ public class CouponAdminFrontController {
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupon/list/0";
     private static final String REST_PREFIX = "/coupon/v1";
     private static final String URL_PREFIX = "/admin/coupons";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     @ModelAttribute("navHead")
     public String addNavHead() {
