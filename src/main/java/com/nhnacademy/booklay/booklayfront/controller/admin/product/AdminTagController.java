@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.DeleteByIdRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateTagRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.UpdateTagRequest;
@@ -42,6 +43,7 @@ public class AdminTagController {
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper();
 
+  //페이지 조회
   @GetMapping("/maintenance")
   public String retrieveTag(
       @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
@@ -80,6 +82,7 @@ public class AdminTagController {
     return "/admin/product/adminTag";
   }
 
+  //생성
   @PostMapping("/maintenance")
   public String createTagAtMaintenance(@Valid @ModelAttribute CreateTagRequest request)
       throws JsonProcessingException {
@@ -88,6 +91,7 @@ public class AdminTagController {
     return "redirect:" + MAINTENANCE_PRE_FIX;
   }
 
+  //수정
   @PostMapping("/maintenance/update")
   public String updateTagAtMaintenance(@Valid @ModelAttribute UpdateTagRequest request)
       throws JsonProcessingException {
@@ -96,6 +100,15 @@ public class AdminTagController {
     return "redirect:" + MAINTENANCE_PRE_FIX;
   }
 
+  //삭제
+  @PostMapping("/maintenance/delete")
+  public String deleteTagAtMaintenance(@Valid @ModelAttribute DeleteByIdRequest request)
+      throws JsonProcessingException {
+    deleteTag(request);
+    return "redirect:" + MAINTENANCE_PRE_FIX;
+  }
+
+  //태그 등록 페이지 조회
   @GetMapping("/connection/{productNo}/{pageNum}")
   public String retrieveTagForProductConnect(
       @PathVariable("pageNum") Long pageNum, Model model,
@@ -124,8 +137,7 @@ public class AdminTagController {
     int nowPage = testTags.getBody().getPageNumber();
     List<TagProductResponse> tagList = testTags.getBody().getData();
 
-
-    for(int i=0; i<tagList.size(); i++){
+    for (int i = 0; i < tagList.size(); i++) {
       log.info(tagList.get(i).getName());
       log.info("출력" + tagList.get(i).isRegistered());
     }
@@ -206,8 +218,9 @@ public class AdminTagController {
   }
 
   @PostMapping("/connection/delete/{productNo}/{pageNum}")
-  public String deleteTagAtConnector(@PathVariable Long pageNum, @PathVariable Long productNo) {
-
+  public String deleteTagAtConnector(@PathVariable Long pageNum, @PathVariable Long productNo,
+      @Valid @ModelAttribute DeleteByIdRequest request) throws JsonProcessingException {
+    deleteTag(request);
     return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
@@ -238,5 +251,17 @@ public class AdminTagController {
         headers, HttpMethod.PUT, uri);
 
     restTemplate.exchange(requestEntity, UpdateTagRequest.class);
+  }
+
+  public void deleteTag(DeleteByIdRequest request) throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.DELETE, uri);
+
+    restTemplate.exchange(requestEntity, String.class);
   }
 }

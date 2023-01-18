@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
+@Setter
 public class CreateProductBookRequest {
 
   @NotNull

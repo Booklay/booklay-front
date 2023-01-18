@@ -3,7 +3,9 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.DeleteByIdRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.request.CreateAuthorRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.author.request.UpdateAuthorRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import java.net.URI;
@@ -92,6 +94,38 @@ public class AdminAuthorController {
 
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
 
+    return "redirect:" + PRE_FIX;
+  }
+
+  @PostMapping("/update")
+  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request)
+      throws JsonProcessingException {
+    log.info("시험 출력 : " + request.getName() + request.getId(), request.getMemberNo());
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/author/");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.POST, uri);
+
+    restTemplate.exchange(requestEntity, String.class);
+
+    return "redirect:" + PRE_FIX;
+  }
+
+  @PostMapping("/delete")
+  public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request)
+      throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/author/");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.DELETE, uri);
+
+    restTemplate.exchange(requestEntity, String.class);
     return "redirect:" + PRE_FIX;
   }
 }

@@ -15,6 +15,7 @@
   <tr>
     <th>테그 번호</th>
     <th>테그 이름</th>
+    <th>삭제</th>
   </tr>
   </thead>
   <tbody>
@@ -27,6 +28,12 @@
           <input name="name" class="name-input" type="text" th:value="${tag.name}" disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
           <span class="update-button">수정</span>
+        </form>
+      </td>
+      <td>
+        <form method="post" action="/admin/tag/maintenance/delete">
+          <input name="id" type="number" th:value="${tag.id}" hidden/>
+          <input class="delete-btn" type="submit" value="삭제"/>
         </form>
       </td>
     </tr>

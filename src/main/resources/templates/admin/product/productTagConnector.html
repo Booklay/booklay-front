@@ -17,6 +17,7 @@
   <tr>
     <th>태그 번호</th>
     <th>태그 이름</th>
+    <th>태그 삭제</th>
     <th>등록 여부</th>
     <th></th>
   </tr>
@@ -33,6 +34,13 @@
                  disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
           <span class="update-button">수정</span>
+        </form>
+      </td>
+      <td>
+        <form method="post"
+              th:action="@{/admin/tag/connection/delete/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+          <input name="id" type="number" th:value="${tag.id}" hidden/>
+          <input class="submit-btn" type="submit" value="삭제"/>
         </form>
       </td>
       <td>
