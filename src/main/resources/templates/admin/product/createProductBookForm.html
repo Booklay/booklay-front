@@ -5,18 +5,21 @@
   <title>Title</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-  <script src="/js/productBookRegister.js"></script>
+  <script src="/js/product/productBookRegister.js"></script>
 </head>
 <body>
 
-<form method="post" action="/admin/product/book/create" enctype="multipart/form-data">
+<form method="post" action="/admin/product/books/create" enctype="multipart/form-data">
 <!--<form enctype="multipart/form-data">-->
   <p>제목 : <input type="text" name="title"/></p>
   <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
   </p>
   <p>가격 : <input type="number" min="0" name="price"/></p>
   <p>적립률 : <input type="number" min="0" name="pointRate" th:value="${defaultPointRate}"/> %</p>
-  <p>적립 여부 : <input type="checkbox" name="pointMethod"/></p>
+  <p>적립 여부 :
+  <input type="radio" name="pointMethod" value="true"> Y
+  <input type="radio" name="pointMethod" value="false"> N
+  </p>
 
   <p>짧은 설명</p>
   <div id="shortEditor"></div>
@@ -26,8 +29,9 @@
   <div id="longEditor"></div>
   <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
 
-
-  <p>판매 여부 : <input type="checkbox" name="isSelling"/>
+  <p>판매 여부 :
+    <input type="radio" name="isSelling" value="true"> Y
+    <input type="radio" name="isSelling" value="false"> N
   <p>
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
     &ensp; &ensp; &ensp;
@@ -48,7 +52,6 @@
   <p>이북 주소 : <input type="text" name="ebookAddress"></p>
 
   <input type="submit" id="btn-submit"/>
-<!--  <input type="button" id="btn-submit" value="임시 버튼"/>-->
 </form>
 
 </body>

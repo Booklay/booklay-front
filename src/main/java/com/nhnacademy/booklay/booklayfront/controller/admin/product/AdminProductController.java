@@ -85,7 +85,7 @@ public class AdminProductController {
   @PostMapping("/subscribes/create")
   public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
       MultipartFile image) throws IOException {
-    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/books");
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/subscribes");
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
       public String getFilename() {

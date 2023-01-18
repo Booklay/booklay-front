@@ -29,13 +29,13 @@ public class CreateProductSubscribeRequest {
   private List<Long> categoryIds;
 
   @NotNull
-  @Length(max=4)
-  private Integer subscribeWeek;
+  private Long subscribeWeek;
 
   @NotNull
-  @Length(max=6)
-  private Integer subscribeDay;
+  private Long subscribeDay;
 
   @NotNull
   private String publisher;
+
+  private List<Long> childProducts;
 }

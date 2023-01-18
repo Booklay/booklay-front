@@ -50,6 +50,31 @@ function addAuthor() {
   authorNo = authorNo + 1
 }
 
+function showProduct() {
+  window.open("/admin/categories/", "a",
+      "width=400, height=600, left=100, top=50");
+}
+
+let childProduct = 1;
+
+function addChildProduct() {
+    const childProductSpan = document.createElement("span")
+    const innerChildProductSpan = "구독 발송 상품" + childProduct + " : "
+    childProductSpan.innerText = innerChildProductSpan;
+
+    const childProductInput = document.createElement("input")
+    childProductInput.setAttribute('type', 'number')
+    childProductInput.setAttribute('name', 'categoryIds[' + (childProduct - 1) + ']')
+
+    const br = document.createElement("br");
+
+    document.getElementById('childProduct').appendChild(childProductSpan);
+    document.getElementById('childProduct').appendChild(childProductInput);
+    document.getElementById('childProduct').appendChild(br);
+
+  childProduct = childProduct + 1
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const Editor = toastui.Editor;
 
