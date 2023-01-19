@@ -1,11 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.auth.LoginRequest;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.mapper.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class InitialAuthenticationFilter extends OncePerRequestFilter {
@@ -37,7 +35,7 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
      * /login 경로에만 이 필터를 적용한다.
      */
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         return !request.getServletPath().equals("/login");
     }
 }

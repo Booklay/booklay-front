@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
 import com.nhnacademy.booklay.booklayfront.filter.AuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.filter.InitialAuthenticationFilter;
+import com.nhnacademy.booklay.booklayfront.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ public class SecurityConfig {
 
     private final ObjectMapper mapper;
     private final UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -42,7 +44,8 @@ public class SecurityConfig {
         http.csrf()
                 .disable();
 
-        http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         http.authenticationProvider(usernamePasswordAuthenticationProvider);
 

@@ -23,5 +23,6 @@ public class AuthenticationServerProxy {
         var loginRequest = new LoginRequest(username, password);
 
         restTemplate.postForEntity(url, loginRequest, Void.class);
+
     }
 }
