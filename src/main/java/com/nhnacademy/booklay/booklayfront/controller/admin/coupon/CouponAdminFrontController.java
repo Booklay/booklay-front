@@ -10,7 +10,6 @@ import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.E
 import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.PAGE_NUM;
 import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
@@ -34,7 +33,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,7 +43,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
