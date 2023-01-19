@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<head>
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="/js/coupon/couponPopup.js"></script>
+</head>
+<html lang="ko">
+<h2>회원 선택</h2>
+<div id="header-carousel" class="carousel slide" data-ride="carousel">
+    <table border="1px">
+        <tr>
+            <td>번호</td>
+            <td>회원 ID</td>
+            <td>회원 닉네임</td>
+            <td>생일</td>
+            <td></td>
+        </tr>
+        <tbody th:each="member, memberStat :${memberList}">
+        <tr>
+            <td><p th:text="${memberStat.count}"></p></td>
+            <td><p th:text="${member.id}"></p></td>
+            <td><p th:text="${member.nickname}"></p></td>
+            <td><p th:text="${member.birthday}"></p></td>
+            <td><input type="button" value="선택" th:id="${member.id}" th:onclick="setMemberText(this.getAttribute('id'))"></td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+</html>
