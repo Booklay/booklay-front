@@ -30,6 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ *
+ * @author 최규태
+ */
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor

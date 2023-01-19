@@ -38,8 +38,27 @@
     <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
   <div id="categories"></div>
 
-  <p>발매 주차 : <input name="subscribeWeek" type="number" min="0" max="4"/></p>
-  <p>발매 요일 : <input name="subscribeDay" type="number" min="1" max="7"/></p>
+  <p>발매 주차 :
+    <select name="subscribeDay">
+      <option value=1>1주차</option>
+      <option value=2>2주차</option>
+      <option value=3>3주차</option>
+      <option value=4>4주차</option>
+    </select>
+  </p>
+
+  <p>발매 요일 :
+    <select name="subscribeDay">
+      <option value=1>월요일</option>
+      <option value=2>화요일</option>
+      <option value=3>수요일</option>
+      <option value=4>목요일</option>
+      <option value=5>금요일</option>
+      <option value=6>토요일</option>
+      <option value=7>일요일</option>
+    </select>
+  </p>
+
   <p>출판사 : <input name="publisher" type="text"/></p>
 
 

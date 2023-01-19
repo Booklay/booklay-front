@@ -14,8 +14,8 @@
   <p>제목 : <input type="text" name="title"/></p>
   <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
   </p>
-  <p>가격 : <input type="number" min="0" name="price"/></p>
-  <p>적립률 : <input type="number" min="0" name="pointRate" th:value="${defaultPointRate}"/> %</p>
+  <p>가격 : <input type="number" min="0" step="1" name="price"/></p>
+  <p>적립률 : <input type="number" min="0" step="1" name="pointRate" th:value="${defaultPointRate}"/> %</p>
   <p>적립 여부 :
   <input type="radio" name="pointMethod" value="true"> Y
   <input type="radio" name="pointMethod" value="false"> N
@@ -39,7 +39,7 @@
   <div id="categories"></div>
 
   <p>ISBN : <input type="text" name="isbn"/></p>
-  <p>페이지 수 : <input type="number" min="0" name="page"/></p>
+  <p>페이지 수 : <input type="number" min="0" step="1" name="page"/></p>
   <p>출판사 : <input type="text" name="publisher"/></p>
   <p>출판일 : <input type="date" name="publishedDate"/></p>
   <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
@@ -48,7 +48,7 @@
   <div id="authors"></div>
 
   <!--  둘 중 하나만 입력 가능해야함-->
-  <p>재고량 : <input type="number" min="0" name="storage"/></p>
+  <p>재고량 : <input type="number" min="0" step="1" name="storage"/></p>
   <p>이북 주소 : <input type="text" name="ebookAddress"></p>
 
   <input type="submit" id="btn-submit"/>
