@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service;
 
 
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,13 @@ import java.util.Collections;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class RestService {
 
+    private final RestTemplate restTemplate;
 
     public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody,
                                  Class<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -43,8 +44,6 @@ public class RestService {
 
     public <T> ApiEntity<T> put(String url, Map<String, Object> requestBody,
                                 Class<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
 
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -68,7 +67,6 @@ public class RestService {
 
     public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params,
                                 ParameterizedTypeReference<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
 
         HttpHeaders headers = new HttpHeaders();
@@ -94,7 +92,6 @@ public class RestService {
 
     public <T> ApiEntity<T> get(String url, MultiValueMap<String, String> params,
                                 Class<T> responseType) {
-        RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
 
@@ -120,7 +117,6 @@ public class RestService {
     }
 
     public void delete(String url) {
-        RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(url);
     }
 }
