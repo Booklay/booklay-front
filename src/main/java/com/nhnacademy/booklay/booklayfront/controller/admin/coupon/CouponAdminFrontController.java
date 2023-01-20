@@ -47,7 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/coupon")
+@RequestMapping("/admin/coupons")
 public class CouponAdminFrontController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
@@ -55,7 +55,7 @@ public class CouponAdminFrontController {
     private final String gatewayIp;
 
     private static final String RETURN_PAGE = "admin/adminPage";
-    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupon/list/0";
+    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
 
     private static final String REST_PREFIX = "/coupon/v1";
     private static final String COUPON_URL_PREFIX = "/admin/coupons";
@@ -72,7 +72,7 @@ public class CouponAdminFrontController {
         return RETURN_PAGE;
     }
 
-    @GetMapping("create")
+    @GetMapping("/create")
     public String createCouponForm(Model model) {
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX);
 
@@ -115,13 +115,13 @@ public class CouponAdminFrontController {
         return RETURN_PAGE_COUPON_LIST;
     }
 
-    @GetMapping("type/create")
+    @GetMapping("/type/create")
     public String createCouponTypeForm(Model model) {
         model.addAttribute(TARGET_VIEW, "coupon/createCouponTypeForm");
         return RETURN_PAGE;
     }
 
-    @PostMapping("type/create")
+    @PostMapping("/type/create")
     public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX);
@@ -375,7 +375,6 @@ public class CouponAdminFrontController {
 
         return "/admin/coupon/couponPopup";
     }
-
 
     private String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
