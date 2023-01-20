@@ -3,9 +3,9 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,32 +25,21 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 @RequestMapping("/admin/coupon/template")
 public class CouponTemplateAdminFrontController {
     private final RestService restService;
+    private final CouponRestApiModelSettingService restApiService;
     private final String gatewayIp;
     private final ImageUploader imageUploader;
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String RETURN_PAGE_COUPON_TEMPLATE_LIST = "redirect:/admin/coupon/template/list/0";
-    private static final String REST_PREFIX = "/coupon/v1";
-    private static final String URL_PREFIX = "/admin/couponTemplates/";
     private final ObjectMapper objectMapper;
 
     @ModelAttribute("navHead")
     public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
+        return "coupon/couponFragments/couponTemplateNavHead";
     }
 
     @GetMapping("create")
     public String createCouponTemplateForm(Model model){
-        String url = buildString(gatewayIp, REST_PREFIX, "/admin/couponTypes");
-        ApiEntity<PageResponse<CouponType>>
-                apiEntity = restService.get(url, getDefaultPageMap(0),
-                new ParameterizedTypeReference<>() {
-                });
-
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
+        restApiService.setAllCouponTypeToModel(model);
         model.addAttribute(TARGET_VIEW, "coupon/createCouponTemplateForm");
         return RETURN_PAGE;
     }
@@ -69,7 +58,7 @@ public class CouponTemplateAdminFrontController {
 
             // FIXME Image 저장 후, 반환 값
             map.put("imageId", 1L);
-            String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX);
+            String url = buildString(gatewayIp, REST_PREFIX, COUPON_TEMPLATE_URL_PREFIX);
             ApiEntity<String> apiEntity = restService.post(url, map, String.class);
             if (!apiEntity.isSuccess()) {
                 return ERROR;
@@ -84,17 +73,7 @@ public class CouponTemplateAdminFrontController {
 
     @GetMapping("list/{pageNum}")
     public String allCouponTemplateList(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/pages");
-        ApiEntity<PageResponse<CouponTemplate>> apiEntity =
-                restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
-                });
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-
-        // FIXME : Boolean is null.
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_LIST, apiEntity.getBody().getData());
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
+        restApiService.setCouponTemplateListToModelByPage(pageNum, model);
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/templateListView");
         return RETURN_PAGE;
@@ -102,25 +81,15 @@ public class CouponTemplateAdminFrontController {
 
     @GetMapping("detail/{couponTemplateId}")
     public String viewCouponDetail(Model model, @PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/", couponTemplateId);
-        ApiEntity<CouponTemplateDetail> apiEntity = restService.get(url, null, CouponTemplateDetail.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+        restApiService.setCouponTemplateDetailToModelByCouponTemplateId(couponTemplateId, model);
         model.addAttribute(TARGET_VIEW, "coupon/templateDetailView");
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_DETAIL, apiEntity.getBody());
         return RETURN_PAGE;
     }
 
     @GetMapping("update/{couponTemplateId}")
     public String updateCouponForm(Model model, @PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/", couponTemplateId);
-        ApiEntity<CouponTemplateDetail> apiEntity = restService.get(url, null, CouponTemplateDetail.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-        apiEntity.getBody().setId(couponTemplateId);
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_DETAIL, apiEntity.getBody());
+        restApiService.setAllCouponTypeToModel(model);
+        restApiService.setCouponTemplateDetailToModelByCouponTemplateId(couponTemplateId, model);
         model.addAttribute(TARGET_VIEW, "coupon/couponTemplateUpdateForm");
         return RETURN_PAGE;
     }
@@ -130,16 +99,14 @@ public class CouponTemplateAdminFrontController {
                                        @PathVariable String couponTemplateId) {
         String url = buildString(gatewayIp, REST_PREFIX, couponTemplateId);
         Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
-        ApiEntity<String> apiEntity = restService.put(url, map, String.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+        restService.put(url, map, String.class);
+
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }
 
     @GetMapping("delete/{couponTemplateId}")
     public String deleteCouponTemplate(@PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX, URL_PREFIX, "/", couponTemplateId);
+        String url = buildString(gatewayIp, REST_PREFIX, COUPON_TEMPLATE_URL_PREFIX, couponTemplateId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }

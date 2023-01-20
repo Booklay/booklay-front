@@ -180,7 +180,6 @@ class CouponAdminFrontControllerTest {
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
-
         mockMvc.perform(get(URI_PREFIX + "/list/0/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
@@ -191,7 +190,7 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void viewCoupon() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 0L, 1000L
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
         ResponseEntity<CouponDetail> responseEntity =
@@ -213,7 +212,7 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void updateCouponForm() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 0L, 1000L
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
         ResponseEntity<CouponDetail> responseEntity =
