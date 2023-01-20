@@ -213,55 +213,55 @@ class CouponAdminFrontControllerTest {
             .andReturn();
     }
 
-    @Test
-    void updateCouponForm() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 0L, 1000L
-            , 101L, 123L, 10000L, 1000L,
-            LocalDateTime.now(), false, "", false);
-        ResponseEntity<CouponDetail> responseEntity =
-            new ResponseEntity(couponDetail, HttpStatus.OK);
-        //mocking
-        ApiEntity<CouponDetail> object = new ApiEntity<>();
-        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
-        when(restService.get(anyString(), any(),
-            ArgumentMatchers.<Class<CouponDetail>>any())).thenReturn(object);
-
-        mockMvc.perform(get(URI_PREFIX + "/update/0").accept(MediaType.TEXT_HTML))
-            .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
-                .equals("coupon/couponUpdateForm"))
-            .andReturn();
-    }
-
 //    @Test
-//    void postUpdateCouponForm() throws Exception {
-//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("name", "coupon1");
-//        map.add("userId", "1");
-//        map.add("typeName", "정액");
-//        map.add("amount", "1000");
-//        map.add("categoryId", "12");
-//        map.add("productId", "3");
-//        map.add("minimumUseAmount", "10000");
-//        map.add("maximumDiscountAmount", "1000");
-//        map.add("issuanceDeadline", "2030-10-30T12:34");
-//        map.add("isDuplicatable", "true");
-//        map.add("issueAmount", "500");
-//
-//        ApiEntity<String> apiEntity = new ApiEntity<>();
-//        ResponseEntity<String> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);
-//        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
+//    void updateCouponForm() throws Exception {
+//        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 0L, 1000L
+//            , 101L, 123L, 10000L, 1000L,
+//            LocalDateTime.now(), false, "", false);
+//        ResponseEntity<CouponDetail> responseEntity =
+//            new ResponseEntity(couponDetail, HttpStatus.OK);
 //        //mocking
-//        when(restService.put(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
-//            .thenReturn(apiEntity);
+//        ApiEntity<CouponDetail> object = new ApiEntity<>();
+//        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
+//        when(restService.get(anyString(), any(),
+//            ArgumentMatchers.<Class<CouponDetail>>any())).thenReturn(object);
 //
-//        mockMvc.perform(post(URI_PREFIX + "/update/0").accept(MediaType.TEXT_HTML)
-//                .params(map)
-//                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-//            .andExpect(status().is3xxRedirection())
-//            .andExpect(result -> result.getResponse().getRedirectedUrl().equals(""));
+//        mockMvc.perform(get(URI_PREFIX + "/update/0").accept(MediaType.TEXT_HTML))
+//            .andExpect(status().isOk())
+//            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
+//            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+//                .equals("coupon/couponUpdateForm"))
+//            .andReturn();
 //    }
+
+    @Test
+    void postUpdateCouponForm() throws Exception {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("name", "coupon1");
+        map.add("userId", "1");
+        map.add("typeName", "정액");
+        map.add("amount", "1000");
+        map.add("categoryId", "12");
+        map.add("productId", "3");
+        map.add("minimumUseAmount", "10000");
+        map.add("maximumDiscountAmount", "1000");
+        map.add("issuanceDeadline", "2030-10-30T12:34");
+        map.add("isDuplicatable", "true");
+        map.add("issueAmount", "500");
+
+        ApiEntity<String> apiEntity = new ApiEntity<>();
+        ResponseEntity<String> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);
+        ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
+        //mocking
+        when(restService.put(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
+            .thenReturn(apiEntity);
+
+        mockMvc.perform(post(URI_PREFIX + "/update/0").accept(MediaType.TEXT_HTML)
+                .params(map)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(result -> result.getResponse().getRedirectedUrl().equals(""));
+    }
 
     @Test
     void deleteCoupon() throws Exception {
