@@ -1,12 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponDetail;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponHistory;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.FrontURI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
 
 @Controller
 @RequiredArgsConstructor

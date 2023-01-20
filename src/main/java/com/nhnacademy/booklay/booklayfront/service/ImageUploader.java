@@ -1,7 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.service;
 
-import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.domain.ImageUploadResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ImageUploadResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

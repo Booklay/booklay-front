@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <div><img th:src="${couponTemplateDetail.imagePath}"></div><br/>
+        쿠폰 템플릿 ID : <span th:text="${couponTemplateDetail.id}"> </span><br/>
+        쿠폰 이름 : <span th:text="${couponTemplateDetail.name}"> </span><br/>
+        쿠폰 종류 : <span th:text="${couponTemplateDetail.typeCode}"></span><br/>
+        적용 범위 :
+        <span th:if="${couponTemplateDetail.isOrderCoupon == true}">
+            <span>주문쿠폰</span>
+        </span>
+        <span th:if="${couponTemplateDetail.isOrderCoupon == false}">
+            <span>상품쿠폰</span>
+        </span><br/>
+        적용 대상 번호 : <span th:text="${couponTemplateDetail.applyItemId}"></span><br/>
+        할인 금액(정액) or 할인율(정율) : <span th:text="${couponTemplateDetail.amount}"></span><br/>
+        최소 사용 금액 : <span th:text="${couponTemplateDetail.minimumUseAmount}"></span><br/>
+        최대 할인 금액 : <span th:text="${couponTemplateDetail.maximumDiscountAmount}"></span><br/>
+        발급 기한 일시 : <span th:text="${couponTemplateDetail.issuanceDeadlineAt}"></span><br/>
+        발급 후 유효 기한 : <span th:text="${couponTemplateDetail.validateTerm}"></span><br/>
+        중복 사용 가능 여부 : <span th:text="${couponTemplateDetail.isDuplicatable}"></span><br/>
+    </div>
+</html>

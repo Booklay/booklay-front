@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<head>
+    <script src="/js/coupon/couponCreateForm.js"></script>
+    <style>
+        .hidden{
+            visibility: hidden;
+        }
+    </style>
+</head>
+<html lang="ko">
+
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <form action="" method="post" enctype="multipart/form-data">
+            <label>쿠폰 이름 : <input type="text" name="name"> </label> <br/>
+            쿠폰 종류 : <select type="number" name="typeCode">
+                    <arc th:each="couponType:${couponTypeList}">
+                        <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
+                    </arc>
+                </select><br/>
+            <label>할인량 : <input type="number" name="amount"></label> <br/>
+            주문 쿠폰 여부<br/>
+            <label>주문 쿠폰 : <input id="isOrderCoupon" type="radio" name="isOrderCoupon" value="true" checked></label>
+            <label>상품 쿠폰 : <input id="isProductCoupon" type="radio" name="isOrderCoupon" value="false"></label>
+            <input type="button" value="찾기">
+            <br/>
+            <span>
+                <label id="categorySelectorLabel">적용 카테고리 번호 : <input id="categorySelector" type="number" name="applyItemId"></label>
+                <label id="itemSelectorLabel" class="hidden">적용 상품 번호 : <input id="itemSelector" type="number" name="disable"></label>
+                <br/>
+            </span>
+            <label>최소 사용 금액 : <input type="number" name="minimumUseAmount"></label> <br/>
+            <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount"></label> <br/>
+            <label>발급 기한 일시 : <input type="datetime-local" name="issuingDeadLine" value="2030-01-01T00:00"></label> <br/>
+            중복 사용 가능 여부<br/>
+            <label>발급 후 유효 기한 : <input type="number" name="validateTerm" ></label>
+            <label>중복 사용 가능 : <input type="radio" name="isDuplicatable" value="true" checked></label>
+            <label>중복 사용 불가 : <input type="radio" name="isDuplicatable" value="false"></label> <br/>
+            <label>쿠폰 이미지 : <input type="file" accept="image/*" name="couponImage"></label><br/>
+            <input type="submit">
+        </form>
+    </div>
+</html>
+
+

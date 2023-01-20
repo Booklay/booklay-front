@@ -1,50 +1,26 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_COUPON_TYPE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.ERROR;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.PAGE_NUM;
-import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponMemberIssueRequest;
-import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponAddRequest;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponDetail;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponHistory;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssueRequest;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponType;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponTypeAddRequest;
-import com.nhnacademy.booklay.booklayfront.dto.domain.FrontURI;
-import com.nhnacademy.booklay.booklayfront.dto.domain.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -94,7 +70,7 @@ public class CouponAdminFrontController {
 
     @PostMapping("/create")
     public String postCreateCoupon(
-        @ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
+        @Valid @ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
         @RequestParam("issuanceDeadline")
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
         @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
@@ -105,6 +81,8 @@ public class CouponAdminFrontController {
 
         String imagePath = imageUploader.uploadImage(multipartFile, request);
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
+
+        // FIXME Image 저장 후, 반환 값
         map.put("imageId", 1L);
 
         String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_PREFIX);
@@ -124,7 +102,7 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("/types/create")
-    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
+    public String postCreateCoupon(@Valid @ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_TYPES_PREFIX);
 
@@ -220,7 +198,6 @@ public class CouponAdminFrontController {
         if (!apiEntity.isSuccess()) {
             return ERROR;
         }
-
         apiEntity.getBody().setId(couponId);
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
         model.addAttribute(TARGET_VIEW, "coupon/couponUpdateForm");
@@ -228,7 +205,7 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("update/{couponId}")
-    public String postUpdateCouponForm(@ModelAttribute CouponAddRequest couponAddRequest,
+    public String postUpdateCouponForm(@Valid @ModelAttribute CouponAddRequest couponAddRequest,
                                        @PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, couponId);
         Map<String, Object> map = new HashMap<>();
