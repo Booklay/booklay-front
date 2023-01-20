@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <form th:action="${couponSetting.id}" method="post" enctype="multipart/form-data">
+            <div th:text="${couponSetting.id}"></div>
+            <input type="number" name="id" th:value="${couponSetting.id}" hidden>
+            <label>설정 타입 : <input type="number" name="settingType" th:value="${couponSetting.settingType}"> </label> <br/>
+            <label>회원 등급 : <input type="number" name="memberGrade" th:value="${couponSetting.memberGrade}"> </label> <br/>
+            <label>쿠폰 템플릿 번호 : <input type="number" name="couponTemplateNo" th:value="${couponSetting.couponTemplateNo}"> </label> <br/>
+            <input type="submit">
+        </form>
+    </div>
+</html>
+
+

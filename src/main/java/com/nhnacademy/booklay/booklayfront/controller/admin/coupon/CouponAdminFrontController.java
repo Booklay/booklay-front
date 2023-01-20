@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -31,6 +32,8 @@ public class CouponAdminFrontController {
     private final ImageUploader imageUploader;
     private final String gatewayIp;
 
+    private final CouponRestApiModelSettingService restApiService;
+
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
 
@@ -51,20 +54,8 @@ public class CouponAdminFrontController {
 
     @GetMapping("/create")
     public String createCouponForm(Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_TYPES_PREFIX);
-
-        ApiEntity<PageResponse<CouponType>>
-            apiEntity = restService.get(url, getDefaultPageMap(0),
-            new ParameterizedTypeReference<>() {
-            });
-
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
+        restApiService.setAllCouponTypeToModel(model);
         model.addAttribute(TARGET_VIEW, "coupon/createCouponForm");
-
         return RETURN_PAGE;
     }
 
@@ -75,10 +66,8 @@ public class CouponAdminFrontController {
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
         @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
         HttpServletRequest request) {
-
         couponAddRequest.setIssuanceDeadlineAt(
             date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-
         String imagePath = imageUploader.uploadImage(multipartFile, request);
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
 
@@ -88,9 +77,7 @@ public class CouponAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_PREFIX);
 
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
 
         return RETURN_PAGE_COUPON_LIST;
     }
@@ -108,7 +95,6 @@ public class CouponAdminFrontController {
 
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         restService.post(url, map, String.class);
-
         return "redirect:/admin/coupon/list/type/0";
     }
 
@@ -125,9 +111,7 @@ public class CouponAdminFrontController {
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
 
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
 
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
@@ -143,9 +127,7 @@ public class CouponAdminFrontController {
         ApiEntity<PageResponse<CouponType>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/typeListView");
@@ -167,9 +149,7 @@ public class CouponAdminFrontController {
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
         model.addAttribute(PAGE_NUM, pageNum);
@@ -182,9 +162,7 @@ public class CouponAdminFrontController {
     public String viewCoupon(Model model, @PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, "/", couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
         return RETURN_PAGE;
@@ -195,9 +173,7 @@ public class CouponAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_PREFIX, "/", couponId);
 
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
         apiEntity.getBody().setId(couponId);
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
         model.addAttribute(TARGET_VIEW, "coupon/couponUpdateForm");
@@ -210,10 +186,8 @@ public class CouponAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, couponId);
         Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponAddRequest);
-        ApiEntity<String> apiEntity = restService.put(url, map, String.class);
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+        restService.put(url, map, String.class);
+
         return RETURN_PAGE_COUPON_LIST;
     }
 
@@ -286,13 +260,12 @@ public class CouponAdminFrontController {
     public String issueCouponForm(Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_PREFIX, "/pages");
 
+        // 쿠폰 모든 종류 찾아서 받아오고, 팝업창에서 선택에서 선택할 수 있게끔..
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(0), new ParameterizedTypeReference<>() {
             });
 
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
 
         model.addAttribute("couponList", apiEntity.getBody().getData());
         model.addAttribute(TARGET_VIEW, "coupon/issueCouponForm");
@@ -306,9 +279,7 @@ public class CouponAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, "/admin/coupons/issue");
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
 
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
 
         return RETURN_PAGE_COUPON_LIST;
     }
@@ -335,9 +306,7 @@ public class CouponAdminFrontController {
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
+
 
         model.addAttribute("couponList", apiEntity.getBody().getData());
 
@@ -351,14 +320,11 @@ public class CouponAdminFrontController {
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
 
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-
         model.addAttribute("memberList", apiEntity.getBody().getData());
 
         return "/admin/coupon/couponPopup";
     }
+
 
     @GetMapping("/issue-history")
     public String issueHistoryList() {
@@ -366,22 +332,4 @@ public class CouponAdminFrontController {
         return null;
     }
 
-    private String buildString(String... strings) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : strings) {
-            builder.append(s);
-        }
-        return builder.toString();
-    }
-
-    private MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, Integer size) {
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("page", pageNum.toString());
-        map.add("size", size.toString());
-        return map;
-    }
-
-    private MultiValueMap<String, String> getDefaultPageMap(Integer pageNum) {
-        return getDefaultPageMap(pageNum, 20);
-    }
 }

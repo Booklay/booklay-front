@@ -21,23 +21,11 @@ public class RestService {
                                  Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
         ApiEntity<T> apiEntity = new ApiEntity<>();
-
-        try {
-            ResponseEntity<T> response =
-                restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
-            apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e) {
-            apiEntity.setHttpClientErrorException(e);
-
-        }
-
+        ResponseEntity<T> response =
+            restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
+        apiEntity.setSuccessResponse(response);
         return apiEntity;
     }
 
@@ -45,24 +33,11 @@ public class RestService {
                                 Class<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
         ApiEntity<T> apiEntity = new ApiEntity<>();
-
-        try {
-            ResponseEntity<T> response =
-                restTemplate.exchange(url, HttpMethod.PUT, entity, responseType);
-            apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e) {
-            apiEntity.setHttpClientErrorException(e);
-
-        }
-
+        ResponseEntity<T> response =
+            restTemplate.exchange(url, HttpMethod.PUT, entity, responseType);
+        apiEntity.setSuccessResponse(response);
         return apiEntity;
     }
 
@@ -70,25 +45,11 @@ public class RestService {
                                 ParameterizedTypeReference<T> responseType) {
         RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
         ApiEntity<T> apiEntity = new ApiEntity<>();
-
-        try {
-            ResponseEntity<T> response =
-                restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity,
-                    responseType);
-            apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e) {
-            apiEntity.setHttpClientErrorException(e);
-        }
-
+        ResponseEntity<T> response =
+            restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, null,
+                responseType);
+        apiEntity.setSuccessResponse(response);
         return apiEntity;
     }
 
@@ -97,24 +58,11 @@ public class RestService {
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
-
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
         ApiEntity<T> apiEntity = new ApiEntity<>();
-
-        try {
-            ResponseEntity<T> response =
-                restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, entity,
-                    responseType);
-            apiEntity.setSuccessResponse(response);
-        } catch (HttpClientErrorException e) {
-            apiEntity.setHttpClientErrorException(e);
-        }
+        ResponseEntity<T> response =
+            restTemplate.exchange(builder.build().toUriString(), HttpMethod.GET, null,
+                responseType);
+        apiEntity.setSuccessResponse(response);
 
         return apiEntity;
     }
