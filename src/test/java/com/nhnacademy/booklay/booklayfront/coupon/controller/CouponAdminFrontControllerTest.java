@@ -51,7 +51,7 @@ class CouponAdminFrontControllerTest {
     @MockBean
     ImageUploader imageUploader;
     private String RETURN_PAGE = "admin/adminPage";
-    private static final String URI_PREFIX = "/admin/coupon";
+    private static final String URI_PREFIX = "/admin/coupons";
 
     @Autowired
     String gatewayIp;
