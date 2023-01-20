@@ -2,8 +2,8 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookJson;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
 import java.io.IOException;
 import java.net.URI;
 import javax.validation.Valid;
@@ -24,12 +24,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ *
+ * @author 최규태
+ */
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
 public class AdminProductController {
+
   private static final String PRE_FIX = "/admin/product";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
@@ -37,21 +42,19 @@ public class AdminProductController {
 
   @GetMapping
   public String getProductMainPage() {
-    return PRE_FIX+"/productMainManage";
+    return PRE_FIX + "/productMainManage";
   }
 
-  @GetMapping("/book/create")
+  @GetMapping("/books/create")
   public String getProductBookForm() {
-    return PRE_FIX+"/createProductBookForm";
+    return PRE_FIX + "/createProductBookForm";
   }
 
-  @PostMapping("/book/create")
+  @PostMapping("/books/create")
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
       MultipartFile image)
       throws IOException {
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/books");
-
-    CreateProductBookJson jsonString = new CreateProductBookJson(request);
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
@@ -61,7 +64,7 @@ public class AdminProductController {
     };
 
     MultipartBodyBuilder resource = new MultipartBodyBuilder();
-    resource.part("request", mapper.writeValueAsString(jsonString), MediaType.APPLICATION_JSON);
+    resource.part("request", mapper.writeValueAsString(request), MediaType.APPLICATION_JSON);
     resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
 
     HttpHeaders headers = new HttpHeaders();
@@ -78,14 +81,44 @@ public class AdminProductController {
     return "redirect:/product/view/" + productNo;
   }
 
-  @GetMapping("/subscribe/create")
+  @GetMapping("/subscribes/create")
   public String getProductSubscribeForm() {
-    return PRE_FIX+"/createProductSubscribeForm";
+    return PRE_FIX + "/createProductSubscribeForm";
+  }
+
+  @PostMapping("/subscribes/create")
+  public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
+      MultipartFile image) throws IOException {
+    URI uri = URI.create(gatewayIp + "/shop/v1/admin/product/subscribes");
+    ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
+      @Override
+      public String getFilename() {
+        return image.getOriginalFilename();
+      }
+    };
+
+    MultipartBodyBuilder resource = new MultipartBodyBuilder();
+    resource.part("request", mapper.writeValueAsString(request), MediaType.APPLICATION_JSON);
+    resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
+        headers);
+
+    ResponseEntity<Long> responseEntity = restTemplate.postForEntity(uri, httpEntity,
+        Long.class);
+
+    Long productNo = responseEntity.getBody();
+    return "redirect:/product/view/" + productNo;
   }
 
 
   @GetMapping("/author")
   public String getAuthorMaintain() {
-    return PRE_FIX+"/adminAuthor";
+
+    return PRE_FIX + "/adminAuthor";
   }
 }
