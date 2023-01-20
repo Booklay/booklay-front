@@ -66,7 +66,7 @@ public class CouponAdminFrontController {
         return "coupon/couponFragments/couponNavHead";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String adminCouponPage(Model model) {
         model.addAttribute(TARGET_VIEW, "coupon/empty");
         return RETURN_PAGE;
@@ -91,7 +91,7 @@ public class CouponAdminFrontController {
         return RETURN_PAGE;
     }
 
-    @PostMapping("create")
+    @PostMapping("/create")
     public String postCreateCoupon(
         @ModelAttribute("CouponTypeAddRequest") CouponAddRequest couponAddRequest,
         @RequestParam("issuanceDeadline")
@@ -132,12 +132,12 @@ public class CouponAdminFrontController {
         return "redirect:/admin/coupon/list/type/0";
     }
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public String allCouponList0() {
         return RETURN_PAGE_COUPON_LIST;
     }
 
-    @GetMapping("list/{pageNum}")
+    @GetMapping("/list/{pageNum}")
     public String allCouponList(Model model, @PathVariable Integer pageNum) {
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, "/pages");
 
