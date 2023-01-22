@@ -23,9 +23,10 @@
             </div>
           </div>
           <div class="nav-item dropdown">
-            <a href="#" class="nav-link" data-toggle="dropdown">미등록 <i class="fa fa-angle-down float-right mt-1"></i></a>
+            <a href="#" class="nav-link" data-toggle="dropdown">배송지 <i
+                    class="fa fa-angle-down float-right mt-1"></i></a>
             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-              <a href="" class="dropdown-item">미등록</a>
+                <a href="/address/13" class="dropdown-item">배송지 목록</a>
               <a href="" class="dropdown-item">미등록</a>
               <a href="" class="dropdown-item">미등록</a>
             </div>
@@ -38,9 +39,9 @@
     </div>
 
     <div class="col-lg-9">
-      <!-- Navbar Start -->
-      <th:block th:include="${'mypage/'+ navHead}"/>
-      <!-- Navbar End -->
+        <!-- Navbar Start -->
+        <!-- <th:block th:include="${'mypage/'+ navHead}"/> -->
+        <!-- Navbar End -->
       <!-- member detail Start -->
       <th:block th:include="${'mypage/' + targetUrl}"/>
       <!-- member detail End -->

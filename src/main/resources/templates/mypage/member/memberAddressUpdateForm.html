@@ -27,13 +27,16 @@
 <body>
 <h3>주소 수정하기</h3>
 <div>
-    <form th:action="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo})(addressNo=${address.getId()})}"
+    <form th:action="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo}, addressNo=${address.getId()})}"
           method="post" name="DeliveryDestinationCURequest">
         <b>배송지 이름</b>: <input type="text" name="name" th:value="${address.getName()}"><br>
         <b>우편번호</b>: <input type="text" name="zipCode" th:value="${address.getZipCode()}"><br>
         <b>상세주소</b>: <input type="text" name="address" th:value="${address.getAddress()}"><br>
-        <b>기본 배송지 여부</b> <input type="radio" name="isDefaultDestination" th:if="${address.getIsDefaultDestination()}"
-                                checked><br>
+        <b>기본 배송지 여부</b>
+        설정 <input type="radio" value="true" name="isDefaultDestination"
+                  th:checked="${address.getIsDefaultDestination().equals(true)}">
+        해제 <input type="radio" value="false" name="isDefaultDestination"
+                  th:checked="${address.getIsDefaultDestination().equals(false)}"><br>
         <input type="submit" value="수정하기"/>
     </form>
 </div>
