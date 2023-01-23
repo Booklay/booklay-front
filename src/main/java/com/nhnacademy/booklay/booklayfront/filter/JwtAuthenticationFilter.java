@@ -15,6 +15,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -29,17 +30,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String jwt = request.getHeader("Authorization");
+        String jwtFormHeader = request.getHeader("Authorization");
+        String jwt = getTokenFromHeader(jwtFormHeader);
+
         if (Objects.isNull(jwt)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        SecretKey key = Keys.hmacShaKeyFor(
-                secret.getBytes(StandardCharsets.UTF_8));
-
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody();
@@ -61,4 +61,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return request.getServletPath()
                 .equals("login");
     }
+
+    private String getTokenFromHeader(String header) {
+        return header.split(" ")[1];
+    }
+
 }
