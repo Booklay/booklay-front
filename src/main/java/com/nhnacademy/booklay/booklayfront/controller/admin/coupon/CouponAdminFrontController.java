@@ -70,7 +70,7 @@ public class CouponAdminFrontController {
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
         map.put("imageId", 1L);
 
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX);
 
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
 
@@ -87,7 +87,7 @@ public class CouponAdminFrontController {
     @PostMapping("type/create")
     public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TYPES_URL_PREFIX);
 
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         restService.post(url, map, String.class);
@@ -102,7 +102,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("list/{pageNum}")
     public String allCouponList(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, "pages");
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX, "pages");
 
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
@@ -120,7 +120,7 @@ public class CouponAdminFrontController {
     @GetMapping("list/type/{pageNum}")
     public String allCouponTypeList(Model model, @PathVariable Integer pageNum) {
 
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TYPES_URL_PREFIX);
         ApiEntity<PageResponse<CouponType>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
@@ -133,7 +133,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("type/delete/{couponId}")
     public String couponTypeDelete(@PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX, couponId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TYPES_URL_PREFIX, couponId);
         restService.delete(url);
         return "redirect:/admin/coupon/list/type/0";
     }
@@ -142,7 +142,7 @@ public class CouponAdminFrontController {
     public String memberCouponList(Model model, @PathVariable String memberNo,
                                    @PathVariable Integer pageNum) {
         String url =
-            buildString(gatewayIp, REST_PREFIX, "/members/", memberNo, "/", pageNum.toString());
+            buildString(gatewayIp, REST_PREFIX_COUPON, "/members/", memberNo, "/", pageNum.toString());
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
@@ -157,7 +157,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("detail/{couponId}")
     public String viewCoupon(Model model, @PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, couponId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
 
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
@@ -167,7 +167,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("update/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, couponId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX, couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
 
         apiEntity.getBody().setId(couponId);
@@ -179,7 +179,7 @@ public class CouponAdminFrontController {
     @PostMapping("update/{couponId}")
     public String postUpdateCouponForm(@ModelAttribute CouponAddRequest couponAddRequest,
                                        @PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, couponId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, couponId);
         Map<String, Object> map = new HashMap<>();
         map.put("couponRequest", couponAddRequest);
         restService.put(url, map, String.class);
@@ -189,14 +189,14 @@ public class CouponAdminFrontController {
 
     @GetMapping("delete/{couponId}")
     public String deleteCoupon(@PathVariable String couponId) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, couponId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX, couponId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_LIST;
     }
 
     @GetMapping("history/{pageNum}")
     public String historyCoupon(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX, "history/", pageNum.toString());
+        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX_COUPON, "history/", pageNum.toString());
         ApiEntity<CouponHistory> apiEntity =
             restService.get(url, null, new ParameterizedTypeReference<>() {
             });
@@ -211,7 +211,7 @@ public class CouponAdminFrontController {
     @GetMapping("history/{memberNo}/{pageNum}")
     public String memberHistoryCoupon(Model model, @PathVariable String memberNo,
                                       @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX, "history/", memberNo, "/",
+        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX_COUPON, "history/", memberNo, "/",
             pageNum.toString());
         ApiEntity<CouponHistory> apiEntity =
             restService.get(url, null, new ParameterizedTypeReference<>() {
@@ -225,7 +225,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("issue/{pageNum}")
     public String issueCoupon(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX, "issue/", pageNum.toString());
+        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX_COUPON, "issue/", pageNum.toString());
         ApiEntity<CouponIssue> apiEntity =
             restService.get(url, null, new ParameterizedTypeReference<>() {
             });
@@ -239,7 +239,7 @@ public class CouponAdminFrontController {
     @GetMapping("issue/{memberNo}/{pageNum}")
     public String memberIssueCoupon(Model model, @PathVariable Integer pageNum,
                                     @PathVariable String memberNo) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX, "issue/", memberNo, "/",
+        String url = buildString(FrontURI.SHOP_URI, REST_PREFIX_COUPON, "issue/", memberNo, "/",
             pageNum.toString());
         ApiEntity<CouponIssue> apiEntity =
             restService.get(url, null, new ParameterizedTypeReference<>() {
@@ -254,7 +254,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("/issue")
     public String issueCouponForm(Model model) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, "/pages");
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX, "/pages");
 
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(0), new ParameterizedTypeReference<>() {
@@ -271,7 +271,7 @@ public class CouponAdminFrontController {
     public String issueCouponCreate(@Valid @ModelAttribute CouponIssueRequest couponRequest) {
         Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
 
-        String url = buildString(gatewayIp, REST_PREFIX, "/admin/coupons/issue");
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, "/admin/coupons/issue");
         ApiEntity<String> apiEntity = restService.post(url, map, String.class);
 
 
@@ -294,7 +294,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("/popup/pages/{pageNum}")
     public String couponPopup(@PathVariable int pageNum, Model model) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_URL_PREFIX, "pages");
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_URL_PREFIX, "pages");
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });

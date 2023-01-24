@@ -40,7 +40,7 @@ public class CouponSettingAdminController {
     public String postCreateCouponSetting(
             @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_SETTING_URL_PREFIX);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_SETTING_URL_PREFIX);
         restService.post(url, map, String.class);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
@@ -70,14 +70,14 @@ public class CouponSettingAdminController {
             @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest
             , @PathVariable String couponSettingId) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_SETTING_URL_PREFIX, couponSettingId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_SETTING_URL_PREFIX, couponSettingId);
         restService.put(url, map, String.class);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
 
     @GetMapping("delete/{couponSettingId}")
     public String deleteCoupon(@PathVariable String couponSettingId) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_SETTING_URL_PREFIX, couponSettingId);
+        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_SETTING_URL_PREFIX, couponSettingId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
