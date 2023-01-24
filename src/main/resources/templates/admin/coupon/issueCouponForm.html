@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <head>
+  <link href="/css/form.css" rel="stylesheet">
   <script src="/js/coupon/couponPopup.js"></script>
 </head>
 <html lang="ko">
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
-  <form action="/admin/coupon/issue" method="post" enctype="multipart/form-data">
-    쿠폰 종류 :
-    <input type="text" id="couponId", name="couponId">
-    <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();">
-    <br/>
-    <label>수량 : <input type="number" name="quantity"></label> <br/>
+  <div id="input-form">
+    <form action="/admin/coupons/issue" method="post" enctype="multipart/form-data">
+      <div>
+        <label>쿠폰 종류 :<input type="text" id="couponId", name="couponId"></label>
+        <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();">
+      </div>
+      <br/>
+      <label>수량 : <input type="number" name="quantity"></label> <br/>
 
-    <input type="submit" value="발급">
-  </form>
+      <input type="submit" value="발급">
+    </form>
+  </div>
 </div>
 </html>

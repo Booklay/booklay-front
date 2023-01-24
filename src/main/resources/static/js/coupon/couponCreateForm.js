@@ -1,26 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-    function createParagraph() {
-        console.log("event");
-        let categorySelectorLabel = document.getElementById("categorySelectorLabel")
-        let categorySelector = document.getElementById("categorySelector")
-        let itemSelectorLabel = document.getElementById("itemSelectorLabel")
-        let itemSelector = document.getElementById("itemSelector")
-        let isOrderCoupon = document.getElementById("isOrderCoupon")
+function changeByType() {
+    let couponType = document.getElementById("coupon-type");
 
-        if (isOrderCoupon.checked){
-            itemSelector.setAttribute("name", "disable");
-            itemSelectorLabel.classList.add("hidden");
-            categorySelector.setAttribute("name", "applyItemId");
-            categorySelectorLabel.classList.remove("hidden");
-        }else {
-            categorySelector.setAttribute("name", "disable");
-            categorySelectorLabel.classList.add("hidden");
-            itemSelector.setAttribute("name", "applyItemId");
-            itemSelectorLabel.classList.remove("hidden");
-        }
+    // select에서 선택된 option의 text.
+    let selectText = couponType.options[couponType.selectedIndex].text;
+
+    let selectDiv = document.getElementById("select-item");
+
+    if(selectText === "포인트") {
+        selectDiv.style.display = "none";
+    } else {
+        selectDiv.style.display = "block";
     }
-    let button = document.getElementById("isOrderCoupon");
-    button.addEventListener("change", createParagraph);
-    let button2 = document.getElementById("isProductCoupon");
-    button2.addEventListener("change", createParagraph);
-});
+}
+
+function changeByRange() {
+    let couponRange = document.getElementById("coupon-range");
+    let rangeValue = couponRange.options[couponRange.selectedIndex].text;
+    let itemLabel = document.getElementById("apply-item-label")
+
+    if(rangeValue === "order") {
+        itemLabel.innerText = "적용 카테고리 번호"
+    } else if(rangeValue === "item") {
+        itemLabel.innerText = "적용 상품 번호"
+    }
+}

@@ -1,44 +1,15 @@
 <!DOCTYPE html>
 <head>
-    <style>
-        .hidden{
-            visibility: hidden;
-        }
-    </style>
+    <title>쿠폰 종류 생성</title>
 </head>
 <html lang="ko">
-
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <form action="/admin/coupon/type/create" method="post" enctype="multipart/form-data">
+        <form action="/admin/coupons/types/create" method="post" enctype="multipart/form-data">
             <label>쿠폰 코드 : <input type="number" name="id"> </label> <br/>
             <label>쿠폰 타입 이름 : <input type="text" name="name"> </label> <br/>
             <input type="submit">
         </form>
     </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        function createParagraph() {
-            console.log("event");
-            let categorySelector = document.getElementById("categorySelector")
-            let itemSelector = document.getElementById("itemSelector")
-            let isOrderCoupon = document.getElementById("isOrderCoupon")
-            if (isOrderCoupon.checked){
-                itemSelector.setAttribute("name", "disable");
-                itemSelector.classList.add("hidden");
-                categorySelector.setAttribute("name", "applyItemId");
-                categorySelector.classList.remove("hidden");
-            }else {
-                categorySelector.setAttribute("name", "disable");
-                categorySelector.classList.add("hidden");
-                itemSelector.setAttribute("name", "applyItemId");
-                itemSelector.classList.remove("hidden");
-            }
-        }
-        let button = document.getElementById("isOrderCoupon");
-        button.addEventListener("change", createParagraph);
-    });
-</script>
 </html>
 
 

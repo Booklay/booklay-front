@@ -13,6 +13,7 @@ public class AdminIndexController {
     public String getAdminPage(Model model) {
         model.addAttribute("navHead", "emptyPage");
         model.addAttribute("targetUrl", "emptyPage");
+
         return "/admin/adminPage";
     }
 }
