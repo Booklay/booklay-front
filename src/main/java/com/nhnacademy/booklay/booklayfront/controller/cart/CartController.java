@@ -7,7 +7,6 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildStri
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
-import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public class CartController {
     private static final String STRING_CART_ID = "CART_ID";
     private static final String STRING_PRODUCT_NO = "productNo";
     private static final String STRING_PRODUCT_NO_LIST = "productNoList";
-    private static final String ATTRIBUTE_NAME_CART_OBJECT_LIST = "cartObjectList";
+    private static final String ATTRIBUTE_NAME_CART_DTO_LIST = "cartDtoList";
 
     @ModelAttribute(STRING_CART_ID)
     public String getCookieValue(@CookieValue(name = STRING_CART_ID, required = false)
@@ -63,10 +62,10 @@ public class CartController {
         MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
         multiValueMap.add(STRING_CART_ID, cartId);
         String url = buildString(gatewayIp, REST_PREFIX_SHOP, CART_URL_PREFIX);
-        ApiEntity<List<CartObject>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});
-        List<CartObject> cartObjectList = apiEntity.getBody();
-        model.addAttribute(ATTRIBUTE_NAME_CART_OBJECT_LIST, cartObjectList);
-        return "cart/cartForm";
+        ApiEntity<List<CartDto>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});
+        List<CartDto> cartDtoList = apiEntity.getBody();
+        model.addAttribute(ATTRIBUTE_NAME_CART_DTO_LIST, cartDtoList);
+        return "cart/cartListForm";
     }
 
     @PostMapping
@@ -108,13 +107,6 @@ public class CartController {
         String url = buildString(gatewayIp, REST_PREFIX_SHOP, CART_URL_PREFIX, "buy");
         restService.post(url, map, String.class);
         return "redirect:cart/list";
-    }
-
-    @GetMapping("login")
-    public String loginAndMoveCartRedisToRDB(@ModelAttribute(STRING_CART_ID)String cartId){
-        String url = buildString(gatewayIp, REST_PREFIX_SHOP, CART_URL_PREFIX, "login/", cartId);
-        restService.get(url, null, String.class);
-        return "";
     }
 
     private String getRandomUUID(){
