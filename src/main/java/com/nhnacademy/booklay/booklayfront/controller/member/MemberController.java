@@ -71,21 +71,6 @@ public class MemberController {
         //TODO 2: 에러처리
 
         return "redirect:/";
-
-//        HttpEntity<MemberCreateRequest> request = new HttpEntity<>(memberCreateRequest);
-
-//        ResponseEntity<Void> response =
-//            restTemplate.exchange(redirectGatewayPrefix, HttpMethod.POST, request,
-//                Void.class);
-//
-//        //TODO 1: 에러처리
-//        if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
-//            redirectAttributes.addFlashAttribute("error", response.getStatusCode());
-//            return "redirect:/error";
-//        }
-//
-//        return "redirect:/shop";
-
     }
 
     @GetMapping("/{memberNo}")
