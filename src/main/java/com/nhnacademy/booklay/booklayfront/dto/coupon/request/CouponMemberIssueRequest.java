@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.coupon;
+package com.nhnacademy.booklay.booklayfront.dto.coupon.request;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;

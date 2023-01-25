@@ -11,7 +11,8 @@ import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.P
 import static com.nhnacademy.booklay.booklayfront.dto.domain.ControllerStrings.TARGET_VIEW;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponMemberIssueRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.domain.CouponAddRequest;
@@ -28,10 +29,12 @@ import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -49,6 +52,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupons")
+@Slf4j
 public class CouponAdminFrontController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
@@ -358,9 +362,6 @@ public class CouponAdminFrontController {
         ApiEntity<PageResponse<Coupon>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
 
         model.addAttribute("couponList", apiEntity.getBody().getData());
 
@@ -374,19 +375,20 @@ public class CouponAdminFrontController {
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
 
-        if (!apiEntity.isSuccess()) {
-            return ERROR;
-        }
-
         model.addAttribute("memberList", apiEntity.getBody().getData());
 
         return "/admin/coupon/couponPopup";
     }
 
     @GetMapping("/issue-history")
-    public String issueHistoryList() {
+    public String issueHistoryList(@RequestParam(value="pageNum", defaultValue = "0") int pageNum) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX, REST_COUPON_PREFIX, "/issue-history");
+        ApiEntity<List<CouponHistoryResponse>> apiEntity =
+            restService.get(url, null, new ParameterizedTypeReference<>() {
+            });
 
-        return null;
+        log.info(apiEntity.getBody().toString());
+        return "redirect:/";
     }
 
     private String buildString(String... strings) {
