@@ -43,11 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CouponAdminFrontController.class)
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.config")
+@ComponentScan("com.nhnacademy.booklay.booklayfront.service")
 class CouponAdminFrontControllerTest {
     @MockBean
     RestService restService;
-    @MockBean
-    CouponRestApiModelSettingService couponRestApiModelSettingService;
     @Autowired
     MockMvc mockMvc;
 
@@ -89,15 +88,15 @@ class CouponAdminFrontControllerTest {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("name", "coupon1");
         map.add("userId", "1");
-        map.add("typeName", "정액");
+        map.add("typeCode", "1");
+        map.add("isOrderCoupon", "true");
+        map.add("applyItemId", "12");
         map.add("amount", "1000");
-        map.add("categoryId", "12");
-        map.add("productId", "3");
         map.add("minimumUseAmount", "10000");
         map.add("maximumDiscountAmount", "1000");
         map.add("issuanceDeadline", "2030-10-30T12:34");
         map.add("isDuplicatable", "true");
-        map.add("issueAmount", "500");
+        map.add("isLimited", "true");
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<List<Coupon>> responseEntity =
@@ -238,16 +237,16 @@ class CouponAdminFrontControllerTest {
     void postUpdateCouponForm() throws Exception {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("name", "coupon1");
-        map.add("userId", "1");
-        map.add("typeName", "정액");
+        map.add("typeCode", "1");
         map.add("amount", "1000");
-        map.add("categoryId", "12");
-        map.add("productId", "3");
+        map.add("isOrderCoupon", "true");
+        map.add("applyItemId", "12");
+        map.add("issueAmount", "500");
         map.add("minimumUseAmount", "10000");
         map.add("maximumDiscountAmount", "1000");
         map.add("issuanceDeadline", "2030-10-30T12:34");
         map.add("isDuplicatable", "true");
-        map.add("issueAmount", "500");
+        map.add("isLimited", "true");
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<String> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);

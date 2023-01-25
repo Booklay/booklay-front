@@ -22,7 +22,7 @@
         <p th:if="${pageNum > 0}">
             <a th:href="${'coupon/list/type/' + (pageNum - 1)}">이전</a>
         </p>
-        <p th:if="${#lists.size(couponTypeList) > 0}">
+        <p th:if="${#lists.size(couponTypeList) == 20}">
             <a th:href="${'coupon/list/type/' + (pageNum + 1)}">다음</a>
         </p>
     </div>
