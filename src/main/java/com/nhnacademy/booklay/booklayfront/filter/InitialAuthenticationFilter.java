@@ -3,7 +3,10 @@ package com.nhnacademy.booklay.booklayfront.filter;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -13,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 로그인을 시도할 때 단 한번 실행되는 필터.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -27,7 +33,11 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
         String password = request.getParameter("password");
 
         UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication(memberId, password);
-        authenticationManager.authenticate(authentication);
+
+        Authentication authenticated = authenticationManager.authenticate(authentication);
+        log.info(authenticated.getAuthorities().toString());
+
+        Authentication test = SecurityContextHolder.getContext().getAuthentication();
 
     }
 

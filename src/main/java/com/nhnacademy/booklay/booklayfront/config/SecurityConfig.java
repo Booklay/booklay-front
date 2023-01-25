@@ -1,12 +1,17 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
 import com.nhnacademy.booklay.booklayfront.filter.AuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.filter.InitialAuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.filter.JwtAuthenticationFilter;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +23,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Spring Security 기본 설정

@@ -1,12 +1,19 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
+import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
 
 /**
  *
@@ -19,6 +26,7 @@ import org.springframework.stereotype.Component;
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
     private final AuthenticationServerProxy proxy;
+    private final TokenUtils tokenUtils;
 
     /**
      * 프록시로 인증 서벌르 호출합니다.
@@ -33,11 +41,13 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());
 
-        proxy.sendAuth(username, password);
-
         log.info("login start , {}", username);
 
-        return new UsernamePasswordAuthenticationToken(username, password);
+        JwtInfo jwtInfo = proxy.sendAuth(username, password);
+
+        String role = tokenUtils.getRole(jwtInfo);
+
+        return new UsernamePasswordAuthenticationToken(jwtInfo.getUuid(), jwtInfo.getJwt(), Collections.singletonList(new SimpleGrantedAuthority(role)));
     }
 
     /**
