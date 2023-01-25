@@ -100,8 +100,6 @@ public class AdminAuthorController {
         objectMapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
 
-    log.info(requestEntity.getBody());
-
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
 
     return PAGE_PRE_FIX;
@@ -110,7 +108,6 @@ public class AdminAuthorController {
   @PostMapping("/update")
   public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request)
       throws JsonProcessingException {
-    log.info("시험 출력 : " + request.getName() + request.getId(), request.getMemberNo());
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     HttpHeaders headers = new HttpHeaders();

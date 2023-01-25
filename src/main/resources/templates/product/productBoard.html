@@ -6,36 +6,31 @@
 </head>
 <body>
 
-<table>
-  <thead>
-
-  <tr>
-    <th>상품 번호</th>
-    <th>이미지</th>
-    <th>제목</th>
-    <th>작가</th>
-    <th>가격</th>
-    <th>적립여부</th>
-    <th>적립률</th>
-  </tr>
-  </thead>
+<table border=1>
+  <tbody>
   <th:block th:each="product : ${productList}">
     <tr>
-      <td><span th:text="${product.productId}"/></td>
-      <td>이미지 입니다...</td>
-      <td><a th:href="@{/product/view/{productNo} (productNo=${product.productId})}" th:text="${product.title}"/></td>
+      <td rowspan="3">이미지 입니다...</td>
+      <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}" th:text="${product.title}"/></td>
+      <td><input type="number"/></td>
+    </tr>
+
+    <tr>
       <td>
-        <th:block th:if="${product.authors != null}" th:each="author : ${product.authors}">
-          <span th:text = "${author.name}"/>
+        작가 :
+        <th:block th:each="author : ${product.authors}"><span th:text="${author.name}"/>
         </th:block>
       </td>
-      <td><span th:text="${product.price}"/></td>
-      <td><span th:text="${product.pointMethod}"/></td>
-      <td><span th:text="${product.pointRate}"/></td>
+      <td>출판사 : <span th:text="${product.publisher}"/></td>
+      <td><input type="button" value="카트에 넣기"/></td>
+    </tr>
+
+    <tr>
+      <td><span th:text="${product.price}"/> 원</td>
+      <td>적립률 : <span th:if="${product.isPointMethod()}" th:text="${product.pointRate}"/> %</td>
+      <td><input type="button" value="바로 구매"/></td>
     </tr>
   </th:block>
-  <tbody>
-
   </tbody>
 </table>
 </body>

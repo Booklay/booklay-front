@@ -3,7 +3,9 @@ package com.nhnacademy.booklay.booklayfront.controller.product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.RetrieveByIdRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateWishlistRequest;
 import java.net.URI;
 import java.util.List;
@@ -36,7 +38,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
-public class ProductBoardController {
+public class ProductDisplayController {
 
   private final static String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
@@ -85,9 +87,21 @@ public class ProductBoardController {
   }
 
   @GetMapping("/view/{productNo}")
-  public String productViewer(@PathVariable("productNo") Long productNo, Model model) {
+  public String productViewer(@PathVariable("productNo") Long productNo, Model model)
+      throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(null ,
+        headers, HttpMethod.GET, uri);
+
+
+    ResponseEntity<RetrieveProductViewResponse> response = restTemplate.exchange(requestEntity, RetrieveProductViewResponse.class);
 
     model.addAttribute("productNo", productNo);
+    model.addAttribute("product", response.getBody());
 
     return "/product/productDetailView";
   }

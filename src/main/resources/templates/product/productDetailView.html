@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title th:text="${product.title}"></title>
+  <link href="/css/productView.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -10,16 +11,102 @@
 <!--<th:block th:if="${member !=null}">-->
 <!--  <input th:if="${member.authorize == 'admin'}" th:id="${productNo}" type="button" value="태그 등록 팝업창 호출" onclick="showPopup(id);"/>-->
 <!--</th:block>-->
+<div id="detail">
 
-<input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출" onclick="showPopup(id);"/>
+  <div id="top-info">
 
-<!--<th:block th:if="${member !=null}">-->
-<form method="post" action="">
-  <input name="memberNo" type="number" th:if="${member != null}" th:value="${member.memberNo}"
-         hidden="hidden"/>
-  <input type="submit" value="찜 등록"/>
-</form>
-<!--</th:block>-->
+    <div id="thumbnail">
+      <p>이미지가 들어올 자리 입니다...</p>
+    </div>
+
+    <div id="information">
+      <h2 th:text="${product.title}"></h2>
+      <p th:if="${product.productDetailId != null}">
+        작가 :
+        <th:block th:each="author : ${product.authors}">
+          <span th:text="${author.name}"/>
+        </th:block>
+        &ensp;
+        <span th:text="${product.publisher}"/> |
+        <span th:text="${product.publishedDate}"/>
+      </p>
+
+      <p th:if="${product.subscribeId != null}">
+        <span th:text="${product.publisher}"/> |
+        매월 <span th:text="${product.subscribeWeek}"/>주차
+        <span th:text="${product.subscribeDay}"/> 발송
+      </p>
+      <hr>
+      <p> 정가  | <span th:text="${product.price}"/>원</p>
+      <!--    <p th:text="${product.salePrice}"></p>-->
+      <p> 적립률 |
+        <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/>
+        <span th:if="${product.pointMethod == false}" th:text="0"/>
+        %</p>
+      <P>연관 태그</P>
+      <th:block th:each="tag : ${product.productTags}">
+        <span th:text="${tag.name}"/>
+      </th:block>
+      </br>
+      <input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출" onclick="showPopup(id);"/>
+
+      <div id="button-var">
+        <form class="btnAtVar" method="post" action="">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input class="numIn" name="quantity" type="number" min="1"value="1"/>
+          <input name="productId" type="number" th:value="${product.productId}" hidden="hidden">
+          <input type="submit" value="구매"/>
+        </form>
+
+        <form class="btnAtVar" method="post" action="">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input class="numIn" name="quantity" type="number" min="1" value="1"/>
+          <input name="productId" type="number" th:value="${product.productId}" hidden="hidden">
+          <input type="submit" value="카트에 넣기"/>
+        </form>
+
+        <!--<th:block th:if="${member !=null}">-->
+        <form class="btnAtVar" method="post" action="">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input type="submit" value="찜 등록"/>
+        </form>
+        <!--</th:block>-->
+
+        <!--<th:block th:if="${member !=null}">-->
+        <form class="btnAtVar" method="post" action="">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input type="submit" value="알림 등록"/>
+        </form>
+      </div>
+      <!--</th:block>-->
+    </div>
+  </div>
+
+  <div id="short_description">
+    <span th:text="${product.shortDescription}"/>
+  </div>
+
+  <hr>
+  <div id="long_description">
+    <span th:text="${product.longDescription}"/>
+  </div>
+</div>
+<div id="relation">
+</div>
+
+<div id="review">
+</div>
+
+<div id="productQNA"></div>
+
 
 <script>
   function showPopup(productNo) {
