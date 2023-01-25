@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MemberRetrieveResponse {
-    private Long memberId;
+    private Long memberNo;
     private String gender;
-    private String id;
+    private String memberId;
     private String nickname;
     private String name;
     private LocalDate birthday;

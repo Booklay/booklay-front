@@ -92,9 +92,9 @@ public class DeliveryDestinationController {
     }
 
     @GetMapping("/update/{memberNo}/{addressNo}")
-    public String retrieveUpdateAddress(@PathVariable Long memberNo,
-                                        @PathVariable Long addressNo,
-                                        Model model) {
+    public String retrieveUpdateAddressForm(@PathVariable Long memberNo,
+                                            @PathVariable Long addressNo,
+                                            Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
