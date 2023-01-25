@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="/js/product/productBookRegister.js"></script>
+</head>
+<body>
+
+<form method="post" action="/admin/product/books/create" enctype="multipart/form-data">
+  <!--<form enctype="multipart/form-data">-->
+  <p>제목 : <input type="text" name="title"/></p>
+  <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
+  </p>
+  <p>가격 : <input type="number" min="0" step="1" name="price"/></p>
+  <p>적립률 : <input type="number" min="0" step="1" name="pointRate" th:value="${defaultPointRate}"/> %</p>
+  <p>적립 여부 :
+    <input type="radio" name="pointMethod" value="true"> Y
+    <input type="radio" name="pointMethod" value="false"> N
+  </p>
+
+  <p>짧은 설명</p>
+  <div id="shortEditor"></div>
+  <input id="shortDescription" name="shortDescription" type="text" hidden="hidden"/>
+
+  <p>긴 설명</p>
+  <div id="longEditor"></div>
+  <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
+
+  <p>판매 여부 :
+    <input type="radio" name="isSelling" value="true"> Y
+    <input type="radio" name="isSelling" value="false"> N
+  <p>
+    <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
+    &ensp; &ensp; &ensp;
+    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
+  <div id="categories"></div>
+
+  <p>ISBN : <input type="text" name="isbn"/></p>
+  <p>페이지 수 : <input type="number" min="0" step="1" name="page"/></p>
+  <p>출판사 : <input type="text" name="publisher"/></p>
+  <p>출판일 : <input type="date" name="publishedDate"/></p>
+  <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
+  &ensp;&ensp;&ensp;
+  <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
+  <div id="authors"></div>
+
+  <!--  둘 중 하나만 입력 가능해야함-->
+  <p>재고량 : <input type="number" min="0" step="1" name="storage"/></p>
+  <p>이북 주소 : <input type="text" name="ebookAddress"></p>
+
+  <input type="submit" id="btn-submit"/>
+</form>
+
+</body>
+</html>
