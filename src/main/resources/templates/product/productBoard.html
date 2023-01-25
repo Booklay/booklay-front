@@ -11,7 +11,7 @@
   <th:block th:each="product : ${productList}">
     <tr>
       <td rowspan="3">이미지 입니다...</td>
-      <td colspan="2"><span th:text="${product.title}"/></td>
+      <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}" th:text="${product.title}"/></td>
       <td><input type="number"/></td>
     </tr>
 
