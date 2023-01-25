@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <title>사용자 쿠폰 발급</title>
     <script src="/js/coupon/couponPopup.js"></script>
+    <link href="/css/form.css" rel="stylesheet">
 </head>
 <body>
-<form action="/admin/coupons/member/issue" method="post" enctype="multipart/form-data">
-    쿠폰 종류 :
-    <input type="text" id="couponId", name="couponId">
-    <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();"> <br/>
+<div id="input-form">
+    <form action="/admin/coupons/member/issue" method="post" enctype="multipart/form-data">
+        <label for="couponId">쿠폰 종류</label>
+        <input type="text" id="couponId" name="couponId">
+        <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();"> <br/>
 
-    발급할 회원 :
-    <input type="text" id="memberId", name="memberId">
-    <input type="button" value="회원 찾기" onclick="showMemberPopup();"> <br/>
+        <label for="memberId">발급할 회원</label>
+        <input type="text" id="memberId" name="memberId">
+        <input type="button" value="회원 찾기" onclick="showMemberPopup();"> <br/>
 
-    <input type="submit" value="발급">
-</form>
+        <input type="submit" value="발급">
+    </form>
+</div>
 </body>
 </html>

@@ -8,13 +8,12 @@
   <div id="input-form">
     <form action="/admin/coupons/issue" method="post" enctype="multipart/form-data">
       <div>
-        <label>쿠폰 종류 :<input type="text" id="couponId", name="couponId"></label>
+        <label for="couponId">쿠폰 종류</label><input type="text" id="couponId", name="couponId">
         <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();">
       </div>
-      <br/>
-      <label>수량 : <input type="number" name="quantity"></label> <br/>
-
-      <input type="submit" value="발급">
+      <div>
+        <label for="quantity">수량</label><input type="number" name="quantity" id="quantity">
+      </div><input type="submit" value="발급">
     </form>
   </div>
 </div>
