@@ -58,7 +58,7 @@ public class CouponAdminFrontController {
 
     @PostMapping("create")
     public String postCreateCoupon(
-        @ModelAttribute("CouponAddRequest") CouponAddRequest couponAddRequest,
+        @Valid @ModelAttribute("CouponAddRequest") CouponAddRequest couponAddRequest,
         @RequestParam("issuanceDeadline")
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
         @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
@@ -85,7 +85,7 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("type/create")
-    public String postCreateCoupon(@ModelAttribute("CouponTypeAddRequest")
+    public String postCreateCoupon(@Valid @ModelAttribute("CouponTypeAddRequest")
                                    CouponTypeAddRequest couponTypeAddRequest) {
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_TYPES_URL_PREFIX);
 
@@ -177,7 +177,7 @@ public class CouponAdminFrontController {
     }
 
     @PostMapping("update/{couponId}")
-    public String postUpdateCouponForm(@ModelAttribute CouponAddRequest couponAddRequest,
+    public String postUpdateCouponForm(@Valid @ModelAttribute CouponAddRequest couponAddRequest,
                                        @PathVariable String couponId) {
         String url = buildString(gatewayIp, REST_PREFIX, couponId);
         Map<String, Object> map = new HashMap<>();

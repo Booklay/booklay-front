@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class CouponTemplateAdminFrontController {
 
     @PostMapping("create")
     public String createCouponTemplatePost(
-        @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
+        @Valid @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
         @RequestParam("issuingDeadLine")
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
         @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
@@ -95,7 +96,7 @@ public class CouponTemplateAdminFrontController {
     }
 
     @PostMapping("update/{couponTemplateId}")
-    public String postUpdateCouponForm(@ModelAttribute CouponTemplateAddRequest couponTemplateAddRequest,
+    public String postUpdateCouponForm(@Valid @ModelAttribute CouponTemplateAddRequest couponTemplateAddRequest,
                                        @PathVariable String couponTemplateId) {
         String url = buildString(gatewayIp, REST_PREFIX, couponTemplateId);
         Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
