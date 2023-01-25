@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Member Address</title>
+    <script src="/js/member/addressCreatePopup.js"></script>
 </head>
 <body>
-<h3>배송지 목록</h3><br>
-<button><a th:href="@{/address/register/{memberNo}(memberNo=${memberNo})}">추가하기</a></button>
+<h3>[배송지 목록]</h3><br>
+<input type="button" value="추가하기" th:id="${memberNo}" onclick="showAddressPopup(this.getAttribute('id'))">
 <br>
-<table>
+<table border="1">
     <tr>
         <th scope="col">번호</th>
         <th scope="col">이름</th>
@@ -28,13 +29,13 @@
             <span th:unless="${address.getIsDefaultDestination()}">X</span>
         </td>
         <td>
-            <button th:href="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo})(addressNo=${address.getId()})}"
-                    target="_blank">삭제하기
+            <button><a
+                    th:href="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo}, addressNo=${address.getId()})}">수정하기</a>
             </button>
         </td>
         <td>
-            <button th:href="@{/address/delete/{memberNo}/{addressNo}(memberNo=${memberNo})(addressNo=${address.getId()})}">
-                수정하기
+            <button><a
+                    th:href="@{/address/delete/{memberNo}/{addressNo}(memberNo=${memberNo}, addressNo=${address.getId()})}">삭제하기</a>
             </button>
         </td>
     </tr>

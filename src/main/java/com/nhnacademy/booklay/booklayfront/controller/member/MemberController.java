@@ -33,6 +33,8 @@ public class MemberController {
 
     private final String redirectGatewayPrefix;
 
+    private final static String MYPAGE = "/mypage/myPage";
+
     public MemberController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
         redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
@@ -45,7 +47,7 @@ public class MemberController {
 
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
-    public String test() {
+    public String retrieveCreateMemberForm(Model model) {
         return "member/createMemberForm";
     }
 
@@ -91,7 +93,7 @@ public class MemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefix);
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
@@ -101,9 +103,9 @@ public class MemberController {
 
         model.addAttribute("member", response.getBody());
         model.addAttribute("memberNo", memberNo);
+        model.addAttribute("targetUrl", "member/memberDetail");
 
         return "mypage/member/memberDetail";
     }
-
 
 }
