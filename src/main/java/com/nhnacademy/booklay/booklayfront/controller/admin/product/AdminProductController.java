@@ -2,17 +2,25 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Controller;
@@ -36,31 +44,28 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/admin/product")
 public class AdminProductController {
 
+  private static final Long DEFAULT_POINT_RATE = 5L;
   private static final String PRE_FIX = "/admin/product";
   private static final String URI_PRE_FIX = "/shop/v1/admin/product/";
+  private static final String REDIRECT_PRE_FIX = "redirect:/product/view/";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-  private final Long DEFAULT_POINT_RATE = 5L;
 
+  //총 관리 인덱스 페이지
   @GetMapping
   public String getProductMainPage() {
     return PRE_FIX + "/productMainManage";
   }
 
+  //책 생성 페이지
   @GetMapping("/books/create")
   public String getProductBookCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
     return PRE_FIX + "/createProductBookForm";
   }
 
-  @GetMapping("/books/update/{productId}")
-  public String getProductBookUpdateForm(Model model, @PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books");
-
-    return PRE_FIX + "/updateProductBookForm";
-  }
-
+  //책 생성 요청
   @PostMapping("/books/create")
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
       MultipartFile image)
@@ -89,15 +94,69 @@ public class AdminProductController {
         Long.class);
 
     Long productNo = responseEntity.getBody();
-    return "redirect:/product/view/" + productNo;
+    return REDIRECT_PRE_FIX + productNo;
   }
 
+  //책 수정 페이지 조회
+  @GetMapping("/books/update/{productId}")
+  public String getProductBookUpdateForm(Model model, @PathVariable Long productId) {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books/" + productId);
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    ResponseEntity<RetrieveProductBookForUpdateResponse> response =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    RetrieveProductBookForUpdateResponse productData = response.getBody();
+
+    model.addAttribute("product", productData);
+
+    return PRE_FIX + "/updateProductBookForm";
+  }
+
+  //책 생성 요청
+  @PostMapping("/books/update")
+  public String updateProductBook(@Valid @ModelAttribute UpdateProductBookRequest request,
+      MultipartFile image)
+      throws IOException {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books");
+
+    ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
+      @Override
+      public String getFilename() {
+        return image.getOriginalFilename();
+      }
+    };
+
+    MultipartBodyBuilder resource = new MultipartBodyBuilder();
+    resource.part("request", mapper.writeValueAsString(request), MediaType.APPLICATION_JSON);
+    resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
+        headers);
+
+    restTemplate.put(uri, httpEntity);
+
+    return REDIRECT_PRE_FIX + request.getProductId();
+  }
+
+  //구독 상품 생성 페이지 조회
   @GetMapping("/subscribes/create")
   public String getProductSubscribeCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
     return PRE_FIX + "/createProductSubscribeForm";
   }
 
+  //구독 상품 수정 페이지 조회
   @GetMapping("/subscribes/update/{productId}")
   public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
 
@@ -131,7 +190,7 @@ public class AdminProductController {
         Long.class);
 
     Long productNo = responseEntity.getBody();
-    return "redirect:/product/view/" + productNo;
+    return REDIRECT_PRE_FIX + productNo;
   }
 
 

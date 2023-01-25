@@ -1,48 +1,54 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
 public class RetrieveProductBookForUpdateResponse {
 
   @NotNull
-  private Long productId;
+  Long productId;
   @NotNull
-  private String title;
+  String title;
   @NotNull
-  private Long price;
+  Long price;
   @NotNull
-  private Long pointRate;
+  Long pointRate;
   @NotNull
-  private String shortDescription;
+  String shortDescription;
   @NotNull
-  private String longDescription;
+  String longDescription;
   @NotNull
-  private boolean isSelling;
+  boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  boolean pointMethod;
 
   @NotNull
-  private Long productDetailId;
+  Long productDetailId;
   @NotNull
-  private String isbn;
+  String isbn;
   @NotNull
-  private int page;
+  Integer page;
   @NotNull
-  private String publisher;
+  String publisher;
+  @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+  LocalDateTime registedAt;
+
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @NotNull
-  private LocalDate publishedDate;
+  LocalDate publishedDate;
   @Setter
-  private String ebookAddress;
+  String ebookAddress;
   @Setter
-  private int storage;
-  @NotNull
-  private List<Long> authorIds;
-  @NotNull
-  private List<Long> categoryIds;
+  Integer storage;
+
+  List<Long> authorIds;
+
+  List<Long> categoryIds;
 }

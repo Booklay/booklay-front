@@ -1,13 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.product.request;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
 @Setter
 public class UpdateProductBookRequest {
+
+  @Getter
   @NotNull
   private Long productId;
   @NotNull
@@ -24,6 +29,10 @@ public class UpdateProductBookRequest {
   private boolean isSelling;
   @NotNull
   private boolean pointMethod;
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+  @NotNull
+  private LocalDateTime registedAt;
+
 
   @NotNull
   private Long productDetailId;
@@ -40,7 +49,7 @@ public class UpdateProductBookRequest {
   @Setter
   private String ebookAddress;
   @Setter
-  private int storage;
+  private Integer storage;
   @NotNull
   private List<Long> authorIds;
   @NotNull

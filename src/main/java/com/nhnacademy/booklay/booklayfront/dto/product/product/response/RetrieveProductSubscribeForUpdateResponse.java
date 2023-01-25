@@ -1,41 +1,42 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class RetrieveProductSubscribeForUpdateResponse {
 
   @NotNull
-  private Long productId;
+  Long productId;
   @NotNull
-  private String title;
+  String title;
   @NotNull
-  private Long price;
+  Long price;
   @NotNull
-  private Long pointRate;
+  Long pointRate;
   @NotNull
-  private String shortDescription;
+  String shortDescription;
   @NotNull
-  private String longDescription;
+  String longDescription;
   @NotNull
-  private boolean isSelling;
+  boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  boolean pointMethod;
+  @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+  LocalDateTime registedAt;
 
   @NotNull
-  private List<Long> categoryIds;
+  List<Long> categoryIds;
 
   @NotNull
-  private Long subscribeId;
-
+  Long subscribeId;
   @NotNull
-  private Long subscribeWeek;
-
+  Long subscribeWeek;
   @NotNull
-  private Long subscribeDay;
-
+  Long subscribeDay;
   @NotNull
-  private String publisher;
+  String publisher;
 
-  private List<Long> childProducts;
+  List<Long> childProducts;
 }

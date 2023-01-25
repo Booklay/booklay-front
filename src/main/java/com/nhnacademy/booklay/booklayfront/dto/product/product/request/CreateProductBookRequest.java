@@ -39,7 +39,7 @@ public class CreateProductBookRequest {
   @Setter
   private String ebookAddress;
   @Setter
-  private int storage;
+  private Integer storage;
   @NotNull
   private List<Long> authorIds;
   @NotNull

@@ -88,12 +88,12 @@
 <!--        관리자 식별-->
         <th:block>
           <form th:if="${product.productDetailId != null}" class="btnAtVar" method="get"
-                th:action="@{admin/product/books/update/{productId} (productId = ${productNo})}">
+                th:action="@{/admin/product/books/update/{productId} (productId = ${productNo})}">
             <input type="submit" value="수정"/>
           </form>
 
           <form th:if="${product.subscribeId != null}" class="btnAtVar" method="get"
-                th:action="@{admin/product/subscribes/update/{productId} (productId = ${productNo})}">
+                th:action="@{/admin/product/subscribes/update/{productId} (productId = ${productNo})}">
             <input type="submit" value="수정"/>
           </form>
         </th:block>
