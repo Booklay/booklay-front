@@ -22,6 +22,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final ObjectMapper mapper;
 
+
     public AuthenticationFilter(AuthenticationManager authenticationManager, ObjectMapper mapper) {
         super(authenticationManager);
         this.mapper = mapper;
