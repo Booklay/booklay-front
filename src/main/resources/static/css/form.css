@@ -1,4 +1,8 @@
-#input-form {
-    margin-top: 20px;
-    line-height: 30px;
+#input-form label {
+    text-align: center;
+    width: 130px;
+}
+
+#input-form .selector {
+    width: 70px;
 }
