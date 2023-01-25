@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponSettingAddRequest;
 import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +39,7 @@ public class CouponSettingAdminController {
 
     @PostMapping("create")
     public String postCreateCouponSetting(
-            @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest) {
+            @Valid @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_SETTING_URL_PREFIX);
         restService.post(url, map, String.class);
@@ -67,7 +68,7 @@ public class CouponSettingAdminController {
 
     @PostMapping("update/{couponSettingId}")
     public String postUpdateCouponSetting(
-            @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest
+        @Valid @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest
             , @PathVariable String couponSettingId) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
         String url = buildString(gatewayIp, REST_PREFIX, COUPON_SETTING_URL_PREFIX, couponSettingId);
