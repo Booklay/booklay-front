@@ -1,6 +1,11 @@
 spring:
   application:
     name: booklay-front
+  devtools:
+    livereload:
+      enabled: true
 
 booklay:
   gateway-origin: http://localhost:8080
+
+

@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.nhnacademy.booklay.booklayfront.controller.coupon.CouponMemberFrontController;
-import com.nhnacademy.booklay.booklayfront.dto.domain.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.domain.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponDetail;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponHistory;
-import com.nhnacademy.booklay.booklayfront.dto.domain.CouponIssue;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -68,9 +68,9 @@ class CouponMemberFrontControllerTest {
 
     //    @Test
     void couponDetail() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
-            , 101L, 123L, 10000L, 1000L,
-            LocalDateTime.now(), false, "", false);
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 0L, 1000L
+            , 101L, 123L, 10000L, 1000L, LocalDateTime.now(),
+             false, "", false);
         ResponseEntity<CouponDetail> responseEntity =
             new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking

@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.domain;
+package com.nhnacademy.booklay.booklayfront.dto.coupon;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,7 +19,7 @@ public class CouponDetail {
     private String id;
     private String name;
     private Long userId;
-    private String typeName;
+    private Long typeCode;
     private Long amount;
     private Long categoryId;
     private Long productId;

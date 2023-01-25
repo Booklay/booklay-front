@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <table>
+            <tr>
+                <td>쿠폰 템플릿 ID</td>
+                <td>쿠폰 이름</td>
+                <td>쿠폰 타입</td>
+                <td>쿠폰 대상 번호</td>
+                <td>할인량</td>
+                <td>최소사용금액</td>
+                <td>최대할인금액</td>
+                <td>중복사용여부</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        <tbody th:each="couponTemplate:${couponTemplateList}">
+            <tr>
+                <td><p th:text="${couponTemplate.id}"></p></td>
+                <td><p th:text="${couponTemplate.name}"></p></td>
+                <td>
+                    <custom th:if="${couponTemplate.isOrderCoupon}">
+                        <p>주문쿠폰</p>
+                    </custom>
+                    <custom th:if="${!couponTemplate.isOrderCoupon}">
+                        <p>상품쿠폰</p>
+                    </custom>
+                </td>
+                <td><p th:text="${couponTemplate.applyItemId}"></p></td>
+                <td><p th:text="${couponTemplate.amount}"></p></td>
+                <td><p th:text="${couponTemplate.minimumUseAmount}"></p></td>
+                <td><p th:text="${couponTemplate.maximumDiscountAmount}"></p></td>
+                <td><p th:text="${couponTemplate.isDuplicatable}"></p></td>
+                <td><a th:href="${'/admin/coupon/template/detail/'+couponTemplate.id}">상세</a></td>
+                <td><a th:href="${'/admin/coupon/template/update/'+couponTemplate.id}">수정</a></td>
+                <td><a th:href="${'/admin/coupon/template/delete/'+couponTemplate.id}">삭제</a></td>
+            </tr>
+        </tbody>
+
+        </table>
+        <p th:if="${pageNum > 0}">
+            <a th:href="${'coupon/template/list/' + (pageNum - 1)}">이전</a>
+        </p>
+        <p th:if="${#lists.size(couponTemplateList) > 0}">
+            <a th:href="${'coupon/template/list/' + (pageNum + 1)}">다음</a>
+        </p>
+    </div>
+</html>
