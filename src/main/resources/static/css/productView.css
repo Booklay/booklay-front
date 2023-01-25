@@ -1,0 +1,26 @@
+#top-info{
+  margin: auto;
+  padding: 5px;
+  display: flex;
+}
+
+#thumbnail{
+  box-sizing: border-box;
+  width:30%;
+  height: 40%;
+  background: #bd2130;
+  border: 1px solid black;
+  float: left;
+  margin: auto;
+}
+
+#information{
+  box-sizing: border-box;
+  width:60%;
+  height:40%;
+  background: darkgray;
+  border: 1px solid black;
+  float:right;
+  padding: 3px;
+  margin: auto;
+}
