@@ -18,9 +18,20 @@
   box-sizing: border-box;
   width:60%;
   height:40%;
-  background: darkgray;
-  border: 1px solid black;
+  border-left: 1px solid gray;
   float:right;
-  padding: 3px;
+  padding: 5px;
   margin: auto;
+}
+
+.numIn{
+  width:30px;
+}
+
+#button-var{
+  display: flex;
+}
+
+.btnAtVar{
+  padding: 5px;
 }
