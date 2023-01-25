@@ -59,7 +59,7 @@ public class CouponTemplateAdminFrontController {
 
             // FIXME Image 저장 후, 반환 값
             map.put("imageId", 1L);
-            String url = buildString(gatewayIp, REST_PREFIX, COUPON_TEMPLATE_URL_PREFIX);
+            String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_TEMPLATE_REST_PREFIX);
             ApiEntity<String> apiEntity = restService.post(url, map, String.class);
             if (!apiEntity.isSuccess()) {
                 return ERROR;
@@ -98,7 +98,7 @@ public class CouponTemplateAdminFrontController {
     @PostMapping("update/{couponTemplateId}")
     public String postUpdateCouponForm(@Valid @ModelAttribute CouponTemplateAddRequest couponTemplateAddRequest,
                                        @PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX, couponTemplateId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX, couponTemplateId);
         Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
         restService.put(url, map, String.class);
 
@@ -107,7 +107,7 @@ public class CouponTemplateAdminFrontController {
 
     @GetMapping("delete/{couponTemplateId}")
     public String deleteCouponTemplate(@PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX, COUPON_TEMPLATE_URL_PREFIX, couponTemplateId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_TEMPLATE_REST_PREFIX, couponTemplateId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }

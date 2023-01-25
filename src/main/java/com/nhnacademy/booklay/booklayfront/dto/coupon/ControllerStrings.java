@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ControllerStrings {
 
-    public static final String REST_PREFIX = "/coupon/v1";
+    public static final String DOMAIN_PREFIX = "/coupon/v1";
     public static final String TARGET_VIEW = "targetUrl";
     public static final String PAGE_NUM = "pageNum";
     public static final String ERROR = "error";
 
-    public static final String COUPON_URL_PREFIX = "/admin/coupons/";
-    public static final String COUPON_TYPES_URL_PREFIX = "/admin/couponTypes/";
-    public static final String COUPON_TEMPLATE_URL_PREFIX = "/admin/couponTemplates/";
-    public static final String COUPON_SETTING_URL_PREFIX = "/admin/couponSettings/";
+    public static final String COUPON_REST_PREFIX = "/admin/coupons/";
+    public static final String COUPON_TYPES_REST_PREFIX = "/admin/couponTypes/";
+    public static final String COUPON_TEMPLATE_REST_PREFIX = "/admin/couponTemplates/";
+    public static final String COUPON_SETTING_REST_PREFIX = "/admin/couponSettings/";
 
 
     public static final String COUPON_URL_LIST_PAGE = "pages";
