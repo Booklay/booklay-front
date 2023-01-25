@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 public class AuthenticationServerProxy {
 
     private final RestTemplate restTemplate;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private final String gatewayIp;
 
