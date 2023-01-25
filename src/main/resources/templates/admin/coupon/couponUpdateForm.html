@@ -4,7 +4,6 @@
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form th:action="${'update/' + couponDetail.id}" method="post" enctype="multipart/form-data">
             <label>쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.name}"> </label><br/>
-            <label>사용자 ID : <input type="number" name="userId" th:value="${couponDetail.userId}"></label><br/>
             <label>쿠폰 종류 : <input type="text" name="typeName" th:value="${couponDetail.typeName}"></label><br/>
             <label>할인 금액(정액) or 할인율(정율) : <input type="number" name="amount" th:value="${couponDetail.amount}"></label><br/>
             <label>적용 카테고리 번호 : <input type="number" name="categoryId" th:value="${couponDetail.categoryId}"></label><br/>

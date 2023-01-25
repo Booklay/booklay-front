@@ -30,15 +30,15 @@ public class CouponMemberFrontController {
     private static final String RETURN_PAGE = "mypage/myPage";
     private static final String REST_PRE_FIX = "/shop/v1/member/coupon/";
 
+    @ModelAttribute("navHead")
+    public String addNavHead() {
+        return "coupon/couponFragments/couponNavHead";
+    }
+
     @GetMapping("")
     public String memberCouponPage(Model model) {
         model.addAttribute(TARGET_VIEW, "coupon/empty");
         return RETURN_PAGE;
-    }
-
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
     }
 
     @GetMapping("list")
