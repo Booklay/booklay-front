@@ -119,7 +119,7 @@ public class AdminProductController {
     return PRE_FIX + "/updateProductBookForm";
   }
 
-  //책 생성 요청
+  //책 수정 요청
   @PostMapping("/books/update")
   public String updateProductBook(@Valid @ModelAttribute UpdateProductBookRequest request,
       MultipartFile image)
@@ -156,14 +156,6 @@ public class AdminProductController {
     return PRE_FIX + "/createProductSubscribeForm";
   }
 
-  //구독 상품 수정 페이지 조회
-  @GetMapping("/subscribes/update/{productId}")
-  public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
-
-    return PRE_FIX + "/updateProductSubscribeForm";
-  }
-
-
   @PostMapping("/subscribes/create")
   public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
       MultipartFile image) throws IOException {
@@ -191,6 +183,28 @@ public class AdminProductController {
 
     Long productNo = responseEntity.getBody();
     return REDIRECT_PRE_FIX + productNo;
+  }
+
+  //구독 상품 수정 페이지 조회
+  @GetMapping("/subscribes/update/{productId}")
+  public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "subscribes/" + productId);
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    ResponseEntity<RetrieveProductBookForUpdateResponse> response =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    RetrieveProductBookForUpdateResponse productData = response.getBody();
+
+    model.addAttribute("product", productData);
+
+    return PRE_FIX + "/updateProductSubscribeForm";
   }
 
 
