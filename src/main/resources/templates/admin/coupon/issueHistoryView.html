@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>발급 기록 조회</title>
+</head>
+<body>
+    <div id="header-carousel" class="carousel slide" data-ride="carousel">
+        <table>
+            <tr>
+                <td>번호</td>
+                <td>쿠폰 ID</td>
+                <td>쿠폰 코드</td>
+                <td>쿠폰 이름</td>
+                <td>소유 회원 ID</td>
+                <td>발급일</td>
+                <td>만료일</td>
+            </tr>
+            <tbody th:each="history, historyStat:${historyList}">
+            <tr>
+                <td><p th:text="${historyStat.count}"></p></td>
+                <td><p th:text="${history.id}"></p></td>
+                <td><p th:text="${history.code}"></p></td>
+                <td><p th:text="${history.name}"></p></td>
+                <td><p th:text="${history.memberId}"></p></td>
+                <td><p th:text="${history.issuedAt}"></p></td>
+                <td><p th:text="${history.expiredAt}"></p></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

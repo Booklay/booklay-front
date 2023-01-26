@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.test;
 import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
@@ -69,8 +70,8 @@ public class CouponAdminFrontController {
             date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
 
-        map.put("couponImage", multipartFile);
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_REST_PREFIX);
+        map.put("imageId", 1L);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX, "/admin/coupons");
 
         restService.post(url, map, String.class);
 
@@ -90,7 +91,7 @@ public class CouponAdminFrontController {
 
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         restService.post(url, map, String.class);
-        return "redirect:/admin/coupon/list/type/0";
+        return "redirect:/admin/coupons/list/type/0";
     }
 
     @GetMapping("/list")
@@ -125,7 +126,7 @@ public class CouponAdminFrontController {
     public String couponTypeDelete(@PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_TYPES_REST_PREFIX, couponId);
         restService.delete(url);
-        return "redirect:/admin/coupon/list/type/0";
+        return "redirect:/admin/coupons/list/type/0";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")
@@ -309,16 +310,16 @@ public class CouponAdminFrontController {
         return "/admin/coupon/couponPopup";
     }
 
-
     @GetMapping("/issue-history")
-    public String issueHistoryList(@RequestParam(value="pageNum", defaultValue = "0") int pageNum) {
+    public String issueHistoryList(@RequestParam(value="pageNum", defaultValue = "0") int pageNum, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_REST_PREFIX, "/issue-history");
         ApiEntity<List<CouponHistoryResponse>> apiEntity =
             restService.get(url, null, new ParameterizedTypeReference<>() {
             });
 
-        log.info(apiEntity.getBody().toString());
-        return "redirect:/";
+        model.addAttribute("historyList", apiEntity.getBody());
+        model.addAttribute(TARGET_VIEW, "coupon/issueHistoryView");
+        return RETURN_PAGE;
     }
 
 }
