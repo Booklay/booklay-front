@@ -7,40 +7,40 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
 @Setter
 public class UpdateProductSubscribeRequest {
 
-  @Getter
   @NotNull
-  private Long productId;
+  Long productId;
   @NotNull
-  private String title;
+  String title;
   @NotNull
-  private Long price;
+  Long price;
   @NotNull
-  private Long pointRate;
+  Long pointRate;
   @NotNull
-  private String shortDescription;
+  String shortDescription;
   @NotNull
-  private String longDescription;
+  String longDescription;
   @NotNull
-  private boolean isSelling;
+  boolean isSelling;
   @NotNull
-  private boolean pointMethod;
-  @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+  boolean pointMethod;
+  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @NotNull
-  private LocalDateTime registedAt;
+  LocalDateTime registedAt;
 
   @NotNull
-  private List<Long> categoryIds;
+  List<Long> categoryIds;
 
   @NotNull
-  private Long subscribeId;
+  Long subscribeId;
   @NotNull
-  private Long subscribeWeek;
+  Long subscribeWeek;
   @NotNull
-  private Long subscribeDay;
+  Long subscribeDay;
   @NotNull
-  private String publisher;
-  private List<Long> childProducts;
+  String publisher;
+  List<Long> childProducts;
 }

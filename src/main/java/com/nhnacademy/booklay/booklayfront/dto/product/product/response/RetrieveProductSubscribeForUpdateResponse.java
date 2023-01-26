@@ -3,8 +3,10 @@ package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
 public class RetrieveProductSubscribeForUpdateResponse {
 
   @NotNull

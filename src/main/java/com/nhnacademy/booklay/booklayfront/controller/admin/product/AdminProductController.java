@@ -9,6 +9,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreatePro
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductSubscribeForUpdateResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -106,7 +107,7 @@ public class AdminProductController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
+    RequestEntity<Long> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
 
     ResponseEntity<RetrieveProductBookForUpdateResponse> response =
@@ -157,6 +158,7 @@ public class AdminProductController {
     return PRE_FIX + "/createProductSubscribeForm";
   }
 
+  //구독 상품 생성
   @PostMapping("/subscribes/create")
   public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
       MultipartFile image) throws IOException {
@@ -194,22 +196,25 @@ public class AdminProductController {
     HttpHeaders httpHeaders = new HttpHeaders();
     httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
+    RequestEntity<Long> requestEntity = new RequestEntity<>(
         httpHeaders, HttpMethod.GET, uri);
 
-    ResponseEntity<RetrieveProductBookForUpdateResponse> response =
+    ResponseEntity<RetrieveProductSubscribeForUpdateResponse> response =
         restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
         });
 
-    RetrieveProductBookForUpdateResponse productData = response.getBody();
+    RetrieveProductSubscribeForUpdateResponse productData = response.getBody();
+
+    log.info(productData.toString());
+
 
     model.addAttribute("product", productData);
 
     return PRE_FIX + "/updateProductSubscribeForm";
   }
 
-  //책 수정 요청
-  @PostMapping("/subscribe/update")
+  //구독 수정 요청
+  @PostMapping("/subscribes/update")
   public String updateProductSubscribe(@Valid @ModelAttribute UpdateProductSubscribeRequest request,
       MultipartFile image)
       throws IOException {

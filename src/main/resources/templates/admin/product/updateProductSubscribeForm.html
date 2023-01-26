@@ -7,8 +7,13 @@
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="/js/product/productUpdate.js"></script>
 </head>
-<body>ㅌ
+<body>
 <form method="post" action="/admin/product/subscribes/update" enctype="multipart/form-data">
+
+  <input type="number" name="subscribeId" th:value="${product.subscribeId}" hidden="hidden"/>
+  <input type="number" name="productId" th:value="${product.productId}" hidden="hidden"/>
+  <input type="datetime-local" name="registedAt" th:value="${product.registedAt}" hidden="hidden"/>
+
   <p>제목 : <input type="text" name="title" th:value="${product.title}"/></p>
   <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
   </p>
@@ -59,7 +64,7 @@
   <div id="categories"></div>
 
   <p>발매 주차 :
-    <select name="subscribeDay">
+    <select name="subscribeWeek">
       <option value=1>1주차</option>
       <option value=2>2주차</option>
       <option value=3>3주차</option>
