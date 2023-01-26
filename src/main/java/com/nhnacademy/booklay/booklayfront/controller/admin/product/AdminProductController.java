@@ -7,6 +7,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveA
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import java.io.IOException;
 import java.net.URI;
@@ -207,6 +208,35 @@ public class AdminProductController {
     return PRE_FIX + "/updateProductSubscribeForm";
   }
 
+  //책 수정 요청
+  @PostMapping("/subscribe/update")
+  public String updateProductSubscribe(@Valid @ModelAttribute UpdateProductSubscribeRequest request,
+      MultipartFile image)
+      throws IOException {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "subscribes");
+
+    ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
+      @Override
+      public String getFilename() {
+        return image.getOriginalFilename();
+      }
+    };
+
+    MultipartBodyBuilder resource = new MultipartBodyBuilder();
+    resource.part("request", mapper.writeValueAsString(request), MediaType.APPLICATION_JSON);
+    resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+    MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+    HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
+        headers);
+
+    restTemplate.put(uri, httpEntity);
+
+    return REDIRECT_PRE_FIX + request.getProductId();
+  }
 
   @GetMapping("/author")
   public String getAuthorMaintain() {

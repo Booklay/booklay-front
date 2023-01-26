@@ -3,12 +3,14 @@ package com.nhnacademy.booklay.booklayfront.dto.product.product.request;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Setter
 public class UpdateProductSubscribeRequest {
 
+  @Getter
   @NotNull
   private Long productId;
   @NotNull
