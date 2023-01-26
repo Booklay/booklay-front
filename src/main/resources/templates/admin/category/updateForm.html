@@ -33,11 +33,16 @@
 
         노출 여부 :
         <div>
-            <input type="radio" id="yes" name="isExposure" value="true"
-                   checked>
-            <label for="yes">Y</label>
-            <input type="radio" id="no" name="isExposure" value="true">
-            <label for="no">N</label>
+            <th:block th:if="${category.getIsExposure()}">
+                <input type="radio" name="isExposure" value="true" checked> Y
+                <input type="radio" name="isExposure" value="false"> N
+            </th:block>
+
+            <th:block th:unless="${category.getIsExposure()}">
+                <input type="radio" name="isExposure" value="true"> Y
+                <input type="radio" name="isExposure" value="false" checked> N
+            </th:block>
+
         </div>
         <br/>
         <input type="submit" value="제출">
