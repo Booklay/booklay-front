@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
-import com.nhnacademy.booklay.booklayfront.dto.test;
 import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
