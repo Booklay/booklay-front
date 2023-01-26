@@ -26,6 +26,8 @@ public class WebConfig {
         return ip;
 
     }
+
+    @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
 
         return builder
