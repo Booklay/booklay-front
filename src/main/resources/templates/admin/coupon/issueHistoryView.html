@@ -5,7 +5,7 @@
 </head>
 <body>
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <table>
+        <table border="1px">
             <tr>
                 <td>번호</td>
                 <td>쿠폰 ID</td>
@@ -22,8 +22,8 @@
                 <td><p th:text="${history.code}"></p></td>
                 <td><p th:text="${history.name}"></p></td>
                 <td><p th:text="${history.memberId}"></p></td>
-                <td><p th:text="${history.issuedAt}"></p></td>
-                <td><p th:text="${history.expiredAt}"></p></td>
+                <td><p th:text="${#temporals.format(history.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                <td><p th:text="${#temporals.format(history.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
             </tr>
             </tbody>
         </table>

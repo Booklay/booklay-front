@@ -39,7 +39,6 @@ public class CouponAdminFrontController {
 
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
-    
 
     @ModelAttribute("navHead")
     public String addNavHead() {
