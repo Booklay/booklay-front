@@ -66,7 +66,7 @@ public class CartController {
         ApiEntity<List<CartObject>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});
         List<CartObject> cartObjectList = apiEntity.getBody();
         model.addAttribute(ATTRIBUTE_NAME_CART_OBJECT_LIST, cartObjectList);
-        return "cart/cartListForm";
+        return "cart/cartForm";
     }
 
     @PostMapping
