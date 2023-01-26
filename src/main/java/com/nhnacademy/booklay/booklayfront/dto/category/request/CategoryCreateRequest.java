@@ -13,7 +13,6 @@ public class CategoryCreateRequest {
     @NotNull
     private final Long id;
 
-    @NotNull
     private final Long parentCategoryId;
 
     @NotBlank
