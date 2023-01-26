@@ -97,6 +97,7 @@ class CouponAdminFrontControllerTest {
         map.add("issuanceDeadline", "2030-10-30T12:34");
         map.add("isDuplicatable", "true");
         map.add("isLimited", "true");
+        map.add("validateTerm", "10");
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<List<Coupon>> responseEntity =
@@ -247,6 +248,7 @@ class CouponAdminFrontControllerTest {
         map.add("issuanceDeadline", "2030-10-30T12:34");
         map.add("isDuplicatable", "true");
         map.add("isLimited", "true");
+        map.add("validateTerm", "10");
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<String> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);
