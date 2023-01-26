@@ -1,17 +1,10 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
-import com.nhnacademy.booklay.booklayfront.filter.AuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.filter.InitialAuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.filter.JwtAuthenticationFilter;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,8 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Spring Security 기본 설정
@@ -38,7 +29,7 @@ public class SecurityConfig {
 
     private final ObjectMapper mapper;
     private final UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -51,8 +42,8 @@ public class SecurityConfig {
         http.csrf()
                 .disable();
 
-        http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class)
-                .addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+        http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class);
+//                .addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         http.authenticationProvider(usernamePasswordAuthenticationProvider);
 
@@ -76,14 +67,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    private AuthenticationFilter getAuthenticationFilter() throws Exception {
-        AuthenticationFilter authenticationFilter =
-                new AuthenticationFilter(authenticationManager(null), mapper);
-
-        authenticationFilter.setFilterProcessesUrl("/members/doLogin");
-
-        return authenticationFilter;
-    }
 
     private InitialAuthenticationFilter getInitialAuthenticationFilter() throws Exception {
         return new InitialAuthenticationFilter(authenticationManager(null));

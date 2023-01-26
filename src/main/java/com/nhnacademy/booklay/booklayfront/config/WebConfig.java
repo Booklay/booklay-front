@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
 import java.io.IOException;
+import com.nhnacademy.booklay.booklayfront.interceptor.JwtAddInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +16,23 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
+
 @Configuration
 public class WebConfig {
 
     @Bean
     public String gatewayIp(@Value("${booklay.gateway-origin}") String ip) {
         return ip;
+
+    }
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+
+        return builder
+                .setReadTimeout(Duration.ofSeconds(5L))
+                .setConnectTimeout(Duration.ofSeconds(5L))
+                .interceptors(new JwtAddInterceptor())
+                .build();
     }
 
     @Bean

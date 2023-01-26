@@ -31,12 +31,12 @@ public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
         log.info("path = {}", httpRequest.getURI().getPath());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//        if (!this.needJwt(httpRequest.getURI().getPath())
-//                || GgUtils.hasRole(authentication, ROLE_ANONYMOUS)) {
-//            return execution.execute(httpRequest, body);
-//        }
+        if (!this.needJwt(httpRequest.getURI().getPath())) {
+            return execution.execute(httpRequest, body);
+        }
 
         log.info("RestTemplate Interceptor");
+        log.info((String) authentication.getCredentials());
         httpRequest.getHeaders().setBearerAuth((String) authentication.getCredentials());
 
         return execution.execute(httpRequest, body);

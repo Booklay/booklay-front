@@ -1,9 +1,13 @@
 package com.nhnacademy.booklay.booklayfront.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,11 +22,14 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Objects;
 
-@Component
+//@Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Value(("${booklay.jwt.secret}"))
     private String secret;
+
+    private final TokenUtils tokenUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,19 +42,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
-                .build()
-                .parseClaimsJws(jwt)
-                .getBody();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        String username = String.valueOf(claims.get("username"));
-
-        String authority = String.valueOf(claims.get("role"));
-
-        var auth = new UsernamePasswordAuthentication(username, null, Collections.singletonList(new SimpleGrantedAuthority(authority)));
-        SecurityContextHolder.getContext()
-                .setAuthentication(auth);
+//        var auth = new UsernamePasswordAuthentication(username, null, Collections.singletonList(new SimpleGrantedAuthority(authority)));
+//        SecurityContextHolder.getContext()
+//                .setAuthentication(auth);
 
         filterChain.doFilter(request, response);
 
