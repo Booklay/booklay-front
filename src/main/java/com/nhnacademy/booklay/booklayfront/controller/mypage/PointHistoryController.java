@@ -2,12 +2,16 @@ package com.nhnacademy.booklay.booklayfront.controller.mypage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentRequest;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -21,8 +25,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-
+/**
+ * @author 양승아
+ */
 @Slf4j
 @Controller
 @RequestMapping("/point")
@@ -36,6 +43,34 @@ public class PointHistoryController {
     public PointHistoryController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
         this.redirectGatewayPrefix = gateway + "/shop/v1" + "/point";
+    }
+
+    @GetMapping("/{memberNo}")
+    public String retrievePointList(@RequestParam(value = "page", defaultValue = "0") int page,
+                                    @PathVariable Long memberNo,
+                                    Model model) {
+
+        String query = "?page=" + page;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo + query);
+
+        RequestEntity<Void> requestEntity =
+            new RequestEntity<>(headers, HttpMethod.GET, uri);
+
+        ResponseEntity<PageResponse<PointHistoryRetrieveResponse>> response =
+            restTemplate.exchange(requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        List<PointHistoryRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
+
+        model.addAttribute("pointList", list);
+        model.addAttribute("targetUrl", "member/memberPointList");
+
+        return MYPAGE;
     }
 
     @GetMapping("/present/{memberNo}")
@@ -77,8 +112,6 @@ public class PointHistoryController {
         ResponseEntity<Void> response =
             restTemplate.exchange(requestEntity, Void.class);
 
-        model.addAttribute("targetUrl", "member/memberPointList");
-
-        return MYPAGE;
+        return "redirect:/point/" + memberNo;
     }
 }

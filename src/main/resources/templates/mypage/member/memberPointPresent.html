@@ -10,7 +10,7 @@
     <form th:action="@{/point/present/{memberNo}(memberNo=${totalPoint.getMember()})}" method="post">
         <b>선물 대상 사용자 ID</b>: <input type="text" name="targetMemberId"><br>
         <b>선물할 포인트</b> (현재 보유 포인트: <span th:text="${totalPoint.getTotalPoint()}"></span>p)
-        : <input type="text" name="targetPoint"><br>
+        : <input type="text" name="targetPoint" step="1">p<br>
         <input type="submit" value="선물하기"/>
     </form>
 </div>
