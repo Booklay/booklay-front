@@ -37,8 +37,6 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
         Authentication authenticated = authenticationManager.authenticate(authentication);
         log.info(authenticated.getAuthorities().toString());
 
-        Authentication test = SecurityContextHolder.getContext().getAuthentication();
-
     }
 
     /**
