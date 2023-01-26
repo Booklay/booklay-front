@@ -2,18 +2,17 @@ package com.nhnacademy.booklay.booklayfront.dto.category.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryUpdateRequest {
 
     @NotNull
     private Long id;
 
-    @NotNull
     private Long parentCategoryId;
 
     @NotBlank

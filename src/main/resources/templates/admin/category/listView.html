@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <h1>카테고리 리스트</h1>
+
+    <div>
+        <button type="button" onclick="location.href='/admin/categories/create'">
+            카테고리 추가하기
+        </button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>카테고리 번호</th>
+            <th>상위 카테고리</th>
+            <th>카테고리 이름</th>
+            <th>카테고리 깊이</th>
+            <th>노출 여부</th>
+            <th>수정하기</th>
+            <th>삭제하기</th>
+        </tr>
+        </thead>
+
+        <tbody th:each="category : ${categories}">
+        <tr>
+
+            <td>
+                <label>
+                    <span th:text="${category.id}"></span>
+                </label>
+            </td>
+
+            <td>
+                <label th:if="${category.getParentCategoryId()} == null">
+                    <span th:text="없음"></span>
+                </label>
+                <label th:unless="${category.getParentCategoryId() == null}">
+                    <span th:text="${category.getParentCategoryId()}"></span>
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <span th:text="${category.name}"></span>
+                </label>
+            </td>
+
+            <td>
+                <label>
+                    <span th:text="${category.depth}"></span>
+                </label>
+            </td>
+
+            <td>
+                <label class="exposure-text">
+                    <span th:text="${category.isExposure}"></span>
+                </label>
+            </td>
+
+            <td>
+                <input type="submit" class="submit-btn" value="수정 제출" hidden/>
+                <button type="button"
+                        th:onclick="|location.href='@{/admin/categories/{categoryId}/update(categoryId=${category.id})}'|">
+                    수정
+                </button>
+            </td>
+
+            <td>
+                <form th:action="@{/admin/categories/{categoryId}(categoryId=${category.id})}" th:method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <h2 th:if="${categories.isEmpty()}">등록된 카테고리가 없습니다.</h2>
+
+    <button onclick="location.href='/admin/categories?page=0'"> 첫 페이지</button>
+    <button th:unless="${currentPage}==0" th:onclick="|location.href='@{/admin/categories(page=${currentPage}-1)}'|">
+        이전 페이지
+    </button>
+    <button th:unless="${currentPage} == ${totalPage} - 1"
+            th:onclick="|location.href='@{/admin/categories(page=${currentPage}+1)}'|">
+        다음 페이지
+    </button>
+    <button th:onclick="|location.href='@{/admin/categories(page=${totalPage}-1)}'|"> 마지막 페이지</button>
+</div>
+</body>
+</html>

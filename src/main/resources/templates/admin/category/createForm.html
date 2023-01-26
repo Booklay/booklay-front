@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Category Register</title>
 </head>
 <body>
 <div>
     <form method="post" action="/admin/categories">
-        private Long id; <input type="number" name="id"/> <br/>
-        private Long parentCategoryId;  <input type="number" name="parentCategoryId"/> <br/>
-        private String name;    <input type="text" name="name"/> <br/>
-        private Boolean isExposure;
-        <input type="radio" name="isExposure" value="true"> Y
-        <input type="radio" name="isExposure" value="false"> N
+        <h1>카테고리 등록 정보</h1>
+        <label> 카테고리 번호
+            <input type="number" name="id"/>
+        </label> <br/>
+        <label>
+            상위 카테고리 번호
+            <input type="number" name="parentCategoryId" placeholder="없을 시, 0 혹은 빈칸"/>
+        </label> <br/>
+        <label> 카테고리 이름
+            <input type="text" name="name"/>
+        </label> <br/>
+        <div>
+            노출 여부 :
+            <input type="radio" id="yes" name="isExposure" value="true"
+                   checked>
+            <label for="yes">Y</label>
+            <input type="radio" id="no" name="isExposure" value="true">
+            <label for="no">N</label>
+        </div>
+        <br/>
         <input type="submit" value="제출">
     </form>
 </div>
