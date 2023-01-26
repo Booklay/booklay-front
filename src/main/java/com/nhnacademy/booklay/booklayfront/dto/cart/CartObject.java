@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class CartObject {
     private Long productNo;
     private String productName;
-    private String productPrice;
+    private Long productPrice;
     private Integer productCount;
 }
