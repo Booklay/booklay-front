@@ -28,7 +28,7 @@
         </tr>
         </thead>
 
-        <tbody th:each="category : ${categories}">
+        <tbody th:each="category : ${list}">
         <tr>
 
             <td>
@@ -81,17 +81,13 @@
         </tr>
         </tbody>
     </table>
-    <h2 th:if="${categories.isEmpty()}">등록된 카테고리가 없습니다.</h2>
+    <th:block th:if="${list.isEmpty()}">
+        <h2>등록된 카테고리가 없습니다.</h2>
+    </th:block>
 
-    <a href="/admin/categories?page=0"> 첫 페이지</a>
-    <a th:unless="${currentPage}==0" th:href="@{/admin/categories(page=${currentPage}-1)}">
-        이전 페이지
-    </a>
-    <a th:unless="${currentPage} == ${totalPage} - 1"
-       th:href="@{/admin/categories(page=${currentPage}+1)}">
-        다음 페이지
-    </a>
-    <a th:href="@{/admin/categories(page=${totalPage}-1)}"> 마지막 페이지</a>
+    <!--    페이지네이션 번호-->
+    <th:block th:include="fragments/pageFooter"/>
+
 </div>
 </body>
 </html>

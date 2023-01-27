@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div>
+    <th:block th:unless="${list.isEmpty()}">
+        <a th:href="@{__${currentUrl}__(page=0)}"> 첫 페이지</a>
+
+        <a th:unless="${currentPage}==0" th:href="@{__${currentUrl}__(page=${currentPage}-1)}">
+            이전 페이지
+        </a>
+
+        <!-- 현재 페이지 번호-->
+        <strong th:text="${currentPage} + 1"></strong>
+
+        <a th:unless="${currentPage} == ${totalPage} - 1"
+           th:href="@{__${currentUrl}__(page=${currentPage}+1)}">
+            다음 페이지
+        </a>
+        <a th:href="@{__${currentUrl}__(page=${totalPage}-1)}"> 마지막 페이지 </a>
+    </th:block>
+</div>
+
+
+</html>

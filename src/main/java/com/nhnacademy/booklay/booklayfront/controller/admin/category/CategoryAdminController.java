@@ -120,12 +120,12 @@ public class CategoryAdminController {
             });
 
         if (response.isSuccess()) {
-            mav.addObject("categories", response.getBody().getData());
+            mav.addObject("list", response.getBody().getData());
             mav.addObject("totalPage", response.getBody().getTotalPages());
             mav.addObject("currentPage", response.getBody().getPageNumber());
             mav.setViewName("admin/category/listView");
         } else {
-            mav.setViewName("/");
+            mav.setViewName("/index");
         }
 
         return mav;
