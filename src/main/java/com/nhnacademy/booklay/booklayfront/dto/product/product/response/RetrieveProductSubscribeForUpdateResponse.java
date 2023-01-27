@@ -26,7 +26,7 @@ public class RetrieveProductSubscribeForUpdateResponse {
   @NotNull
   boolean pointMethod;
   @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
-  LocalDateTime registedAt;
+  LocalDateTime createdAt;
 
   @NotNull
   List<Long> categoryIds;

@@ -31,7 +31,7 @@ public class UpdateProductBookRequest {
   private boolean pointMethod;
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
   @NotNull
-  private LocalDateTime registedAt;
+  private LocalDateTime createdAt;
 
 
   @NotNull

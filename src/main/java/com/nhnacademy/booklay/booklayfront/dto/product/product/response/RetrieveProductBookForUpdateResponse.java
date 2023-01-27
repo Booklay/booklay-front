@@ -37,7 +37,7 @@ public class RetrieveProductBookForUpdateResponse {
   @NotNull
   String publisher;
   @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
-  LocalDateTime registedAt;
+  LocalDateTime createdAt;
 
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")

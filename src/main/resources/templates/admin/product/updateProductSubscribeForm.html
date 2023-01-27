@@ -12,7 +12,7 @@
 
   <input type="number" name="subscribeId" th:value="${product.subscribeId}" hidden="hidden"/>
   <input type="number" name="productId" th:value="${product.productId}" hidden="hidden"/>
-  <input type="datetime-local" name="registedAt" th:value="${product.registedAt}" hidden="hidden"/>
+  <input type="datetime-local" name="createdAt" th:value="${product.createdAt}" hidden="hidden"/>
 
   <p>제목 : <input type="text" name="title" th:value="${product.title}"/></p>
   <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
@@ -55,32 +55,91 @@
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
     &ensp; &ensp; &ensp;
     <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
-  <br>
-  <th:block th:each="categoryId : ${product.categoryIds}">
-    이전 등록 카테고리 <span th:text="${categoryIdStat.count}"/> :
-    <span th:text="${categoryIdStat.current}"/>
     <br>
-  </th:block>
+    <th:block th:each="categoryId : ${product.categoryIds}">
+      이전 등록 카테고리 <span th:text="${categoryIdStat.count}"/> :
+      <span th:text="${categoryIdStat.current}"/>
+      <br>
+    </th:block>
   <div id="categories"></div>
 
+
+<!--  TODO: 하드코딩 수정할것-->
   <p>발매 주차 :
     <select name="subscribeWeek">
-      <option value=1>1주차</option>
-      <option value=2>2주차</option>
-      <option value=3>3주차</option>
-      <option value=4>4주차</option>
+      <th:block th:if="${product.subscribeWeek ==1 }">
+        <option value=1 selected>1주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek !=1 }">
+        <option value=1>1주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek ==2 }">
+        <option value=2 selected>2주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek !=2}">
+        <option value=2>2주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek ==3 }">
+        <option value=3 selected>3주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek !=3 }">
+        <option value=3>3주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek ==4 }">
+        <option value=4 selected>4주차</option>
+      </th:block>
+      <th:block th:if="${product.subscribeWeek !=4 }">
+        <option value=4>4주차</option>
+      </th:block>
     </select>
   </p>
 
   <p>발매 요일 :
     <select name="subscribeDay">
-      <option value=1>월요일</option>
-      <option value=2>화요일</option>
-      <option value=3>수요일</option>
-      <option value=4>목요일</option>
-      <option value=5>금요일</option>
-      <option value=6>토요일</option>
-      <option value=7>일요일</option>
+
+      <th:block th:if="${product.subscribeDay == 1}">
+        <option value=1 selected>월요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 1}">
+        <option value=1>월요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 2}">
+        <option value=2 selected>화요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 2}">
+        <option value=2>화요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 3}">
+        <option value=3 selected>수요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 3}">
+        <option value=3>수요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 4}">
+        <option value=4 selected>목요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 4}">
+        <option value=4>목요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 5}">
+        <option value=5 selected>금요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 5}">
+        <option value=5>금요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 6}">
+        <option value=6 selected>토요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 6}">
+        <option value=6>토요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay == 7}">
+        <option value=7 selected>일요일</option>
+      </th:block>
+      <th:block th:if="${product.subscribeDay != 7}">
+        <option value=7>일요일</option>
+      </th:block>
+
     </select>
   </p>
 
@@ -93,7 +152,7 @@
     <input name="childProductAdder" type="button" value="구독 책 추가" onclick="addChildProduct();"/>
   <div id="childProduct"></div>
 
-  <input type="submit" value="구독 상품 등록" id="btn-submit"/>
+  <input type="submit" value="구독 상품 수정" id="btn-submit"/>
 </form>
 
 
