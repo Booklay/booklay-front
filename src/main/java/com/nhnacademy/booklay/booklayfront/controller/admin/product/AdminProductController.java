@@ -61,6 +61,22 @@ public class AdminProductController {
     return PRE_FIX + "/productMainManage";
   }
 
+  //상품 soft delete
+  @PostMapping("/delete/{productId}")
+  public String getProductSoftDelete(@PathVariable Long productId) {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + productId);
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    RequestEntity<Long> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.DELETE, uri);
+
+    restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    });
+
+    return "redirect:/product/board";
+  }
+
   //책 생성 페이지
   @GetMapping("/books/create")
   public String getProductBookCreateForm(Model model) {
@@ -75,6 +91,8 @@ public class AdminProductController {
       MultipartFile image)
       throws IOException {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books");
+
+
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override

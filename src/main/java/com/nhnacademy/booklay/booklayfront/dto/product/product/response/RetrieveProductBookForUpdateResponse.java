@@ -24,9 +24,9 @@ public class RetrieveProductBookForUpdateResponse {
   @NotNull
   String longDescription;
   @NotNull
-  boolean isSelling;
+  Boolean isSelling;
   @NotNull
-  boolean pointMethod;
+  Boolean pointMethod;
 
   @NotNull
   Long productDetailId;

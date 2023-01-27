@@ -6,12 +6,18 @@
 </head>
 <body>
 
+<form>
+  <input type="text" name="search"/>
+  <input type="submit" value="검색"/>
+</form>
+
 <table border=1>
   <tbody>
   <th:block th:each="product : ${productList}">
     <tr>
       <td rowspan="3">이미지 입니다...</td>
-      <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}" th:text="${product.title}"/></td>
+      <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}"
+                         th:text="${product.title}"/></td>
       <td><input type="number"/></td>
     </tr>
 
@@ -22,13 +28,17 @@
         </th:block>
       </td>
       <td>출판사 : <span th:text="${product.publisher}"/></td>
-      <td><input type="button" value="카트에 넣기"/></td>
+      <td><input th:if="${product.isSelling}" type="button" value="카트에 넣기"/>
+        <span th:if="${!product.isSelling}" >품절</span>
+      </td>
     </tr>
 
     <tr>
       <td><span th:text="${product.price}"/> 원</td>
-      <td>적립률 : <span th:if="${product.isPointMethod()}" th:text="${product.pointRate}"/> %</td>
-      <td><input type="button" value="바로 구매"/></td>
+      <td>적립률 : <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/> %</td>
+      <td><input th:if="${product.isSelling}" type="button" value="바로 구매"/>
+        <span th:if="${!product.isSelling}" >품절</span>
+      </td>
     </tr>
   </th:block>
   </tbody>

@@ -22,9 +22,9 @@ public class RetrieveProductSubscribeForUpdateResponse {
   @NotNull
   String longDescription;
   @NotNull
-  boolean isSelling;
+  Boolean isSelling;
   @NotNull
-  boolean pointMethod;
+  Boolean pointMethod;
   @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
   LocalDateTime createdAt;
 
