@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -46,19 +47,15 @@ public class CouponTemplateAdminFrontController {
 
     @PostMapping("create")
     public String createCouponTemplatePost(
-        @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
+        @Valid @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
         @RequestParam("issuingDeadLine")
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
-        @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile,
-        HttpServletRequest request) {
+        @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile) {
             couponTemplateAddRequest.setIssuingDeadLine(
                     date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-            String imagePath = imageUploader.uploadImage(multipartFile, request);
             Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
-
-            // FIXME Image 저장 후, 반환 값
-            map.put("imageId", 1L);
-            String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TEMPLATE_URL_PREFIX);
+            map.put("couponImage", multipartFile);
+            String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TEMPLATE_REST_PREFIX);
             ApiEntity<String> apiEntity = restService.post(url, map, String.class);
             if (!apiEntity.isSuccess()) {
                 return ERROR;
@@ -95,9 +92,9 @@ public class CouponTemplateAdminFrontController {
     }
 
     @PostMapping("update/{couponTemplateId}")
-    public String postUpdateCouponForm(@ModelAttribute CouponTemplateAddRequest couponTemplateAddRequest,
+    public String postUpdateCouponForm(@Valid @ModelAttribute CouponTemplateAddRequest couponTemplateAddRequest,
                                        @PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, couponTemplateId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, couponTemplateId);
         Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
         restService.put(url, map, String.class);
 
@@ -106,7 +103,7 @@ public class CouponTemplateAdminFrontController {
 
     @GetMapping("delete/{couponTemplateId}")
     public String deleteCouponTemplate(@PathVariable String couponTemplateId) {
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TEMPLATE_URL_PREFIX, couponTemplateId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TEMPLATE_REST_PREFIX, couponTemplateId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }

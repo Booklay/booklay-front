@@ -16,31 +16,31 @@ public class CouponRestApiModelSettingService {
     private final String gatewayIp;
 
     public void setAllCouponTypeToModel(Model model){
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TYPES_URL_PREFIX);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TYPES_REST_PREFIX);
         ApiEntity<PageResponse<CouponType>> apiEntity =
                 restService.get(url, getDefaultPageMap(0, Integer.MAX_VALUE), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
     }
     public void setCouponTemplateListToModelByPage(Integer pageNum, Model model){
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TEMPLATE_URL_PREFIX, COUPON_URL_LIST_PAGE);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TEMPLATE_REST_PREFIX, COUPON_URL_LIST_PAGE);
         ApiEntity<PageResponse<CouponTemplate>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_LIST, apiEntity.getBody().getData());
     }
     public void setCouponTemplateDetailToModelByCouponTemplateId(String couponTemplateId, Model model){
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_TEMPLATE_URL_PREFIX, couponTemplateId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TEMPLATE_REST_PREFIX, couponTemplateId);
         ApiEntity<CouponTemplateDetail> apiEntity = restService.get(url, null, CouponTemplateDetail.class);
         apiEntity.getBody().setId(couponTemplateId);
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_DETAIL, apiEntity.getBody());
     }
     public void setCouponSettingListToModelByPage(Integer pageNum, Model model){
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_SETTING_URL_PREFIX, COUPON_URL_LIST_PAGE);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_SETTING_REST_PREFIX, COUPON_URL_LIST_PAGE);
         ApiEntity<PageResponse<CouponSetting>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_SETTING_LIST, apiEntity.getBody().getData());
     }
     public void setCouponSettingToModelByCouponSettingId(String couponSettingId, Model model) {
-        String url = buildString(gatewayIp, REST_PREFIX_COUPON, COUPON_SETTING_URL_PREFIX, couponSettingId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_SETTING_REST_PREFIX, couponSettingId);
         ApiEntity<CouponSetting> apiEntity = restService.get(url, null, CouponSetting.class);
         apiEntity.getBody().setId(couponSettingId);
         model.addAttribute(ATTRIBUTE_NAME_COUPON_SETTING, apiEntity.getBody());
