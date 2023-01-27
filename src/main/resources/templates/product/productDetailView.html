@@ -37,7 +37,7 @@
         <span th:text="${product.subscribeDay}"/> 발송
       </p>
       <hr>
-      <p> 정가  | <span th:text="${product.price}"/>원</p>
+      <p> 정가 | <span th:text="${product.price}"/>원</p>
       <!--    <p th:text="${product.salePrice}"></p>-->
       <p> 적립률 |
         <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/>
@@ -55,7 +55,7 @@
           <input name="memberNo" type="number" th:if="${member != null}"
                  th:value="${member.memberNo}"
                  hidden="hidden"/>
-          <input class="numIn" name="quantity" type="number" min="1"value="1"/>
+          <input class="numIn" name="quantity" type="number" min="1" value="1"/>
           <input name="productId" type="number" th:value="${product.productId}" hidden="hidden">
           <input type="submit" value="구매"/>
         </form>
@@ -76,17 +76,28 @@
                  hidden="hidden"/>
           <input type="submit" value="찜 등록"/>
         </form>
-        <!--</th:block>-->
 
-        <!--<th:block th:if="${member !=null}">-->
         <form class="btnAtVar" method="post" action="">
           <input name="memberNo" type="number" th:if="${member != null}"
                  th:value="${member.memberNo}"
                  hidden="hidden"/>
           <input type="submit" value="알림 등록"/>
         </form>
+<!--        </th:block>-->
+
+<!--        관리자 식별-->
+        <th:block>
+          <form th:if="${product.productDetailId != null}" class="btnAtVar" method="get"
+                th:action="@{/admin/product/books/update/{productId} (productId = ${productNo})}">
+            <input type="submit" value="수정"/>
+          </form>
+
+          <form th:if="${product.subscribeId != null}" class="btnAtVar" method="get"
+                th:action="@{/admin/product/subscribes/update/{productId} (productId = ${productNo})}">
+            <input type="submit" value="수정"/>
+          </form>
+        </th:block>
       </div>
-      <!--</th:block>-->
     </div>
   </div>
 

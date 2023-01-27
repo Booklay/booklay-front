@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>상품 수정</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+  <script src="/js/product/productUpdate.js"></script>
+</head>
+<body>
+
+<form method="post" action="/admin/product/books/update" enctype="multipart/form-data">
+
+  <input type="number" name="productDetailId" th:value="${product.productDetailId}" hidden="hidden"/>
+  <input type="number" name="productId" th:value="${product.productId}" hidden="hidden"/>
+  <input type="datetime-local" name="createdAt" th:value="${product.createdAt}" hidden="hidden"/>
+
+  <!--<form enctype="multipart/form-data">-->
+  <p>제목 : <input type="text" name="title" th:value="${product.title}"/></p>
+  <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
+  </p>
+  <p>가격 : <input type="number" min="0" step="1" name="price" th:value="${product.price}"/></p>
+  <p>적립률 : <input type="number" min="0" step="1" name="pointRate" th:value="${product.pointRate}"/>
+    %</p>
+  <p>적립 여부 :
+    <th:block th:if="${product.pointMethod}">
+      <input type="radio" name="pointMethod" checked value="true"> Y
+      <input type="radio" name="pointMethod" value="false"> N
+    </th:block>
+
+    <th:block th:unless="${product.pointMethod}">
+      <input type="radio" name="pointMethod" value="true"> Y
+      <input type="radio" name="pointMethod" checked value="false"> N
+    </th:block>
+  </p>
+
+  <p>짧은 설명</p>
+  <div id="shortEditor"></div>
+  <input id="shortDescription" name="shortDescription" type="text" hidden="hidden"/>
+
+  <p>긴 설명</p>
+  <div id="longEditor"></div>
+  <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
+
+  <p>판매 여부 :
+    <th:block th:if="${product.isSelling}">
+      <input type="radio" name="isSelling" checked value="true"> Y
+      <input type="radio" name="isSelling" value="false"> N
+    </th:block>
+
+    <th:block th:unless="${product.isSelling}">
+      <input type="radio" name="isSelling" value="true"> Y
+      <input type="radio" name="isSelling" checked value="false"> N
+    </th:block>
+  <p>
+    <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
+    &ensp; &ensp; &ensp;
+    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
+  <br>
+  <th:block th:each="categoryId : ${product.categoryIds}">
+    이전 등록 카테고리 <span th:text="${categoryIdStat.count}"/> :
+    <span th:text="${categoryIdStat.current}"/>
+    <br>
+  </th:block>
+  <div id="categories"> </div>
+
+  <p>ISBN : <input type="text" name="isbn" th:value="${product.isbn}"/></p>
+  <p>페이지 수 : <input type="number" min="0" step="1" name="page" th:value="${product.page}"/></p>
+  <p>출판사 : <input type="text" name="publisher" th:value="${product.publisher}"/></p>
+  <p>출판일 : <input type="date" name="publishedDate" th:value="${product.publishedDate}"/></p>
+  <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
+  &ensp;&ensp;&ensp;
+  <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
+  <br>
+  <th:block th:each="authorId : ${product.authorIds}">
+    이전 등록 작가 <span th:text="${authorIdStat.count}"/> :
+    <span th:text="${authorIdStat.current}"/>
+    <br>
+  </th:block>
+  <div id="authors"></div>
+
+  <!--  둘 중 하나만 입력 가능해야함-->
+  <p>재고량 : <input type="number" min="0" step="1" name="storage" th:value="${product.storage}"/></p>
+  <p>이북 주소 : <input type="text" name="ebookAddress" th:value="${product.ebookAddress}"></p>
+
+  <input type="submit" value="책 상품 수정" id="btn-submit"/>
+</form>
+
+
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', () => {
+    const Editor = toastui.Editor;
+
+    const editor1 = new Editor({
+      el: document.querySelector('#shortEditor'),
+      height: '500px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical',
+      initialValue: [[${product.shortDescription}]],
+      autofocus: false
+    });
+    editor1.getMarkdown();
+
+    const editor2 = new Editor({
+      el: document.querySelector('#longEditor'),
+      height: '500px',
+      initialEditType: 'markdown',
+      previewStyle: 'vertical',
+      initialValue: [[${product.longDescription}]],
+      autofocus: false
+    });
+    editor2.getMarkdown();
+
+    const submitButton = document.getElementById('btn-submit');
+
+    submitButton.addEventListener('click', (event) => {
+      const shortDescription = editor1.getHTML();
+      const longDescription = editor2.getHTML();
+
+      console.log(shortDescription);
+      console.log(longDescription);
+
+      document.getElementById('shortDescription').setAttribute('value', shortDescription)
+      document.getElementById('longDescription').setAttribute('value', longDescription)
+    });
+  });
+</script>
+
+</body>
+</html>
