@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentRequest;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.PointCouponRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
 import java.net.URI;
@@ -19,6 +20,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+
 /**
  * @author 양승아
  */
@@ -37,12 +40,14 @@ public class PointHistoryController {
     private final RestTemplate restTemplate;
 
     private final String redirectGatewayPrefix;
+    private final String redirectGatewayPrefixCoupon;
 
     private final static String MYPAGE = "/mypage/myPage";
 
     public PointHistoryController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
         this.redirectGatewayPrefix = gateway + "/shop/v1" + "/point";
+        this.redirectGatewayPrefixCoupon = gateway + "/coupon/v1" + "/members";
     }
 
     @GetMapping("/{memberNo}")
@@ -93,6 +98,32 @@ public class PointHistoryController {
         return MYPAGE;
     }
 
+    @GetMapping("/coupon/{memberNo}")
+    public String retrievePointCouponList(@PathVariable Long memberNo,
+                                          Model model) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        URI uri = URI.create(redirectGatewayPrefixCoupon + "/" + memberNo + "/coupons/point");
+
+        RequestEntity<Void> requestEntity =
+            new RequestEntity<>(headers, HttpMethod.GET, uri);
+
+        ResponseEntity<PageResponse<PointCouponRetrieveResponse>> response =
+            restTemplate.exchange(requestEntity,
+                new ParameterizedTypeReference<>() {
+                });
+
+        List<PointCouponRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
+
+        model.addAttribute("pointCouponList", list);
+        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("targetUrl", "member/memberPointCouponList");
+
+        return MYPAGE;
+//        return "mypage/member/memberPointCouponList";
+    }
+
     @PostMapping("/present/{memberNo}")
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
@@ -109,8 +140,24 @@ public class PointHistoryController {
             new RequestEntity<>(objectMapper.writeValueAsString(pointPresentRequest), headers,
                 HttpMethod.POST, uri);
 
-        ResponseEntity<Void> response =
-            restTemplate.exchange(requestEntity, Void.class);
+        restTemplate.exchange(requestEntity, Void.class);
+
+        return "redirect:/point/" + memberNo;
+    }
+
+    @GetMapping("/coupon/{memberNo}/{couponId}")
+    public String convertPointCoupon(@PathVariable Long memberNo,
+                                     @PathVariable Long couponId,
+                                     Model model) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo + "/" + couponId);
+
+        RequestEntity<Void> requestEntity =
+            new RequestEntity<>(headers, HttpMethod.GET, uri);
+
+        restTemplate.exchange(requestEntity, Void.class);
 
         return "redirect:/point/" + memberNo;
     }
