@@ -1,9 +1,9 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
@@ -50,6 +50,7 @@ public class AdminProductController {
   private static final String PRE_FIX = "/admin/product";
   private static final String URI_PRE_FIX = "/shop/v1/admin/product/";
   private static final String REDIRECT_PRE_FIX = "redirect:/product/view/";
+  private static final String RETURN_PAGE = "admin/adminPage";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -64,7 +65,8 @@ public class AdminProductController {
   @GetMapping("/books/create")
   public String getProductBookCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
-    return PRE_FIX + "/createProductBookForm";
+    model.addAttribute(TARGET_VIEW, "product/createProductBookForm");
+    return RETURN_PAGE;
   }
 
   //책 생성 요청
@@ -155,7 +157,8 @@ public class AdminProductController {
   @GetMapping("/subscribes/create")
   public String getProductSubscribeCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
-    return PRE_FIX + "/createProductSubscribeForm";
+    model.addAttribute(TARGET_VIEW, "product/createProductSubscribeForm");
+    return RETURN_PAGE;
   }
 
   //구독 상품 생성
@@ -207,7 +210,6 @@ public class AdminProductController {
 
     log.info(productData.toString());
 
-
     model.addAttribute("product", productData);
 
     return PRE_FIX + "/updateProductSubscribeForm";
@@ -243,9 +245,9 @@ public class AdminProductController {
     return REDIRECT_PRE_FIX + request.getProductId();
   }
 
+  //작가 팝업창
   @GetMapping("/author")
   public String getAuthorMaintain() {
-
     return PRE_FIX + "/adminAuthor";
   }
 }
