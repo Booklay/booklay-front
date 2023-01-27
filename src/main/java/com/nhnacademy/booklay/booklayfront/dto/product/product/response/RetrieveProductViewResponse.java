@@ -33,9 +33,9 @@ public class RetrieveProductViewResponse {
   @NotNull
   private String longDescription;
   @NotNull
-  private boolean isSelling;
+  private Boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  private Boolean pointMethod;
 
   private List<RetrieveTagResponse> productTags;
 

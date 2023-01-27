@@ -1,6 +1,6 @@
 function showCategory() {
   window.open("/admin/categories/", "a",
-      "width=400, height=600, left=100, top=50");
+      "width=600, height=700, left=100, top=50");
 }
 
 let catNo = 1;
@@ -27,7 +27,7 @@ function addCategory() {
 
 function showAuthor() {
   window.open("/admin/author/maintenance", "a",
-      "width=725, height=750, left=100, top=50");
+      "width=800, height=750, left=100, top=50");
 }
 
 let authorNo = 1;

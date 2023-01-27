@@ -22,14 +22,14 @@ public class CreateProductBookRequest {
   @NotNull
   private String longDescription;
   @NotNull
-  private boolean isSelling;
+  private Boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  private Boolean pointMethod;
 
   @NotNull
   private String isbn;
   @NotNull
-  private int page;
+  private Integer page;
   @NotNull
   private String publisher;
 
