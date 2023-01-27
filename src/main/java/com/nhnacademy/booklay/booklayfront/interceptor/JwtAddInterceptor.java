@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -10,10 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * {@link ClientHttpRequestInterceptor} 인터페이스 추상 메서드를 재정의하여 서버로 요청을 보내기 전 토큰 정보가 있다면 주입 후 요청을 보냅니다.
@@ -36,11 +40,19 @@ public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
         }
 
         log.info("RestTemplate Interceptor");
-        log.info((String) authentication.getCredentials());
-        httpRequest.getHeaders().setBearerAuth((String) authentication.getCredentials());
 
-        return execution.execute(httpRequest, body);
-    }
+        String uuid = (String) authentication.getPrincipal();
+        Optional<String> token = Optional.ofNullable(((String) redisTemplate.opsForHash().get(uuid, "TOKEN")));
+
+        if (token.isEmpty()) {
+            return execution.execute(httpRequest, body);
+        }
+
+        log.info("token = {}", token.get());
+
+        httpRequest.getHeaders().setBearerAuth(token.get());
+
+        return execution.execute(httpRequest, body);}
 
     /**
      * {@link HttpRequest} 로 받은 요청에 대해 토큰 기반 인증이 필요한지 검사합니다.

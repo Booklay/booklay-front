@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -35,7 +36,11 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthentication authentication = new UsernamePasswordAuthentication(memberId, password);
 
         Authentication authenticated = authenticationManager.authenticate(authentication);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(authenticated);
         log.info(authenticated.getAuthorities().toString());
+        log.info((String) authenticated.getPrincipal());
 
     }
 

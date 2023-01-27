@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -28,12 +29,13 @@ public class WebConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    public RestTemplate restTemplate(RestTemplateBuilder builder, RedisTemplate<String, Object> redisTemplate) {
 
         return builder
                 .setReadTimeout(Duration.ofSeconds(5L))
                 .setConnectTimeout(Duration.ofSeconds(5L))
-                .interceptors(new JwtAddInterceptor())
+                .interceptors(new JwtAddInterceptor(redisTemplate))
+                .errorHandler(responseErrorHandler())
                 .build();
     }
 
@@ -62,10 +64,4 @@ public class WebConfig {
         };
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplateBuilder()
-            .errorHandler(responseErrorHandler())
-            .build();
-    }
 }

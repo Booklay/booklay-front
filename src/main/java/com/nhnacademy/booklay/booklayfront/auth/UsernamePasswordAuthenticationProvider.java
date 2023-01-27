@@ -47,7 +47,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
         String role = tokenUtils.getRole(jwtInfo);
 
-        return new UsernamePasswordAuthenticationToken(jwtInfo.getUuid(), jwtInfo.getJwt(), Collections.singletonList(new SimpleGrantedAuthority(role)));
+        return new UsernamePasswordAuthentication(jwtInfo.getUuid(), jwtInfo.getJwt(), Collections.singletonList(new SimpleGrantedAuthority(role)));
     }
 
     /**
@@ -60,4 +60,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthentication.class.isAssignableFrom(authentication);
     }
+
+
+
 }

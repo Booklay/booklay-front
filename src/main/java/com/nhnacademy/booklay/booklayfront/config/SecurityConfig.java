@@ -29,7 +29,6 @@ public class SecurityConfig {
 
     private final ObjectMapper mapper;
     private final UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider;
-//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
@@ -43,7 +42,6 @@ public class SecurityConfig {
                 .disable();
 
         http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class);
-//                .addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         http.authenticationProvider(usernamePasswordAuthenticationProvider);
 
