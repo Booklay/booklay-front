@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="/js/coupon/couponPopup.js"></script>
+</head>
+<html lang="ko">
+<h2>상품 선택</h2>
+<table border=1>
+    <thead>
+    <tr>
+        <th>상품 번호</th>
+        <th>제목</th>
+        <th>가격</th>
+        <th>판매 여부</th>
+        <th>출판사</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="product : ${productList}">
+        <tr>
+            <td><span th:text="${product.productId}"></span></td>
+            <td><span th:text="${product.title}"></span></td>
+            <td><span th:text="${product.price}"></span></td>
+            <td><span th:text="${product.isSelling}"></span></td>
+            <td><span th:text="${product.publisher}"></span></td>
+            <td><input type="button" value="선택" th:id="${product.productId}" th:onclick="setApplyItemText(this.getAttribute('id'))"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<h2 th:if="${productList.isEmpty()}">등록된 상품이 없습니다.</h2>
+
+</html>
