@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <script src="/js/coupon/couponCreateForm.js"></script>
+    <script src="/js/coupon/couponPopup.js"></script>
     <link href="/css/form.css" rel="stylesheet">
 </head>
     <div id="input-form">
@@ -22,7 +23,7 @@
                 <span>
                     <label id="apply-item-label" for="apply-item">적용 카테고리 번호</label><input type="number" name="applyItemId" id="apply-item">
                 </span>
-                <input type="button" value="찾기">
+                <input type="button" value="찾기" id="item-search-button" onclick="showCategoryPopup()">
                 <br/>
             </div>
             <label for="minimum-amount">최소 사용 금액</label><input type="number" name="minimumUseAmount" id="minimum-amount"><br/>

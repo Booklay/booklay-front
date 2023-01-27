@@ -146,7 +146,7 @@ public class CouponAdminFrontController {
 
     @GetMapping("/detail/{couponId}")
     public String viewCoupon(Model model, @PathVariable String couponId) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, "/", couponId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_REST_PREFIX, couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
 
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
@@ -282,30 +282,6 @@ public class CouponAdminFrontController {
         restService.post(url, map, String.class);
 
         return RETURN_PAGE_COUPON_LIST;
-    }
-
-    @GetMapping("/popup/pages/{pageNum}")
-    public String couponPopup(@PathVariable int pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_REST_PREFIX, "pages");
-        ApiEntity<PageResponse<Coupon>> apiEntity =
-            restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
-            });
-
-        model.addAttribute("couponList", apiEntity.getBody().getData());
-
-        return "/admin/coupon/couponPopup";
-    }
-
-    @GetMapping("/member/popup/pages/{pageNum}")
-    public String memberPopup(@PathVariable int pageNum, Model model) {
-        String url = buildString(gatewayIp, "/shop/v1/admin/members");
-        ApiEntity<PageResponse<Coupon>> apiEntity =
-            restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
-            });
-
-        model.addAttribute("memberList", apiEntity.getBody().getData());
-
-        return "/admin/coupon/couponPopup";
     }
 
     @GetMapping("/issue-history")

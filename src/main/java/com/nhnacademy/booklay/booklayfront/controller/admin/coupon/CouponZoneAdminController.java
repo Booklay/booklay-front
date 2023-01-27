@@ -21,7 +21,7 @@ public class CouponZoneAdminController {
 
     @GetMapping
     public String getCouponZoneList(Model model) {
-        model.addAttribute(TARGET_VIEW, "/coupon/couponZone.couponZoneList");
+        model.addAttribute(TARGET_VIEW, "/coupon/couponZone/couponZoneList");
         return RETURN_PAGE;
     }
 
