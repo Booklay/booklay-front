@@ -30,9 +30,7 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/members")
 public class MemberController {
     private final RestTemplate restTemplate;
-
     private final String redirectGatewayPrefix;
-
     private final static String MYPAGE = "/mypage/myPage";
 
     public MemberController(RestTemplate restTemplate, String gateway) {
