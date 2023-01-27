@@ -16,6 +16,7 @@ public class ControllerStrings {
     public static final String COUPON_TYPES_REST_PREFIX = "/admin/couponTypes/";
     public static final String COUPON_TEMPLATE_REST_PREFIX = "/admin/couponTemplates/";
     public static final String COUPON_SETTING_REST_PREFIX = "/admin/couponSettings/";
+    public static final String CART_URL_PREFIX = "/cart/";
 
 
     public static final String COUPON_URL_LIST_PAGE = "pages";
