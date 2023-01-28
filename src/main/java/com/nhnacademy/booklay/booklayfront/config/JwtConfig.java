@@ -16,7 +16,6 @@ public class JwtConfig {
     @Value(("${booklay.jwt.secret}"))
     private final String secret;
 
-
     @Bean
     public JwtParser jwtParser() {
         return Jwts.parserBuilder()
