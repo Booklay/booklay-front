@@ -12,11 +12,12 @@
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form action="" method="post" enctype="multipart/form-data">
             <label>쿠폰 이름 : <input type="text" name="name"> </label> <br/>
-            쿠폰 종류 : <select type="number" name="typeCode">
+            <label>쿠폰 종류 :
+            <select type="number" name="typeCode">
                     <arc th:each="couponType:${couponTypeList}">
                         <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
                     </arc>
-                </select><br/>
+            </select></label><br/>
             <label>할인량 : <input type="number" name="amount"></label> <br/>
             주문 쿠폰 여부<br/>
             <label>주문 쿠폰 : <input id="isOrderCoupon" type="radio" name="isOrderCoupon" value="true" checked></label>
