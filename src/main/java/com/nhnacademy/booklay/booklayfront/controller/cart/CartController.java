@@ -36,7 +36,7 @@ public class CartController {
     private static final String STRING_CART_ID_FOR_API = "cartId";
     private static final String STRING_PRODUCT_NO = "productNo";
     private static final String STRING_PRODUCT_NO_LIST = "productNoList";
-    private static final String REDIRECT_CART_LIST = "redirect:cart/list";
+    private static final String REDIRECT_CART_LIST = "redirect:/cart/list";
 
     @ModelAttribute(STRING_CART_ID)
     public String getCookieValue(@CookieValue(name = STRING_CART_ID, required = false)
