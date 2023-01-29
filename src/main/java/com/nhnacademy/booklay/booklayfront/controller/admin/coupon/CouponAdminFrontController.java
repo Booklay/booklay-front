@@ -90,7 +90,7 @@ public class CouponAdminFrontController {
 
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         restService.post(url, map, String.class);
-        return "redirect:/admin/coupon/list/type/0";
+        return "redirect:/admin/coupons/list/type/0";
     }
 
     @GetMapping("/list")
@@ -125,7 +125,7 @@ public class CouponAdminFrontController {
     public String couponTypeDelete(@PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, COUPON_TYPES_REST_PREFIX, couponId);
         restService.delete(url);
-        return "redirect:/admin/coupon/list/type/0";
+        return "redirect:/admin/coupons/list/type/0";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")

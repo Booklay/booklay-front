@@ -205,9 +205,9 @@
                                 </div>
                             </td>
                             <td th:id="${cart.productNo}" class="align-middle" th:text="${cart.productPrice * cart.productCount}"></td>
-                            <td class="align-middle"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary" ><a class="text-black-50" th:href="${'/cart/delete/'+cart.productNo}"><i th:id="${productNo+'delete'}" class="fa fa-times"></i></a></button></td>
                         </tr>
-                    </tr>
+                    </th:block>
                     </tbody>
                 </table>
             </div>
