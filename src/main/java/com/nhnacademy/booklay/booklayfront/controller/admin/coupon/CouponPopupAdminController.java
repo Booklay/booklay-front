@@ -27,7 +27,7 @@ public class CouponPopupAdminController {
     private final RestService restService;
     private final String gatewayIp;
 
-    private static final String RESOURCE_BASE = "/admin/coupon/";
+    private static final String RESOURCE_BASE = "admin/coupon/";
 
     @GetMapping("/coupon/pages/{pageNum}")
     public String couponPopup(@PathVariable int pageNum, Model model) {
