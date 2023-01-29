@@ -4,8 +4,10 @@ package com.nhnacademy.booklay.booklayfront.controller.cart;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
+import com.nhnacademy.booklay.booklayfront.dto.cart.CartProductNoListRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -96,10 +98,10 @@ public class CartController {
 
     @PostMapping("buy")
     public String deleteProductsInCartByBuy(@ModelAttribute(STRING_CART_ID)String cartId,
-                                            @RequestBody List<Long> productNoList){
+                                            @RequestBody CartProductNoListRequest cartProductNoListRequest){
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add(STRING_CART_ID_FOR_API, cartId);
-        map.put(STRING_PRODUCT_NO_LIST, productNoList.stream().map(Object::toString).collect(Collectors.toList()));
+        map.put(STRING_PRODUCT_NO_LIST, cartProductNoListRequest.getProductNoList().stream().map(Object::toString).collect(Collectors.toList()));
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
         restService.delete(url, map);
         return REDIRECT_CART_LIST;
@@ -109,7 +111,7 @@ public class CartController {
     public String loginAndMoveCartRedisToRDB(@ModelAttribute(STRING_CART_ID)String cartId){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "login/", cartId);
         restService.get(url, null, String.class);
-        return "";
+        return REDIRECT_CART_LIST;
     }
 
     private String getRandomUUID(){
