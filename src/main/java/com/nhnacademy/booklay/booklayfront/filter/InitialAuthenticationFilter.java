@@ -1,6 +1,9 @@
 package com.nhnacademy.booklay.booklayfront.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +30,9 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthenticationManager authenticationManager;
 
+    private static final List<String> EXCLUDE_URL =
+        List.of("/login");
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -42,6 +48,8 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
         log.info(authenticated.getAuthorities().toString());
         log.info((String) authenticated.getPrincipal());
 
+        response.sendRedirect("/");
+
     }
 
     /**
@@ -49,6 +57,7 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !request.getServletPath().equals("/login");
+        return EXCLUDE_URL.stream()
+                          .noneMatch(exclude -> exclude.equals(request.getServletPath()));
     }
 }

@@ -32,7 +32,9 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.formLogin().disable();
+        http.formLogin().disable()
+                .logout().logoutUrl("/members/logout")
+                .logoutSuccessUrl("/");
 
         http.authorizeRequests()
                 .anyRequest()
