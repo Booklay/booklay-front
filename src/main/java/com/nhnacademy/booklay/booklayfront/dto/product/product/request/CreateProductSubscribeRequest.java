@@ -4,7 +4,6 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
@@ -29,10 +28,10 @@ public class CreateProductSubscribeRequest {
   private List<Long> categoryIds;
 
   @NotNull
-  private Long subscribeWeek;
+  private Integer subscribeWeek;
 
   @NotNull
-  private Long subscribeDay;
+  private Integer subscribeDay;
 
   @NotNull
   private String publisher;
