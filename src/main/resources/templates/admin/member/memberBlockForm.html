@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 차단하기</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{/img/favicon.ico}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div>
+    <h3>회원 차단하기</h3><br>
+    <form th:action="@{/admin/members/block/{memberNo}(memberNo=${member.getMemberNo()})}" method="post"
+          name="MemberBlockRequest">
+        <b>회원 ID</b>: <span th:text="${member.getMemberId()}"></span><br>
+        <b>회원 이름</b>: <span th:text="${member.getName()}"></span><br>
+        <b>사유</b>: <textarea name="reason"></textarea><br>
+        <input type="submit" value="차단하기"/>
+    </form>
+</div>
+</body>
+</html>
