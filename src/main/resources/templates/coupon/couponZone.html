@@ -101,38 +101,43 @@
 </div>
 <!-- Page Header End -->
 
+<!-- Content Start -->
 <div class="container-fluid pt-5">
-    <h4 class="font-weight-semi-bold text-uppercase mb-3">선착순</h4>
+    <h4 class="font-weight-semi-bold text-uppercase mb-3">수량 제한</h4>
     <div class="row px-xl-5 pb-3">
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                <h5 class="font-weight-semi-bold m-0">장바구니 50% 할인</h5>
-            </div>
-            <button><a href="/coupon-zone/3">발급받기</a></button>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                <h5 class="font-weight-semi-bold m-0">이달의 쿠폰(300명)</h5>
-            </div>
-        </div>
+        <span th:if="${#lists.isEmpty(limitedList)}">
+            <div>등록된 쿠폰이 없습니다.</div>
+        </span>
+        <span th:unless="${#lists.isEmpty(limitedList)}">
+            <span th:each="limited:${limitedList}">
+                <div class="">
+                    <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                        <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+                        <h5 class="font-weight-semi-bold m-0" th:text="${limited.name}"></h5>
+                    </div>
+                    <button><a href="/coupon-zone/3">발급받기</a></button>
+                </div>
+            </span>
+        </span>
     </div>
     <h4 class="font-weight-semi-bold text-uppercase mb-3">무제한 발급</h4>
     <div class="row px-xl-5 pb-3">
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                <h5 class="font-weight-semi-bold m-0">사장님이 미쳤어요~ 포인트 5000원</h5>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-            <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-                <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-                <h5 class="font-weight-semi-bold m-0">어쩌구저쩌구</h5>
-            </div>
-        </div>
+        <span th:if="${#lists.isEmpty(unlimitedList)}">
+            <div>등록된 쿠폰이 없습니다.</div>
+        </span>
+        <span th:unless="${#lists.isEmpty(unlimitedList)}">
+            <span th:each="unlimited:${unlimitedList}">
+                <div class="">
+                    <div class="d-flex align-items-center border mb-4" style="padding: 30px;">
+                        <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
+                        <h5 class="font-weight-semi-bold m-0" th:text="${unlimited.name}"></h5>
+                    </div>
+                    <button><a href="/coupon-zone/3">발급받기</a></button>
+                </div>
+            </span>
+        </span>
     </div>
 </div>
+<!-- Content End -->
 </body>
 </html>

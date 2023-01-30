@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
+import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponIssueAdminFrontController;
@@ -17,13 +18,16 @@ import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,6 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.client.RestTemplate;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -49,13 +54,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         , CouponTypeAdminController.class
         , CouponIssueAdminFrontController.class})
 @ActiveProfiles("test")
-@ComponentScan("com.nhnacademy.booklay.booklayfront.config")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
+@AutoConfigureMockMvc(addFilters = false)
+@Import(WebConfig.class)
 class CouponAdminFrontControllerTest {
     @MockBean
     RestService restService;
     @Autowired
     MockMvc mockMvc;
+
+    @MockBean
+    AuthenticationManager authenticationManager;
+
+    @MockBean
+    RestTemplate restTemplate;
 
     @MockBean
     ImageUploader imageUploader;

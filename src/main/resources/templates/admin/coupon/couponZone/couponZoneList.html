@@ -5,39 +5,73 @@
     <title>쿠폰존 목록</title>
 </head>
 <body>
+<button><a href="/admin/coupon-zone/form">등록하기</a></button>
+<br>
 <h3>수량 제한 쿠폰</h3>
-<button><a>등록하기</a></button>
-<table>
-    <tr>
-        <td>번호</td>
-        <td>쿠폰 ID</td>
-        <td>쿠폰 이름</td>
-        <td>설명</td>
-        <td>숨김여부</td>
-        <td>오픈시간</td>
-        <td>닫힘시간</td>
-        <td>숨김여부</td>
-        <td>쿠폰상세</td>
-        <td>수정</td>
-        <td>삭제</td>
-    </tr>
-</table>
-<h3>수량 무제한 쿠폰</h3>
-<button><a>등록하기</a></button>
+<div th:if="${#lists.isEmpty(limitedList)}">
+    <div>등록된 수량 제한 쿠폰이 없습니다.</div>
+</div>
+<div th:unless="${#lists.isEmpty(limitedList)}">
     <table>
         <tr>
             <td>번호</td>
             <td>쿠폰 ID</td>
             <td>쿠폰 이름</td>
             <td>설명</td>
+            <td>숨김여부</td>
             <td>오픈시간</td>
             <td>닫힘시간</td>
-            <td>숨김여부</td>
-            <td>쿠폰상세</td>
             <td>수정</td>
             <td>삭제</td>
         </tr>
+        <tbody th:each="limited, limitedStat :${limitedList}">
+        <tr>
+            <td><p th:text="${limitedStat.count}"></p></td>
+            <td><p th:text="${limited.id}"></p></td>
+            <td><p th:text="${limited.name}"></p></td>
+            <td><p th:text="${limited.description}"></p></td>
+            <td><p th:text="${limited.isBlind}"></p></td>
+            <td><p th:text="${limited.openedAt}"></p></td>
+            <td><p th:text="${limited.closedAt}"></p></td>
+            <td><input type="button" value="수정"></td>
+            <td><input type="button" value="삭제"></td>
+        </tr>
+        </tbody>
     </table>
 </div>
+
+<h3>수량 무제한 쿠폰</h3>
+<div th:if="${#lists.isEmpty(unlimitedList)}">
+    <div>등록된 수량 무제한 쿠폰이 없습니다.</div>
+</div>
+<div th:unless="${#lists.isEmpty(unlimitedList)}">
+    <table>
+        <tr>
+            <td>번호</td>
+            <td>쿠폰 ID</td>
+            <td>쿠폰 이름</td>
+            <td>설명</td>
+            <td>숨김여부</td>
+            <td>오픈시간</td>
+            <td>닫힘시간</td>
+            <td>수정</td>
+            <td>삭제</td>
+        </tr>
+        <tbody th:each="unlimited, unlimitedStat :${unlimitedList}">
+        <tr>
+            <td><p th:text="${unlimitedStat.count}"></p></td>
+            <td><p th:text="${unlimited.id}"></p></td>
+            <td><p th:text="${unlimited.name}"></p></td>
+            <td><p th:text="${unlimited.description}"></p></td>
+            <td><p th:text="${unlimited.isBlind}"></p></td>
+            <td><p th:text="${unlimited.openedAt}"></p></td>
+            <td><p th:text="${unlimited.closedAt}"></p></td>
+            <td><input type="button" value="수정"></td>
+            <td><input type="button" value="삭제"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

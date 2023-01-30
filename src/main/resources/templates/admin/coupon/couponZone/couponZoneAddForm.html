@@ -2,9 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>쿠폰존 등록</title>
+    <script src="/js/coupon/couponPopup.js"></script>
+    <link href="/css/form.css" rel="stylesheet">
 </head>
 <body>
+<div id="input-form">
+    <form action="/admin/coupon-zone" method="post" enctype="multipart/form-data">
+        <label for="couponId">쿠폰 종류</label>
+        <input type="text" id="couponId" name="couponId">
+        <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();"><br/>
 
+        <label for="description">설명</label><input type="text" name="description" id="description"><br/>
+
+        <label for="opened-at">오픈 시간</label><input type="datetime-local" name="openedAt" id="opened-at"><br/>
+        <label for="closed-at">마감 시간</label><input type="datetime-local" name="closedAt" id="closed-at"><br/>
+
+        <label for="isBlind">숨김 여부</label>
+        <input type="checkbox" name="isBlind" value="true" id="isBlind"/><br/>
+
+        <input type="submit">
+    </form>
+</div>
 </body>
 </html>
