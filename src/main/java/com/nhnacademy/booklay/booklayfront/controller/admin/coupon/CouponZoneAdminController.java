@@ -37,11 +37,18 @@ public class CouponZoneAdminController {
         return "coupon/couponFragments/couponNavHead";
     }
 
+    /**
+     * 관리자의 쿠폰존 조회.
+     * 수량 제한 있는 쿠폰과, 제한 없는 쿠폰을 각 각 받아와서 보여줍니다.
+     *
+     */
     @GetMapping
     public String getCouponZoneList(@RequestParam(value = "page", defaultValue = "0") int page,
                                     Model model) {
-        URI getLimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited");
-        URI getUnlimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited");
+        String query = "?page=" + page;
+
+        URI getLimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
+        URI getUnlimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited" + query);
 
         ApiEntity<PageResponse<CouponZoneRetrieveResponse>> limitedList =
             restService.get(getLimitedUri.toString(), null, new ParameterizedTypeReference<>() {
@@ -60,6 +67,7 @@ public class CouponZoneAdminController {
 
     /**
      * 쿠폰존에 쿠폰을 등록하기 위한 폼 호출.
+     *
      */
     @GetMapping("/form")
     public String getCouponZoneAddForm(Model model) {
@@ -68,10 +76,14 @@ public class CouponZoneAdminController {
         return RETURN_PAGE;
     }
 
+    /**
+     * 관리자가 쿠폰을 쿠폰존에 등록합니다.
+     * 쿠폰존에 등록된 쿠폰 중, isBlind = false 인 쿠폰만 사용자가 조회 가능합니다.
+     *
+     */
     @PostMapping
     public String createAtCouponZone(@Valid @ModelAttribute CouponZoneCreateRequest createRequest,
                                      @RequestParam(required = false, defaultValue = "false") Boolean isBlind) {
-
         createRequest.setIsBlind(isBlind);
 
         URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone");
