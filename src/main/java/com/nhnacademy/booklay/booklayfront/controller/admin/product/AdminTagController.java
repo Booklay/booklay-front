@@ -151,7 +151,7 @@ public class AdminTagController {
     model.addAttribute("tagList", tagList);
     model.addAttribute("productNo", productNo);
 
-    return "/admin/product/productTagConnector";
+    return "admin/product/productTagConnector";
   }
 
   @PostMapping("/connection/{productNo}/{pageNum}")
