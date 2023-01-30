@@ -35,3 +35,23 @@
 .btnAtVar{
   padding: 5px;
 }
+#recommendGoods{
+  display: flex;
+}
+
+.rCmdTxt{
+  margin-top: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  white-space:nowrap;
+}
+
+.rCmdImg{
+  width:155px;
+  height:185px;
+}
+
+.rCmdGoods{
+  width:155px;
+  height:280px;
+}
