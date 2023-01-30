@@ -18,9 +18,9 @@
             <td>쿠폰 ID</td>
             <td>쿠폰 이름</td>
             <td>설명</td>
+            <td>숨김여부</td>
             <td>오픈시간</td>
             <td>닫힘시간</td>
-            <td>숨김여부</td>
             <td>수정</td>
             <td>삭제</td>
         </tr>
@@ -51,9 +51,9 @@
             <td>쿠폰 ID</td>
             <td>쿠폰 이름</td>
             <td>설명</td>
+            <td>숨김여부</td>
             <td>오픈시간</td>
             <td>닫힘시간</td>
-            <td>숨김여부</td>
             <td>수정</td>
             <td>삭제</td>
         </tr>
@@ -62,10 +62,10 @@
             <td><p th:text="${unlimitedStat.count}"></p></td>
             <td><p th:text="${unlimited.id}"></p></td>
             <td><p th:text="${unlimited.name}"></p></td>
-            <td><p th:text="${unlimited.typeName}"></p></td>
-            <td><p th:text="${unlimited.amount}"></p></td>
-            <td><p th:text="${unlimited.minimumUseAmount}"></p></td>
-            <td><p th:text="${unlimited.maximumDiscountAmount}"></p></td>
+            <td><p th:text="${unlimited.description}"></p></td>
+            <td><p th:text="${unlimited.isBlind}"></p></td>
+            <td><p th:text="${unlimited.openedAt}"></p></td>
+            <td><p th:text="${unlimited.closedAt}"></p></td>
             <td><input type="button" value="수정"></td>
             <td><input type="button" value="삭제"></td>
         </tr>
