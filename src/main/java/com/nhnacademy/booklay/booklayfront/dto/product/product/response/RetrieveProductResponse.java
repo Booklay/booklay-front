@@ -25,9 +25,9 @@ public class RetrieveProductResponse {
   @NotNull
   Long pointRate;
   @NotNull
-  boolean isSelling;
+  Boolean isSelling;
   @NotNull
-  boolean pointMethod;
+  Boolean pointMethod;
   @NotNull
   String shortDescription;
   @NotNull

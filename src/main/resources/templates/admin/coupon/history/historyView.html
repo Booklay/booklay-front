@@ -4,6 +4,7 @@
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <table>
             <tr>
+                <td>번호</td>
                 <td>쿠폰 ID</td>
                 <td>사용유저</td>
                 <td>쿠폰 코드</td>
@@ -11,7 +12,7 @@
                 <td>주문번호</td>
                 <td>사용일</td>
             </tr>
-        <tbody th:each="history:${historyList}">
+        <th:block th:each="history:${historyList}">
             <tr>
                 <td><p th:text="${history.couponId}"></p></td>
                 <td><p th:text="${history.userId}"></p></td>
@@ -20,7 +21,7 @@
                 <td><p th:text="${history.orderId}"></p></td>
                 <td><p th:text="${history.orderedAt}"></p></td>
             </tr>
-        </tbody>
+        </th:block>
 
         </table>
         <p th:if="${pageNum > 0}">

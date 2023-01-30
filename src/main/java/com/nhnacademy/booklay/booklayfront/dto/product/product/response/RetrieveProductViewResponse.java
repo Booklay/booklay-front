@@ -33,22 +33,22 @@ public class RetrieveProductViewResponse {
   @NotNull
   private String longDescription;
   @NotNull
-  private boolean isSelling;
+  private Boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  private Boolean pointMethod;
 
   private List<RetrieveTagResponse> productTags;
 
   //책 상세
   private Long productDetailId;
   private String isbn;
-  private int page;
+  private Integer page;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate publishedDate;
   @Setter
   private String ebookAddress;
   @Setter
-  private int storage;
+  private Integer storage;
   private List<RetrieveAuthorResponse> authors;
   private List<Long> categoryIds;
 

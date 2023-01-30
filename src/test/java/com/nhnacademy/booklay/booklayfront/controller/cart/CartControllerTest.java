@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartProductNoListRequest;
@@ -13,16 +14,20 @@ import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
@@ -39,8 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(CartController.class)
 @ActiveProfiles("test")
-@ComponentScan("com.nhnacademy.booklay.booklayfront.config")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
+@AutoConfigureMockMvc(addFilters = false)
+@Import(WebConfig.class)
 class CartControllerTest {
     @MockBean
     RestService restService;
@@ -50,7 +56,10 @@ class CartControllerTest {
     String gatewayIp;
     @Autowired
     ObjectMapper objectMapper;
-
+    @MockBean
+    RestTemplate restTemplate;
+    @MockBean
+    AuthenticationManager authenticationManager;
     private final String RETURN_PAGE = "cart/listForm";
     private final String REDIRECT_PAGE = "cart/list";
     private final String URI_PREFIX = "/cart/";
@@ -93,8 +102,9 @@ class CartControllerTest {
 
     @Test
     void addProductInCart() throws Exception {
-        mockMvc.perform(post(URI_PREFIX + "/list")
+        mockMvc.perform(post(URI_PREFIX)
                 .cookie(cookie)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cartDto)))
             .andExpect(status().is3xxRedirection())
             .andExpect(result -> Objects.equals(

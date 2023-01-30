@@ -1,14 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
+import java.io.IOException;
+import com.nhnacademy.booklay.booklayfront.interceptor.JwtAddInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -17,18 +21,34 @@ import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
-
+import java.time.Duration;
 @Configuration
 public class WebConfig {
 
     @Bean
     public String gatewayIp(@Value("${booklay.gateway-origin}") String ip) {
         return ip;
+
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder, RedisTemplate<String, Object> redisTemplate) {
+
+        return builder
+                .setReadTimeout(Duration.ofSeconds(5L))
+                .setConnectTimeout(Duration.ofSeconds(5L))
+                .interceptors(new JwtAddInterceptor(redisTemplate))
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .errorHandler(responseErrorHandler())
+                .build();
     }
 
     @Bean
     public ObjectMapper objectMapper() {
-        return new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
     }
 
     @Bean
@@ -51,12 +71,4 @@ public class WebConfig {
         };
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplateBuilder()
-            .errorHandler(responseErrorHandler())
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
-            .build();
-    }
 }

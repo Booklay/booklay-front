@@ -21,9 +21,9 @@ public class CreateProductSubscribeRequest {
   @NotNull
   private String longDescription;
   @NotNull
-  private boolean isSelling;
+  private Boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  private Boolean pointMethod;
 
   @NotNull
   private List<Long> categoryIds;

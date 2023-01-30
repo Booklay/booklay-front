@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.constant;
+package com.nhnacademy.booklay.booklayfront.auth.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

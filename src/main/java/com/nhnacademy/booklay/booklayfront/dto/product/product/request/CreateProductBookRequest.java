@@ -22,14 +22,14 @@ public class CreateProductBookRequest {
   @NotNull
   private String longDescription;
   @NotNull
-  private boolean isSelling;
+  private Boolean isSelling;
   @NotNull
-  private boolean pointMethod;
+  private Boolean pointMethod;
 
   @NotNull
   private String isbn;
   @NotNull
-  private int page;
+  private Integer page;
   @NotNull
   private String publisher;
 
@@ -39,37 +39,10 @@ public class CreateProductBookRequest {
   @Setter
   private String ebookAddress;
   @Setter
-  private int storage;
+  private Integer storage;
   @NotNull
   private List<Long> authorIds;
   @NotNull
   private List<Long> categoryIds;
 
-  public boolean getIsSelling() {
-    return this.isSelling;
-  }
-
-  public boolean getPointMethod() {
-    return this.pointMethod;
-  }
-
-  public CreateProductBookRequest(String title, Long price,
-      Long pointRate, String shortDescription, String longDescription, boolean isSelling,
-      boolean pointMethod, String isbn, int page, String publisher,
-      LocalDate publishedDate, List<Long> authorIds,
-      List<Long> categoryIds) {
-    this.title = title;
-    this.price = price;
-    this.pointRate = pointRate;
-    this.shortDescription = shortDescription;
-    this.longDescription = longDescription;
-    this.isSelling = isSelling;
-    this.pointMethod = pointMethod;
-    this.isbn = isbn;
-    this.page = page;
-    this.publisher = publisher;
-    this.publishedDate = publishedDate;
-    this.authorIds = authorIds;
-    this.categoryIds = categoryIds;
-  }
 }

@@ -25,7 +25,6 @@ public class CouponAddRequest {
     private final Long amount;
     @NotNull
     private final Boolean isOrderCoupon;
-    @NotNull
     private final Long applyItemId;
     @NotNull
     private final Long minimumUseAmount;
@@ -40,6 +39,6 @@ public class CouponAddRequest {
     private final Boolean isDuplicatable;
     @NotNull
     private final Boolean isLimited;
-
-
+    @NotNull
+    private final int validateTerm;
 }

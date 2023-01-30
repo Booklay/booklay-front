@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Category Update</title>
+</head>
+<body>
+<div>
+    <form th:action="@{/admin/categories/{categoryId}(categoryId=${category.id})}"
+          th:method="post">
+        <input type="hidden" name="_method" value="put"> <!-- HiddenHttpMethodFilter 사용 -->
+        <h2>카테고리 등록 정보 수정</h2>
+
+        카테고리 번호
+        <label>
+            <input type="number" name="id" th:value="${category.id}">
+        </label> <br/>
+
+        상위 카테고리 번호
+        <label th:if="${category.getParentCategoryId()} == null">
+            <input type="number" name="parentCategoryId" th:value="0"
+                   placeholder="없을 시, 0 혹은 빈칸"/>
+        </label>
+        <label th:unless="${category.getParentCategoryId() == null}">
+            <input type="number" name="parentCategoryId"
+                   th:value="${category.getParentCategoryId()}" placeholder="없을 시, 0 혹은 빈칸"/>
+        </label><br/>
+
+        카테고리 이름
+        <label>
+            <input type="text" name="name" th:value="${category.name}"/>
+        </label><br/>
+
+        노출 여부 :
+        <div>
+            <th:block th:if="${category.getIsExposure()}">
+                <input type="radio" name="isExposure" value="true" checked> Y
+                <input type="radio" name="isExposure" value="false"> N
+            </th:block>
+
+            <th:block th:unless="${category.getIsExposure()}">
+                <input type="radio" name="isExposure" value="true"> Y
+                <input type="radio" name="isExposure" value="false" checked> N
+            </th:block>
+
+        </div>
+        <br/>
+        <input type="submit" value="제출">
+    </form>
+</div>
+</body>
+</html>

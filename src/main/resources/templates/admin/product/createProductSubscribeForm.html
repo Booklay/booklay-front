@@ -5,11 +5,11 @@
   <title>Title</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-  <script src="/js/product/productBookRegister.js"></script>
+  <script src="/js/product/productRegister.js"></script>
 </head>
 <body>
 <form method="post" action="/admin/product/subscribes/create" enctype="multipart/form-data">
-  <p>제목 : <input type="text" name="title"/></p>
+  <p>제목 : <input type="text" name="title" size = 80 maxlength=255/></p>
   <p>썸네일 : <input type="file" name="image" accept="image/jpeg, image/jpg, image/svg+xml, image/png">
   </p>
   <p>가격 : <input type="number" min="0" name="price"/></p>

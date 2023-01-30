@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div>
+    <th:block th:unless="${list.isEmpty()}">
+
+        <th:block>
+            <button type="button">
+                <a th:href="@{__${currentUrl}__(page=0)}"> 첫 페이지 </a>
+            </button>
+        </th:block>
+
+        <th:block th:unless="${currentPage}==0">
+            <button>
+                <a th:href="@{__${currentUrl}__(page=${currentPage}-1)}">
+                    이전 페이지
+                </a>
+            </button>
+        </th:block>
+
+        <!-- 현재 페이지 번호-->
+        <strong th:text="${currentPage} + 1"></strong>
+
+        <th:block th:unless="${currentPage} == ${totalPage} - 1">
+            <button>
+                <a th:href="@{__${currentUrl}__(page=${currentPage}+1)}">
+                    다음 페이지
+                </a>
+            </button>
+        </th:block>
+
+        <th:block>
+            <button>
+                <a th:href="@{__${currentUrl}__(page=${totalPage}-1)}">
+                    마지막 페이지 [<span th:text="${totalPage}"></span>] </a>
+            </button>
+        </th:block>
+
+    </th:block>
+</div>
+
+
+</html>

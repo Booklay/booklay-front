@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -84,8 +86,9 @@ public class AdminTagController {
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("tagList", tagList);
+    model.addAttribute(TARGET_VIEW, "product/adminTag" );
 
-    return "/admin/product/adminTag";
+    return "admin/adminPage";
   }
 
   //생성
