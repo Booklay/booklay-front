@@ -35,6 +35,20 @@ window.onload = function() {
                 totalPay.innerText = sum + parseInt(shippingFee.innerText);
             });
     });
+    document.getElementById("toOrder").addEventListener('click',
+        function (){
+            let productCount = document.getElementById(value.productNo+"count").value;
+            let httpRequest = new XMLHttpRequest();
+            let body = {
+                "productNo":value.productNo,
+                "count":parseInt(productCount)
+            };
+            httpRequest.open('POST', '/order/page');
+            httpRequest.responseType = "json";
+            httpRequest.setRequestHeader("Content-Type", "application/json");
+            httpRequest.send(JSON.stringify(body));
+
+        });
     if (result.length>0){
         document.getElementById(result[0].productNo+"count").dispatchEvent(new Event("change"));
     }

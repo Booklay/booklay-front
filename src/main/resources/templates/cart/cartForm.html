@@ -240,7 +240,7 @@
                         <h5 class="font-weight-bold">총 금액</h5>
                         <h5 class="font-weight-bold" id="totalPay">0</h5>
                     </div>
-                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                    <button id="toOrder" class="btn btn-block btn-primary my-3 py-3">주문하기</button>
                 </div>
             </div>
         </div>
@@ -336,6 +336,10 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+    <script th:inline="javascript" >
+        const result = [[${cartObjectList}]]
+    </script>
+    <script src="/js/cart/cartForm.js"></script>
 </body>
 
 </html>
