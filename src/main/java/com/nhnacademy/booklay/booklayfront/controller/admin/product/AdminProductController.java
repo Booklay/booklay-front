@@ -53,7 +53,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminProductController {
 
   private static final Long DEFAULT_POINT_RATE = 5L;
-  private static final String PRE_FIX = "/admin/product";
+  private static final String PRE_FIX = "admin/product";
   private static final String URI_PRE_FIX = "/shop/v1/admin/product/";
   private static final String REDIRECT_PRE_FIX = "redirect:/product/view/";
   private static final String RETURN_PAGE = "admin/adminPage";
