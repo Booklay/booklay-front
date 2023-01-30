@@ -11,6 +11,7 @@ import java.net.URI;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.math.raw.Mod;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,7 +104,6 @@ public class MemberAdminController {
                               BindingResult bindingResult,
                               @PathVariable Long memberNo,
                               Model model) {
-        //TODO : member block 로직 처리
         URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
 
         ApiEntity<Void> response =
@@ -112,4 +112,13 @@ public class MemberAdminController {
 
         return "redirect:/admin/members";
     }
+
+    @GetMapping("/block/cancel/{memberNo}")
+    public String retrieveMemberBlockCancelForm(@PathVariable Long memberNo,
+                                                BindingResult bindingResult,
+                                                Model model) {
+        model.addAttribute("memberNo", memberNo);
+        return "";
+    }
+
 }
