@@ -20,7 +20,7 @@ public class CouponPopupAdminController {
     private final MemberRestApiModelSettingService memberRestApiModelSettingService;
     private final CategoryRestApiModelSettingService categoryRestApiModelSettingService;
     private final ProductRestApiModelSettingService productRestApiModelSettingService;
-    private static final String RESOURCE_BASE = "/admin/coupon/popup/";
+    private static final String RESOURCE_BASE = "admin/coupon/popup/";
     @GetMapping("/coupon/pages/{pageNum}")
     public String couponPopup(@PathVariable int pageNum, Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);

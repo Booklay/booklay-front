@@ -37,7 +37,7 @@ public class CouponIssueAdminFrontController {
 
     @GetMapping("/issue")
     public String issueCouponForm(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/issueCouponForm");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueCouponForm");
         return RETURN_ADMIN_PAGE;
     }
 
@@ -71,7 +71,7 @@ public class CouponIssueAdminFrontController {
 
     @GetMapping("/member/issue")
     public String issueCouponToMemberForm(Model model) {
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH+"issueCouponToMemberForm");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueCouponToMemberForm");
         return RETURN_ADMIN_PAGE;
     }
 
@@ -83,10 +83,14 @@ public class CouponIssueAdminFrontController {
         return RETURN_PAGE_COUPON_LIST;
     }
 
+    /**
+     * 관리자의 발급 기록 조회.
+     *
+     */
     @GetMapping("/issue-history")
     public String issueHistoryList(@RequestParam(value="pageNum", defaultValue = "0") Integer pageNum, Model model) {
         couponRestApiModelSettingService.setCouponIssueHistoryToModelByPage(pageNum, model);
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH+"issueHistoryView");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueHistoryView");
         return RETURN_ADMIN_PAGE;
     }
 
