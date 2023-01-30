@@ -30,7 +30,7 @@ public class CouponHistoryAdminFrontController {
     }
 
 
-    @GetMapping("history/{pageNum}")
+    @GetMapping("/history/{pageNum}")
     public String historyCoupon(Model model, @PathVariable Integer pageNum) {
         couponRestApiModelSettingService.setCouponHistoryToModelByPage(pageNum, model);
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
@@ -39,7 +39,7 @@ public class CouponHistoryAdminFrontController {
         return RETURN_ADMIN_PAGE;
     }
 
-    @GetMapping("history/{memberNo}/{pageNum}")
+    @GetMapping("/history/{memberNo}/{pageNum}")
     public String memberHistoryCoupon(Model model, @PathVariable String memberNo,
                                       @PathVariable Integer pageNum) {
         couponRestApiModelSettingService.setCouponHistoryToModelByPageAndMemberNo(pageNum, memberNo, model);

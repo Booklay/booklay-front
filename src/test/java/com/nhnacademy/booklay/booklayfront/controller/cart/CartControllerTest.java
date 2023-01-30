@@ -93,8 +93,9 @@ class CartControllerTest {
 
     @Test
     void addProductInCart() throws Exception {
-        mockMvc.perform(post(URI_PREFIX + "/list")
+        mockMvc.perform(post(URI_PREFIX)
                 .cookie(cookie)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(cartDto)))
             .andExpect(status().is3xxRedirection())
             .andExpect(result -> Objects.equals(

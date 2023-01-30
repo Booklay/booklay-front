@@ -1,6 +1,9 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponIssueAdminFrontController;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponTypeAdminController;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -41,7 +44,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 
-@WebMvcTest(CouponAdminFrontController.class)
+@WebMvcTest(controllers = {CouponAdminFrontController.class
+        , CouponHistoryAdminFrontController.class
+        , CouponTypeAdminController.class
+        , CouponIssueAdminFrontController.class})
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.config")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
@@ -166,11 +172,11 @@ class CouponAdminFrontControllerTest {
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
-        mockMvc.perform(get(URI_PREFIX + "/list/type/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/types/list/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/typeListView"))
+                .equals("coupon/type/typeListView"))
             .andReturn();
     }
 
