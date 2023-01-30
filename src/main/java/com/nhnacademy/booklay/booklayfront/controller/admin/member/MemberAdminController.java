@@ -29,7 +29,7 @@ public class MemberAdminController {
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
-    private final static String ADMINPAGE = "/admin/adminPage";
+    private final static String ADMINPAGE = "admin/adminPage";
 
 
     public MemberAdminController(String gateway, RestService restService,
