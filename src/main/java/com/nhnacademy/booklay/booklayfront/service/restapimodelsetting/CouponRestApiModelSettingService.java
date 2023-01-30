@@ -98,7 +98,14 @@ public class CouponRestApiModelSettingService {
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_HISTORY_LIST,apiEntity.getBody().getData());
     }
 
-    public void setCouponIssueHistoryToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
+    public void setCouponIssueToModelByPage(Integer pageNum, Model model) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/issue/", pageNum.toString());
+        ApiEntity<CouponIssue> apiEntity =
+                restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+        model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
+    }
+
+    public void setCouponIssueToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue/", memberNo, "/", pageNum.toString());
         ApiEntity<CouponIssue> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
