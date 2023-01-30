@@ -2,7 +2,9 @@ package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
-import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponIssueAdminFrontController;
+import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponTypeAdminController;
 import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -12,6 +14,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponType;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +48,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(CouponAdminFrontController.class)
+
+@WebMvcTest(controllers = {CouponAdminFrontController.class
+        , CouponHistoryAdminFrontController.class
+        , CouponTypeAdminController.class
+        , CouponIssueAdminFrontController.class})
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
 @AutoConfigureMockMvc(addFilters = false)
@@ -64,7 +71,7 @@ class CouponAdminFrontControllerTest {
 
     @MockBean
     ImageUploader imageUploader;
-    private String RETURN_PAGE = "admin/adminPage";
+    private static final String RETURN_PAGE = "admin/adminPage";
     private static final String URI_PREFIX = "/admin/coupons";
 
     @Autowired
@@ -74,13 +81,13 @@ class CouponAdminFrontControllerTest {
     void createCouponForm() throws Exception {
         List<CouponType> couponTypes = new ArrayList<>();
         couponTypes.add(new CouponType(1L, "dummyType"));
-        PageResponse<CouponType> couponTypePageResponse = new PageResponse();
+        PageResponse<CouponType> couponTypePageResponse = new PageResponse<>();
         ReflectionTestUtils.setField(couponTypePageResponse, "pageNumber", 0);
         ReflectionTestUtils.setField(couponTypePageResponse, "pageSize", 20);
         ReflectionTestUtils.setField(couponTypePageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponTypePageResponse, "data", couponTypes);
         ResponseEntity<PageResponse<CouponType>> responseEntity =
-            new ResponseEntity(couponTypePageResponse, HttpStatus.OK);
+            new ResponseEntity<>(couponTypePageResponse, HttpStatus.OK);
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         //mocking
@@ -89,8 +96,8 @@ class CouponAdminFrontControllerTest {
         //then
         mockMvc.perform(get(URI_PREFIX + "/create").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/createCouponForm"))
             .andReturn();
     }
@@ -145,7 +152,7 @@ class CouponAdminFrontControllerTest {
         ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponPageResponse, "data", couponList);
         ResponseEntity<PageResponse<Coupon>> responseEntity =
-            new ResponseEntity(couponPageResponse, HttpStatus.OK);
+            new ResponseEntity<>(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -154,8 +161,8 @@ class CouponAdminFrontControllerTest {
 
         mockMvc.perform(get(URI_PREFIX + "/list/0"))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/listView"))
             .andDo(print())
             .andReturn();
@@ -170,18 +177,18 @@ class CouponAdminFrontControllerTest {
         ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponPageResponse, "data", couponTypes);
         ResponseEntity<PageResponse<CouponType>> responseEntity =
-            new ResponseEntity(couponPageResponse, HttpStatus.OK);
+            new ResponseEntity<>(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
-        mockMvc.perform(get(URI_PREFIX + "/list/type/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/types/list/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
-                .equals("coupon/typeListView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
+                .equals("coupon/type/typeListView"))
             .andReturn();
     }
 
@@ -189,7 +196,7 @@ class CouponAdminFrontControllerTest {
     @Test
     void memberCouponList() throws Exception {
         List<Coupon> couponList = new ArrayList<>();
-        ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity(couponList, HttpStatus.OK);
+        ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity<>(couponList, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -197,8 +204,8 @@ class CouponAdminFrontControllerTest {
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
         mockMvc.perform(get(URI_PREFIX + "/list/0/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/listView"))
             .andReturn();
     }
@@ -209,7 +216,7 @@ class CouponAdminFrontControllerTest {
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
         ResponseEntity<CouponDetail> responseEntity =
-            new ResponseEntity(couponDetail, HttpStatus.OK);
+            new ResponseEntity<>(couponDetail, HttpStatus.OK);
         //mocking
         ApiEntity<CouponDetail> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -218,8 +225,8 @@ class CouponAdminFrontControllerTest {
 
         mockMvc.perform(get(URI_PREFIX + "/detail/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/detailView"))
             .andDo(print())
             .andReturn();
@@ -263,7 +270,7 @@ class CouponAdminFrontControllerTest {
         map.add("validateTerm", "10");
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
-        ResponseEntity<String> responseEntity = new ResponseEntity("couponList", HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<>("couponList", HttpStatus.OK);
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
         when(restService.put(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
@@ -296,7 +303,7 @@ class CouponAdminFrontControllerTest {
         List<CouponHistory> historyList = new ArrayList<>();
         historyList.add(couponHistory);
         ResponseEntity<List<CouponHistory>> responseEntity =
-            new ResponseEntity(historyList, HttpStatus.OK);
+            new ResponseEntity<>(historyList, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -307,8 +314,8 @@ class CouponAdminFrontControllerTest {
         //then
         mockMvc.perform(get(URI_PREFIX + "/history/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/historyView"))
             .andReturn();
     }
@@ -326,7 +333,7 @@ class CouponAdminFrontControllerTest {
         List<CouponHistory> historyList = new ArrayList<>();
         historyList.add(couponHistory);
         ResponseEntity<List<CouponHistory>> responseEntity =
-            new ResponseEntity(historyList, HttpStatus.OK);
+            new ResponseEntity<>(historyList, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -337,8 +344,8 @@ class CouponAdminFrontControllerTest {
         //then
         mockMvc.perform(get(URI_PREFIX + "/history/0/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/historyView"))
             .andReturn();
     }
@@ -355,7 +362,7 @@ class CouponAdminFrontControllerTest {
         List<CouponIssue> issueList = new ArrayList<>();
         issueList.add(couponIssue);
         ResponseEntity<List<CouponIssue>> responseEntity =
-            new ResponseEntity(issueList, HttpStatus.OK);
+            new ResponseEntity<>(issueList, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -366,8 +373,8 @@ class CouponAdminFrontControllerTest {
         //then
         mockMvc.perform(get(URI_PREFIX + "/issue/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/issueView"))
             .andReturn();
     }
@@ -384,7 +391,7 @@ class CouponAdminFrontControllerTest {
         List<CouponIssue> issueList = new ArrayList<>();
         issueList.add(couponIssue);
         ResponseEntity<List<CouponIssue>> responseEntity =
-            new ResponseEntity(issueList, HttpStatus.OK);
+            new ResponseEntity<>(issueList, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -394,8 +401,8 @@ class CouponAdminFrontControllerTest {
         //then
         mockMvc.perform(get(URI_PREFIX + "/issue/0/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> result.getModelAndView().getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> result.getModelAndView().getModel().get("targetUrl")
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
                 .equals("coupon/issueView"))
             .andReturn();
     }

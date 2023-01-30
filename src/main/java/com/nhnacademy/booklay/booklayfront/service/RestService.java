@@ -4,14 +4,14 @@ package com.nhnacademy.booklay.booklayfront.service;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -70,5 +70,11 @@ public class RestService {
 
     public void delete(String url) {
         restTemplate.delete(url);
+    }
+
+    public void delete(String url, MultiValueMap<String, String> params) {
+        RestTemplate restTemplate = new RestTemplate();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
+        restTemplate.delete(builder.build().toUriString());
     }
 }

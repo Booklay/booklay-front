@@ -2,7 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponSettingAddRequest;
-import com.nhnacademy.booklay.booklayfront.service.CouponRestApiModelSettingService;
+import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ import java.util.Map;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
+@SuppressWarnings("unchecked")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupon/setting")
@@ -41,7 +42,7 @@ public class CouponSettingAdminController {
     public String postCreateCouponSetting(
             @Valid @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_SETTING_REST_PREFIX);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_SETTING_REST_PREFIX);
         restService.post(url, map, String.class);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
@@ -71,14 +72,14 @@ public class CouponSettingAdminController {
         @Valid @ModelAttribute("CouponSettingAddRequest") CouponSettingAddRequest couponSettingAddRequest
             , @PathVariable String couponSettingId) {
         Map<String, Object> map = objectMapper.convertValue(couponSettingAddRequest, Map.class);
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_SETTING_REST_PREFIX, couponSettingId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_SETTING_REST_PREFIX, couponSettingId);
         restService.put(url, map, String.class);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
 
     @GetMapping("delete/{couponSettingId}")
     public String deleteCoupon(@PathVariable String couponSettingId) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX, COUPON_SETTING_REST_PREFIX, couponSettingId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_SETTING_REST_PREFIX, couponSettingId);
         restService.delete(url);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
