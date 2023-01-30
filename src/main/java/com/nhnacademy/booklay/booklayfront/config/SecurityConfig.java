@@ -53,7 +53,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**");
+                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**");
     }
 
     @Bean
