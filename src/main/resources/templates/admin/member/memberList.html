@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원 리스트</title>
+    <script src="/js/member/memberBlockPopup.js"></script>
 </head>
 <body>
 <div>
-    <h3>회원 리스트</h3>
-    <table>
+    <h3>[회원 리스트]</h3>
+    <table border="1">
         <thead>
         <tr>
             <th>회원 번호</th>
@@ -25,12 +26,48 @@
         </tr>
         </thead>
 
-        <tbody>
+        <tbody th:each="member : ${list}">
         <tr>
-
+            <td th:text="${member.getMemberNo()}"></td>
+            <td th:text="${member.getMemberId()}"></td>
+            <td th:text="${member.getName()}"></td>
+            <td th:text="${member.getNickname()}"></td>
+            <td th:text="${member.getBirthday()}"></td>
+            <td th:text="${member.getPhoneNo()}"></td>
+            <td th:text="${member.getEmail()}"></td>
+            <td th:text="${#temporals.format(member.getCreatedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+            <td>
+                <span th:if="${member.getCreatedAt()!=member.getUpdatedAt()}"
+                      th:text="${#temporals.format(member.getUpdatedAt(), 'yyyy.MM.dd HH:mm:ss')}"></span>
+                <span th:if="${member.getCreatedAt()==member.getUpdatedAt()}">X</span>
+            </td>
+            <td>
+                <span th:unless="${member.getDeletedAt()==null}"
+                      th:text="${#temporals.format(member.getDeletedAt(), 'yyyy.MM.dd HH:mm:ss')}"></span>
+                <span th:if="${member.getDeletedAt()==null}">X</span>
+            </td>
+            <td>
+                <span th:if="${member.getIsBlocked()}">O</span>
+                <span th:unless="${member.getIsBlocked()}">X</span>
+            </td>
+            <td>
+                <span th:unless="${member.getIsBlocked()}"><input type="button" value="차단하기"
+                                                                  th:id="${member.getMemberNo()}"
+                                                                  onclick="showMemberBlockPopup(this.getAttribute('id'))"></span>
+                <span th:if="${member.getIsBlocked()}"><input type="button" value="해제하기" th:id="${member.getMemberNo()}"
+                                                              onclick="showMemberBlockCancelPopup(this.getAttribute('id'))"></span>
+            </td>
         </tr>
         </tbody>
     </table>
+
+    <th:block th:if="${list.isEmpty()}">
+        <h2>등록된 회원이 없습니다.</h2>
+    </th:block>
+
+    <!--    페이지네이션 번호-->
+    <th:block th:include="fragments/pageFooter"/>
+
 </div>
 </body>
 </html>
