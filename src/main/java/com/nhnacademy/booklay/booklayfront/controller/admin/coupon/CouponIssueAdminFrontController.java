@@ -41,7 +41,7 @@ public class CouponIssueAdminFrontController {
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
-    
+    private static final String COUPON_ISSUE_HTML_PATH = "coupon/issue/";
 
     @ModelAttribute("navHead")
     public String addNavHead() {
@@ -57,7 +57,7 @@ public class CouponIssueAdminFrontController {
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/issueView");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH+"issueView");
         return RETURN_ADMIN_PAGE;
     }
 
@@ -68,7 +68,7 @@ public class CouponIssueAdminFrontController {
 
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
         model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/issueView");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH+"issueView");
         return RETURN_ADMIN_PAGE;
 
     }
@@ -90,7 +90,7 @@ public class CouponIssueAdminFrontController {
 
     @GetMapping("/member/issue")
     public String issueCouponToMemberForm(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/issueCouponToMemberForm");
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH+"issueCouponToMemberForm");
         return RETURN_ADMIN_PAGE;
     }
 
