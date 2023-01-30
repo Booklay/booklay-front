@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
@@ -60,6 +61,9 @@ class CartControllerTest {
     RestTemplate restTemplate;
     @MockBean
     AuthenticationManager authenticationManager;
+    @MockBean
+    TokenUtils tokenUtils;
+
     private final String RETURN_PAGE = "cart/listForm";
     private final String REDIRECT_PAGE = "cart/list";
     private final String URI_PREFIX = "/cart/";
