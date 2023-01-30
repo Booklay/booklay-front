@@ -5,6 +5,7 @@ import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.T
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,15 +48,17 @@ public class CouponZoneAdminController {
         URI getLimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited");
         URI getUnlimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited");
 
-        ApiEntity<CouponZoneRetrieveResponse> limitedList =
-            restService.get(getLimitedUri.toString(), null, CouponZoneRetrieveResponse.class);
+        ApiEntity<PageResponse<CouponZoneRetrieveResponse>> limitedList =
+            restService.get(getLimitedUri.toString(), null, new ParameterizedTypeReference<>() {
+            });
 
-        ApiEntity<CouponZoneRetrieveResponse> unlimitedList =
-            restService.get(getUnlimitedUri.toString(), null, CouponZoneRetrieveResponse.class);
+        ApiEntity<PageResponse<CouponZoneRetrieveResponse>> unlimitedList =
+            restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
+            });
 
         model.addAttribute(TARGET_VIEW, "/coupon/couponZone/couponZoneList");
-        model.addAttribute("limitedList", limitedList.getBody());
-        model.addAttribute("unlimitedList", unlimitedList.getBody());
+        model.addAttribute("limitedList", limitedList.getBody().getData());
+        model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
         return RETURN_PAGE;
     }
