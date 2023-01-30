@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.coupon.CouponMemberFrontController;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -46,6 +47,8 @@ class CouponMemberFrontControllerTest {
     @MockBean
     AuthenticationManager authenticationManager;
 
+    @MockBean
+    TokenUtils tokenUtils;
 
     private final String RETURN_PAGE = "mypage/myPage";
     private final String URI_PREFIX = "/member/coupon/";
