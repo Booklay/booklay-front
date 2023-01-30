@@ -99,11 +99,18 @@ public class CouponRestApiModelSettingService {
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_HISTORY_LIST,apiEntity.getBody());
     }
 
+    /**
+     * 발급된 쿠폰 리스트 조회 요청을 보냅니다.
+     *
+     */
     public void setCouponIssueToModelByPage(Integer pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/issue/", pageNum.toString());
-        ApiEntity<PageResponse<CouponHistory>> apiEntity =
-                restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody().getData());
+        String query = "?page=" + pageNum;
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/admin/coupons/issue-history", query);
+
+        ApiEntity<PageResponse<CouponHistoryResponse>> apiEntity =
+                restService.get(url, null, new ParameterizedTypeReference<>() {});
+
+        model.addAttribute("list", apiEntity.getBody().getData());
     }
 
     public void setCouponIssueToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {

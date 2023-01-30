@@ -15,7 +15,7 @@
                 <td>발급일</td>
                 <td>만료일</td>
             </tr>
-            <tbody th:each="history, historyStat:${historyList}">
+            <tbody th:each="history, historyStat:${list}">
             <tr>
                 <td><p th:text="${historyStat.count}"></p></td>
                 <td><p th:text="${history.id}"></p></td>
