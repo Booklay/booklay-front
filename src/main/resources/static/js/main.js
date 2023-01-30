@@ -86,18 +86,21 @@
 
     // Product Quantity
     $('.quantity button').on('click', function () {
-        var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
+        let newVal;
+        let button = $(this);
+        let oldValue = button.parent().parent().find('input').val();
         if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
+            newVal = parseFloat(oldValue) + 1;
         } else {
             if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
+                newVal = parseFloat(oldValue) - 1;
             } else {
                 newVal = 0;
             }
         }
+
         button.parent().parent().find('input').val(newVal);
+        button.parent().parent().find('input').get(0).dispatchEvent(new Event("change"));
     });
     
 })(jQuery);

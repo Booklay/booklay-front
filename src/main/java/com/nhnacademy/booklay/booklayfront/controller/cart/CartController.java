@@ -7,7 +7,6 @@ import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartProductNoListRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 
+@SuppressWarnings("unchecked")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("cart")
