@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>차단 회원 리스트</title>
+    <script src="/js/member/memberBlockPopup.js"></script>
+</head>
+<body>
+<div>
+    <h3>[차단 회원 리스트]</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>회원번호</th>
+            <th>회원ID</th>
+            <th>회원이름</th>
+            <th>차단사유</th>
+            <th>차단일자</th>
+            <th>history</th>
+        </tr>
+        </thead>
+
+        <tbody th:each="member : ${list}">
+        <tr>
+            <td th:text="${member.getId()}"></td>
+            <td th:text="${member.getMemberNo()}"></td>
+            <td th:text="${member.getMemberId()}"></td>
+            <td th:text="${member.getName()}"></td>
+            <td th:text="${member.getReason()}"></td>
+            <td th:text="${#temporals.format(member.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+            <td><input type="button" value="상세보기" th:id="${member.getMemberNo()}"
+                       onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <th:block th:if="${list.isEmpty()}">
+        <h2>차단된 회원이 없습니다.</h2>
+    </th:block>
+
+    <!--    페이지네이션 번호-->
+    <th:block th:include="fragments/pageFooter"/>
+</div>
+</body>
+</html>
