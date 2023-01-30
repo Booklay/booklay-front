@@ -43,5 +43,31 @@
   </th:block>
   </tbody>
 </table>
+
+<hr>
+<div>
+  <a th:if="${nowPage - 1 >= 1}"
+     th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
+    <span th:text="${nowPage}-1"/></a>
+  <a th:if="${nowPage >= 1}"
+     th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
+    <span th:text="${nowPage}"/></a>
+
+  <a th:if="${nowPage+1 != totalPage}"
+     th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
+    <span th:text="${nowPage}+1"/></a>
+
+  <a th:if="${nowPage + 2 < totalPage}"
+     th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
+    <span th:text="${nowPage}+2"/></a>
+  <a th:if="${nowPage + 3 < totalPage}"
+     th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
+    <span th:text="${nowPage}+3"/></a>
+
+  <span th:if="${nowPage + 3 < totalPage}">...</span>
+
+  <a th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
+    <span th:text="${totalPage}"/></a>
+</div>
 </body>
 </html>

@@ -39,7 +39,7 @@
   <div id="categories"></div>
 
   <p>발매 주차 :
-    <select name="subscribeDay">
+    <select name="subscribeWeek">
       <option value=1>1주차</option>
       <option value=2>2주차</option>
       <option value=3>3주차</option>
@@ -60,15 +60,8 @@
   </p>
 
   <p>출판사 : <input name="publisher" type="text"/></p>
-
-
-  <p>
-    <input th:id="${productNo}" type="button" value="상품 팝업창 호출" onclick="showProduct();"/>
-    &ensp; &ensp; &ensp;
-    <input name="childProductAdder" type="button" value="구독 책 추가" onclick="addChildProduct();"/>
-  <div id="childProduct"></div>
-
   <input type="submit" value="구독 상품 등록" id="btn-submit"/>
+
 </form>
 </body>
 </html>
