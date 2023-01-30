@@ -2,14 +2,20 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.request.DisAndConnectBookWithSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductSubscribeRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveBookForSubscribeResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductSubscribeForUpdateResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -51,6 +57,7 @@ public class AdminProductController {
   private static final String URI_PRE_FIX = "/shop/v1/admin/product/";
   private static final String REDIRECT_PRE_FIX = "redirect:/product/view/";
   private static final String RETURN_PAGE = "admin/adminPage";
+  private static final String SUBSCRIBE_CONNECT_PRE_FIX = "/subscribes/connect/";
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
@@ -91,8 +98,6 @@ public class AdminProductController {
       MultipartFile image)
       throws IOException {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books");
-
-
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
@@ -226,8 +231,6 @@ public class AdminProductController {
 
     RetrieveProductSubscribeForUpdateResponse productData = response.getBody();
 
-    log.info(productData.toString());
-
     model.addAttribute("product", productData);
 
     return PRE_FIX + "/updateProductSubscribeForm";
@@ -267,5 +270,78 @@ public class AdminProductController {
   @GetMapping("/author")
   public String getAuthorMaintain() {
     return PRE_FIX + "/adminAuthor";
+  }
+
+  //구독 상품 하위 상품 등록용 조회
+  @GetMapping("/subscribes/connect/{subscribeId}/{pageNum}")
+  public String getBooksForSubscribe(Model model, @PathVariable Long pageNum,
+      @PathVariable Long subscribeId) {
+    if (pageNum < 0L) {
+      pageNum = 1L;
+    }
+
+    Long size = 20L;
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    URI uri = URI.create(
+        gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "?page=" + pageNum
+            + "&size=" + size);
+    RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    ResponseEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    int totalPage = bookResponse.getBody().getTotalPages();
+    int nowPage = bookResponse.getBody().getPageNumber();
+    List<RetrieveBookForSubscribeResponse> bookList = bookResponse.getBody().getData();
+
+    model.addAttribute("subscribeId", subscribeId);
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("totalPage", totalPage);
+    model.addAttribute("bookList", bookList);
+
+    return PRE_FIX + "/productSubscribeConnector";
+  }
+
+  //구독 상품 하위 상품 등록
+  @PostMapping("/subscribes/connect/{subscribeId}/{pageNum}")
+  public String subscribeBookConnection(@PathVariable Long pageNum,
+      @PathVariable Long subscribeId,
+      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request)
+      throws JsonProcessingException {
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.POST, uri);
+
+    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
+    return "redirect:" + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
+  }
+
+  //구독 상품 하위 상품 등록 취소
+  @PostMapping("/subscribes/disconnect/{subscribeId}/{pageNum}")
+  public String subscribeBookDisconnection(@PathVariable Long pageNum,
+      @PathVariable Long subscribeId,
+      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request)
+      throws JsonProcessingException {
+
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.DELETE, uri);
+
+    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
+
+    return "redirect:" + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
 }

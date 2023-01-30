@@ -146,11 +146,6 @@ public class AdminTagController {
     int nowPage = testTags.getBody().getPageNumber();
     List<TagProductResponse> tagList = testTags.getBody().getData();
 
-    for (int i = 0; i < tagList.size(); i++) {
-      log.info(tagList.get(i).getName());
-      log.info("출력" + tagList.get(i).isRegistered());
-    }
-
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("tagList", tagList);
@@ -174,8 +169,6 @@ public class AdminTagController {
     RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
 
-    log.info(requestEntity.getBody());
-
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
     return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
@@ -196,8 +189,6 @@ public class AdminTagController {
 
     RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.DELETE, uri);
-
-    log.info(requestEntity.getBody());
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
@@ -237,15 +228,11 @@ public class AdminTagController {
   public void createTag(CreateTagRequest request) throws JsonProcessingException {
     URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
-    log.info(request.getName());
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     RequestEntity<String> requestEntity = new RequestEntity<>(objectMapper.writeValueAsString(request),
         headers, HttpMethod.POST, uri);
-
-    log.info(requestEntity.getBody());
 
     restTemplate.exchange(requestEntity, RetrieveTagResponse.class);
   }
