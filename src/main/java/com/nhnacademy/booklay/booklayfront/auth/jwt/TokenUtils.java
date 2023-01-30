@@ -25,4 +25,26 @@ public class TokenUtils {
 
         return role.get(0).get("authority");
     }
+
+    public Claims getClaims(String jwt) {
+        return parser.parseClaimsJws(jwt).getBody();
+    }
+    public String getRole(String jwt) {
+        Claims claims = getClaims(jwt);
+
+        var role =
+            (ArrayList<LinkedHashMap<String, String>>) claims.get("role");
+
+        return role.get(0).get("authority");
+    }
+
+    public String getUuid(String jwt) {
+        Claims claims = getClaims(jwt);
+
+        String uuid = (String) claims.get("uuid");
+
+        return uuid;
+    }
+
+
 }

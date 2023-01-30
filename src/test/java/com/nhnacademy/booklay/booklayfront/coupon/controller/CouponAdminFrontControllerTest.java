@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
@@ -71,6 +72,10 @@ class CouponAdminFrontControllerTest {
 
     @MockBean
     ImageUploader imageUploader;
+
+    @MockBean
+    TokenUtils tokenUtils;
+
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String URI_PREFIX = "/admin/coupons";
 
