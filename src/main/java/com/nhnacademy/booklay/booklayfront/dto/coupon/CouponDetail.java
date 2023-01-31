@@ -19,7 +19,7 @@ public class CouponDetail {
     private String id;
     private String name;
     private Long userId;
-    private Long typeCode;
+    private String typeName;
     private Long amount;
     private Long categoryId;
     private Long productId;

@@ -1,41 +1,36 @@
 package com.nhnacademy.booklay.booklayfront.dto.coupon;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CouponTemplateAddRequest {
     @NotBlank
     @Size(max = 100)
-    private final String name;
+    private String name;
     @NotNull
-    private final Long typeCode;
+    private Long typeCode;
     @NotNull
-    private final Long amount;
+    private Long amount;
     @NotNull
-    private final Boolean isOrderCoupon;
+    private Boolean isOrderCoupon;
     @NotNull
-    private final Long applyItemId;
+    private Long applyItemId;
     @NotNull
-    private final Long minimumUseAmount;
-    private final Long maximumDiscountAmount;
-    @Setter
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Long minimumUseAmount;
+    private Long maximumDiscountAmount;
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime issuingDeadLine;
-    private final Integer validateTerm;
+    private Integer validateTerm;
     @NotNull
-    private final Boolean isDuplicatable;
+    private Boolean isDuplicatable;
 }

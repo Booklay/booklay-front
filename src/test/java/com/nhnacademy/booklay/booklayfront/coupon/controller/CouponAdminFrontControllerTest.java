@@ -14,8 +14,8 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponType;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -206,7 +206,7 @@ class CouponAdminFrontControllerTest {
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
-        mockMvc.perform(get(URI_PREFIX + "/types/list/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/types/list").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
@@ -218,7 +218,13 @@ class CouponAdminFrontControllerTest {
     @Test
     void memberCouponList() throws Exception {
         List<Coupon> couponList = new ArrayList<>();
-        ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity<>(couponList, HttpStatus.OK);
+
+        PageResponse<Coupon> couponPageResponse = new PageResponse<>();
+        ReflectionTestUtils.setField(couponPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "data", couponList);
+        ResponseEntity<PageResponse<Coupon>> responseEntity = new ResponseEntity<>(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
@@ -234,7 +240,7 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void viewCoupon() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 1L, 1000L
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정율", 1000L
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
         ResponseEntity<CouponDetail> responseEntity =
@@ -293,6 +299,7 @@ class CouponAdminFrontControllerTest {
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<String> responseEntity = new ResponseEntity<>("couponList", HttpStatus.OK);
+
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
         when(restService.put(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
@@ -313,13 +320,16 @@ class CouponAdminFrontControllerTest {
     }
 
     @Test
-    @Disabled
     void historyCoupon() throws Exception {
         //given
         List<CouponHistoryResponse> couponHistoryResponseList = new ArrayList<>();
         couponHistoryResponseList.add(couponHistoryResponse);
 
         PageResponse<CouponHistoryResponse> couponHistoryPageResponse = new PageResponse<>();
+
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponHistoryPageResponse, "data", couponHistoryResponseList);
 
         ResponseEntity<PageResponse<CouponHistoryResponse>> responseEntity =
@@ -342,11 +352,14 @@ class CouponAdminFrontControllerTest {
     }
 
     @Test
-    @Disabled
     void historyCouponMember() throws Exception {
         List<CouponHistoryResponse> couponHistoryResponseList = new ArrayList<>();
         couponHistoryResponseList.add(couponHistoryResponse);
         PageResponse<CouponHistoryResponse> couponHistoryPageResponse = new PageResponse<>();
+
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponHistoryPageResponse, "data", couponHistoryResponseList);
         ResponseEntity<PageResponse<CouponHistoryResponse>> responseEntity =
                 new ResponseEntity<>(couponHistoryPageResponse, HttpStatus.OK);

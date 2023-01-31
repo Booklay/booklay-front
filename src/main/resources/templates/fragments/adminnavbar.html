@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"
+<html lang="ko"
       xmlns:th="https://www.thymeleaf.org">
 
 <!-- Navbar Start -->
@@ -28,10 +28,10 @@
               <a href="/admin/coupons/member/issue" class="dropdown-item">사용자 발급</a>
               <span class="dropdown-item-text">----------</span>
               <a href="/admin/coupons/types/create/" class="dropdown-item">쿠폰 타입 등록</a>
-              <a href="/admin/coupons/types/list/0" class="dropdown-item">쿠폰 타입 조회</a>
+              <a href="/admin/coupons/types/list" class="dropdown-item">쿠폰 타입 조회</a>
               <span class="dropdown-item-text">----------</span>
               <a href="/admin/coupons/issue-history" class="dropdown-item">쿠폰 발급 기록 조회</a>
-              <a href="/admin/coupons/use-history/0" class="dropdown-item">쿠폰 사용 기록 조회</a>
+              <a href="/admin/coupons/use-history" class="dropdown-item">쿠폰 사용 기록 조회</a>
             </div>
           </div>
 
@@ -50,9 +50,9 @@
                         class="fa fa-angle-down float-right mt-1"></i></a>
                 <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                     <a href="/admin/coupon/template/create" class="dropdown-item">쿠폰 템플릿 등록</a>
-                    <a href="/admin/coupon/template/list/0" class="dropdown-item">쿠폰 템플릿 조회</a>
+                    <a href="/admin/coupon/template/list" class="dropdown-item">쿠폰 템플릿 조회</a>
                     <a href="/admin/coupon/setting/create" class="dropdown-item">쿠폰 설정 등록</a>
-                    <a href="/admin/coupon/setting/list/0" class="dropdown-item">쿠폰 설정 조회</a>
+                    <a href="/admin/coupon/setting/list" class="dropdown-item">쿠폰 설정 조회</a>
                 </div>
             </div>
 
@@ -88,6 +88,9 @@
       <!-- admin detail Start -->
       <th:block th:if="${not #strings.isEmpty(targetUrl)}">
         <th:block th:include="${'admin/' + targetUrl}"/>
+      </th:block>
+      <th:block th:if="${not #strings.isEmpty(currentPage)}">
+        <th:block th:include="fragments/pageFooter"/>
       </th:block>
       <!-- admin detail End -->
     </div>

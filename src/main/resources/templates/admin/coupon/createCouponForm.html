@@ -9,9 +9,9 @@
             <label for="coupon-name">쿠폰 이름</label><input type="text" name="name" id="coupon-name"><br/>
             <label for="coupon-type">쿠폰 종류</label>
                 <select type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
-                    <arc th:each="couponType:${couponTypeList}">
+                    <th:block th:each="couponType:${couponTypeList}">
                         <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
-                    </arc>
+                    </th:block>
                 </select><br/>
             <label for="coupon-amount">할인량</label><input type="number" name="amount" id="coupon-amount"><br/>
             <div id="select-item">

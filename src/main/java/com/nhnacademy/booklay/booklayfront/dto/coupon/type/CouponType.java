@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.coupon;
+package com.nhnacademy.booklay.booklayfront.dto.coupon.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

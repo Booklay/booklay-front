@@ -1,43 +1,59 @@
 <!DOCTYPE html>
 <head>
-    <script src="/js/coupon/couponCreateForm.js"></script>
+    <script src="/js/coupon/couponTemplateCreateForm.js"></script>
+    <script src="/js/coupon/couponPopup.js"></script>
     <style>
         .hidden{
-            visibility: hidden;
+            display: none;
+
         }
     </style>
 </head>
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <form action="" method="post" enctype="multipart/form-data">
-            <label>쿠폰 이름 : <input type="text" name="name"> </label> <br/>
-            <label>쿠폰 종류 :
-            <select type="number" name="typeCode">
-                    <arc th:each="couponType:${couponTypeList}">
+        <div id="input-form">
+            <form action="/admin/coupon/template/create" method="post" enctype="multipart/form-data">
+                <label for="coupon-name">쿠폰 이름</label><input type="text" name="name" id="coupon-name"><br/>
+                <label for="coupon-type">쿠폰 종류</label>
+                <select type="number" name="typeCode" id="coupon-type">
+                    <th:block th:each="couponType:${couponTypeList}">
                         <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
-                    </arc>
-            </select></label><br/>
-            <label>할인량 : <input type="number" name="amount"></label> <br/>
-            주문 쿠폰 여부<br/>
-            <label>주문 쿠폰 : <input id="isOrderCoupon" type="radio" name="isOrderCoupon" value="true" checked></label>
-            <label>상품 쿠폰 : <input id="isProductCoupon" type="radio" name="isOrderCoupon" value="false"></label>
-            <input type="button" value="찾기">
-            <br/>
-            <span>
-                <label id="categorySelectorLabel">적용 카테고리 번호 : <input id="categorySelector" type="number" name="applyItemId"></label>
-                <label id="itemSelectorLabel" class="hidden">적용 상품 번호 : <input id="itemSelector" type="number" name="disable"></label>
-            </span><br/>
-            <label>최소 사용 금액 : <input type="number" name="minimumUseAmount"></label> <br/>
-            <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount"></label> <br/>
-            <label>발급 기한 일시 : <input type="datetime-local" name="issuingDeadLine" value="2030-01-01T00:00"></label> <br/>
-            <label>발급 후 유효 기한 : <input type="number" name="validateTerm" ></label><br/>
-            중복 사용 가능 여부<br/>
-            <label>중복 사용 가능 : <input type="radio" name="isDuplicatable" value="true" checked></label>
-            <label>중복 사용 불가 : <input type="radio" name="isDuplicatable" value="false"></label> <br/>
-            <label>쿠폰 이미지 : <input type="file" accept="image/*" name="couponImage"></label><br/>
-            <input type="submit">
-        </form>
+                    </th:block>
+                </select><br/>
+                <label for="coupon-amount" id="amountLabel">할인량</label><input type="number" name="amount" id="coupon-amount" min="0"><br/>
+                <span id="minimumAmountSpan"><label for="minimum-amount">최소 사용 금액</label><input type="number" name="minimumUseAmount" id="minimum-amount"><br/></span>
+                <span id="maximumAmountSpan"><label for="maximum-amount">최대 할인 금액</label><input type="number" name="maximumDiscountAmount" id="maximum-amount"><br/></span>
+                <div id="select-item">
+                    <label for="coupon-range">적용 범위</label>
+                    <select id="coupon-range" name="isOrderCoupon">
+                        <option value="1" selected>주문 쿠폰</option>
+                        <option value="0">상품 쿠폰</option>
+                    </select><br/>
+                    <span>
+                    <label id="apply-item-label" for="apply-item">적용 카테고리 번호</label><input type="number" name="applyItemId" id="apply-item">
+                </span>
+                    <input type="button" value="찾기" id="product-search-button" class="hidden">
+                    <input type="button" value="찾기" id="category-search-button">
+                    <br/>
+                </div>
+                <label for="deadline">발급 기한 일시</label><input type="datetime-local" name="issuanceDeadline" value="2030-01-01T00:00" id="deadline"><br/>
+                <span id="duplicateSpan"><label>중복 사용 가능 여부</label><br/>
+                <label for="duplicate-true" class="selector">가능</label> <input type="radio" name="isDuplicatable" value="true" checked id="duplicate-true">
+                <label for="duplicate-false" class="selector">불가</label> <input type="radio" name="isDuplicatable" value="false" id="duplicate-false"><br/>
+                </span>
+                <label>수량 제한 여부</label><br/>
+                <label for="limited-true" class="selector">있음</label><input type="radio" name="isLimited" value="true" checked id="limited-true">
+                <label for="limited-false" class="selector">없음</label><input type="radio" name="isLimited" value="false" id="limited-false"><br/>
+                <label for="validate-term">유효 기간</label>
+                <select id="validate-term" name="validateTerm">
+                    <option value="10" selected>10일</option>
+                    <option value="30">30일</option>
+                </select><br/>
+                <label for="image-input">쿠폰 이미지</label> <input type="file" accept="image/*" name="couponImage" id="image-input"><br/>
+                <input type="submit">
+            </form>
+        </div>
     </div>
 </html>
 

@@ -1,23 +1,22 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
-import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponTemplateAddRequest;
+import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import javax.validation.Valid;
+import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.ZoneId;
-import java.util.Date;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Map;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 @SuppressWarnings("unchecked")
 public class CouponTemplateAdminFrontController {
     private final RestService restService;
+    private final ImageUploader imageUploader;
     private final CouponRestApiModelSettingService restApiService;
     private final String gatewayIp;
     private final ObjectMapper objectMapper;
@@ -46,29 +46,17 @@ public class CouponTemplateAdminFrontController {
     @PostMapping("create")
     public String createCouponTemplatePost(
         @Valid @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
-        @RequestParam("issuingDeadLine")
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date date,
-        @RequestParam(name = "couponImage", required = false) MultipartFile multipartFile) {
-            couponTemplateAddRequest.setIssuingDeadLine(
-                    date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
-            Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
-            map.put("couponImage", multipartFile);
-            String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON,
-                ADMIN_COUPON_TEMPLATE_REST_PREFIX);
-            ApiEntity<String> apiEntity = restService.post(url, map, String.class);
-            if (!apiEntity.isSuccess()) {
-                return ERROR;
-            }
-            return RETURN_PAGE_COUPON_TEMPLATE_LIST;
-    }
-
-    @GetMapping("list")
-    public String allCouponTemplateList0() {
+        @RequestParam(name = "couponImage", required = false) MultipartFile image) throws IOException {
+        Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
+        imageUploader.uploadImage(image, map);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON,
+            ADMIN_COUPON_TEMPLATE_REST_PREFIX);
+        restService.post(url, map, String.class);
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }
 
-    @GetMapping("list/{pageNum}")
-    public String allCouponTemplateList(Model model, @PathVariable Integer pageNum) {
+    @GetMapping("list")
+    public String allCouponTemplateList(Model model, @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
         restApiService.setCouponTemplateListToModelByPage(pageNum, model);
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, COUPON_TEMPLATE_HTML_PATH+"templateListView");
