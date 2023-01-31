@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.filter;
+package com.nhnacademy.booklay.booklayfront.auth.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
@@ -20,6 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * 사용자의 요청마다 JWT를 검증합니다.
+ * SESSION_ID 라는 쿠키가 있는 경우 인증된 사용자입니다.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -81,7 +85,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (Objects.equals("SESSION_ID", cookie.getName())) {
                 return cookie.getValue();
             }
-
         }
         return null;
     }

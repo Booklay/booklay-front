@@ -2,13 +2,10 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
-import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
-import com.nhnacademy.booklay.booklayfront.filter.InitialAuthenticationFilter;
-import com.nhnacademy.booklay.booklayfront.filter.JwtAuthenticationFilter;
+import com.nhnacademy.booklay.booklayfront.auth.filter.InitialAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,15 +32,17 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.formLogin().disable()
-                .logout().logoutUrl("/members/logout")
-                .logoutSuccessUrl("/");
+            .logout().logoutUrl("/members/logout")
+            .deleteCookies("SESSION_ID")
+            .invalidateHttpSession(true)
+            .logoutSuccessUrl("/");
 
         http.authorizeRequests()
-                .anyRequest()
-                .permitAll();
+            .anyRequest()
+            .permitAll();
 
         http.csrf()
-                .disable();
+            .disable();
 
         http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class);
 
@@ -55,12 +54,12 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring()
-                .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**");
+                         .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**");
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
-            throws Exception {
+        throws Exception {
         return configuration.getAuthenticationManager();
     }
 
