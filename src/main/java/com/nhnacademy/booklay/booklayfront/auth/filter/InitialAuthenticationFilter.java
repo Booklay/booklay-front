@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.filter;
+package com.nhnacademy.booklay.booklayfront.auth.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import java.util.Arrays;

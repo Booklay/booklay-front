@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.interceptor;
+package com.nhnacademy.booklay.booklayfront.auth.interceptor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import java.net.URI;
@@ -72,7 +73,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberNo}")
-    public String retrieveMemberDetail(@PathVariable Long memberNo, Model model) {
+    public String retrieveMemberDetail(@PathVariable Long memberNo, Model model, MemberInfo memberInfo) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
@@ -87,6 +88,8 @@ public class MemberController {
         model.addAttribute("member", response.getBody());
         model.addAttribute("memberNo", memberNo);
         model.addAttribute("targetUrl", "member/memberDetail");
+
+        log.info("member id = {}",memberInfo.getMemberId());
 
         return "mypage/member/memberDetail";
     }

@@ -2,13 +2,10 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
-import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
-import com.nhnacademy.booklay.booklayfront.filter.InitialAuthenticationFilter;
-import com.nhnacademy.booklay.booklayfront.filter.JwtAuthenticationFilter;
+import com.nhnacademy.booklay.booklayfront.auth.filter.InitialAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

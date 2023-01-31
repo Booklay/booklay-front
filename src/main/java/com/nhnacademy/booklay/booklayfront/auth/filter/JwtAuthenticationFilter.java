@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.filter;
+package com.nhnacademy.booklay.booklayfront.auth.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
@@ -67,11 +67,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getSessionId(Cookie[] cookies) {
 
+        if (Objects.isNull(cookies)) {
+            return null;
+        }
+
         for (Cookie cookie : cookies) {
             if (Objects.equals("SESSION_ID", cookie.getName())) {
                 return cookie.getValue();
             }
-
         }
         return null;
     }

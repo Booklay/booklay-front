@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class TokenUtils {
 
     private final JwtParser parser;
+    private final String gatewayIp;
+    private static final String MEMBER_INFO_PREFIX = "/shop/v1/members/email/";
 
     public Claims getClaims(JwtInfo jwtInfo) {
         return parser.parseClaimsJws(jwtInfo.getJwt()).getBody();
@@ -41,10 +43,17 @@ public class TokenUtils {
     public String getUuid(String jwt) {
         Claims claims = getClaims(jwt);
 
-        String uuid = (String) claims.get("uuid");
-
-        return uuid;
+        return (String) claims.get("uuid");
     }
 
+    public String getEmail(String jwt) {
+        Claims claims = getClaims(jwt);
+
+        return  (String) claims.get("email");
+    }
+
+    public String getShopUrl(){
+        return gatewayIp + MEMBER_INFO_PREFIX;
+    }
 
 }
