@@ -43,9 +43,16 @@ public class CouponRestApiModelSettingService {
     private final RestService restService;
     private final String gatewayIp;
 
+    /**
+     * 생성된 쿠폰 조회 요청을 보냅니다.
+     *
+     */
     public void setCouponListToModelByPage(Integer pageNum, Model model){
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "pages");
-        ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+        String query = "?page=" + pageNum;
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/admin/coupons", query);
+
+        ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
+
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
     }
 
@@ -55,6 +62,10 @@ public class CouponRestApiModelSettingService {
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
     }
 
+    /**
+     * 쿠폰의 상세 정보를 요청합니다.
+     * @param couponId 상세 조회 하려는 쿠폰의 id
+     */
     public void setCouponDetailToModelByCouponId(String couponId, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);

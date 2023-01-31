@@ -94,7 +94,7 @@ class CouponAdminFrontControllerTest {
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
         //then
-        mockMvc.perform(get(URI_PREFIX + "/create").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX).accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
@@ -126,7 +126,7 @@ class CouponAdminFrontControllerTest {
         when(restService.post(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
             .thenReturn(apiEntity);
 
-        mockMvc.perform(post(URI_PREFIX + "/create").accept(MediaType.TEXT_HTML)
+        mockMvc.perform(post(URI_PREFIX + "/create-form").accept(MediaType.TEXT_HTML)
                 .params(map)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
             .andExpect(status().is3xxRedirection())
@@ -159,7 +159,7 @@ class CouponAdminFrontControllerTest {
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
-        mockMvc.perform(get(URI_PREFIX + "/list/0"))
+        mockMvc.perform(get(URI_PREFIX + "/list"))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
@@ -312,11 +312,11 @@ class CouponAdminFrontControllerTest {
 
 
         //then
-        mockMvc.perform(get(URI_PREFIX + "/history/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/issue-history").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/historyView"))
+                .equals("coupon/issueHistoryView"))
             .andReturn();
     }
 
@@ -371,7 +371,7 @@ class CouponAdminFrontControllerTest {
 
 
         //then
-        mockMvc.perform(get(URI_PREFIX + "/issue/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/issue").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")

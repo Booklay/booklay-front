@@ -84,8 +84,8 @@ public class CouponAdminFrontController {
     }
 
     /**
-     *
-     * @param couponAddRequest
+     * 쿠폰 생성.
+     * @param couponAddRequest 쿠폰 생성에 필요한 요청.
      */
     @PostMapping("/create-form")
     public String postCreateCoupon(
@@ -128,21 +128,21 @@ public class CouponAdminFrontController {
         return RETURN_PAGE_COUPON_LIST;
     }
 
-
+    /**
+     * 생성된 쿠폰 리스트 조회.
+     *
+     */
     @GetMapping("/list")
-    public String allCouponList0() {
-        return RETURN_PAGE_COUPON_LIST;
-    }
-
-    @GetMapping("/list/{pageNum}")
-    public String allCouponList(Model model, @PathVariable Integer pageNum) {
+    public String allCouponList(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
+
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
+
         return RETURN_ADMIN_PAGE;
     }
-
 
     @GetMapping("list/{memberNo}/{pageNum}")
     public String memberCouponList(Model model, @PathVariable String memberNo,
@@ -154,11 +154,15 @@ public class CouponAdminFrontController {
         return RETURN_ADMIN_PAGE;
     }
 
-
+    /**
+     * 쿠폰 상세 조회.
+     * @param couponId 상세 조회 하려는 쿠폰의 id
+     */
     @GetMapping("/detail/{couponId}")
     public String viewCoupon(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
+
         return RETURN_ADMIN_PAGE;
     }
 
@@ -186,6 +190,4 @@ public class CouponAdminFrontController {
         restService.delete(url);
         return RETURN_PAGE_COUPON_LIST;
     }
-
-
 }

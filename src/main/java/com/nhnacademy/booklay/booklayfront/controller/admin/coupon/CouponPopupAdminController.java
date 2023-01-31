@@ -10,6 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+/**
+ * 팝업창을 보여주기 위한 컨트롤러.
+ */
 
 @Controller
 @RequiredArgsConstructor
@@ -21,8 +27,10 @@ public class CouponPopupAdminController {
     private final CategoryRestApiModelSettingService categoryRestApiModelSettingService;
     private final ProductRestApiModelSettingService productRestApiModelSettingService;
     private static final String RESOURCE_BASE = "admin/coupon/popup/";
-    @GetMapping("/coupon/pages/{pageNum}")
-    public String couponPopup(@PathVariable int pageNum, Model model) {
+
+    @GetMapping("/coupon")
+    public String couponPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                              Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "couponPopup";
     }
