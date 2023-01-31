@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -104,10 +105,32 @@ public class MemberAdminController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-//            model.addAttribute("targetUrl", "member/blockedMemberList");
-//
-//            return ADMINPAGE;
+
             return "admin/member/blockedMemberHistoryList";
+        } else {
+            return "/";
+        }
+    }
+
+    @GetMapping("/dropped")
+    public String retrieveDroppedMemberList(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        Model model) {
+        String query = "/dropped?page=" + page;
+
+        URI uri = URI.create(redirectGatewayPrefix + query);
+
+        ApiEntity<PageResponse<DroppedMemberRetrieveResponse>> response =
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+            model.addAttribute("targetUrl", "member/droppedMemberList");
+
+            return ADMINPAGE;
         } else {
             return "/";
         }

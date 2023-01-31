@@ -2,8 +2,10 @@ package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +34,12 @@ import org.springframework.web.client.RestTemplate;
 public class MemberController {
     private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
+    private final RestService restService;
     private final static String MYPAGE = "/mypage/myPage";
 
-    public MemberController(RestTemplate restTemplate, String gateway) {
+    public MemberController(RestTemplate restTemplate, RestService restService, String gateway) {
         this.restTemplate = restTemplate;
+        this.restService = restService;
         redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
     }
 
@@ -91,4 +96,12 @@ public class MemberController {
         return "mypage/member/memberDetail";
     }
 
+    @GetMapping("/delete/{memberNo}")
+    public String deleteMember(@PathVariable Long memberNo, Model model) {
+        URI uri = URI.create(redirectGatewayPrefix + "/delete/" + memberNo);
+
+        restService.delete(uri.toString(), null);
+
+        return "redirect:/";
+    }
 }
