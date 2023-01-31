@@ -23,6 +23,7 @@ public class CategoryRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, "/admin/categories");
         ApiEntity<PageResponse<CategoryResponse>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute("categoryList", apiEntity.getBody().getData());
+
+        model.addAttribute("list", apiEntity.getBody().getData());
     }
 }

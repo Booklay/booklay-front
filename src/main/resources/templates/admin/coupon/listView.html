@@ -2,31 +2,44 @@
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <table border="1px">
-            <tr>
-                <td>쿠폰 ID</td>
-                <td>쿠폰 이름</td>
-                <td>쿠폰 타입</td>
-                <td>할인량</td>
-                <td>최소사용금액</td>
-                <td>최대할인금액</td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        <tbody th:each="coupon:${couponList}">
-            <tr>
-                <td><p th:text="${coupon.id}"></p></td>
-                <td><p th:text="${coupon.name}"></p></td>
-                <td><p th:text="${coupon.typeName}"></p></td>
-                <td><p th:text="${coupon.amount}"></p></td>
-                <td><p th:text="${coupon.minimumUseAmount}"></p></td>
-                <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
-                <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
-                <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
-                <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
-            </tr>
-        </tbody>
+        <div th:if="${#lists.isEmpty(list)}">
+            <div>
+                <p>등록된 쿠폰이 없습니다.</p>
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(list)}">
+            <table border="1px">
+                <tr>
+                    <td>번호</td>
+                    <td>쿠폰 ID</td>
+                    <td>쿠폰 이름</td>
+                    <td>쿠폰 타입</td>
+                    <td>할인량</td>
+                    <td>최소사용금액</td>
+                    <td>최대할인금액</td>
+                    <td>수량제한</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tbody th:each="coupon, couponStat:${list}">
+                <tr>
+                    <td><p th:text="${couponStat.count}"></p></td>
+                    <td><p th:text="${coupon.id}"></p></td>
+                    <td><p th:text="${coupon.name}"></p></td>
+                    <td><p th:text="${coupon.typeName}"></p></td>
+                    <td><p th:text="${coupon.amount}"></p></td>
+                    <td><p th:text="${coupon.minimumUseAmount}"></p></td>
+                    <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
+                    <td>
+                        <p th:if="${coupon.isLimited}">O</p>
+                        <p th:unless="${coupon.isLimited}">X</p>
+                    </td>
+                    <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
+                    <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
+                    <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
+                </tr>
+                </tbody>
 
         </table>
     </div>

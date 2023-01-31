@@ -35,20 +35,23 @@ public class CouponPopupAdminController {
         return RESOURCE_BASE + "couponPopup";
     }
 
-    @GetMapping("/member/pages/{pageNum}")
-    public String memberPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/member")
+    public String memberPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                              Model model) {
         memberRestApiModelSettingService.setMemberListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "memberPopup";
     }
 
-    @GetMapping("/category/pages/{pageNum}")
-    public String categoryPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/category")
+    public String categoryPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                Model model) {
         categoryRestApiModelSettingService.setCategoryListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "categoryPopup";
     }
 
-    @GetMapping("/product/pages/{pageNum}")
-    public String productPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/product")
+    public String productPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                               Model model) {
         productRestApiModelSettingService.setProductListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "productPopup";
     }

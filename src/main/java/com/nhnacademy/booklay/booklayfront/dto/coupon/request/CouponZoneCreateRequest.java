@@ -20,7 +20,7 @@ public class CouponZoneCreateRequest {
     private LocalDateTime openedAt;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime closedAt;
+    private LocalDateTime issuanceDeadlineAt;
 
     @Setter
     Boolean isBlind;

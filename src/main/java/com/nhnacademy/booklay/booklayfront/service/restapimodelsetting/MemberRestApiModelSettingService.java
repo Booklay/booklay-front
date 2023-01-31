@@ -8,6 +8,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaul
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -21,8 +22,9 @@ public class MemberRestApiModelSettingService {
     private final String gatewayIp;
 
     public void setMemberListToModelByPage(Integer pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ADMIN_MEMBER_REST_PREFIX);
-        ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute("memberList", apiEntity.getBody().getData());
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, "/admin/members");
+        ApiEntity<PageResponse<MemberRetrieveResponse>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+
+        model.addAttribute("list", apiEntity.getBody().getData());
     }
 }

@@ -32,7 +32,7 @@
     </tr>
     </thead>
     <tbody>
-    <th:block th:each="product : ${productList}">
+    <th:block th:each="product : ${list}">
         <tr>
             <td><span th:text="${product.productId}"></span></td>
             <td><span th:text="${product.title}"></span></td>
@@ -44,6 +44,6 @@
     </th:block>
     </tbody>
 </table>
-<h2 th:if="${productList.isEmpty()}">등록된 상품이 없습니다.</h2>
+<h2 th:if="${list.isEmpty()}">등록된 상품이 없습니다.</h2>
 
 </html>

@@ -43,7 +43,7 @@ public class CouponAdminFrontController {
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
+    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
     
 
     @ModelAttribute("navHead")
@@ -77,10 +77,12 @@ public class CouponAdminFrontController {
      * @param couponAddRequest 쿠폰 생성에 필요한 요청.
      */
     @PostMapping("/create-form")
-    public String postCreateCoupon(
-        @Valid @ModelAttribute CouponAddRequest couponAddRequest,
-        @RequestParam(name = "image", required = false) MultipartFile image) throws IOException {
+    public String postCreateCoupon(@Valid @ModelAttribute CouponAddRequest couponAddRequest,
+                                   @RequestParam(name = "image", required = false) MultipartFile image) throws IOException {
+
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
+
+        // 이미지 저장
         if (!Objects.isNull(image) && !image.isEmpty()) {
             URI storageUrl = URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/storage");
             ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
@@ -93,14 +95,17 @@ public class CouponAdminFrontController {
             resource.part("file",
                     contentsAsResource,
                     MediaType.valueOf(Objects.requireNonNull(image.getContentType())));
+
             MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
             HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
                     headers);
+
             ResponseEntity<ObjectFileResponse> responseEntity = restTemplate.postForEntity(storageUrl, httpEntity,
                     ObjectFileResponse.class);
-            map.put("imageId", responseEntity.getBody().getId());
+            map.put("fileId", responseEntity.getBody().getId());
         }
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
 
@@ -147,6 +152,10 @@ public class CouponAdminFrontController {
         return RETURN_ADMIN_PAGE;
     }
 
+    /**
+     * 쿠폰 수정 폼.
+     * @param couponId 수정하려는 쿠폰의 id
+     */
     @GetMapping("update/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
@@ -154,6 +163,11 @@ public class CouponAdminFrontController {
         return RETURN_ADMIN_PAGE;
     }
 
+    /**
+     * 쿠폰 수정.
+     * @param couponAddRequest 수정 내용
+     * @param couponId 수정하려는 쿠폰의 id
+     */
     @PostMapping("update/{couponId}")
     public String postUpdateCouponForm(@Valid @ModelAttribute CouponAddRequest couponAddRequest,
                                        @PathVariable String couponId) {

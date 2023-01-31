@@ -27,7 +27,7 @@ public class CouponIssueAdminFrontController {
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list/0";
+    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/issue-history";
     private static final String COUPON_ISSUE_HTML_PATH = "coupon/issue/";
 
     @ModelAttribute("navHead")
