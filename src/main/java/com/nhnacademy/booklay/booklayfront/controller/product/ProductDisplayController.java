@@ -2,10 +2,12 @@ package com.nhnacademy.booklay.booklayfront.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateWishlistRequest;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -35,14 +37,21 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/product")
-public class ProductDisplayController {
+public class ProductDisplayController extends BaseController {
 
   private final static String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
   private final RestTemplate restTemplate;
   private final ObjectMapper mapper = new ObjectMapper();
+
+  public ProductDisplayController(RestService restService,
+                                  String gatewayIp, RestTemplate restTemplate) {
+    super(restService, gatewayIp);
+    this.gatewayIp = gatewayIp;
+    this.restTemplate = restTemplate;
+
+  }
 
   @GetMapping("/display")
   public String retrieveProduct(
@@ -82,7 +91,7 @@ public class ProductDisplayController {
       model.addAttribute("productList", productList);
     }
 
-    return "product/productBoard";
+    return "shop";
   }
 
   @GetMapping("/view/{productNo}")
@@ -131,7 +140,7 @@ public class ProductDisplayController {
         model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
 
-    return "product/productDetailView";
+    return "detail";
   }
 
   @PostMapping("/view/wishlist/register")
