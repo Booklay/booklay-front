@@ -5,7 +5,7 @@
     <link href="/css/form.css" rel="stylesheet">
 </head>
     <div id="input-form">
-        <form action="/admin/coupons/create" method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data">
             <label for="coupon-name">쿠폰 이름</label><input type="text" name="name" id="coupon-name"><br/>
             <label for="coupon-type">쿠폰 종류</label>
                 <select type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
@@ -28,7 +28,7 @@
             </div>
             <label for="minimum-amount">최소 사용 금액</label><input type="number" name="minimumUseAmount" id="minimum-amount"><br/>
             <label for="maximum-amount">최대 할인 금액</label><input type="number" name="maximumDiscountAmount" id="maximum-amount"><br/>
-            <label for="deadline">발급 기한 일시</label><input type="datetime-local" name="issuanceDeadline" value="2030-01-01T00:00" id="deadline"><br/>
+            <label for="deadline">발급 기한 일시</label><input type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline"><br/>
             <label>중복 사용 가능 여부</label><br/>
             <label for="duplicate-true" class="selector">가능</label> <input type="radio" name="isDuplicatable" value="true" checked id="duplicate-true">
             <label for="duplicate-false" class="selector">불가</label> <input type="radio" name="isDuplicatable" value="false" id="duplicate-false"><br/>
@@ -40,7 +40,7 @@
                 <option value="10" selected>10일</option>
                 <option value="30">30일</option>
             </select><br/>
-            <label for="image-input">쿠폰 이미지</label> <input type="file" accept="image/*" name="couponImage" id="image-input"><br/>
+            <label for="image-input">쿠폰 이미지</label> <input type="file" accept="image/*" name="image" id="image-input"><br/>
             <input type="submit">
         </form>
     </div>
