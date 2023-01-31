@@ -78,10 +78,9 @@ public class MemberAdminController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-//            model.addAttribute("targetUrl", "member/blockedMemberList");
-//
-//            return ADMINPAGE;
-            return "admin/member/blockedMemberList";
+            model.addAttribute("targetUrl", "member/blockedMemberList");
+
+            return ADMINPAGE;
         } else {
             return "/";
         }

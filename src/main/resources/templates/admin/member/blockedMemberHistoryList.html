@@ -11,6 +11,7 @@
         <thead>
         <tr>
             <th>번호</th>
+            <th>회원 ID</th>
             <th>차단사유</th>
             <th>차단일자</th>
             <th>해제일자</th>
@@ -20,6 +21,7 @@
         <tbody th:each="history, historyStat : ${list}">
         <tr>
             <td th:text="${historyStat.count}"></td>
+            <td th:text="${history.getMemberId()}"></td>
             <td th:text="${history.getReason()}"></td>
             <td th:text="${#temporals.format(history.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
             <td th:text="${#temporals.format(history.getReleasedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
