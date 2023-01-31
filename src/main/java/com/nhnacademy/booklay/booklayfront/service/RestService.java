@@ -73,7 +73,6 @@ public class RestService {
     }
 
     public void delete(String url, MultiValueMap<String, String> params) {
-        RestTemplate restTemplate = new RestTemplate();
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
         restTemplate.delete(builder.build().toUriString());
     }
