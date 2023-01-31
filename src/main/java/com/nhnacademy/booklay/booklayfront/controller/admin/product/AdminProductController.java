@@ -324,7 +324,7 @@ public class AdminProductController {
         headers, HttpMethod.POST, uri);
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
-    return "redirect:" + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
+    return "redirect:/admin/product" + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
 
   //구독 상품 하위 상품 등록 취소
@@ -344,7 +344,7 @@ public class AdminProductController {
 
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
-    return "redirect:" + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
+    return "redirect:/admin/product" + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
 
   //연관 상품 등록 위해 조회
