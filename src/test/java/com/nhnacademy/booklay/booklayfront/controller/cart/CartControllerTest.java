@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,8 @@ class CartControllerTest {
     AuthenticationManager authenticationManager;
     @MockBean
     TokenUtils tokenUtils;
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
 
     private final String RETURN_PAGE = "cart/listForm";
     private final String REDIRECT_PAGE = "cart/list";

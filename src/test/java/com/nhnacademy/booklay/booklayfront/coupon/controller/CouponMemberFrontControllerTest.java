@@ -27,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,9 @@ class CouponMemberFrontControllerTest {
 
     @MockBean
     TokenUtils tokenUtils;
+
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
 
     private final String RETURN_PAGE = "mypage/myPage";
     private final String URI_PREFIX = "/member/coupon/";
