@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link href="/css/product/productBoard.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -15,7 +16,12 @@
   <tbody>
   <th:block th:each="product : ${productList}">
     <tr>
-      <td rowspan="3">이미지 입니다...</td>
+      <td rowspan="3">
+        <div>
+<!--          <img class="product-img" th:src="@{http://localhost:9090/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>-->
+          <img class="product-img" th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
+        </div>
+      </td>
       <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}"
                          th:text="${product.title}"/></td>
       <td><input type="number"/></td>
@@ -29,7 +35,7 @@
       </td>
       <td>출판사 : <span th:text="${product.publisher}"/></td>
       <td><input th:if="${product.selling}" type="button" value="카트에 넣기"/>
-        <span th:if="${!product.selling}" >품절</span>
+        <span th:if="${!product.selling}">품절</span>
       </td>
     </tr>
 
@@ -37,7 +43,7 @@
       <td><span th:text="${product.price}"/> 원</td>
       <td>적립률 : <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/> %</td>
       <td><input th:if="${product.selling}" type="button" value="바로 구매"/>
-        <span th:if="${!product.selling}" >품절</span>
+        <span th:if="${!product.selling}">품절</span>
       </td>
     </tr>
   </th:block>

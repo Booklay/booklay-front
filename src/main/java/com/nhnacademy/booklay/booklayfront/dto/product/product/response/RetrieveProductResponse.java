@@ -17,7 +17,7 @@ public class RetrieveProductResponse {
   @NotNull
   Long productId;
   @Setter
-  MultipartFile image;
+  Long objectFileId;
   @NotNull
   String title;
   @NotNull
