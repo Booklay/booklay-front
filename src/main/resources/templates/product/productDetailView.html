@@ -12,7 +12,8 @@
   <div id="top-info">
 
     <div id="thumbnail">
-      <p>이미지가 들어올 자리 입니다...</p>
+      <img class="main-img"
+           th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
     </div>
 
     <div id="information">
@@ -111,30 +112,31 @@
 
 
   <!--  추천상품-->
-  <h3>연관 상품</h3>
-
-  <input th:id="${product.productId}" type="button" value="연관 상품 추가"
-         onclick="showRecommendRegisterPopup(id);"/>
-
   <div id="recommendGoods">
-    <th:block th:each="recommend : ${recommendProducts}">
-      <div class="rCmdGoods">
-        <div class="rCmdImg">
-          <p>이미지 입니다...</p>
+    <h3>연관 상품</h3>
+
+    <input th:id="${product.productId}" type="button" value="연관 상품 추가"
+           onclick="showRecommendRegisterPopup(id);"/>
+
+    <div id="recommendGoodsView">
+      <th:block th:each="recommend : ${recommendProducts}">
+        <div class="rCmdGoods">
+            <img class="product-img"
+                 th:src="@{/storage/{objectFileId} (objectFileId = ${recommend.objectFileId})}"/>
+          <P class="rCmdTxt">
+            <a th:href="@{/product/view/{productId} (productId = ${recommend.productId})}"
+               th:text="${recommend.title}"/>
+          </P>
+          <p class="rCmdTxt">
+            <th:block th:each="author : ${recommend.authors}">
+              <span th:text="${author.name}"/>
+            </th:block>
+            | <span th:text="${recommend.publisher}"/>
+          </p>
+          <p class="rCmdTxt"><span th:text="${recommend.price}"/> 원</p>
         </div>
-        <P class="rCmdTxt">
-          <a th:href="@{/product/view/{productId} (productId = ${recommend.productId})}"
-             th:text="${recommend.title}"/>
-        </P>
-        <p class="rCmdTxt">
-          <th:block th:each="author : ${recommend.authors}">
-            <span th:text="${author.name}"/>
-          </th:block>
-          | <span th:text="${recommend.publisher}"/>
-        </p>
-        <p class="rCmdTxt"><span th:text="${recommend.price}"/> 원</p>
-      </div>
-    </th:block>
+      </th:block>
+    </div>
   </div>
 
 
@@ -165,10 +167,13 @@
       <tbody>
       <th:block th:each="book : ${booksAtSubscribe}">
         <tr>
-          <td rowspan="3">이미지 입니다...</td>
+          <td rowspan="3">
+            <img class="product-img"
+                 th:src="@{/storage/{objectFileId} (objectFileId = ${book.objectFileId})}"/>
+          </td>
           <td colspan="2">
             <a th:href="@{/product/view/{productId} (productId = ${book.productId})}"
-              th:text="${book.title}"/></td>
+               th:text="${book.title}"/></td>
         </tr>
 
         <tr>
@@ -215,7 +220,7 @@
 
   function showRecommendRegisterPopup(productNo) {
     window.open("/admin/product/recommend/" + productNo + "/0", "a",
-        "width=500, height=550, left=100, top=50");
+        "width=750, height=550, left=100, top=50");
   }
 </script>
 </body>

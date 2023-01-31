@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link href="/css/product/productBoard.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -15,7 +16,9 @@
   <tbody>
   <th:block th:each="product : ${productList}">
     <tr>
-      <td rowspan="3">이미지 입니다...</td>
+      <td rowspan="3">
+        <img class="product-img" th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
+      </td>
       <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}"
                          th:text="${product.title}"/></td>
       <td rowspan="3">
