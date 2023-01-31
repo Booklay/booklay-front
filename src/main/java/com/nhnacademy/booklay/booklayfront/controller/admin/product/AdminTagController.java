@@ -203,7 +203,7 @@ public class AdminTagController {
       pageNum = 1L;
     }
     createTag(request);
-    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/update/{productNo}/{pageNum}")
@@ -214,7 +214,7 @@ public class AdminTagController {
     }
 
     updateTag(request);
-    return "redirect:" + CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
   }
 
   @PostMapping("/connection/delete/{productNo}/{pageNum}")

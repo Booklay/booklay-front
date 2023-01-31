@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<form>
+  <input type="text" name="search"/>
+  <input type="submit" value="검색"/>
+</form>
+
+<table border=1>
+  <tbody>
+  <th:block th:each="product : ${productList}">
+    <tr>
+      <td rowspan="3">이미지 입니다...</td>
+      <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}"
+                         th:text="${product.title}"/></td>
+      <td rowspan="3">
+        <th:block th:if="${product.productId != productNo}">
+          <form th:if="${product.recommend}" method="post"
+                th:action="@{/admin/product/recommend/delete/{pageNum} (pageNum = ${pageNum})}" )>
+            <input name="targetId" type="number" th:value="${product.productId}" hidden="hidden">
+            <input name="baseId" type="number" th:value="${productNo}" hidden="hidden">
+            <input type="submit" value="등록 취소">
+          </form>
+          <form th:if="${!product.recommend}" method="post"
+                th:action="@{/admin/product/recommend/create/{pageNum} (pageNum = ${pageNum})}" )>
+            <input name="targetId" type="number" th:value="${product.productId}" hidden="hidden">
+            <input name="baseId" type="number" th:value="${productNo}" hidden="hidden">
+            <input type="submit" value="등록">
+          </form>
+        </th:block>
+        <th:block th:if="${product.productId == productNo}">
+          <span>등록 불가능</span>
+        </th:block>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        작가 :
+        <th:block th:each="author : ${product.authors}"><span th:text="${author.name}"/>
+        </th:block>
+      </td>
+      <td>출판사 : <span th:text="${product.publisher}"/></td>
+    </tr>
+
+    <tr>
+      <td><span th:text="${product.price}"/> 원</td>
+      <td>적립률 : <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/> %</td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+
+<hr>
+<div>
+  <a th:if="${nowPage - 1 >= 1}"
+     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
+    <span th:text="${nowPage}-1"/></a>
+  <a th:if="${nowPage >= 1}"
+     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
+    <span th:text="${nowPage}"/></a>
+
+  <a th:if="${nowPage+1 != totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
+    <span th:text="${nowPage}+1"/></a>
+
+  <a th:if="${nowPage + 2 < totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
+    <span th:text="${nowPage}+2"/></a>
+  <a th:if="${nowPage + 3 < totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
+    <span th:text="${nowPage}+3"/></a>
+
+  <span th:if="${nowPage + 3 < totalPage}">...</span>
+
+  <a th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
+    <span th:text="${totalPage}"/></a>
+</div>
+</body>
+</html>

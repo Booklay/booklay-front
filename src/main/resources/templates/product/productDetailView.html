@@ -109,17 +109,23 @@
     </div>
   </div>
 
+
+  <!--  추천상품-->
+  <h3>연관 상품</h3>
+
+  <input th:id="${product.productId}" type="button" value="연관 상품 추가"
+         onclick="showRecommendRegisterPopup(id);"/>
+
   <div id="recommendGoods">
-    <h3>연관 상품</h3>
-
-    <input th:id="${product.productId}" type="button" value="연관 상품 추가" onclick="showRecommendRegisterPopup(id);"/>
-
     <th:block th:each="recommend : ${recommendProducts}">
       <div class="rCmdGoods">
         <div class="rCmdImg">
           <p>이미지 입니다...</p>
         </div>
-        <P class="rCmdTxt" th:text="${recommend.title}"/>
+        <P class="rCmdTxt">
+          <a th:href="@{/product/view/{productId} (productId = ${recommend.productId})}"
+             th:text="${recommend.title}"/>
+        </P>
         <p class="rCmdTxt">
           <th:block th:each="author : ${recommend.authors}">
             <span th:text="${author.name}"/>
@@ -146,6 +152,7 @@
   </div>
 </div>
 
+<!--구독시 배송되는 상품-->
 <th:block th:if="${product.subscribeId != null}">
   <hr>
   <div id="booksAtSubscribed">
@@ -159,8 +166,8 @@
       <th:block th:each="book : ${booksAtSubscribe}">
         <tr>
           <td rowspan="3">이미지 입니다...</td>
-          <td colspan="2"><a
-              th:href="@{/product/view/{productId} (productId = ${book.productId})}"
+          <td colspan="2">
+            <a th:href="@{/product/view/{productId} (productId = ${book.productId})}"
               th:text="${book.title}"/></td>
         </tr>
 
@@ -206,8 +213,8 @@
         "width=1000, height=550, left=100, top=50");
   }
 
-  function showRecommendRegisterPopup(productNo){
-    window.open("/admin/product/connection/" + productNo + "/0", "a",
+  function showRecommendRegisterPopup(productNo) {
+    window.open("/admin/product/recommend/" + productNo + "/0", "a",
         "width=500, height=550, left=100, top=50");
   }
 </script>

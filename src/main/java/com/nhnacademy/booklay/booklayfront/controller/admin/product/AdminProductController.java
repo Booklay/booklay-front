@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateDeleteProductRecommendRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.DisAndConnectBookWithSubscribeRequest;
@@ -13,6 +14,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdatePro
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveBookForSubscribeResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductSubscribeForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
@@ -108,7 +110,7 @@ public class AdminProductController {
 
     MultipartBodyBuilder resource = new MultipartBodyBuilder();
     resource.part("request", mapper.writeValueAsString(request), MediaType.APPLICATION_JSON);
-    resource.part("imgFile", contentsAsResource, MediaType.MULTIPART_FORM_DATA);
+    resource.part("imgFile", contentsAsResource, MediaType.valueOf(image.getContentType()));
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -343,5 +345,75 @@ public class AdminProductController {
     restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
 
     return "redirect:" + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
+  }
+
+  //연관 상품 등록 위해 조회
+  @GetMapping("/recommend/{productNo}/{pageNum}")
+  public String retrieveProductForRecommend(@PathVariable Long pageNum,
+      @PathVariable Long productNo, Model model) {
+    Long size = 20L;
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    //최초 상품 상세 정보 호출
+    URI uri = URI.create(
+        gatewayIp + URI_PRE_FIX + "/recommend/" + productNo + "?page=" + pageNum + "&size=" + size);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(null,
+        headers, HttpMethod.GET, uri);
+
+    ResponseEntity<PageResponse<RetrieveProductResponse>> recommendResponse =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    int totalPage = recommendResponse.getBody().getTotalPages();
+    int nowPage = recommendResponse.getBody().getPageNumber();
+    List<RetrieveProductResponse> productList = recommendResponse.getBody().getData();
+
+    model.addAttribute("productNo", productNo);
+    model.addAttribute("productList", productList);
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("totalPage", totalPage);
+
+    return PRE_FIX + "/recommendConnector";
+  }
+
+  //연관 상품 등록
+  @PostMapping("/recommend/create/{pageNum}")
+  public String createRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
+      @PathVariable Long pageNum) throws JsonProcessingException {
+    Long productNo = request.getBaseId();
+
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.POST, uri);
+
+    restTemplate.exchange(requestEntity, CreateDeleteProductRecommendRequest.class);
+
+    return "redirect:/admin/product/recommend/" + productNo + "/" + pageNum;
+  }
+
+  //연관 상품 삭제
+  @PostMapping("/recommend/delete/{pageNum}")
+  public String deleteRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
+      @PathVariable Long pageNum) throws JsonProcessingException {
+    Long productNo = request.getBaseId();
+
+    URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
+        headers, HttpMethod.DELETE, uri);
+
+    restTemplate.exchange(requestEntity, CreateDeleteProductRecommendRequest.class);
+
+    return "redirect:/admin/product/recommend/" + productNo + "/" + pageNum;
   }
 }

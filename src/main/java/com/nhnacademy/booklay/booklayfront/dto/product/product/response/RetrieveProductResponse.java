@@ -25,7 +25,7 @@ public class RetrieveProductResponse {
   @NotNull
   Long pointRate;
   @NotNull
-  Boolean isSelling;
+  Boolean selling;
   @NotNull
   Boolean pointMethod;
   @NotNull
@@ -34,4 +34,6 @@ public class RetrieveProductResponse {
   String publisher;
 
   List<RetrieveAuthorResponse> authors;
+
+  Boolean recommend;
 }
