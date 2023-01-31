@@ -43,6 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             String token = (String)redisTemplate.opsForHash().get(sessionId, "TOKEN");
+
+            if (Objects.isNull(token) || token.isEmpty()) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String role = tokenUtils.getRole(token);
             String uuid = tokenUtils.getUuid(token);
 
@@ -66,6 +72,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getSessionId(Cookie[] cookies) {
+
+        if (Objects.isNull(cookies)) {
+            return null;
+        }
 
         for (Cookie cookie : cookies) {
             if (Objects.equals("SESSION_ID", cookie.getName())) {
