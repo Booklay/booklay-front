@@ -15,7 +15,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -205,7 +205,7 @@ class CouponAdminFrontControllerTest {
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
 
-        mockMvc.perform(get(URI_PREFIX + "/types/list/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/types/list").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
             .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
@@ -217,7 +217,13 @@ class CouponAdminFrontControllerTest {
     @Test
     void memberCouponList() throws Exception {
         List<Coupon> couponList = new ArrayList<>();
-        ResponseEntity<List<Coupon>> responseEntity = new ResponseEntity<>(couponList, HttpStatus.OK);
+
+        PageResponse<Coupon> couponPageResponse = new PageResponse<>();
+        ReflectionTestUtils.setField(couponPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponPageResponse, "totalPages", 0);
+        ReflectionTestUtils.setField(couponPageResponse, "data", couponList);
+        ResponseEntity<PageResponse<Coupon>> responseEntity = new ResponseEntity<>(couponPageResponse, HttpStatus.OK);
         //mocking
         ApiEntity<Object> object = new ApiEntity<>();
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
