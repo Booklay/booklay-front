@@ -23,6 +23,6 @@ public class ProductRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, "/product");
         ApiEntity<PageResponse<RetrieveProductResponse>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute("productList", apiEntity.getBody().getData());
+        model.addAttribute("list", apiEntity.getBody().getData());
     }
 }

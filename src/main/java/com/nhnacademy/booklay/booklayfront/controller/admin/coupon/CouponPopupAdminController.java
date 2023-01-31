@@ -10,6 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+/**
+ * 팝업창을 보여주기 위한 컨트롤러.
+ */
 
 @Controller
 @RequiredArgsConstructor
@@ -20,27 +26,32 @@ public class CouponPopupAdminController {
     private final MemberRestApiModelSettingService memberRestApiModelSettingService;
     private final CategoryRestApiModelSettingService categoryRestApiModelSettingService;
     private final ProductRestApiModelSettingService productRestApiModelSettingService;
-    private static final String RESOURCE_BASE = "/admin/coupon/popup/";
-    @GetMapping("/coupon/pages/{pageNum}")
-    public String couponPopup(@PathVariable int pageNum, Model model) {
+    private static final String RESOURCE_BASE = "admin/coupon/popup/";
+
+    @GetMapping("/coupon")
+    public String couponPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                              Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "couponPopup";
     }
 
-    @GetMapping("/member/pages/{pageNum}")
-    public String memberPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/member")
+    public String memberPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                              Model model) {
         memberRestApiModelSettingService.setMemberListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "memberPopup";
     }
 
-    @GetMapping("/category/pages/{pageNum}")
-    public String categoryPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/category")
+    public String categoryPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                Model model) {
         categoryRestApiModelSettingService.setCategoryListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "categoryPopup";
     }
 
-    @GetMapping("/product/pages/{pageNum}")
-    public String productPopup(@PathVariable int pageNum, Model model) {
+    @GetMapping("/product")
+    public String productPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                               Model model) {
         productRestApiModelSettingService.setProductListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "productPopup";
     }

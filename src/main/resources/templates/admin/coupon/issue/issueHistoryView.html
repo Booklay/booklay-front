@@ -5,28 +5,35 @@
 </head>
 <body>
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <table border="1px">
-            <tr>
-                <td>번호</td>
-                <td>쿠폰 ID</td>
-                <td>쿠폰 코드</td>
-                <td>쿠폰 이름</td>
-                <td>소유 회원 ID</td>
-                <td>발급일</td>
-                <td>만료일</td>
-            </tr>
-            <tbody th:each="history, historyStat:${historyList}">
-            <tr>
-                <td><p th:text="${historyStat.count}"></p></td>
-                <td><p th:text="${history.id}"></p></td>
-                <td><p th:text="${history.code}"></p></td>
-                <td><p th:text="${history.name}"></p></td>
-                <td><p th:text="${history.memberId}"></p></td>
-                <td><p th:text="${#temporals.format(history.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
-                <td><p th:text="${#temporals.format(history.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:if="${#lists.isEmpty(list)}">
+            발급된 쿠폰이 없습니다.
+        </div>
+        <div th:unless="${#lists.isEmpty(list)}">
+            <table border="1px">
+                <tr>
+                    <td>번호</td>
+                    <td>쿠폰 ID</td>
+                    <td>쿠폰 코드</td>
+                    <td>쿠폰 이름</td>
+                    <td>소유 회원 ID</td>
+                    <td>발급일</td>
+                    <td>만료일</td>
+                </tr>
+                <tbody th:each="history, historyStat:${list}">
+                <tr>
+                    <td><p th:text="${historyStat.count}+${currentPage}*20"></p></td>
+                    <td><p th:text="${history.id}"></p></td>
+                    <td><p th:text="${history.code}"></p></td>
+                    <td><p th:text="${history.name}"></p></td>
+                    <td><p th:text="${history.memberId}"></p></td>
+                    <td><p th:text="${#temporals.format(history.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(history.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- pagination -->
+            <th:block th:include="fragments/pageFooter"/>
+        </div>
     </div>
 </body>
 </html>
