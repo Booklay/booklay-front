@@ -88,20 +88,36 @@ public class ProductDisplayController {
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model)
       throws JsonProcessingException {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(null,
-        headers, HttpMethod.GET, uri);
+    //최초 상품 상세 정보 호출
+    URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
+
+    RequestEntity<String> mainRequestEntity = new RequestEntity<>(null,
+        headers, HttpMethod.GET, mainUri);
 
     ResponseEntity<RetrieveProductViewResponse> response =
-        restTemplate.exchange(requestEntity, RetrieveProductViewResponse.class);
+        restTemplate.exchange(mainRequestEntity, RetrieveProductViewResponse.class);
 
     model.addAttribute("productNo", productNo);
     model.addAttribute("product", response.getBody());
 
+
+    //연관 상품 목록 호출
+    URI recommendUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/recommend/" + productNo);
+
+    RequestEntity<String> requestEntity = new RequestEntity<>(null,
+        headers, HttpMethod.GET, recommendUri);
+
+    ResponseEntity<List<RetrieveProductResponse>> recommendGoodsResponse =
+        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+        });
+
+    model.addAttribute("recommendProducts",recommendGoodsResponse.getBody());
+
+    //구독 상품의 경우 구독의 자식 상품들 목록 호출
     if (Objects.nonNull(response.getBody().getSubscribeId())) {
         Long subscribeId = response.getBody().getSubscribeId();
         URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/subscribe/" + subscribeId);
