@@ -6,6 +6,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -55,6 +56,11 @@ public class CouponRestApiModelSettingService {
     public void setAllCouponTypeToModel(Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
         ApiEntity<PageResponse<CouponType>> apiEntity = restService.get(url, getDefaultPageMap(0, Integer.MAX_VALUE), new ParameterizedTypeReference<>() {});
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
+    }
+    public void setCouponTypeListToModelByPage(Integer pageNum, Model model){
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
+        ApiEntity<PageResponse<CouponType>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }

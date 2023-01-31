@@ -14,7 +14,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponType;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import java.util.Objects;
 

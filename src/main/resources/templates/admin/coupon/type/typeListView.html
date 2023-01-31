@@ -9,15 +9,20 @@
             let nameTd = this.parentElement.parentElement.children.item(1);
             let value = nameTd.firstElementChild.value;
             nameTd.innerHTML = '<p>'+value+'</p>';
+            let httpRequest = new XMLHttpRequest();
+            let body = {
+                "id": parseInt(this.parentElement.parentElement.children.item(0).firstElementChild.innerHTML),
+                "name": value.toString()
+            };
+            httpRequest.open('POST', '/admin/coupons/types/update');
+            httpRequest.responseType = "json";
+            httpRequest.setRequestHeader("Content-Type", "application/json");
+            httpRequest.send(JSON.stringify(body));
         }else{
             this.classList.add("editing");
             this.innerText = "수정중";
             let nameTd = this.parentElement.parentElement.children.item(1);
-            console.log(nameTd);
-            console.log(this.parentElement.children);
-            console.log(this.parentElement);
             nameTd.innerHTML = '<input value="'+nameTd.firstElementChild.innerHTML+'">';
-            console.log(nameTd.firstElementChild.innerHTML);
         }
     }
     window.onload = function (){
@@ -40,7 +45,7 @@
                 <td><p th:text="${couponType.id}"></p></td>
                 <td><p th:text="${couponType.name}"></p></td>
                 <td><button th:id="${couponType.id+'update'}">수정</button></td>
-                <td><a th:href="${'/admin/coupon/types/delete/'+couponType.id}">삭제</a></td>
+                <td><a th:href="${'/admin/coupons/types/delete/'+couponType.id}">삭제</a></td>
             </tr>
         </tbody>
 

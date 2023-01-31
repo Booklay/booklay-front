@@ -48,12 +48,7 @@ public class CouponSettingAdminController {
     }
 
     @GetMapping("list")
-    public String allCouponSettingList0() {
-        return RETURN_PAGE_COUPON_SETTING_LIST;
-    }
-
-    @GetMapping("list/{pageNum}")
-    public String allCouponSettingList(Model model, @PathVariable Integer pageNum) {
+    public String allCouponSettingList(Model model, @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
         restApiService.setCouponSettingListToModelByPage(pageNum, model);
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/setting/settingListView");

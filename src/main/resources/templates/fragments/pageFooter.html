@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <div>
-    <th:block th:unless="${list.isEmpty()}">
+    <th:block th:unless="${#strings.isEmpty(currentPage)}">
 
         <th:block>
             <button type="button">

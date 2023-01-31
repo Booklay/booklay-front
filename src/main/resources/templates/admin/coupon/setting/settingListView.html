@@ -22,12 +22,5 @@
             </tr>
         </tbody>
         </table>
-<!--            <a th:href="${'./' + (pageNum - 1)}">이전</a>-->
-        <p th:if="${pageNum > 0}">
-            <a th:href="${'/admin/coupon/setting/list/' + (pageNum - 1)}">이전</a>
-        </p>
-        <p th:if="${#lists.size(couponSettingList) >= 20}">
-            <a th:href="${'/admin/coupon/setting/list/' + (pageNum + 1)}">다음</a>
-        </p>
     </div>
 </html>
