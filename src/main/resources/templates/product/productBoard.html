@@ -21,7 +21,7 @@
       <td rowspan="3">이미지 입니다...</td>
       <td colspan="2"><a th:href="@{/product/view/{productId} (productId = ${product.productId})}"
                          th:text="${product.title}"/></td>
-      <td><input th:id="${product.productId+'count'}" type="number" min="1"/></td>
+      <td><input th:id="${product.productId+'count'}" type="number" min="1" value="1"/></td>
     </tr>
 
     <tr>
