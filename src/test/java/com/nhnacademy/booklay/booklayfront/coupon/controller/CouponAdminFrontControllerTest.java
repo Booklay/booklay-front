@@ -299,6 +299,7 @@ class CouponAdminFrontControllerTest {
 
         ApiEntity<String> apiEntity = new ApiEntity<>();
         ResponseEntity<String> responseEntity = new ResponseEntity<>("couponList", HttpStatus.OK);
+
         ReflectionTestUtils.setField(apiEntity, "successResponse", responseEntity);
         //mocking
         when(restService.put(anyString(), anyMap(), ArgumentMatchers.<Class<String>>any()))
@@ -319,13 +320,16 @@ class CouponAdminFrontControllerTest {
     }
 
     @Test
-    @Disabled
     void historyCoupon() throws Exception {
         //given
         List<CouponHistoryResponse> couponHistoryResponseList = new ArrayList<>();
         couponHistoryResponseList.add(couponHistoryResponse);
 
         PageResponse<CouponHistoryResponse> couponHistoryPageResponse = new PageResponse<>();
+
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponHistoryPageResponse, "data", couponHistoryResponseList);
 
         ResponseEntity<PageResponse<CouponHistoryResponse>> responseEntity =
@@ -348,11 +352,14 @@ class CouponAdminFrontControllerTest {
     }
 
     @Test
-    @Disabled
     void historyCouponMember() throws Exception {
         List<CouponHistoryResponse> couponHistoryResponseList = new ArrayList<>();
         couponHistoryResponseList.add(couponHistoryResponse);
         PageResponse<CouponHistoryResponse> couponHistoryPageResponse = new PageResponse<>();
+
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageNumber", 0);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "pageSize", 20);
+        ReflectionTestUtils.setField(couponHistoryPageResponse, "totalPages", 0);
         ReflectionTestUtils.setField(couponHistoryPageResponse, "data", couponHistoryResponseList);
         ResponseEntity<PageResponse<CouponHistoryResponse>> responseEntity =
                 new ResponseEntity<>(couponHistoryPageResponse, HttpStatus.OK);
