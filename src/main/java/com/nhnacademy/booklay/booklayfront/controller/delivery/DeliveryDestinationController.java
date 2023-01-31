@@ -32,7 +32,7 @@ public class DeliveryDestinationController {
 
     private final String redirectGatewayPrefix;
 
-    private final static String MYPAGE = "/mypage/myPage";
+    private final static String MYPAGE = "mypage/myPage";
 
     public DeliveryDestinationController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
