@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 차단 해제하기</title>
+</head>
+<body>
+<div>
+    <h3>[회원 차단 해제하기]</h3>
+    <b>차단을 해제하시겠습니까?</b><br>
+    <button><a
+            th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>
+    </button>
+    <input type="button" value="취소" onclick="window.close()">
+</div>
+</body>
+</html>

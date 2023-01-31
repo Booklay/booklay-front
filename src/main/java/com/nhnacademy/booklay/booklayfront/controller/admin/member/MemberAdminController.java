@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -86,6 +87,55 @@ public class MemberAdminController {
         }
     }
 
+    @GetMapping("/block/history/{memberNo}")
+    public String retrieveBlockedMemberHistoryList(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @PathVariable Long memberNo,
+        Model model) {
+
+        String query = "/block/detail/" + memberNo +"?page=" + page;
+
+        URI uri = URI.create(redirectGatewayPrefix + query);
+
+        ApiEntity<PageResponse<BlockedMemberRetrieveResponse>> response =
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+
+            return "admin/member/blockedMemberHistoryList";
+        } else {
+            return "/";
+        }
+    }
+
+    @GetMapping("/dropped")
+    public String retrieveDroppedMemberList(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        Model model) {
+        String query = "/dropped?page=" + page;
+
+        URI uri = URI.create(redirectGatewayPrefix + query);
+
+        ApiEntity<PageResponse<DroppedMemberRetrieveResponse>> response =
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+            model.addAttribute("targetUrl", "member/droppedMemberList");
+
+            return ADMINPAGE;
+        } else {
+            return "/";
+        }
+    }
+
     @GetMapping("/block/{memberNo}")
     public String retrieveMemberBlockForm(@PathVariable Long memberNo, Model model) {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
@@ -98,12 +148,18 @@ public class MemberAdminController {
         return "admin/member/memberBlockForm";
     }
 
+    @GetMapping("/block/cancel/{blockedMemberDetailId}")
+    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId, Model model) {
+        model.addAttribute("blockedMemberDetailId", blockedMemberDetailId);
+
+        return "admin/member/memberBlockCancelForm";
+    }
+
     @PostMapping("/block/{memberNo}")
     public String memberBlock(@Valid @ModelAttribute MemberBlockRequest request,
                               BindingResult bindingResult,
                               @PathVariable Long memberNo,
                               Model model) {
-        //TODO : member block 로직 처리
         URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
 
         ApiEntity<Void> response =
@@ -111,5 +167,15 @@ public class MemberAdminController {
                 Void.class);
 
         return "redirect:/admin/members";
+    }
+
+    @GetMapping("/block/cancel/process/{blockedMemberDetailId}")
+    public String memberBlockCancel(@PathVariable Long blockedMemberDetailId, Model model){
+        URI uri = URI.create(redirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
+
+        ApiEntity<Void> response =
+            restService.get(uri.toString(), null, Void.class);
+
+        return "redirect:/admin/members/block";
     }
 }

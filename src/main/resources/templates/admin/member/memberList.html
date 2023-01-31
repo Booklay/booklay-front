@@ -23,6 +23,7 @@
             <th>탈퇴일</th>
             <th>차단여부</th>
             <th>차단하기</th>
+            <th>차단내역</th>
         </tr>
         </thead>
 
@@ -56,6 +57,8 @@
                                                                   onclick="showMemberBlockPopup(this.getAttribute('id'))"></span>
                 <span th:if="${member.getIsBlocked()}"><input type="button" value="해제하기" th:id="${member.getMemberNo()}"
                                                               onclick="showMemberBlockCancelPopup(this.getAttribute('id'))"></span>
+            <td><input type="button" value="상세보기" th:id="${member.getMemberNo()}"
+                       onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))"></td>
             </td>
         </tr>
         </tbody>
