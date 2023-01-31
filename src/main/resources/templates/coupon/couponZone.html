@@ -115,7 +115,7 @@
                         <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
                         <h5 class="font-weight-semi-bold m-0" th:text="${limited.name}"></h5>
                     </div>
-                    <button><a href="/coupon-zone/3">발급받기</a></button>
+                    <button><a th:href="@{/coupon-zone/{id}(id=${limited.getId()})}">발급받기</a></button>
                 </div>
             </span>
         </span>
@@ -132,7 +132,7 @@
                         <h1 class="fa fa-check text-primary m-0 mr-3"></h1>
                         <h5 class="font-weight-semi-bold m-0" th:text="${unlimited.name}"></h5>
                     </div>
-                    <button><a href="/coupon-zone/3">발급받기</a></button>
+                    <button><a th:href="@{/coupon-zone/{id}(id=${limited.getId()})}">발급받기</a></button>
                 </div>
             </span>
         </span>
