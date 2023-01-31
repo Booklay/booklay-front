@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenUtils tokenUtils;
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -32,17 +36,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Auth Filter Path = {}", request.getRequestURI());
 
         try {
-
-            String jwtFormHeader = request.getHeader("Authorization");
-            String jwt = getTokenFromHeader(jwtFormHeader);
-
-            if (Objects.isNull(jwt) || jwt.isEmpty()) {
+            String sessionId = getSessionId(request.getCookies());
+            if (Objects.isNull(sessionId)) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            String role = tokenUtils.getRole(jwt);
-            String uuid = tokenUtils.getUuid(jwt);
+            String token = (String)redisTemplate.opsForHash().get(sessionId, "TOKEN");
+            String role = tokenUtils.getRole(token);
+            String uuid = tokenUtils.getUuid(token);
 
             Authentication authentication =
                 new UsernamePasswordAuthentication(uuid, null, Collections.singletonList(
@@ -63,12 +65,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return request.getServletPath().contains("img");
     }
 
-    private String getTokenFromHeader(String header) {
-        if (header == null ||!header.startsWith("Bearer ")) {
-            return "";
-        }
+    private String getSessionId(Cookie[] cookies) {
 
-        return header.split(" ")[1];
+        for (Cookie cookie : cookies) {
+            if (Objects.equals("SESSION_ID", cookie.getName())) {
+                return cookie.getValue();
+            }
+
+        }
+        return null;
     }
 
 }
