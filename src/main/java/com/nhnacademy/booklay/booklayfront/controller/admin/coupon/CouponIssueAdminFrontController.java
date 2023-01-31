@@ -60,20 +60,6 @@ public class CouponIssueAdminFrontController {
     }
 
     /**
-     *
-     *
-     */
-    @GetMapping("issue/{memberNo}/{pageNum}")
-    public String memberIssueCoupon(Model model, @PathVariable Integer pageNum,
-                                    @PathVariable String memberNo) {
-        couponRestApiModelSettingService.setCouponIssueToModelByPageAndMemberNo(pageNum, memberNo, model);
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
-        model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueView");
-        return RETURN_ADMIN_PAGE;
-    }
-
-    /**
      * 특정 사용자에게 쿠폰을 발급하기 위한 폼.
      *
      */
@@ -112,13 +98,27 @@ public class CouponIssueAdminFrontController {
     }
 
     /**
+     *
+     *
+     */
+    @GetMapping("issue-history/{memberNo}")
+    public String memberIssueCoupon(Model model, @RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                    @PathVariable String memberNo) {
+        couponRestApiModelSettingService.setCouponIssueToModelByPageAndMemberNo(pageNum, memberNo, model);
+        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
+        model.addAttribute(PAGE_NUM, pageNum);
+        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueHistoryView");
+        return RETURN_ADMIN_PAGE;
+    }
+
+    /**
      * 사용된 쿠폰 리스트 조회
      *
      */
     @GetMapping("/use-history")
     public String getCouponUsedHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,
                                        Model model) {
-        couponRestApiModelSettingService.setCouponIssueHistoryToModelByPage(pageNum, model);
+        couponRestApiModelSettingService.setCouponUseHistoryToModelByPage(pageNum, model);
         model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "useHistoryView");
         return RETURN_ADMIN_PAGE;
     }

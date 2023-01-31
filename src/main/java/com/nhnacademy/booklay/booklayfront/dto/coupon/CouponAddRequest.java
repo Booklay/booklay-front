@@ -1,47 +1,48 @@
 package com.nhnacademy.booklay.booklayfront.dto.coupon;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class CouponAddRequest {
     @NotBlank
     @Size(max = 100)
-    private final String name;
+    private String name;
 
     @NotNull
-    private final Long typeCode;
+    private Long typeCode;
 
     @NotNull
-    private final Long amount;
+    private Long amount;
 
     @NotNull
-    private final Boolean isOrderCoupon;
+    private Boolean isOrderCoupon;
 
-    private final Long applyItemId;
-
-    @NotNull
-    private final Long minimumUseAmount;
+    private Long applyItemId;
 
     @NotNull
-    private final Long maximumDiscountAmount;
+    private Long minimumUseAmount;
+
+    @NotNull
+    private Long maximumDiscountAmount;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private final LocalDateTime issuanceDeadlineAt;
+    private LocalDateTime issuanceDeadlineAt;
 
     @NotNull
-    private final Boolean isDuplicatable;
+    private Boolean isDuplicatable;
 
     @NotNull
-    private final Boolean isLimited;
+    private Boolean isLimited;
 
     @NotNull
-    private final int validateTerm;
+    private int validateTerm;
 }

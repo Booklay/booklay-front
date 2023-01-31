@@ -19,19 +19,9 @@ import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.D
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 
-import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponSetting;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponTemplate;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponTemplateDetail;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponType;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -48,10 +38,9 @@ public class CouponRestApiModelSettingService {
      *
      */
     public void setCouponListToModelByPage(Integer pageNum, Model model){
-        String query = "?page=" + pageNum;
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/admin/coupons", query);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
 
-        ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, null, new ParameterizedTypeReference<>() {});
+        ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
     }
@@ -103,9 +92,9 @@ public class CouponRestApiModelSettingService {
 
 
 
-    public void setCouponIssueHistoryToModelByPage(Integer pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue-history");
-        ApiEntity<List<CouponHistoryResponse>> apiEntity =
+    public void setCouponUseHistoryToModelByPage(Integer pageNum, Model model) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history");
+        ApiEntity<PageResponse<CouponHistoryResponse>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_HISTORY_LIST,apiEntity.getBody());
     }
@@ -115,18 +104,21 @@ public class CouponRestApiModelSettingService {
      *
      */
     public void setCouponIssueToModelByPage(Integer pageNum, Model model) {
-        String query = "?page=" + pageNum;
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/admin/coupons/issue-history", query);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue-history");
 
         ApiEntity<PageResponse<CouponHistoryResponse>> apiEntity =
-                restService.get(url, null, new ParameterizedTypeReference<>() {});
+                restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         model.addAttribute("list", apiEntity.getBody().getData());
     }
 
     public void setCouponIssueToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue/", memberNo, "/", pageNum.toString());
-        ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue-history/", memberNo);
+
+        ApiEntity<PageResponse<CouponHistoryResponse>> apiEntity =
+                restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+
+        model.addAttribute("list", apiEntity.getBody().getData());
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody().getData());
     }
 

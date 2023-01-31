@@ -92,35 +92,27 @@ public class CouponAdminFrontController {
         @Valid @ModelAttribute CouponAddRequest couponAddRequest,
         @RequestParam(name = "image", required = false) MultipartFile image) throws IOException {
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
-
-        URI storageUrl = URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/storage");
-
-        ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
-            @Override
-            public String getFilename() {
-                return image.getOriginalFilename();
-            }
-        };
-
-        MultipartBodyBuilder resource = new MultipartBodyBuilder();
-
-        resource.part("file",
-            contentsAsResource,
-            MediaType.valueOf(Objects.requireNonNull(image.getContentType())));
-
-        MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
-            headers);
-
-        ResponseEntity<ObjectFileResponse> responseEntity = restTemplate.postForEntity(storageUrl, httpEntity,
-            ObjectFileResponse.class);
-
-        map.put("imageId", responseEntity.getBody().getId());
-
+        if (!Objects.isNull(image) && !image.isEmpty()) {
+            URI storageUrl = URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/storage");
+            ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return image.getOriginalFilename();
+                }
+            };
+            MultipartBodyBuilder resource = new MultipartBodyBuilder();
+            resource.part("file",
+                    contentsAsResource,
+                    MediaType.valueOf(Objects.requireNonNull(image.getContentType())));
+            MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+            HttpEntity<MultiValueMap<String, HttpEntity<?>>> httpEntity = new HttpEntity<>(multipartBody,
+                    headers);
+            ResponseEntity<ObjectFileResponse> responseEntity = restTemplate.postForEntity(storageUrl, httpEntity,
+                    ObjectFileResponse.class);
+            map.put("imageId", responseEntity.getBody().getId());
+        }
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
 
         restService.post(url, map, String.class);
