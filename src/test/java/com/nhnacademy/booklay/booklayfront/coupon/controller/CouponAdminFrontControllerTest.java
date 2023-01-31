@@ -212,7 +212,7 @@ class CouponAdminFrontControllerTest {
 
     @Test
     void viewCoupon() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, 1L, 1000L
+        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정율", 1000L
             , 101L, 123L, 10000L, 1000L,
             LocalDateTime.now(), false, "", false);
         ResponseEntity<CouponDetail> responseEntity =

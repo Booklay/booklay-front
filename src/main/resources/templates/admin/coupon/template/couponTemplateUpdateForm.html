@@ -23,7 +23,7 @@
         </select><br/>
             <label>할인량 : <input type="number" name="amount" th:value="${couponTemplateDetail.amount}"></label> <br/>
             주문 쿠폰 여부<br/>
-            <custom th:if="${couponTemplateDetail.isOrderCoupon}">
+            <th:block th:if="${couponTemplateDetail.isOrderCoupon}">
                 <label>주문 쿠폰 : <input id="isOrderCoupon" type="radio" name="isOrderCoupon" value="true" checked></label>
                 <label>상품 쿠폰 : <input id="isProductCoupon" type="radio" name="isOrderCoupon" value="false"></label>
                 <br/>
@@ -32,8 +32,8 @@
                     <label id="itemSelectorLabel" class="hidden">적용 상품 번호 : <input id="itemSelector" type="number" name="disable"></label>
                     <br/>
                 </span>
-            </custom>
-            <custom th:if="${!couponTemplateDetail.isOrderCoupon}">
+            </th:block>
+            <th:block th:if="${!couponTemplateDetail.isOrderCoupon}">
                 <label>주문 쿠폰 : <input id="isOrderCoupon" type="radio" name="isOrderCoupon" value="true"></label>
                 <label>상품 쿠폰 : <input id="isProductCoupon" type="radio" name="isOrderCoupon" value="false" checked></label>
                 <br/>
@@ -42,16 +42,16 @@
                     <label id="itemSelectorLabel" class="hidden">적용 상품 번호 : <input id="itemSelector" type="number" name="applyItemId" th:value="${couponTemplateDetail.applyItemId}"></label>
                     <br/>
                 </span>
-            </custom>
+            </th:block>
             <label>최소 사용 금액 : <input type="number" name="minimumUseAmount"  th:value="${couponTemplateDetail.minimumUseAmount}"></label> <br/>
             <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount" th:value="${couponTemplateDetail.maximumDiscountAmount}"></label> <br/>
             <label>발급 기한 일시 : <input type="datetime-local" name="issuanceDeadline" th:value="${couponTemplateDetail.issuanceDeadlineAt}"></label> <br/>
             <label>발급 후 유효 기한 : <input type="number" name="validateTerm" th:value="${couponTemplateDetail.validateTerm}"></label><br/>
             중복 사용 가능 여부<br/>
-            <custum th:if="${couponTemplateDetail.isDuplicatable}">
+            <th:block th:if="${couponTemplateDetail.isDuplicatable}">
                 <label>중복 사용 가능 : <input type="radio" name="isDuplicatable" value="true" checked></label>
                 <label>중복 사용 불가 : <input type="radio" name="isDuplicatable" value="false"></label> <br/>
-            </custum>
+            </th:block>
             <custum th:if="${!couponTemplateDetail.isDuplicatable}">
                 <label>중복 사용 가능 : <input type="radio" name="isDuplicatable" value="true"></label>
                 <label>중복 사용 불가 : <input type="radio" name="isDuplicatable" value="false" checked></label> <br/>
