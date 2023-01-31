@@ -4,6 +4,7 @@ import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthentication;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -45,6 +46,7 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
 
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(authenticated);
+        response.addCookie(new Cookie("SESSION_ID",(String) authenticated.getPrincipal()));
         log.info(authenticated.getAuthorities().toString());
         log.info((String) authenticated.getPrincipal());
 
