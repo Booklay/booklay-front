@@ -12,6 +12,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 로그인 시도시 인증서버로 요청을 보냅니다.
+ * 옳바른 요청을 했을 경우 Authorization 헤더에 access token이 담겨 있습니다.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 
 /**
+ * 인증을 처리하기 위한 AuthenticationProvider 클래스입니다.
  *
  * @author 조현진
  */
@@ -29,11 +30,11 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     private final TokenUtils tokenUtils;
 
     /**
-     * 프록시로 인증 서벌르 호출합니다.
+     * 프록시로 인증 서버를 호출합니다.
      *
-     * @param authentication
-     * @return
-     * @throws AuthenticationException
+     * @param authentication - InitialAuthenticationFilter에서 만든 인증 객체입니다. name에 로그인 요청한 id, credentials에 비밀번호를 담고있습니다.
+     * @return Authentication 객체를 반환합니다.
+     * @throws AuthenticationException 인증 실패시 발생할 수 있는 오류입니다.
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

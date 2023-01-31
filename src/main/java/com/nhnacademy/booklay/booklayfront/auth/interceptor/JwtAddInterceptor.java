@@ -13,6 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * 사용자가 요청할때마다 헤더에 JWT를 달아줍니다.
+ *
+ * @author 조현진
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAddInterceptor implements ClientHttpRequestInterceptor{

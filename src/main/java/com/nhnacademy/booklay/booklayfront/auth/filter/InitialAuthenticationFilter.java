@@ -22,7 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 로그인을 시도할 때 단 한번 실행되는 필터.
+ * /login 경로로 인증을 시도할 때 실행되는 필터입니다.
+ * 인증 Principal 에 세션 아이디 및 자격 증명(Credential) 등 JWT 저장 관련 작업을 수행합니다.
+ * {@link OncePerRequestFilter} 추상 클래스를 상속받아 사용자의 요청 당 한 번만 필터가 동작합니다.
+ *
+ * @author 조현진
  */
 @Slf4j
 @Component
@@ -55,7 +59,7 @@ public class InitialAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * /login 경로에만 이 필터를 적용한다.
+     * /login 경로에만 이 필터를 적용합니다.
      */
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
