@@ -52,21 +52,21 @@
 
       <div id="button-var">
         <th:block th:if="${product.isSelling}">
-          <form class="btnAtVar" method="post" action="">
+          <form class="btnAtVar" method="post" action="/order/product">
             <input name="memberNo" type="number" th:if="${member != null}"
                    th:value="${member.memberNo}"
                    hidden="hidden"/>
-            <input class="numIn" name="quantity" type="number" min="1" value="1"/>
-            <input name="productId" type="number" th:value="${product.productId}" hidden="hidden">
+            <input class="numIn" name="count" type="number" min="1" value="1"/>
+            <input name="productNo" type="number" th:value="${product.productId}" hidden="hidden">
             <input type="submit" value="구매"/>
           </form>
 
-          <form class="btnAtVar" method="post" action="">
+          <form class="btnAtVar" method="post" action="/cart">
             <input name="memberNo" type="number" th:if="${member != null}"
                    th:value="${member.memberNo}"
                    hidden="hidden"/>
-            <input class="numIn" name="quantity" type="number" min="1" value="1"/>
-            <input name="productId" type="number" th:value="${product.productId}" hidden="hidden">
+            <input class="numIn" name="count" type="number" min="1" value="1"/>
+            <input name="productNo" type="number" th:value="${product.productId}" hidden="hidden">
             <input type="submit" value="카트에 넣기"/>
           </form>
         </th:block>
