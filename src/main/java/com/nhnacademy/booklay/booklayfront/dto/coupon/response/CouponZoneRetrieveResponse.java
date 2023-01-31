@@ -13,6 +13,6 @@ public class CouponZoneRetrieveResponse {
     private String name;
     private String description;
     private LocalDateTime openedAt;
-    private LocalDateTime closedAt;
+    private LocalDateTime issuanceDeadlineAt;
     private Boolean isBlind;
 }

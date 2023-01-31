@@ -21,23 +21,28 @@
 <html lang="ko">
 <h2>회원 선택</h2>
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
-    <table border="1px">
-        <tr>
-            <td>번호</td>
-            <td>회원 ID</td>
-            <td>회원 닉네임</td>
-            <td>생일</td>
-            <td></td>
-        </tr>
-        <tbody th:each="member, memberStat :${memberList}">
-        <tr>
-            <td><p th:text="${memberStat.count}"></p></td>
-            <td><p th:text="${member.id}"></p></td>
-            <td><p th:text="${member.nickname}"></p></td>
-            <td><p th:text="${member.birthday}"></p></td>
-            <td><input type="button" value="선택" th:id="${member.id}" th:onclick="setMemberText(this.getAttribute('id'))"></td>
-        </tr>
-    </tbody>
-    </table>
+    <div th:if="${#lists.isEmpty(list)}">
+        등록된 회원이 없습니다.
+    </div>
+    <div th:unless="${#lists.isEmpty(list)}">
+        <table border="1px">
+            <tr>
+                <td>번호</td>
+                <td>회원 ID</td>
+                <td>회원 닉네임</td>
+                <td>생일</td>
+                <td></td>
+            </tr>
+            <tbody th:each="member, memberStat :${list}">
+            <tr>
+                <td><p th:text="${memberStat.count}"></p></td>
+                <td><p th:text="${member.memberNo}"></p></td>
+                <td><p th:text="${member.nickname}"></p></td>
+                <td><p th:text="${member.birthday}"></p></td>
+                <td><input type="button" value="선택" th:id="${member.memberNo}" th:onclick="setMemberText(this.getAttribute('id'))"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </html>

@@ -38,11 +38,13 @@ public class CouponRestApiModelSettingService {
      *
      */
     public void setCouponListToModelByPage(Integer pageNum, Model model){
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/admin/coupons");
 
         ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+        model.addAttribute("list", apiEntity.getBody().getData());
+        model.addAttribute("totalPage", apiEntity.getBody().getTotalPages());
+        model.addAttribute("currentPage", apiEntity.getBody().getPageNumber());
     }
 
     public void setCouponListToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
@@ -110,6 +112,8 @@ public class CouponRestApiModelSettingService {
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         model.addAttribute("list", apiEntity.getBody().getData());
+        model.addAttribute("totalPage", apiEntity.getBody().getTotalPages());
+        model.addAttribute("currentPage", apiEntity.getBody().getPageNumber());
     }
 
     public void setCouponIssueToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {

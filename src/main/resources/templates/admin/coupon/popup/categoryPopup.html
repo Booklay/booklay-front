@@ -31,7 +31,7 @@
         <th></th>
     </tr>
     </thead>
-    <tbody th:each="category : ${categoryList}">
+    <tbody th:each="category : ${list}">
     <tr>
 
         <td>
@@ -70,6 +70,6 @@
     </tr>
     </tbody>
 </table>
-<h2 th:if="${categories.isEmpty()}">등록된 카테고리가 없습니다.</h2>
+<h2 th:if="${list.isEmpty()}">등록된 카테고리가 없습니다.</h2>
 
 </html>

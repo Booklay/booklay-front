@@ -1,7 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
@@ -27,6 +25,10 @@ public class CouponZoneController {
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String RETURN_PAGE = "admin/adminPage";
 
+    /**
+     * 사용자의 쿠폰존 페이지.
+     *
+     */
     @GetMapping
     public String getCouponZone(Model model) {
         URI getLimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/limited");
@@ -46,6 +48,10 @@ public class CouponZoneController {
         return "/coupon/couponZone";
     }
 
+    /**
+     * 사용자의 쿠폰 발급.
+     *
+     */
     @GetMapping("/{couponId}")
     public String couponZoneIssue(@PathVariable Long couponId) {
 
