@@ -45,7 +45,7 @@ public class CouponZoneController {
         model.addAttribute("limitedList", limitedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
-        return "/coupon/couponZone";
+        return "coupon/couponZone";
     }
 
     /**

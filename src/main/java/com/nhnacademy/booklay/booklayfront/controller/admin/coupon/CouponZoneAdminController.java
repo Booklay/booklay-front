@@ -58,7 +58,7 @@ public class CouponZoneAdminController {
             restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
-        model.addAttribute(TARGET_VIEW, "/coupon/couponZone/couponZoneList");
+        model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneList");
         model.addAttribute("limitedList", limitedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
@@ -71,7 +71,7 @@ public class CouponZoneAdminController {
      */
     @GetMapping("/form")
     public String getCouponZoneAddForm(Model model) {
-        model.addAttribute(TARGET_VIEW, "/coupon/couponZone/couponZoneAddForm");
+        model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneAddForm");
 
         return RETURN_PAGE;
     }
