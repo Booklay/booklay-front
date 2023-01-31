@@ -115,7 +115,7 @@ public class ProductDisplayController {
         model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
 
-    return "/product/productDetailView";
+    return "product/productDetailView";
   }
 
   @PostMapping("/view/wishlist/register")

@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,6 +62,11 @@ class CartControllerTest {
     RestTemplate restTemplate;
     @MockBean
     AuthenticationManager authenticationManager;
+    @MockBean
+    TokenUtils tokenUtils;
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
+
     private final String RETURN_PAGE = "cart/listForm";
     private final String REDIRECT_PAGE = "cart/list";
     private final String URI_PREFIX = "/cart/";

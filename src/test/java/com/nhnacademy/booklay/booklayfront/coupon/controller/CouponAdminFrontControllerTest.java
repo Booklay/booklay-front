@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +73,13 @@ class CouponAdminFrontControllerTest {
 
     @MockBean
     ImageUploader imageUploader;
+
+    @MockBean
+    TokenUtils tokenUtils;
+
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
+
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String URI_PREFIX = "/admin/coupons";
 

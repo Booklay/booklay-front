@@ -14,6 +14,6 @@ public class AdminIndexController {
         model.addAttribute("navHead", "emptyPage");
         model.addAttribute("targetUrl", "emptyPage");
 
-        return "/admin/adminPage";
+        return "admin/adminPage";
     }
 }

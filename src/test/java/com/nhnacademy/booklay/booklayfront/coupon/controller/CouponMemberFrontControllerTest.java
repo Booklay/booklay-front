@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.coupon.CouponMemberFrontController;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -26,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,11 @@ class CouponMemberFrontControllerTest {
     @MockBean
     AuthenticationManager authenticationManager;
 
+    @MockBean
+    TokenUtils tokenUtils;
+
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
 
     private final String RETURN_PAGE = "mypage/myPage";
     private final String URI_PREFIX = "/member/coupon/";
