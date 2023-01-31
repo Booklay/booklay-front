@@ -67,6 +67,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getSessionId(Cookie[] cookies) {
 
+        if (Objects.isNull(cookies)) {
+            return null;
+        }
+
         for (Cookie cookie : cookies) {
             if (Objects.equals("SESSION_ID", cookie.getName())) {
                 return cookie.getValue();
