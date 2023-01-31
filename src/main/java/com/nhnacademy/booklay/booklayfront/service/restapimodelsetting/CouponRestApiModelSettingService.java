@@ -1,25 +1,10 @@
 package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_SETTING_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_TEMPLATE_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_TYPES_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_DETAIL;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_SETTING;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_SETTING_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_TEMPLATE_DETAIL;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_TEMPLATE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_COUPON_TYPE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_HISTORY_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_ISSUE_HISTORY_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_ISSUE_LIST;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.COUPON_URL_LIST_PAGE;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +28,18 @@ public class CouponRestApiModelSettingService {
         ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
+    /**
+     * 관리자의 멤버의 보유쿠폰 조회요청을 보내고 model에 결과값을 추가함?
+     * @param memberNo 조회하려는 멤버의 no
+     */
     public void setCouponListToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/members/", memberNo, "/", pageNum.toString());
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "members/", memberNo);
         ApiEntity<PageResponse<Coupon>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     /**
@@ -65,11 +56,13 @@ public class CouponRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
         ApiEntity<PageResponse<CouponType>> apiEntity = restService.get(url, getDefaultPageMap(0, Integer.MAX_VALUE), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TYPE_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
     public void setCouponTemplateListToModelByPage(Integer pageNum, Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TEMPLATE_REST_PREFIX, COUPON_URL_LIST_PAGE);
         ApiEntity<PageResponse<CouponTemplate>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
     public void setCouponTemplateDetailToModelByCouponTemplateId(String couponTemplateId, Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TEMPLATE_REST_PREFIX, couponTemplateId);
@@ -81,6 +74,7 @@ public class CouponRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_SETTING_REST_PREFIX, COUPON_URL_LIST_PAGE);
         ApiEntity<PageResponse<CouponSetting>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_COUPON_SETTING_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     public void setCouponSettingToModelByCouponSettingId(String couponSettingId, Model model) {
@@ -96,7 +90,8 @@ public class CouponRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history");
         ApiEntity<PageResponse<CouponHistoryResponse>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_ISSUE_HISTORY_LIST,apiEntity.getBody());
+        model.addAttribute(ATTRIBUTE_NAME_ISSUE_HISTORY_LIST,apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     /**
@@ -110,6 +105,7 @@ public class CouponRestApiModelSettingService {
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         model.addAttribute("list", apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     public void setCouponIssueToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
@@ -120,17 +116,20 @@ public class CouponRestApiModelSettingService {
 
         model.addAttribute("list", apiEntity.getBody().getData());
         model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     public void setCouponHistoryToModelByPage(Integer pageNum, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/");
         ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
     public void setCouponHistoryToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/", memberNo);
         ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 }

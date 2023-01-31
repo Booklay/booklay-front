@@ -66,9 +66,18 @@ public class CouponTypeAdminController {
     }
     //todo type update 없음
 
-    @GetMapping("/delete/{couponId}")
-    public String couponTypeDelete(@PathVariable String couponId) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX, couponId);
+    @PostMapping("/update")
+    public String couponTypeUpdate(@Valid @ModelAttribute("CouponTypeAddRequest")
+                                       CouponTypeAddRequest couponTypeAddRequest){
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
+        Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
+        restService.put(url, map, String.class);
+        return RETURN_ADMIN_PAGE;
+    }
+
+    @GetMapping("/delete/{couponTypeId}")
+    public String couponTypeDelete(@PathVariable String couponTypeId) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX, couponTypeId);
         restService.delete(url);
         return COUPON_TYPE_REDIRECT_LIST;
     }

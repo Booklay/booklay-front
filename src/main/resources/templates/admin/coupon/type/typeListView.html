@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+<script th:inline="javascript">
+    const couponTypeList = [[${couponTypeList}]];
+    function updateClickEvent(){
+        if (this.classList.contains("editing")){
+            this.classList.remove("editing");
+            this.innerText = "수정";
+            let nameTd = this.parentElement.parentElement.children.item(1);
+            let value = nameTd.firstElementChild.value;
+            nameTd.innerHTML = '<p>'+value+'</p>';
+        }else{
+            this.classList.add("editing");
+            this.innerText = "수정중";
+            let nameTd = this.parentElement.parentElement.children.item(1);
+            console.log(nameTd);
+            console.log(this.parentElement.children);
+            console.log(this.parentElement);
+            nameTd.innerHTML = '<input value="'+nameTd.firstElementChild.innerHTML+'">';
+            console.log(nameTd.firstElementChild.innerHTML);
+        }
+    }
+    window.onload = function (){
+        couponTypeList.forEach(value => {
+            let couponType = document.getElementById(value.id+"update");
+            couponType.addEventListener("click", updateClickEvent);
+        });
+    }
+</script>
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <table>
             <tr>
@@ -13,18 +39,12 @@
             <tr>
                 <td><p th:text="${couponType.id}"></p></td>
                 <td><p th:text="${couponType.name}"></p></td>
-                <td><a th:href="${'/admin/coupon/types/update/'+couponType.id}">수정</a></td>
+                <td><button th:id="${couponType.id+'update'}">수정</button></td>
                 <td><a th:href="${'/admin/coupon/types/delete/'+couponType.id}">삭제</a></td>
             </tr>
         </tbody>
 
         </table>
-        <p th:if="${pageNum > 0}">
-            <a th:href="${'coupon/types/list/' + (pageNum - 1)}">이전</a>
-        </p>
-        <p th:if="${#lists.size(couponTypeList) == 20}">
-            <a th:href="${'coupon/types/list/' + (pageNum + 1)}">다음</a>
-        </p>
     </div>
 
 </html>
