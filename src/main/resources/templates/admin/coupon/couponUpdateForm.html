@@ -2,16 +2,33 @@
 <head>
     <title>쿠폰 수정</title>
     <link href="/css/form.css" rel="stylesheet">
+    <script src="/js/coupon/couponCreateForm.js"></script>
+    <script src="/js/coupon/couponPopup.js"></script>
 </head>
 <html lang="ko">
 
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <form action="" method="post" enctype="multipart/form-data">
             <label>쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.name}"> </label><br/>
-            <label>쿠폰 종류 : <input type="text" name="typeName" th:value="${couponDetail.typeName}"></label><br/>
-            <label>할인 금액(정액) or 할인율(정율) : <input type="number" name="amount" th:value="${couponDetail.amount}"></label><br/>
-            <label>적용 카테고리 번호 : <input type="number" name="categoryId" th:value="${couponDetail.categoryId}"></label><br/>
-            <label>적용 상품 번호 : <input type="number" name="productId" th:value="${couponDetail.productId}"></label><br/>
+            <label>쿠폰 종류 :
+            <select type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
+                <th:block th:each="couponType:${couponTypeList}">
+                    <option th:value="${couponType.id}" th:text="${couponType.name}" th:checked="${#strings.equals(couponType.name, couponDetail.typeName)}"></option>
+                </th:block>
+            </select><br/>
+            <label>할인량 : <input type="number" name="amount" th:value="${couponDetail.amount}"></label><br/>
+                <div id="select-item">
+                    <label for="coupon-range">적용 범위</label>
+                    <select id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
+                        <option value="1" selected>주문 쿠폰</option>
+                        <option value="0">상품 쿠폰</option>
+                    </select><br/>
+                    <span>
+                    <label id="apply-item-label" for="apply-item">적용 카테고리 번호</label><input type="number" name="applyItemId" id="apply-item">
+                </span>
+                    <input type="button" value="찾기" id="item-search-button" onclick="showCategoryPopup()">
+                    <br/>
+                </div>
             <label>최소 사용 금액 : <input type="number" name="minimumUseAmount" th:value="${couponDetail.minimumUseAmount}"></label><br/>
             <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount" th:value="${couponDetail.maximumDiscountAmount}"></label><br/>
             <label>발급 기한 일시 : <input type="datetime-local" name="issuanceDeadlineAt" th:value="${couponDetail.issuanceDeadlineAt}"></label><br/>
