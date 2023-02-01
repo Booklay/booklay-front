@@ -373,6 +373,7 @@
 <div class="container-fluid py-5">
   <div class="text-center mb-4">
     <h2 class="section-title px-5"><span class="px-2">You May Also Like</span></h2>
+    <br>
     <input th:id="${product.productId}" type="button" value="연관 상품 추가"
            onclick="showRecommendRegisterPopup(id);"/>
   </div>
@@ -421,6 +422,7 @@
 <div th:if="${product.subscribeId != null}" class="container-fluid py-5">
   <div class="text-center mb-4">
     <h2 class="section-title px-5"><span class="px-2">This books will be delivered</span></h2>
+    <br>
     <input th:id="${product.subscribeId}" type="button" value="구독 자식 상품 추가"
            onclick="showBookSubscribeRegisterPopup(id);"/>
   </div>

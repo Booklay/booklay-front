@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +50,7 @@ public class RetrieveProductBookForUpdateResponse {
   @Setter
   Integer storage;
 
-  List<Long> authorIds;
+  List<RetrieveAuthorResponse> authorList;
 
-  List<Long> categoryIds;
+  List<CategoryResponse> categoryList;
 }
