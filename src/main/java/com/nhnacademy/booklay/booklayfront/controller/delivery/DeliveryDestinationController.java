@@ -108,8 +108,9 @@ public class DeliveryDestinationController {
 
         model.addAttribute("address", response.getBody());
         model.addAttribute("memberNo", memberNo);
+        model.addAttribute("targetUrl", "member/memberAddressUpdateForm");
 
-        return "mypage/member/memberAddressUpdateForm";
+        return MYPAGE;
     }
 
     @PostMapping("/update/{memberNo}/{addressNo}")
