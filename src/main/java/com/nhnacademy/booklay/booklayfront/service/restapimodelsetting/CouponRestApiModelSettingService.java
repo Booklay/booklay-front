@@ -50,7 +50,7 @@ public class CouponRestApiModelSettingService {
     public void setCouponDetailToModelByCouponId(String couponId, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
         ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
-        apiEntity.getBody().setId(couponId);
+
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
     }
     public void setAllCouponTypeToModel(Model model){
