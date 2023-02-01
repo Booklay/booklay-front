@@ -83,7 +83,7 @@ public class AdminProductController {
     restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
     });
 
-    return "redirect:/product/board";
+    return "redirect:/product/display";
   }
 
   //책 생성 페이지
