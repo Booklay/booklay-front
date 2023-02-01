@@ -1,44 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>회원 주소 등록</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
-    <link th:href="@{/img/favicon.ico}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <title>Dummy Address</title>
 </head>
 <body>
-<!--<h3>배송지 등록하기</h3><br>-->
-<!--<div>-->
-<!--    <form th:action="@{/address/register/{memberNo}(memberNo=${memberNo})}" method="post"-->
-<!--          name="DeliveryDestinationCURequest">-->
-<!--        <b>배송지 이름</b>: <input type="text" name="name"><br>-->
-<!--        <b>우편번호</b>: <input type="text" name="zipCode"><br>-->
-<!--        <b>상세주소</b>: <input type="text" name="address"><br>-->
-<!--        <b>기본 배송지 여부</b>:-->
-<!--        설정 <input type="radio" value="true" name="isDefaultDestination">-->
-<!--        해제 <input type="radio" value="false" name="isDefaultDestination" checked><br>-->
-<!--        <input type="submit" value="등록하기"/>-->
-<!--    </form>-->
-<!--</div>-->
-
 <h3>배송지 등록하기</h3><br>
 
 <form th:action="@{/address/register/{memberNo}(memberNo=${memberNo})}" method="post"
@@ -46,8 +12,8 @@
     <b>배송지 이름</b>: <input type="text" name="name"><br>
     <b>우편번호</b>: <input type="text" id="sample6_postcode" name="zipCode" placeholder="우편번호">
     <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-    <b>주소</b>: <input type="text" id="sample6_address" name="address" placeholder="주소"><br>
-    <b>상세주소</b>: <input type="text" id="sample6_detailAddress" name="addressDetail" placeholder="상세주소">
+    <b>주소</b>: <input type="text" id="sample6_address" placeholder="주소"><br>
+    <b>상세주소</b>: <input type="text" id="sample6_detailAddress" name="address" placeholder="상세주소">
     <input type="text" id="sample6_extraAddress" placeholder="참고항목"><br>
     <b>기본 배송지 여부</b>:
     설정 <input type="radio" value="true" name="isDefaultDestination">
@@ -105,5 +71,6 @@
         }).open();
     }
 </script>
+
 </body>
 </html>
