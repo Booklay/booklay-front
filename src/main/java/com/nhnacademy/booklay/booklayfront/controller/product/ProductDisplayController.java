@@ -91,7 +91,7 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("productList", productList);
     }
 
-    return "shop";
+    return "product/shop";
   }
 
   @GetMapping("/view/{productNo}")
@@ -140,7 +140,7 @@ public class ProductDisplayController extends BaseController {
         model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
 
-    return "detail";
+    return "product/detail";
   }
 
   @PostMapping("/view/wishlist/register")
