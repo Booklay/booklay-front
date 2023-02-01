@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -9,16 +8,10 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberUpdateReques
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
-import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,21 +45,12 @@ public class MemberController {
 
     @PostMapping("/register")
     public String createMember(@Valid @ModelAttribute MemberCreateRequest memberCreateRequest,
-                               BindingResult bindingResult)
-        throws JsonProcessingException {
+                               BindingResult bindingResult) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        URI uri = URI.create(redirectGatewayPrefix);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-
-        httpHeaders.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
-        RequestEntity<String> requestEntity =
-            new RequestEntity<>(objectMapper.writeValueAsString(memberCreateRequest), httpHeaders,
-                HttpMethod.POST, URI.create(redirectGatewayPrefix));
-
-        restTemplate.exchange(requestEntity, Void.class);
+        restService.post(uri.toString(), objectMapper.convertValue(memberCreateRequest, Map.class),
+            Void.class);
         //TODO 2: 에러처리
 
         return "redirect:/";
@@ -85,22 +69,16 @@ public class MemberController {
 
     @GetMapping("/{memberNo}")
     public String retrieveMemberDetail(@PathVariable Long memberNo, Model model, MemberInfo memberInfo) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
-        RequestEntity<Void> requestEntity =
-            new RequestEntity<>(httpHeaders, HttpMethod.GET, uri);
-
-        ResponseEntity<MemberRetrieveResponse> response
-            = restTemplate.exchange(requestEntity, MemberRetrieveResponse.class);
+        ApiEntity<MemberRetrieveResponse> response =
+            restService.get(uri.toString(), null, MemberRetrieveResponse.class);
 
         model.addAttribute("member", response.getBody());
         model.addAttribute("memberNo", memberNo);
         model.addAttribute("targetUrl", "member/memberDetail");
 
-        log.info("member id = {}",memberInfo.getMemberId());
+        log.info("member id = {}", memberInfo.getMemberId());
         return MYPAGE;
     }
 
