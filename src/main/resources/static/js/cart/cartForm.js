@@ -52,4 +52,39 @@ window.onload = function() {
     if (result.length>0){
         document.getElementById(result[0].productNo+"count").dispatchEvent(new Event("change"));
     }
+
+    document.getElementById("allProductCheck").addEventListener("change",
+        function (){
+        let allProductCheck = document.getElementById("allProductCheck");
+        result.forEach(value => {
+            document.getElementById(value.productNo+"check").checked = allProductCheck.checked;
+        });
+    });
+
+    document.getElementById("toOrder").addEventListener("click",
+        function (){
+        let cartDtoArray = [];
+        result.forEach(value => {
+            if(document.getElementById(value.productNo+"check").checked){
+                cartDtoArray.add({
+                    "productNo":value.productNo,
+                    "count": parseInt(document.getElementById(value.productNo+"count").value)
+                });
+
+            }
+        });
+        console.log(cartDtoArray);
+            // let productCount = document.getElementById(value.productNo+"count").value;
+            // let httpRequest = new XMLHttpRequest();
+            // let body = {
+            //     "productNo":value.productNo,
+            //     "count":parseInt(productCount)
+            // };
+            // httpRequest.open('POST', '/order/page');
+            // httpRequest.responseType = "json";
+            // httpRequest.setRequestHeader("Content-Type", "application/json");
+            // httpRequest.send(JSON.stringify(body));
+    });
+
 };
+

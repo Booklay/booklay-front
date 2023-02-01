@@ -177,6 +177,7 @@
             <table class="table table-bordered text-center mb-0">
                 <thead class="bg-secondary text-dark">
                 <tr>
+                    <th><label for="allProductCheck"></label><input type="checkbox" id="allProductCheck"></th>
                     <th>상품</th>
                     <th>가격</th>
                     <th>수량</th>
@@ -192,6 +193,7 @@
 
                 <th:block th:each="cart : ${cartObjectList}">
                     <tr>
+                        <td class="align-middle"><label><input type="checkbox" th:id="${cart.productNo+'check'}"></label></td>
                         <td class="align-middle"><img src="/img/product-1.jpg" alt="" style="width: 50px;" th:text="${cart.productName}"> </td>
                         <td class="align-middle" th:text="${cart.productPrice}"></td>
                         <td class="align-middle">
