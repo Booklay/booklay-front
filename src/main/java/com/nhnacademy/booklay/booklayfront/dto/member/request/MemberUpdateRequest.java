@@ -37,5 +37,4 @@ public class MemberUpdateRequest {
     @Email
     @NotBlank
     private String email;
-
 }

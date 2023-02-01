@@ -31,7 +31,6 @@ public class MemberController {
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
-
     private final static String MYPAGE = "mypage/myPage";
 
     public MemberController(RestTemplate restTemplate, RestService restService, String gateway,

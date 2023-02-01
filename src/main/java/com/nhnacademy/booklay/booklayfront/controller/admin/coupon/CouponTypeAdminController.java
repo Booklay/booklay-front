@@ -27,11 +27,8 @@ public class CouponTypeAdminController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
-
     private final CouponRestApiModelSettingService restApiService;
-
     private static final String COUPON_TYPE_REDIRECT_LIST = "redirect:/admin/coupons/types/list";
-
 
     @ModelAttribute("navHead")
     public String addNavHead() {
@@ -55,7 +52,8 @@ public class CouponTypeAdminController {
     }
 
     @GetMapping("/list")
-    public String allCouponTypeList(Model model, @RequestParam(value = "page", defaultValue = "0") Integer pageNum) {
+    public String allCouponTypeList(Model model, @RequestParam(value = "page", defaultValue = "0")
+    Integer pageNum) {
         restApiService.setCouponTypeListToModelByPage(pageNum, model);
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/type/typeListView");
@@ -64,7 +62,7 @@ public class CouponTypeAdminController {
 
     @PostMapping("/update")
     public String couponTypeUpdate(@Valid @RequestBody
-                                   CouponTypeUpdateRequest couponTypeUpdateRequest){
+                                   CouponTypeUpdateRequest couponTypeUpdateRequest) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
         Map<String, Object> map = objectMapper.convertValue(couponTypeUpdateRequest, Map.class);
         restService.put(url, map, String.class);
@@ -73,10 +71,9 @@ public class CouponTypeAdminController {
 
     @GetMapping("/delete/{couponTypeId}")
     public String couponTypeDelete(@PathVariable String couponTypeId) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX, couponTypeId);
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX,
+            couponTypeId);
         restService.delete(url);
         return COUPON_TYPE_REDIRECT_LIST;
     }
-
-
 }

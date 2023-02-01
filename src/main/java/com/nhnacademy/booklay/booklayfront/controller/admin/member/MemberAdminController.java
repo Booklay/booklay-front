@@ -32,7 +32,6 @@ public class MemberAdminController {
     private final ObjectMapper objectMapper;
     private final static String ADMINPAGE = "admin/adminPage";
 
-
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
         this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/members";
