@@ -14,6 +14,8 @@ public class DeliveryDestinationCURequest {
     private final String zipCode;
     @NotBlank
     private final String address;
+    private final String addressDetail;
+    private final String addDetail;
     @NotNull
     private final Boolean isDefaultDestination;
 }

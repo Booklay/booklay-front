@@ -32,7 +32,6 @@ public class MemberAdminController {
     private final ObjectMapper objectMapper;
     private final static String ADMINPAGE = "admin/adminPage";
 
-
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
         this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/members";
@@ -162,19 +161,18 @@ public class MemberAdminController {
                               Model model) {
         URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
 
-        ApiEntity<Void> response =
-            restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-                Void.class);
+        restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+            Void.class);
 
         return "redirect:/admin/members";
     }
 
     @GetMapping("/block/cancel/process/{blockedMemberDetailId}")
-    public String memberBlockCancel(@PathVariable Long blockedMemberDetailId, Model model){
+    public String memberBlockCancel(@PathVariable Long blockedMemberDetailId,
+                                    Model model) {
         URI uri = URI.create(redirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
 
-        ApiEntity<Void> response =
-            restService.get(uri.toString(), null, Void.class);
+        restService.get(uri.toString(), null, Void.class);
 
         return "redirect:/admin/members/block";
     }
