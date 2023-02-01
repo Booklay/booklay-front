@@ -177,7 +177,7 @@
       <p> 적립률 |
         <span th:if="${product.pointMethod}" th:text="${product.pointRate} + '%'"></span>
         <span th:if="${product.pointMethod == false}">포인트 미적립 상품</span>
-        </p>
+      </p>
       <P>연관 태그</P>
       <th:block th:each="tag : ${product.productTags}">
         <span th:text="${tag.name}"/>
@@ -210,19 +210,40 @@
         <span class="btnAtVar" th:if="${!product.isSelling}">품절</span>
 
         <!--<th:block th:if="${member !=null}">-->
-        <form class="btnAtVar" method="post" action="">
+        <form class="btnAtVar" method="post" action="/product/wishlist/connect">
           <input name="memberNo" type="number" th:if="${member != null}"
                  th:value="${member.memberNo}"
                  hidden="hidden"/>
+          <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
           <input type="submit" value="찜 등록"/>
         </form>
 
-        <form class="btnAtVar" method="post" action="">
+        <form class="btnAtVar" method="post" action="/product/wishlist/disconnect">
           <input name="memberNo" type="number" th:if="${member != null}"
                  th:value="${member.memberNo}"
                  hidden="hidden"/>
+          <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
+          <input type="submit" value="찜 등록 취소"/>
+        </form>
+
+
+        <form class="btnAtVar" method="post" action="/product/alarm/connect">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
           <input type="submit" value="알림 등록"/>
         </form>
+
+        <form class="btnAtVar" method="post" action="/product/alarm/disconnect">
+          <input name="memberNo" type="number" th:if="${member != null}"
+                 th:value="${member.memberNo}"
+                 hidden="hidden"/>
+          <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
+          <input type="submit" value="알림 등록 취소"/>
+        </form>
+
+
         <!--        </th:block>-->
 
         <!--        관리자 식별-->
