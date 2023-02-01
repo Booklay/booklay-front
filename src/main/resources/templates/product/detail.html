@@ -170,14 +170,14 @@
         <span th:text="${product.subscribeDay}"/> 발송
       </p>
       <p class="font-weight-semi-bold mb-4"> 정가 | <span th:text="${product.price}"/>원</p>
-      <p class="mb-4" th:text="${product.shortDescription}"> Short Description</p>
+      <p class="mb-4" th:utext="${product.shortDescription}"> Short Description</p>
 
       <hr>
       <!--    <p th:text="${product.salePrice}"></p>-->
       <p> 적립률 |
-        <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/>
-        <span th:if="${product.pointMethod == false}" th:text="0"/>
-        %</p>
+        <span th:if="${product.pointMethod}" th:text="${product.pointRate} + '%'"></span>
+        <span th:if="${product.pointMethod == false}">포인트 미적립 상품</span>
+        </p>
       <P>연관 태그</P>
       <th:block th:each="tag : ${product.productTags}">
         <span th:text="${tag.name}"/>
@@ -242,7 +242,7 @@
             <input type="submit" value="삭제"/>
           </form>
 
-        </th:block>제
+        </th:block>
       </div>
 
 
@@ -276,7 +276,7 @@
       </div>
       <div class="tab-content">
         <div class="tab-pane fade show active" id="tab-pane-1">
-          <h4 class="mb-3" th:text="${product.longDescription}">Product Description</h4>
+          <h4 class="mb-3" th:utext="${product.longDescription}">Product Description</h4>
         </div>
         <div class="tab-pane fade" id="tab-pane-2">
           <h4 class="mb-3">Additional Information</h4>
