@@ -32,7 +32,7 @@ public class ObjectFileStorageController {
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
 
-    URI uri = URI.create(gatewayIp + "/shop/v1//storage/" + objectFileId);
+    URI uri = URI.create(gatewayIp + "/shop/v1/storage/" + objectFileId);
 
     RequestEntity<PageResponse<RetrieveProductResponse>> requestEntity = new RequestEntity<>(
         headers, HttpMethod.GET, uri);
