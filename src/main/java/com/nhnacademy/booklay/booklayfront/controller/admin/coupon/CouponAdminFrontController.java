@@ -1,12 +1,28 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.PAGE_NUM;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.RETURN_ADMIN_PAGE;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponAddRequest;
 import com.nhnacademy.booklay.booklayfront.dto.storage.response.ObjectFileResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
+import java.io.IOException;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,19 +32,14 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 
 @SuppressWarnings("unchecked")
 @Controller
@@ -38,13 +49,16 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildStri
 public class CouponAdminFrontController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
-    private final String gatewayIp;
     private final RestTemplate restTemplate;
+
+    private final String gatewayIp;
+
+    @Value("${booklay.front-url}")
+    private final String url;
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
-    
 
     @ModelAttribute("navHead")
     public String addNavHead() {
@@ -126,6 +140,7 @@ public class CouponAdminFrontController {
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
+        model.addAttribute("url", url);
 
         return RETURN_ADMIN_PAGE;
     }

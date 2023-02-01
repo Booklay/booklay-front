@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+<head>
+    <script src="/js/coupon/ErrorControl.js"></script>
+</head>
+<body>
     <div id="header-carousel" class="carousel slide" data-ride="carousel">
         <div th:if="${#lists.isEmpty(list)}">
             <div>
@@ -35,12 +38,15 @@
                         <p th:if="${coupon.isLimited}">O</p>
                         <p th:unless="${coupon.isLimited}">X</p>
                     </td>
-                    <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
+                    <td><button th:onclick="'couponDetail(' + ${coupon.id} + ')'">상세</button></td>
                     <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
                     <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
                 </tr>
                 </tbody>
         </table>
+        <td><button onclick=couponDetail(100)>이상한 상세</button></td>
     </div>
     </div>
+    <input type="hidden" id="url" th:value="${url}">
+</body>
 </html>
