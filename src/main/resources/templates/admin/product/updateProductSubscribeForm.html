@@ -40,12 +40,12 @@
   <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
 
   <p>판매 여부 :
-    <th:block th:if="${product.isSelling}">
+    <th:block th:if="${product.selling}">
       <input type="radio" name="isSelling" checked value="true"> Y
       <input type="radio" name="isSelling" value="false"> N
     </th:block>
 
-    <th:block th:unless="${product.isSelling}">
+    <th:block th:unless="${product.selling}">
       <input type="radio" name="isSelling" value="true"> Y
       <input type="radio" name="isSelling" checked value="false"> N
     </th:block>
@@ -55,12 +55,14 @@
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
     &ensp; &ensp; &ensp;
     <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
-    <br>
-    <th:block th:each="categoryId : ${product.categoryIds}">
-      이전 등록 카테고리 <span th:text="${categoryIdStat.count}"/> :
-      <span th:text="${categoryIdStat.current}"/>
-      <br>
+    <br/>
+
+    <th:block th:each="category : ${product.categoryList}">
+      이전 등록 카테고리 <span th:text="${categoryStat.count}"/> :
+      <span th:text="${category.getId()}"/><br/>
     </th:block>
+
+
   <div id="categories"></div>
 
 

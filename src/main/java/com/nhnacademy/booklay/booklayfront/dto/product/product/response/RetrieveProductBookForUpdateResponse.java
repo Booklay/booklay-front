@@ -1,54 +1,51 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
+@NoArgsConstructor
 public class RetrieveProductBookForUpdateResponse {
 
-  @NotNull
-  Long productId;
-  @NotNull
-  String title;
-  @NotNull
-  Long price;
-  @NotNull
-  Long pointRate;
-  @NotNull
-  String shortDescription;
-  @NotNull
-  String longDescription;
-  @NotNull
-  Boolean isSelling;
-  @NotNull
-  Boolean pointMethod;
+  private Long productId;
 
-  @NotNull
-  Long productDetailId;
-  @NotNull
-  String isbn;
-  @NotNull
-  Integer page;
-  @NotNull
-  String publisher;
+  private String title;
+  private Long objectFileId;
+  private Long price;
+  private Long pointRate;
+  private String shortDescription;
+  private String longDescription;
+  private Boolean selling;
+  private Boolean pointMethod;
+
+  private Long productDetailId;
+  private String isbn;
+  private Integer page;
+  private String publisher;
   @DateTimeFormat(pattern = "yyyy-MM-dd hh:MM:ss")
-  LocalDateTime createdAt;
-
+  private LocalDateTime createdAt;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate publishedDate;
+  @Setter
+  private String ebookAddress;
+  private Integer storage;
+
   @NotNull
-  LocalDate publishedDate;
-  @Setter
-  String ebookAddress;
-  @Setter
-  Integer storage;
+  private List<RetrieveAuthorResponse> authorList;
 
-  List<Long> authorIds;
+  @NotNull
+  private List<CategoryResponse> categoryList;
 
-  List<Long> categoryIds;
+  @NotNull
+  private List<RetrieveTagResponse> tagList;
 }
