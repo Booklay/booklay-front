@@ -6,13 +6,17 @@ import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
 import java.io.IOException;
 import com.nhnacademy.booklay.booklayfront.auth.interceptor.JwtAddInterceptor;
+import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +24,8 @@ import org.springframework.web.client.RestTemplate;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 import java.time.Duration;
+import org.springframework.web.server.MethodNotAllowedException;
+
 @Configuration
 public class WebConfig {
 
@@ -60,12 +66,18 @@ public class WebConfig {
 
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
+                if (response.getStatusCode().equals(HttpStatus.METHOD_NOT_ALLOWED)) {
+                    throw new MethodNotAllowedException(
+                        String.valueOf(HttpStatus.METHOD_NOT_ALLOWED), null);
+                }
+
                 if (response.getStatusCode().is4xxClientError()) {
                     throw new BooklayClientException(response.getStatusCode().name());
                 } else if (response.getStatusCode().is5xxServerError()) {
                     throw new BooklayServerException(response.getStatusCode().name());
                 }
             }
+
         };
     }
 
