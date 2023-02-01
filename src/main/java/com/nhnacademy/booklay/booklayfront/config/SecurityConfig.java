@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
-import com.nhnacademy.booklay.booklayfront.auth.filter.InitialAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * Spring Security 기본 설정
@@ -31,7 +29,12 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        http.formLogin().disable()
+        http.formLogin()
+            .loginProcessingUrl("/login")
+            .usernameParameter("memberId")
+            .passwordParameter("password")
+            .loginPage("/members/login")
+            .and()
             .logout().logoutUrl("/members/logout")
             .deleteCookies("SESSION_ID")
             .invalidateHttpSession(true)
@@ -43,8 +46,6 @@ public class SecurityConfig {
 
         http.csrf()
             .disable();
-
-        http.addFilterAt(getInitialAuthenticationFilter(), BasicAuthenticationFilter.class);
 
         http.authenticationProvider(usernamePasswordAuthenticationProvider);
 
@@ -66,10 +67,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    private InitialAuthenticationFilter getInitialAuthenticationFilter() throws Exception {
-        return new InitialAuthenticationFilter(authenticationManager(null));
     }
 
 }
