@@ -85,9 +85,9 @@ class CouponMemberFrontControllerTest {
 
     //    @Test
     void couponDetail() throws Exception {
-        CouponDetail couponDetail = new CouponDetail(null, "c1", 0L, "정액", 1000L
-            , 101L, 123L, 10000L, 1000L, LocalDateTime.now(),
-             false, "", false);
+        CouponDetail couponDetail = new CouponDetail(null, "c1", "정율", 1000
+            , 101L, "booklay", 10000, 1000,
+            LocalDateTime.now(), false, false, 1L, true);
         ResponseEntity<CouponDetail> responseEntity =
             new ResponseEntity(couponDetail, HttpStatus.OK);
         //mocking
