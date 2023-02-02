@@ -53,6 +53,10 @@ public class CouponRestApiModelSettingService {
 
         model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
     }
+
+    /**
+     * Coupon Type을 model에 추가.
+     */
     public void setAllCouponTypeToModel(Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TYPES_REST_PREFIX);
         ApiEntity<PageResponse<CouponType>> apiEntity = restService.get(url, getDefaultPageMap(0, Integer.MAX_VALUE), new ParameterizedTypeReference<>() {});
