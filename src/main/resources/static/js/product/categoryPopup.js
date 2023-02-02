@@ -14,14 +14,31 @@ function setApplyCategoryText(idValue, nameValue) {
     const categoryDisplay = document.createElement("span")
     categoryDisplay.innerText = nameValue
 
+    const editBtn = document.createElement("input")
+    editBtn.setAttribute('type', 'button')
+    editBtn.setAttribute('value', '수정')
+    editBtn.setAttribute('id', opener.catNo);
+
+    opener.document.getElementById('categories').appendChild(categoryInput);
+
+    editBtn.addEventListener('click', () => {
+      console.log(opener.catNo)
+      const targetNo = parseInt(opener.catNo)
+      const targetId = 'categoryIds[' + (opener.catNo-1) + ']'
+      document.getElementById(targetId).toggleAttribute('hidden')
+    }, false)
+
     const br = opener.document.createElement("br");
 
     opener.document.getElementById('categories').appendChild(categorySpan);
-    opener.document.getElementById('categories').appendChild(categoryInput);
     opener.document.getElementById('categories').appendChild(categoryDisplay);
+    opener.document.getElementById('categories').appendChild(editBtn);
     opener.document.getElementById('categories').appendChild(br);
-    opener.catNo = opener.catNo + 1
 
+    // opener.document.getElementById(opener.catNo).addEventListener('click', opener.editButtonActive(opener.catNo))
+    // opener.document.getElementById(opener.catNo).setAttribute('onclick', opener.editButtonActive(opener.catNo))
+
+    opener.catNo = opener.catNo + 1
     window.close();
   }
 }
