@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 상세 내역</title>
+</head>
+<body>
+<h3>[회원 상세 내역]</h3><br>
+<button><a th:href="@{/members/grade/{memberNo}(memberNo=${memberNo})}">등급 이력 보기</a></button>
+<br>
+<button><a th:href="@{/members/authority/{memberNo}(memberNo=${memberNo})}">권한 이력 보기</a></button>
+<br>
+<button><a th:href="@{/members/authority/{memberNo}(memberNo=${memberNo})}">포인트 내력 보기</a></button>
+<br>
+</body>
+</html>

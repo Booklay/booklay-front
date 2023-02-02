@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 권한</title>
+</head>
+<body>
+<h3>[회원 권한 보기]</h3><br>
+<table border="1">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>권한</th>
+    </tr>
+    </thead>
+
+    <tbody th:each="authority :${authorities}">
+    <tr>
+        <td th:text="${authorityStat.count}"></td>
+        <td th:text="${authority.getName()}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -148,10 +148,20 @@ public class MemberAdminController {
     }
 
     @GetMapping("/block/cancel/{blockedMemberDetailId}")
-    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId, Model model) {
+    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId,
+                                                Model model) {
         model.addAttribute("blockedMemberDetailId", blockedMemberDetailId);
 
         return "admin/member/memberBlockCancelForm";
+    }
+
+    @GetMapping("/detail/{memberNo}")
+    public String retrieveMemberDetail(@PathVariable Long memberNo, Model model) {
+        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("targetUrl", "member/adminMemberDetailSelect");
+
+        return ADMINPAGE;
+//        return "admin/member/adminMemberDetailSelect";
     }
 
     @PostMapping("/block/{memberNo}")
