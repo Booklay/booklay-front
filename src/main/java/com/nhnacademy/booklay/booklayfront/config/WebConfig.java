@@ -63,7 +63,11 @@ public class WebConfig {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
                 if (response.getStatusCode().is4xxClientError()) {
+                    // TODO 4 : shop이나 coupon 서버에서 보내는 에러 코드 (404 Not Found 등등...)에 맞게 에러를 던짐.
+                    // TODO 4 : 지금은 없는 정보에 대한 요청이라서 METHOD_NOT_ALLOWED 사용함.
                     if(response.getStatusCode().equals(HttpStatus.METHOD_NOT_ALLOWED)) {
+
+                        // TODO 5 : 응답의 body에서 message 부분을 가져와, 에러 던짐.
                         String body = IOUtils.toString(response.getBody());
                         Map<String, String> map = objectMapper().readValue(body, Map.class);
 

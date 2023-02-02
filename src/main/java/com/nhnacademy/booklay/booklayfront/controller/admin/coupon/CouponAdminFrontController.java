@@ -53,6 +53,7 @@ public class CouponAdminFrontController {
 
     private final String gatewayIp;
 
+    // TODO 1 : booklay-config-repo의 booklay-front-dev 에서 요청을 보낼 url 정보를 가져옴.
     @Value("${booklay.front-url}")
     private final String url;
 
@@ -60,6 +61,7 @@ public class CouponAdminFrontController {
 
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
 
+    // TODO 3 : 이런식으로 사용할 수 있음.
     @ModelAttribute("navHead")
     public String addNavHead() {
         return "coupon/couponFragments/couponNavHead";
@@ -140,6 +142,9 @@ public class CouponAdminFrontController {
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
+
+        // TODO 2 : url 정보를 js 함수에서 사용할 수 있도록, model 에 추가.
+        // TODO 2 : 지금은 url 정보가 필요한 곳에서만 model에 넣었는데... todo3 참고.
         model.addAttribute("url", url);
 
         return RETURN_ADMIN_PAGE;

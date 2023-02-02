@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class WebControllerAdvice extends ResponseEntityExceptionHandler {
 
+    // TODO 6 : 에러 catch하고, 전달하려는 message를 body에 넣음.
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handelIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
