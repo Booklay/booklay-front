@@ -6,6 +6,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberChartRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -155,13 +156,16 @@ public class MemberAdminController {
         return "admin/member/memberBlockCancelForm";
     }
 
-    @GetMapping("/detail/{memberNo}")
-    public String retrieveMemberDetail(@PathVariable Long memberNo, Model model) {
-        model.addAttribute("memberNo", memberNo);
-        model.addAttribute("targetUrl", "member/adminMemberDetailSelect");
+    @GetMapping("/chart")
+    public String retrieveMemberChart(Model model) {
+        URI uri = URI.create(redirectGatewayPrefix + "/chart");
 
-        return ADMINPAGE;
-//        return "admin/member/adminMemberDetailSelect";
+        ApiEntity<MemberChartRetrieveResponse> response =
+            restService.get(uri.toString(), null, MemberChartRetrieveResponse.class);
+
+        model.addAttribute("counts", response.getBody());
+
+        return "admin/member/memberChart";
     }
 
     @PostMapping("/block/{memberNo}")
