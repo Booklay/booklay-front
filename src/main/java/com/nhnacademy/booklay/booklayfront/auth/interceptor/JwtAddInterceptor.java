@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 /**
  * 사용자가 요청할때마다 헤더에 JWT를 달아줍니다.
@@ -49,7 +50,7 @@ public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
             return execution.execute(httpRequest, body);
         }
 
-        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS") || authentication instanceof OAuth2AuthenticationToken)) {
             return execution.execute(httpRequest, body);
         }
 

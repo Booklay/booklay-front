@@ -12,9 +12,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -53,6 +57,9 @@ public class SecurityConfig {
         http.csrf()
             .disable();
 
+        http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository()));
+
+
         return http.build();
     }
 
@@ -76,6 +83,20 @@ public class SecurityConfig {
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
         return new CustomAuthenticationProvider(proxy, userDetailsService, passwordEncoder());
+    }
+
+    private ClientRegistration clientRegistration() {
+        return CommonOAuth2Provider.GITHUB
+            .getBuilder("github")
+            .clientId("11750a6c662e8dd0135c")
+            .clientSecret("4066e502af0568041afa744a0205d803be24842f")
+            .build();
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        ClientRegistration clientRegistration = clientRegistration();
+        return new InMemoryClientRegistrationRepository(clientRegistration);
     }
 
 }
