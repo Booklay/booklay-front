@@ -12,6 +12,7 @@
         <tr>
             <th>번호</th>
             <th>적립 포인트</th>
+            <th>사용 포인트</th>
             <th>누적 포인트</th>
             <th>적립 내용</th>
             <th>적립 일시</th>
@@ -20,7 +21,12 @@
         <tbody th:each="point, pointStat :${pointList}">
         <tr>
             <td th:text="${pointStat.count}"></td>
-            <td th:text="${point.getPoint()}"></td>
+            <td>
+                <span th:if="${point.getPoint()>0}" th:text="${point.getPoint()}"></span>
+            </td>
+            <td>
+                <span th:if="${point.getPoint()<0}" th:text="${point.getPoint()}"></span>
+            </td>
             <td th:text="${point.getTotalPoint()}"></td>
             <td th:text="${point.getUpdatedDetail()}"></td>
             <td th:text="${#temporals.format(point.getUpdatedAt(),'yyyy.MM.dd HH:mm')}"></td>

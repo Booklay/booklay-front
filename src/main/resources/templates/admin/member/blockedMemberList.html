@@ -19,6 +19,8 @@
             <th>차단일자</th>
             <th>history</th>
             <th>해제하기</th>
+            <th>등급이력</th>
+            <th>권한이력</th>
         </tr>
         </thead>
 
@@ -33,7 +35,14 @@
             <td><input type="button" value="상세보기" th:id="${member.getMemberNo()}"
                        onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))"></td>
             <td>
-                <input type="button" value="차단해제" th:id="${member.getId()}" onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">
+                <input type="button" value="차단해제" th:id="${member.getId()}"
+                       onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">
+            </td>
+            <td>
+                <button><a th:href="@{/members/grade/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a></button>
+            </td>
+            <td>
+                <button><a th:href="@{/members/authority/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a></button>
             </td>
         </tr>
         </tbody>
