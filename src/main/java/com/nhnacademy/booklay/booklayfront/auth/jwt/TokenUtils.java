@@ -16,7 +16,7 @@ public class TokenUtils {
     private static final String MEMBER_INFO_PREFIX = "/shop/v1/members/email/";
 
     public Claims getClaims(JwtInfo jwtInfo) {
-        return parser.parseClaimsJws(jwtInfo.getJwt()).getBody();
+        return parser.parseClaimsJws(jwtInfo.getAccessToken()).getBody();
     }
 
     public String getRole(JwtInfo jwtInfo) {

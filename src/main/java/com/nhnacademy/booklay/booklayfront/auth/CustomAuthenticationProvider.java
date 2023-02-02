@@ -1,7 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
-import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
-import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -9,10 +7,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -50,7 +46,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(customMember.getUsername() + "Invalid password");
         }
 
-        customMember.setJwt(jwtInfo.getJwt());
+        customMember.setJwt(jwtInfo.getAccessToken());
         customMember.setUuid(jwtInfo.getUuid());
 
         return new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(), customMember.getAuthorities());

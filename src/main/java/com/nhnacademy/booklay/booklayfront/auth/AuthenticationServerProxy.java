@@ -1,8 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
-import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,24 +38,29 @@ public class AuthenticationServerProxy {
 
         ResponseEntity<Void> response = restTemplate.postForEntity(url, loginRequest, Void.class);
 
-        List<String> jwtHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
+        List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
+        List<String> refreshTokenHeaders = response.getHeaders().get("Refresh_Token");
 
-        String jwt = "";
+        String accessToken = "";
+        String refreshToken = "";
         String uuid = "";
 
-        if(Objects.nonNull(jwtHeaders) && Objects.nonNull(jwtHeaders.get(0))) {
-            jwt = jwtHeaders.get(0).split(" ")[1];
+        if (Objects.nonNull(accessTokenHeaders) && Objects.nonNull(accessTokenHeaders.get(0)) &&
+            Objects.nonNull(refreshTokenHeaders)) {
+            accessToken = accessTokenHeaders.get(0).split(" ")[1];
+            refreshToken = refreshTokenHeaders.get(0);
         }
 
         List<String> uuidHeaders = response.getHeaders().get(UUID_HEADER);
 
-        if(Objects.nonNull(uuidHeaders) && Objects.nonNull(uuidHeaders.get(0))) {
+        if (Objects.nonNull(uuidHeaders) && Objects.nonNull(uuidHeaders.get(0))) {
             uuid = uuidHeaders.get(0);
         }
 
         return JwtInfo.builder()
-                .jwt(jwt)
-                .uuid(uuid)
-                .build();
+                      .accessToken(accessToken)
+                      .refreshToken(refreshToken)
+                      .uuid(uuid)
+                      .build();
     }
 }
