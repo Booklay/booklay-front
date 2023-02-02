@@ -1,8 +1,10 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
-import com.nhnacademy.booklay.booklayfront.auth.jwt.CustomAuthenticationProvider;
+import com.nhnacademy.booklay.booklayfront.auth.CustomAuthenticationProvider;
+import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
  * Spring Security 기본 설정
@@ -35,6 +38,7 @@ public class SecurityConfig {
             .loginProcessingUrl("/login")
             .usernameParameter("memberId")
             .passwordParameter("password")
+            .successHandler(new CustomLoginSuccessHandler())
             .and()
             .logout().logoutUrl("/members/logout")
             .deleteCookies("SESSION_ID")
@@ -47,6 +51,8 @@ public class SecurityConfig {
 
         http.csrf()
             .disable();
+
+
 
         return http.build();
     }

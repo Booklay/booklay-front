@@ -1,7 +1,8 @@
-package com.nhnacademy.booklay.booklayfront.auth.jwt;
+package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,7 +42,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         log.info("login start , {}", username);
 
-        proxy.sendAuth(username, password);
+        JwtInfo jwtInfo = proxy.sendAuth(username, password);
 
         CustomMember customMember = (CustomMember) userDetailsService.loadUserByUsername(username);
 
@@ -49,8 +50,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(customMember.getUsername() + "Invalid password");
         }
 
+        customMember.setJwt(jwtInfo.getJwt());
+        customMember.setUuid(jwtInfo.getUuid());
 
-        return new UsernamePasswordAuthenticationToken(customMember, password, customMember.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(), customMember.getAuthorities());
     }
 
     /**

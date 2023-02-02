@@ -54,31 +54,11 @@ public class AuthenticationServerProxy {
 
         if(Objects.nonNull(uuidHeaders) && Objects.nonNull(uuidHeaders.get(0))) {
             uuid = uuidHeaders.get(0);
-
-            redisTemplate.opsForHash()
-                    .put(uuid, "TOKEN", jwt);
         }
 
         return JwtInfo.builder()
                 .jwt(jwt)
                 .uuid(uuid)
                 .build();
-    }
-
-    public CustomMember getCustomMember(String username) {
-
-        String url = gatewayIp + SHOP_PREFIX + "/members/login";
-
-        MemberResponse memberResponse =
-            restTemplate.getForObject(url + "members/login/?memberId=" + username,
-                                      MemberResponse.class);
-
-        if (memberResponse == null) {
-            throw new UsernameNotFoundException(username);
-        }
-
-        return new CustomMember(memberResponse.getEmail(), memberResponse.getPassword(),
-                                Collections.singletonList(memberResponse.getAuthority()));
-
     }
 }
