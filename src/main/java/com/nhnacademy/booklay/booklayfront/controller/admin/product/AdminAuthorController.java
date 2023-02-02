@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 /**
- *
  * @author 최규태
  */
 
@@ -51,36 +50,15 @@ public class AdminAuthorController {
 
 
   @GetMapping()
-  public String retrieveAuthor(
+  public String authorMaintenance(
       @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
-    if (pageNum.isEmpty()) {
-      pageNum = Optional.of(0);
-    }
-    if (pageNum.get() < 0) {
-      pageNum = Optional.of(0);
-    }
 
-    Long size = 20L;
+    ResponseEntity<PageResponse<RetrieveAuthorResponse>> authorPage = retrieveAuthors(pageNum);
 
-    pageNum = Optional.of(pageNum.get() - 1);
-
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-    URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
-
-    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
-        httpHeaders, HttpMethod.GET, uri);
-
-    ResponseEntity<PageResponse<RetrieveAuthorResponse>> testAuthors =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
-        });
-
-    if (Objects.nonNull(testAuthors.getBody())) {
-      int totalPage = testAuthors.getBody().getTotalPages();
-      int nowPage = testAuthors.getBody().getPageNumber();
-      List<RetrieveAuthorResponse> authorList = testAuthors.getBody().getData();
+    if (Objects.nonNull(authorPage.getBody())) {
+      int totalPage = authorPage.getBody().getTotalPages();
+      int nowPage = authorPage.getBody().getPageNumber();
+      List<RetrieveAuthorResponse> authorList = authorPage.getBody().getData();
 
       model.addAttribute("nowPage", nowPage);
       model.addAttribute("totalPage", totalPage);
@@ -89,6 +67,27 @@ public class AdminAuthorController {
     }
 
     return "admin/adminPage";
+  }
+
+
+  @GetMapping("/popup")
+  public String authorPopup(
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+
+    ResponseEntity<PageResponse<RetrieveAuthorResponse>> authorPage = retrieveAuthors(pageNum);
+
+    if (Objects.nonNull(authorPage.getBody())) {
+      int totalPage = authorPage.getBody().getTotalPages();
+      int nowPage = authorPage.getBody().getPageNumber();
+      List<RetrieveAuthorResponse> authorList = authorPage.getBody().getData();
+
+      model.addAttribute("nowPage", nowPage);
+      model.addAttribute("totalPage", totalPage);
+      model.addAttribute("authorList", authorList);
+      model.addAttribute(TARGET_VIEW, "product/adminAuthor");
+    }
+
+    return "admin/product/popup/authorPopup";
   }
 
   @PostMapping
@@ -139,5 +138,33 @@ public class AdminAuthorController {
 
     restTemplate.exchange(requestEntity, String.class);
     return PAGE_PRE_FIX;
+  }
+
+
+  private ResponseEntity<PageResponse<RetrieveAuthorResponse>> retrieveAuthors(
+      Optional<Integer> pageNum) {
+    if (pageNum.isEmpty()) {
+      pageNum = Optional.of(0);
+    }
+    if (pageNum.get() < 0) {
+      pageNum = Optional.of(0);
+    }
+
+    Long size = 20L;
+
+    pageNum = Optional.of(pageNum.get() - 1);
+
+    HttpHeaders httpHeaders = new HttpHeaders();
+    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+    URI uri = URI.create(
+        gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
+
+    RequestEntity<PageResponse<RetrieveAuthorResponse>> requestEntity = new RequestEntity<>(
+        httpHeaders, HttpMethod.GET, uri);
+
+    return restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    });
+
   }
 }

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>작가 관리 페이지</title>
   <link href="/css/author.css" rel="stylesheet"/>
+  <script src="/js/product/authorPopup.js"></script>
 </head>
 <body>
 <h2>작가 검색 페이지</h2>
@@ -25,6 +26,7 @@
       <th>수정</th>
       <th>삭제</th>
       <th>작품 정보</th>
+      <th>선택</th>
     </tr>
     </thead>
 
@@ -58,22 +60,23 @@
           </td>
           <td>
             <form method="post" action="/admin/author/maintenance/delete">
-              <input name="id" type="number" th:value="${author.authorNo}"
-                     hidden="hidden"/>
+              <input name="id" type="number" th:value="${author.authorNo}" hidden="hidden"/>
               <input type="submit" value="삭제"/>
             </form>
           </td>
           <td><a href="">작품 정보</a></td>
+          <td><input th:id="${author.authorNo}" th:name="${author.name}" type="button" value="선택" onclick="setApplyAuthorText(id, name)"/></td>
         </tr>
       </form>
+
     </th:block>
     </tbody>
   </table>
 </div>
 
 <script>
-  const updateBtns = document.querySelectorAll('.update-button');
-  updateBtns.forEach(function (item) {
+  const updateBtn = document.querySelectorAll('.update-button');
+  updateBtn.forEach(function (item) {
     item.addEventListener('click', function () { // 클릭 이벤트 발생시,
       var form1 = this.parentNode.parentNode
       console.log(form1)
@@ -120,5 +123,7 @@
 
   <input type="submit" value="작가 등록"/>
 </form>
+
+
 </body>
 </html>

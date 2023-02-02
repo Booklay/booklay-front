@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateDeleteProductRecommendRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductSubscribeRequest;
@@ -18,6 +20,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.response.Retrieve
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductSubscribeForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -41,8 +44,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author 최규태
@@ -63,6 +68,7 @@ public class AdminProductController {
   private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+  private final RestService restService;
 
   //총 관리 인덱스 페이지
   @GetMapping
@@ -84,6 +90,31 @@ public class AdminProductController {
     });
 
     return "redirect:/product/display";
+  }
+
+  //카테고리 팝업 호출
+  @GetMapping("/category/popup")
+  public String retrieveCategoryPopUp(
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+
+    String query = "?page=" + page;
+
+    String redirectGatewayPrefix = gatewayIp + "/shop/v1" + "/admin/categories";
+
+    URI uri = URI.create(redirectGatewayPrefix + query);
+
+    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+        });
+
+    if (response.isSuccess()) {
+      model.addAttribute("list", response.getBody().getData());
+      model.addAttribute("totalPage", response.getBody().getTotalPages());
+      model.addAttribute("currentPage", response.getBody().getPageNumber());
+    } else {
+      return "/index";
+    }
+
+    return "admin/product/popup/categoryPopup";
   }
 
   //책 생성 페이지

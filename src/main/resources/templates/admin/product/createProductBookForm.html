@@ -37,8 +37,6 @@
   <p>
 
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
-    &ensp; &ensp; &ensp;
-    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
   <div id="categories"></div>
 
   <p>ISBN : <input type="text" name="isbn" size=40 maxlength=20/></p>
@@ -47,7 +45,6 @@
   <p>출판일 : <input type="date" name="publishedDate"/></p>
   <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
   &ensp;&ensp;&ensp;
-  <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
   <div id="authors"></div>
 
   <!--  둘 중 하나만 입력 가능해야함-->
