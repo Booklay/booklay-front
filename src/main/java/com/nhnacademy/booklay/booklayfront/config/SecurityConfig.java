@@ -46,13 +46,12 @@ public class SecurityConfig {
             .logoutSuccessUrl("/");
 
         http.authorizeRequests()
+            .antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest()
             .permitAll();
 
         http.csrf()
             .disable();
-
-
 
         return http.build();
     }

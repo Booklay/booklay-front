@@ -1,5 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.auth.interceptor;
 
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 사용자가 요청할때마다 헤더에 JWT를 달아줍니다.
@@ -44,18 +49,22 @@ public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
             return execution.execute(httpRequest, body);
         }
 
-        log.info("RestTemplate Interceptor");
-
-        String uuid = (String) authentication.getPrincipal();
-        Optional<String> token = Optional.ofNullable(((String) redisTemplate.opsForHash().get(uuid, "TOKEN")));
-
-        if (token.isEmpty()) {
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ANONYMOUS"))) {
             return execution.execute(httpRequest, body);
         }
 
-        log.info("token = {}", token.get());
+        log.info("RestTemplate Interceptor");
 
-        httpRequest.getHeaders().setBearerAuth(token.get());
+        CustomMember customMember = (CustomMember) authentication.getPrincipal();
+
+        if (Objects.isNull(customMember)) {
+            return execution.execute(httpRequest, body);
+        }
+        String jwt = customMember.getJwt();
+
+        log.info("token = {}", jwt);
+
+        httpRequest.getHeaders().setBearerAuth(jwt);
 
         return execution.execute(httpRequest, body);}
 
