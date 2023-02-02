@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>북레이 - 책상품 등록</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="/js/product/productRegister.js"></script>
@@ -21,7 +21,7 @@
     <input type="radio" name="pointMethod" value="false"> N
   </p>
   <p>적립률 : <input type="number" min="0" step="1" name="pointRate" th:value="${defaultPointRate}"
-                  size = 1 /> %</p>
+                  size=1/> %</p>
 
   <p>짧은 설명</p>
   <div id="shortEditor"></div>
@@ -32,8 +32,8 @@
   <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
 
   <p>판매 여부 :
-    <input type="radio" name="isSelling" value="true"> Y
-    <input type="radio" name="isSelling" value="false"> N
+    <input type="radio" name="selling" value="true"> Y
+    <input type="radio" name="selling" value="false"> N
   <p>
 
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
@@ -48,6 +48,11 @@
   <div id="authors"></div>
 
   <!--  둘 중 하나만 입력 가능해야함-->
+  <p> 책 종류 설정 :
+    <input type="radio" name="ebookCheck" value="true"> 일반 책 상품
+    <input type="radio" name="ebookCheck" value="false"> 이북 상품
+  </p>
+
   <p>재고량 : <input type="number" min="0" step="1" name="storage"/></p>
   <p>이북 주소 : <input type="text" name="ebookAddress" size=40 maxlength=255></p>
 

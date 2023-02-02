@@ -37,7 +37,7 @@
             <td><span th:text="${product.productId}"></span></td>
             <td><span th:text="${product.title}"></span></td>
             <td><span th:text="${product.price}"></span></td>
-            <td><span th:text="${product.isSelling}"></span></td>
+            <td><span th:text="${product.selling}"></span></td>
             <td><span th:text="${product.publisher}"></span></td>
             <td><input type="button" value="선택" th:id="${product.productId}" th:onclick="setApplyItemText(this.getAttribute('id'))"></td>
         </tr>
