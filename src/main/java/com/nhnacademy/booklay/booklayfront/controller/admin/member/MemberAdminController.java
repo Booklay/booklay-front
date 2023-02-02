@@ -164,15 +164,16 @@ public class MemberAdminController {
             restService.get(uri.toString(), null, MemberChartRetrieveResponse.class);
 
         model.addAttribute("counts", response.getBody());
+        model.addAttribute("targetUrl", "member/memberChart");
 
-        return "admin/member/memberChart";
+        return ADMINPAGE;
+//        return "admin/member/memberChart";
     }
 
     @PostMapping("/block/{memberNo}")
     public String memberBlock(@Valid @ModelAttribute MemberBlockRequest request,
                               BindingResult bindingResult,
-                              @PathVariable Long memberNo,
-                              Model model) {
+                              @PathVariable Long memberNo) {
         URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
 
         restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),

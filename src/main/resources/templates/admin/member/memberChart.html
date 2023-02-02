@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>회원 통계 페이지</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h3>[회원 통계]</h3><br>-->
-
-<!--</body>-->
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>회원 통계 페이지</title>
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
 
         // Load the Visualization API and the corechart package.
         google.charts.load('current', {'packages': ['corechart']});
@@ -24,41 +17,32 @@
         // instantiates the pie chart, passes in the data and
         // draws it.
         function drawChart() {
-            fetch('http://localhost:6060/admin/members/chart')
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        // TODO: DB에서 데이터 읽어올 수 있도록 수 (삽질 필요)
-                        console.log(`${res.user.name}`);
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['유효회원', [[${counts.validMemberCount}]]],
+                ['차단회원', [[${counts.blockedMemberCount}]]],
+                ['탈퇴회원', [[${counts.droppedMemberCount}]]]
+            ]);
 
-                        // Create the data table.
-                        var data = new google.visualization.DataTable();
-                        data.addColumn('string', 'Topping');
-                        data.addColumn('number', 'Slices');
-                        data.addRows([
-                            ['유효회원', ${res.}],
-                            ['차단회원', 1],
-                            ['탈퇴회원', 1]
-                        ]);
+            // Set chart options
+            var options = {
+                'title': '회원 비율',
+                'width': 800,
+                'height': 700
+            };
 
-                        // Set chart options
-                        var options = {
-                            'title': '회원 통계',
-                            'width': 400,
-                            'height': 300
-                        };
-
-                        // Instantiate and draw our chart, passing in some options.
-                        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-                        chart.draw(data, options);
-                    }
-                });
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
         }
     </script>
 </head>
 
 <body>
-<!--Div that will hold the pie chart-->
+<h3>[회원 통계]</h3>
 <div id="chart_div"></div>
 </body>
 </html>
