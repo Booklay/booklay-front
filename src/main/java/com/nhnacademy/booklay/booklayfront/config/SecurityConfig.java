@@ -1,7 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.auth.UsernamePasswordAuthenticationProvider;
+import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,16 +25,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final ObjectMapper mapper;
-    private final UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationServerProxy proxy;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.formLogin()
+            .loginPage("/members/login")
             .loginProcessingUrl("/login")
             .usernameParameter("memberId")
             .passwordParameter("password")
-            .loginPage("/members/login")
             .and()
             .logout().logoutUrl("/members/logout")
             .deleteCookies("SESSION_ID")
@@ -46,8 +47,6 @@ public class SecurityConfig {
 
         http.csrf()
             .disable();
-
-        http.authenticationProvider(usernamePasswordAuthenticationProvider);
 
         return http.build();
     }
@@ -67,6 +66,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider() {
+        return new CustomAuthenticationProvider(proxy, userDetailsService, passwordEncoder());
     }
 
 }

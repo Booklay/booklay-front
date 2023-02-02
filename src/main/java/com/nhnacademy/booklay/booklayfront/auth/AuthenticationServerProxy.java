@@ -1,16 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * 로그인 시도시 인증서버로 요청을 보냅니다.
@@ -27,12 +29,13 @@ public class AuthenticationServerProxy {
 
     private final String gatewayIp;
 
-    private static final String PREFIX = "/auth/v1";
+    private static final String AUTH_PREFIX = "/auth/v1";
+    private static final String SHOP_PREFIX = "/shop/v1";
     private static final String UUID_HEADER = "X-User-UUID";
 
     public JwtInfo sendAuth(String username, String password) {
 
-        String url = gatewayIp + PREFIX + "/members/login";
+        String url = gatewayIp + AUTH_PREFIX + "/members/login";
 
         var loginRequest = new LoginRequest(username, password);
 
@@ -60,5 +63,22 @@ public class AuthenticationServerProxy {
                 .jwt(jwt)
                 .uuid(uuid)
                 .build();
+    }
+
+    public CustomMember getCustomMember(String username) {
+
+        String url = gatewayIp + SHOP_PREFIX + "/members/login";
+
+        MemberResponse memberResponse =
+            restTemplate.getForObject(url + "members/login/?memberId=" + username,
+                                      MemberResponse.class);
+
+        if (memberResponse == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return new CustomMember(memberResponse.getEmail(), memberResponse.getPassword(),
+                                Collections.singletonList(memberResponse.getAuthority()));
+
     }
 }

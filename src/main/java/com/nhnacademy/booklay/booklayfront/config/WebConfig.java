@@ -35,7 +35,7 @@ public class WebConfig {
         return builder
                 .setReadTimeout(Duration.ofSeconds(5L))
                 .setConnectTimeout(Duration.ofSeconds(5L))
-                .interceptors(new JwtAddInterceptor(redisTemplate))
+                // .interceptors(new JwtAddInterceptor(redisTemplate))
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .errorHandler(responseErrorHandler())
