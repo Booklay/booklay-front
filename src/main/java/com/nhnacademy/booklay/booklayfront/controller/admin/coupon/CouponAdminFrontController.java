@@ -134,6 +134,7 @@ public class CouponAdminFrontController {
      * 생성된 쿠폰 리스트 조회.
      *
      */
+    // TODO 13 : 테스트를 위해서, front/gateway/coupon 서버를 실행시키고 "localhost:6060/admin/coupons/list"에 들어가서 요상한버튼 누르면 됨.
     @GetMapping("/list")
     public String allCouponList(@RequestParam(value = "page", defaultValue = "0") int pageNum,
                                 Model model) {
