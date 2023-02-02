@@ -62,10 +62,7 @@
                 <label for="limited-false" class="selector">없음</label><input type="radio" name="isLimited" value="false" th:checked="${!couponDetail.isLimited}" id="limited-false"><br/>
             </label><br/>
             <label for="validate-term">유효 기간</label>
-            <select id="validate-term" name="validateTerm">
-                <option value="10" th:selected="${couponDetail.validateTerm == 10}">10일</option>
-                <option value="30" th:selected="${couponDetail.validateTerm == 30}">30일</option>
-            </select><br/>
+            <input type="number" id="validate-term" name="validateTerm" th:value="${couponDetail.validateTerm}"><br/>
             <input type="submit" value="변경 제출">
         </form>
     </div>
