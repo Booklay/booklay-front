@@ -4,14 +4,16 @@ async function couponDetail(couponId) {
     const url = document.querySelector('#url').value;
 
     // TODO 10 : 요청 보내려는 url
-    const requestUrl = `${url}/admin/coupons/detail/${couponId}`;
+    const requestUrl = `${url}/admin/coupons/${couponId}`;
 
+    // TODO 10 : 원래 그 요청.. a태그의 href 들어가던거.
+    const viewUrl = `/admin/coupons/detail/${couponId}`
     // TODO 11 : 요청 보냄.
     const response = await fetch(requestUrl);
 
     // TODO 12 : 요청에 따른 처리.
     if (response.ok) { // 응답 코드 200~299 일 때
-        location.href = requestUrl;
+        location.href = viewUrl;
     }
     else {
         // TODO 7 : 보낸 요청이 에러일 때, message를 보이는 경고창을 띄움.

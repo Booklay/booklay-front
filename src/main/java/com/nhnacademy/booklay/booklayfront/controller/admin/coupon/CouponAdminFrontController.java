@@ -53,9 +53,10 @@ public class CouponAdminFrontController {
 
     private final String gatewayIp;
 
-    // TODO 1 : booklay-config-repo의 booklay-front-dev 에서 요청을 보낼 url 정보를 가져옴.
-    @Value("${booklay.front-url}")
-    private final String url;
+    // TODO 1 : config repo의 front-dev에 등록된 gateway 주소.
+    // TODO 1 : localhost로 하면 인식 못함. 127.0.0.1로 해야함.
+    @Value("${booklay.gw-url}")
+    private final String gatewayUrl;
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
@@ -146,7 +147,7 @@ public class CouponAdminFrontController {
 
         // TODO 2 : url 정보를 js 함수에서 사용할 수 있도록, model 에 추가.
         // TODO 2 : 지금은 url 정보가 필요한 곳에서만 model에 넣었는데... todo3 참고.
-        model.addAttribute("url", url);
+        model.addAttribute("url", gatewayUrl+"/coupon/v1");
 
         return RETURN_ADMIN_PAGE;
     }
