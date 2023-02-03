@@ -45,7 +45,6 @@ document.addEventListener('categorySelected', function (e) {
     document.getElementById('categories').appendChild(br);
 
     document.getElementById(catNo).addEventListener('click', function (e) {
-      console.log("진입 확인")
       e.preventDefault()
       const inputId = catNo
       window.open("/admin/product/category/popup/" + inputId, "a",
