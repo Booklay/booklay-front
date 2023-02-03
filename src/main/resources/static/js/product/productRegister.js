@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-var catNo = 1;
+let catNo = 1;
 
 var authorNo = 1;
 
@@ -77,11 +77,13 @@ document.addEventListener('categorySelected', function (e) {
 
     const br = document.createElement("br");
 
-    document.getElementById('categories').appendChild(categorySpan);
-    document.getElementById('categories').appendChild(categoryInput);
-    document.getElementById('categories').appendChild(categoryDisplay);
-    document.getElementById('categories').appendChild(editBtn);
-    document.getElementById('categories').appendChild(br);
+    const categoryDiv = document.getElementById('categories');
+
+    categoryDiv.appendChild(categorySpan);
+    categoryDiv.appendChild(categoryInput);
+    categoryDiv.appendChild(categoryDisplay);
+    categoryDiv.appendChild(editBtn);
+    categoryDiv.appendChild(br);
 
     document.getElementById(catNo).addEventListener('click', function (e) {
       e.preventDefault()
