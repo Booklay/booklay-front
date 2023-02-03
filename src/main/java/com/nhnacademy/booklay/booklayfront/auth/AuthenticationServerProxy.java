@@ -2,9 +2,6 @@ package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,6 +9,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 로그인 시도시 인증서버로 요청을 보냅니다.
@@ -22,16 +23,13 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class AuthenticationServerProxy {
 
-    private final RestTemplate restTemplate;
-
-    private final RedisTemplate<String, Object> redisTemplate;
-
-    private final String gatewayIp;
-
     private static final String AUTH_PREFIX = "/auth/v1";
     private static final String SHOP_PREFIX = "/shop/v1";
     private static final String UUID_HEADER = "X-User-UUID";
     private static final String GITHUB_PREFIX_ID = "GIT_";
+    private final RestTemplate restTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final String gatewayIp;
 
     public JwtInfo attemptFormAuthentication(String username, String password) {
 

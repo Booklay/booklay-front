@@ -1,23 +1,16 @@
 package com.nhnacademy.booklay.booklayfront.auth.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
-import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
-import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
-import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
 import java.io.IOException;
-import java.util.Collections;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 

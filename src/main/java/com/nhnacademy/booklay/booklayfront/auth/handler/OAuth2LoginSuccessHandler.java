@@ -15,14 +15,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Slf4j
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final AuthenticationServerProxy proxy;
-
 
 
     @Override
@@ -38,7 +36,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         request.getSession().setAttribute("TOKEN", jwtInfo.getAccessToken());
         request.getSession().setAttribute("REFRESH_TOKEN", jwtInfo.getRefreshToken());
-
 
         CustomMember customMember = proxy.getCustomMemberFromApiServer(gitId);
 

@@ -1,7 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth.interceptor;
 
 import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,9 +10,10 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 import java.io.IOException;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import java.util.Objects;
 
 /**
  * 사용자가 요청할때마다 헤더에 JWT를 달아줍니다.
