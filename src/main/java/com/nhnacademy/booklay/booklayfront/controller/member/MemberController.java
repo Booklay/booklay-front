@@ -124,7 +124,7 @@ public class MemberController {
     public String deleteMember(@PathVariable Long memberNo) {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
-        restService.delete(uri.toString(), null);
+        restService.delete(uri.toString());
 
         return "redirect:/";
     }

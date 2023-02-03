@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -77,7 +76,7 @@ public class AdminProductController {
   public String getProductSoftDelete(@PathVariable Long productId) {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + productId);
 
-    restService.delete(uri.toString(), null);
+    restService.delete(uri.toString());
 
     return "redirect:/product/display";
   }
@@ -356,7 +355,7 @@ public class AdminProductController {
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
-    restService.delete(uri.toString(), mapper.convertValue(request, MultiValueMap.class));
+    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
     return "redirect:/admin/product" + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
@@ -400,12 +399,12 @@ public class AdminProductController {
   //연관 상품 삭제
   @PostMapping("/recommend/delete/{pageNum}")
   public String deleteRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
-      @PathVariable Long pageNum){
+      @PathVariable Long pageNum) {
     Long productNo = request.getBaseId();
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
 
-    restService.delete(uri.toString(), mapper.convertValue(request, MultiValueMap.class));
+    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
     return "redirect:/admin/product/recommend/" + productNo + "/" + pageNum;
   }
