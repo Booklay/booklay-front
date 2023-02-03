@@ -29,7 +29,7 @@ document.addEventListener('categorySelected', function (e) {
 
     const categoryDisplay = document.createElement("span")
     categoryDisplay.innerText = name
-    categoryDisplay.setAttribute('id', "spanNo"+(catNo-1))
+    categoryDisplay.setAttribute('id', "spanNo" + (catNo - 1))
 
     const editBtn = document.createElement("button")
     editBtn.setAttribute('value', '수정')
@@ -38,11 +38,12 @@ document.addEventListener('categorySelected', function (e) {
 
     const br = document.createElement("br");
 
-    document.getElementById('categories').appendChild(categorySpan);
-    document.getElementById('categories').appendChild(categoryInput);
-    document.getElementById('categories').appendChild(categoryDisplay);
-    document.getElementById('categories').appendChild(editBtn);
-    document.getElementById('categories').appendChild(br);
+    const categoryDiv = document.getElementById('categories');
+    categoryDiv.appendChild(categorySpan);
+    categoryDiv.appendChild(categoryInput);
+    categoryDiv.appendChild(categoryDisplay);
+    categoryDiv.appendChild(editBtn);
+    categoryDiv.appendChild(br);
 
     document.getElementById(catNo).addEventListener('click', function (e) {
       e.preventDefault()
@@ -61,6 +62,6 @@ document.addEventListener('categoryReselected', function (e) {
 
     document.getElementById('categoryIds[' + (data - 1) + ']').setAttribute(
         'value', id)
-    document.getElementById("spanNo"+(data-1)).innerText=name
+    document.getElementById("spanNo" + (data - 1)).innerText = name
   }
 })
