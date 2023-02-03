@@ -63,7 +63,7 @@ public class ControllerUtil {
             map.put("email", null);
             return map;
         }else {
-            return objectMapper.convertValue(memberInfo, MultiValueMap.class);
+            return objectMapper.convertValue(memberInfo, Map.class);
         }
     }
 
