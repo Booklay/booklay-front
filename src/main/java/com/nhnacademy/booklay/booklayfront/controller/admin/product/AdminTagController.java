@@ -69,10 +69,10 @@ public class AdminTagController {
         });
 
     int totalPage = tagResponse.getBody().getTotalPages();
-    int nowPage = tagResponse.getBody().getPageNumber();
+    int currentPage = tagResponse.getBody().getPageNumber();
     List<RetrieveTagResponse> tagList = tagResponse.getBody().getData();
 
-    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("tagList", tagList);
     model.addAttribute(TARGET_VIEW, "product/adminTag");
@@ -123,10 +123,10 @@ public class AdminTagController {
         });
 
     int totalPage = tagResponse.getBody().getTotalPages();
-    int nowPage = tagResponse.getBody().getPageNumber();
+    int currentPage = tagResponse.getBody().getPageNumber();
     List<TagProductResponse> tagList = tagResponse.getBody().getData();
 
-    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("tagList", tagList);
     model.addAttribute("productNo", productNo);

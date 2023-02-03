@@ -323,28 +323,28 @@
                 </a>
               </li>
 
-              <li class="page-item" th:if="${nowPage - 1 >= 1}">
+              <li class="page-item" th:if="${totalPage - 1 >= 1}">
                 <a class="page-link"
-                   th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-                  <span th:text="${nowPage}-1"/></a></li>
-              <li class="page-item" th:if="${nowPage >= 1}">
+                   th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+                  <span th:text="${totalPage}-1"/></a></li>
+              <li class="page-item" th:if="${totalPage >= 1}">
                 <a class="page-link"
-                   th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-                  <span th:text="${nowPage}"/></a></li>
-              <li class="page-item active" th:if="${nowPage+1 != totalPage}">
+                   th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+                  <span th:text="${totalPage}"/></a></li>
+              <li class="page-item active" th:if="${totalPage+1 != totalPage}">
                 <a class="page-link"
-                   th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-                  <span th:text="${nowPage}+1"/></a></li>
-              <li class="page-item" th:if="${nowPage + 2 < totalPage}">
+                   th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+                  <span th:text="${totalPage}+1"/></a></li>
+              <li class="page-item" th:if="${totalPage + 2 < totalPage}">
                 <a class="page-link"
-                   th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-                  <span th:text="${nowPage}+2"/></a></li>
-              <li class="page-item" th:if="${nowPage + 3 < totalPage}">
+                   th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+                  <span th:text="${totalPage}+2"/></a></li>
+              <li class="page-item" th:if="${totalPage + 3 < totalPage}">
                 <a class="page-link"
-                   th:href="@{/product/display/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-                  <span th:text="${nowPage}+3"/></a></li>
+                   th:href="@{/product/display/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+                  <span th:text="${totalPage}+3"/></a></li>
 
-              <li class="page-item"><span th:if="${nowPage + 3 < totalPage}">...</span></li>
+              <li class="page-item"><span th:if="${totalPage + 3 < totalPage}">...</span></li>
 
               <li class="page-item">
                 <a class="page-link"

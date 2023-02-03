@@ -28,7 +28,7 @@
       <td><span th:text="${tag.id}"/></td>
       <td>
         <form method="post"
-              th:action="@{/admin/tag/connection/update/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+              th:action="@{/admin/tag/connection/update/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${totalPage})}">
           <input name="id" type="number" th:value="${tag.id}" hidden/>
           <input name="name" class="name-input" type="text" th:value="${tag.name}"
                  disabled="disabled"/>
@@ -38,21 +38,21 @@
       </td>
       <td>
         <form method="post"
-              th:action="@{/admin/tag/connection/delete/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+              th:action="@{/admin/tag/connection/delete/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${totalPage})}">
           <input name="id" type="number" th:value="${tag.id}" hidden/>
           <input class="submit-btn" type="submit" value="삭제"/>
         </form>
       </td>
       <td>
         <form th:if="${tag.isRegistered()==true}" method="post"
-              th:action="@{/admin/tag/connection/disconnect/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+              th:action="@{/admin/tag/connection/disconnect/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${totalPage})}">
           <input name="tagId" type="number" th:value="${tag.id}" hidden="hidden"/>
           <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
           <input type="submit" value="등록 취소">
         </form>
 
         <form th:if="${tag.isRegistered()==false}" method="post"
-              th:action="@{/admin/tag/connection/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${nowPage})}">
+              th:action="@{/admin/tag/connection/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${totalPage})}">
           <input name="tagId" type="number" th:value="${tag.id}" hidden="hidden"/>
           <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
           <input type="submit" value="등록">
@@ -65,25 +65,25 @@
 </table>
 
 <div>
-  <a th:if="${nowPage - 1 >= 1}"
-     th:href="@{/admin/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
-    <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}"
-     th:href="@{/admin/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
-    <span th:text="${nowPage}"/></a>
+  <a th:if="${totalPage - 1 >= 1}"
+     th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-2)}">
+    <span th:text="${totalPage}-1"/></a>
+  <a th:if="${totalPage >= 1}"
+     th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
+    <span th:text="${totalPage}"/></a>
 
-  <a th:if="${nowPage+1 != totalPage}"
-     th:href="@{/admin/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-    <span th:text="${nowPage}+1"/></a>
+  <a th:if="${totalPage+1 != totalPage}"
+     th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+    <span th:text="${totalPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}"
-     th:href="@{/admin/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
-    <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}"
-     th:href="@{/admin/tag/connection/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
-    <span th:text="${nowPage}+3"/></a>
+  <a th:if="${totalPage + 2 < totalPage}"
+     th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}+1)}">
+    <span th:text="${totalPage}+2"/></a>
+  <a th:if="${totalPage + 3 < totalPage}"
+     th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}+2)}">
+    <span th:text="${totalPage}+3"/></a>
 
-  <span th:if="${nowPage + 3 < totalPage}">...</span>
+  <span th:if="${totalPage + 3 < totalPage}">...</span>
 
   <a th:href="@{/admin/tag/connection/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
     <span th:text="${totalPage}"/></a>
@@ -93,7 +93,7 @@
 
 <h3>테그 등록</h3>
 <form method="post"
-      th:action="@{/admin/tag/connection/create/{productNo}/{pageNum}(productNo=${productNo}, pageNum=${nowPage})}"/>
+      th:action="@{/admin/tag/connection/create/{productNo}/{pageNum}(productNo=${productNo}, pageNum=${totalPage})}"/>
 <p>테그명 : <input type="text" name="name">
   <input type="submit" value="등록"/></p>
 </form>

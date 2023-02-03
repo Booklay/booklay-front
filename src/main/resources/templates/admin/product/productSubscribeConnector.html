@@ -28,7 +28,7 @@
       <td><span th:text="${book.publisher}"/></td>
       <td>
         <form th:if="${!book.isRegistered}" method="post"
-              th:action="@{/admin/product/subscribes/connect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${nowPage})}">
+              th:action="@{/admin/product/subscribes/connect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${currentPage})}">
           <input name="productId" type="number" th:value="${book.productId}" hidden="hidden"/>
           <input name="subscribeId" type="number" th:value="${subscribeId}" hidden="hidden"/>
           <input name="releaseDate" type="date"/>
@@ -36,7 +36,7 @@
         </form>
 
         <form th:if="${book.isRegistered}" method="post"
-              th:action="@{/admin/product/subscribes/disconnect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${nowPage})}">
+              th:action="@{/admin/product/subscribes/disconnect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${currentPage})}">
           <input name="productId" type="number" th:value="${book.productId}" hidden="hidden"/>
           <input name="subscribeId" type="number" th:value="${subscribeId}" hidden="hidden"/>
           <input type="submit" value="등록 취소"/>
@@ -48,25 +48,25 @@
 </table>
 
 <div>
-  <a th:if="${nowPage - 1 >= 1}"
-     th:href="@{/admin/product/subscribes/connect/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
-    <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}"
-     th:href="@{/admin/product/subscribes/connect/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
-    <span th:text="${nowPage}"/></a>
+  <a th:if="${currentPage - 1 >= 1}"
+     th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${currentPage}-2)}">
+    <span th:text="${currentPage}-1"/></a>
+  <a th:if="${currentPage >= 1}"
+     th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${currentPage}-1)}">
+    <span th:text="${currentPage}"/></a>
 
-  <a th:if="${nowPage+1 != totalPage}"
-     th:href="@{/admin/product/subscribes/connect/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-    <span th:text="${nowPage}+1"/></a>
+  <a th:if="${currentPage+1 != totalPage}"
+     th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${currentPage})}">
+    <span th:text="${currentPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}"
-     th:href="@{/admin/product/subscribes/connect/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
-    <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}"
-     th:href="@{/admin/product/subscribes/connect/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
-    <span th:text="${nowPage}+3"/></a>
+  <a th:if="${currentPage + 2 < totalPage}"
+     th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${currentPage}+1)}">
+    <span th:text="${currentPage}+2"/></a>
+  <a th:if="${currentPage + 3 < totalPage}"
+     th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${currentPage}+2)}">
+    <span th:text="${currentPage}+3"/></a>
 
-  <span th:if="${nowPage + 3 < totalPage}">...</span>
+  <span th:if="${currentPage + 3 < totalPage}">...</span>
 
   <a th:href="@{/admin/product/subscribes/connect/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
     <span th:text="${totalPage}"/></a>

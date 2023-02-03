@@ -323,11 +323,11 @@ public class AdminProductController {
         });
 
     int totalPage = bookResponse.getBody().getTotalPages();
-    int nowPage = bookResponse.getBody().getPageNumber();
+    int currentPage = bookResponse.getBody().getPageNumber();
     List<RetrieveBookForSubscribeResponse> bookList = bookResponse.getBody().getData();
 
     model.addAttribute("subscribeId", subscribeId);
-    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("currentPage", currentPage);
     model.addAttribute("totalPage", totalPage);
     model.addAttribute("bookList", bookList);
 
@@ -376,7 +376,7 @@ public class AdminProductController {
 
     model.addAttribute("productNo", productNo);
     model.addAttribute("productList", recommendResponse.getBody().getData());
-    model.addAttribute("nowPage", recommendResponse.getBody().getPageNumber());
+    model.addAttribute("currentPage", recommendResponse.getBody().getPageNumber());
     model.addAttribute("totalPage", recommendResponse.getBody().getTotalPages());
 
     return PRE_FIX + "/recommendConnector";

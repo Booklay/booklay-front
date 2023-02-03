@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -51,16 +52,14 @@ public class AdminAuthorController {
 
     PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(pageNum);
 
-    int totalPage = authorPage.getTotalPages();
-    int nowPage = authorPage.getPageNumber();
     List<RetrieveAuthorResponse> authorList = authorPage.getData();
 
-    model.addAttribute("nowPage", nowPage);
-    model.addAttribute("totalPage", totalPage);
+    setCurrentPageAndMaxPageToModel(model, authorPage);
     model.addAttribute("authorList", authorList);
     model.addAttribute(TARGET_VIEW, "product/adminAuthor");
 
     return "admin/adminPage";
+
   }
 
   //작가 팝업창
@@ -70,16 +69,14 @@ public class AdminAuthorController {
 
     PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(pageNum);
 
-    int totalPage = authorPage.getTotalPages();
-    int nowPage = authorPage.getPageNumber();
     List<RetrieveAuthorResponse> authorList = authorPage.getData();
 
-    model.addAttribute("nowPage", nowPage);
-    model.addAttribute("totalPage", totalPage);
+    setCurrentPageAndMaxPageToModel(model, authorPage);
     model.addAttribute("authorList", authorList);
     model.addAttribute(TARGET_VIEW, "product/adminAuthor");
 
     return "admin/product/popup/authorPopup";
+
   }
 
   //작가 생성
@@ -91,6 +88,7 @@ public class AdminAuthorController {
         CreateDeleteProductRecommendRequest.class);
 
     return PAGE_PRE_FIX;
+
   }
 
   //작가 수정
@@ -102,6 +100,7 @@ public class AdminAuthorController {
         CreateDeleteProductRecommendRequest.class);
 
     return PAGE_PRE_FIX;
+
   }
 
   //작가 삭제
@@ -111,6 +110,7 @@ public class AdminAuthorController {
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
     return PAGE_PRE_FIX;
+
   }
 
 
@@ -123,7 +123,6 @@ public class AdminAuthorController {
       pageNum = Optional.of(0);
     }
     Long size = 20L;
-    pageNum = Optional.of(pageNum.get() - 1);
 
     URI uri = URI.create(
         gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
@@ -133,5 +132,6 @@ public class AdminAuthorController {
         });
 
     return authorResponse.getBody();
+
   }
 }

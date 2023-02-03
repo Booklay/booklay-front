@@ -70,10 +70,10 @@ public class ProductDisplayController {
 
     if (Objects.nonNull(productResponse.getBody())) {
       int totalPage = productResponse.getBody().getTotalPages();
-      int nowPage = productResponse.getBody().getPageNumber();
+      int currentPage = productResponse.getBody().getPageNumber();
       List<RetrieveProductResponse> productList = productResponse.getBody().getData();
 
-      model.addAttribute("nowPage", nowPage);
+      model.addAttribute("currentPage", currentPage);
       model.addAttribute("totalPage", totalPage);
       model.addAttribute("productList", productList);
     }
@@ -134,7 +134,7 @@ public class ProductDisplayController {
           <p>
                   PageResponse<RetrieveProductResponse> responseBody = response.getBody();
           <p>
-                  model.addAttribute("nowPage", responseBody.getPageNumber());
+                  model.addAttribute("currentPage", responseBody.getPageNumber());
                   model.addAttribute("totalPage", responseBody.getTotalPages());
                   model.addAttribute("productList", responseBody.getData());
          */
