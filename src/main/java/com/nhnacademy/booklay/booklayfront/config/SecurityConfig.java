@@ -2,12 +2,9 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.CustomAuthenticationProvider;
-import com.nhnacademy.booklay.booklayfront.auth.filter.CustomOAuth2AuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,10 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Spring Security 기본 설정
@@ -63,7 +57,7 @@ public class SecurityConfig {
             .disable();
 
         http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository())
-            .successHandler(oAuth2LoginSuccessHandler(null, null, null)));
+            .successHandler(oAuth2LoginSuccessHandler(null)));
 
         return http.build();
     }
@@ -110,7 +104,7 @@ public class SecurityConfig {
     // }
 
     @Bean
-    public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(RestTemplate restTemplate, AuthenticationServerProxy proxy, String gatewayIp) {
-        return new OAuth2LoginSuccessHandler(restTemplate, proxy, gatewayIp);
+    public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(AuthenticationServerProxy proxy) {
+        return new OAuth2LoginSuccessHandler(proxy);
     }
 }

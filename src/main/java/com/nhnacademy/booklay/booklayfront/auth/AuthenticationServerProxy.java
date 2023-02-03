@@ -65,14 +65,15 @@ public class AuthenticationServerProxy {
                       .build();
     }
 
-    public JwtInfo attemptGithubOauth2Authentication(String email, String gitId) {
+    public JwtInfo attemptGithubOauth2Authentication(String gitId, String email) {
         String url = gatewayIp + AUTH_PREFIX + "/members/login/oauth2/github";
 
-        OAuth2LoginRequest oAuth2LoginRequest =
-            new OAuth2LoginRequest(email, GITHUB_PREFIX_ID + gitId);
+        LoginRequest loginRequest = new LoginRequest(GITHUB_PREFIX_ID + gitId, email);
 
         ResponseEntity<Void> response =
-            restTemplate.postForEntity(url, oAuth2LoginRequest, Void.class);
+            restTemplate.postForEntity(url, loginRequest, Void.class);
+
+        //id, email 로
 
         List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
         List<String> refreshTokenHeaders = response.getHeaders().get("Refresh_Token");
@@ -99,4 +100,5 @@ public class AuthenticationServerProxy {
                       .uuid(uuid)
                       .build();
     }
+
 }
