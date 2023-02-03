@@ -100,7 +100,7 @@ public class CategoryAdminController {
    * 카테고리 리스트 화면.
    *
    * @param page .
-   * @param mav  .
+   * @param model  .
    * @return .
    */
   @GetMapping
