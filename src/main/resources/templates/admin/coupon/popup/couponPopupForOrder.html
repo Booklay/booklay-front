@@ -17,9 +17,13 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link th:href="@{/css/style.css}" rel="stylesheet">
   <script src="/js/coupon/couponPopup.js"></script>
+  <script src="/js/popup/popupSetting.js"></script>
 </head>
 <html lang="ko">
 <h2>쿠폰 선택</h2>
+<th:block th:if="${not #strings.isEmpty(targetId)}">
+    <span style="display: none" id="targetId" th:text="${targetId}"></span>
+</th:block>
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
     <div th:if="${#lists.isEmpty(list)}">
         <div>등록된 쿠폰이 없습니다.</div>
@@ -37,20 +41,20 @@
                 <td>수량제한</td>
                 <td></td>
             </tr>
-            <tbody th:each="coupon, couponStat :${list}">
-            <tr>
+            <tbody id="couponTableBody">
+            <tr th:each="coupon, couponStat :${list}" th:name="${coupon.couponCode}" th:id="${coupon.id}">
                 <td><p th:text="${couponStat.count}"></p></td>
                 <td><p th:text="${coupon.id}"></p></td>
                 <td><p th:text="${coupon.name}"></p></td>
                 <td><p th:text="${coupon.typeName}"></p></td>
                 <td><p th:text="${coupon.amount}"></p></td>
-                <td><p th:text="${coupon.minimumUseAmount}"></p></td>
+                <td><p th:text="${coupon.minimumUseAmount}" th:id="${coupon.id+'minimum'}"></p></td>
                 <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
                 <td>
                     <p th:if="${coupon.isLimited}">O</p>
                     <p th:unless="${coupon.isLimited}">X</p>
                 </td>
-                <td><input type="button" value="선택" th:id="${coupon.id}" th:onclick="setParentText(this.getAttribute('id'))"></td>
+                <td><input type="button" value="선택" th:id="${coupon.couponCode}"></td>
             </tr>
             </tbody>
         </table>

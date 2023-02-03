@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CategoryRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
@@ -33,6 +34,25 @@ public class CouponPopupAdminController {
                               Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
         return RESOURCE_BASE + "couponPopup";
+    }
+
+    @GetMapping("/coupon/order")
+    public String orderOrderCouponPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                        @RequestParam(value = "isDuplicable") Boolean dupl,
+                                        Model model, MemberInfo memberInfo){
+        couponRestApiModelSettingService.setOrderCouponListToModelByPageAndMemberNo(pageNum, dupl, memberInfo, model);
+        model.addAttribute("targetId", "ordercoupon");
+        return RESOURCE_BASE + "couponPopupForOrder";
+    }
+    @GetMapping("/coupon/{productNo}")
+    public String orderProductCouponPopup(@RequestParam(value = "page", defaultValue = "0") int pageNum,
+                                          @RequestParam(value = "isDuplicable") Boolean dupl,
+                                          Model model, @PathVariable String productNo,
+                                          MemberInfo memberInfo) {
+        couponRestApiModelSettingService.setProductCouponListToModelByPageAndMemberNoAndProductNo(
+                pageNum, productNo, memberInfo, dupl, model);
+        model.addAttribute("targetId", productNo+"coupon");
+        return RESOURCE_BASE + "couponPopupForOrder";
     }
 
     @GetMapping("/member")

@@ -201,9 +201,9 @@
             <input name="memberNo" type="number" th:if="${member != null}"
                    th:value="${member.memberNo}"
                    hidden="hidden"/>
-            <input class="numIn" name="count" type="number" min="1" value="1"/>
-            <input name="productNo" type="number" th:value="${product.productId}" hidden="hidden">
-            <input type="submit" value="카트에 넣기"/>
+            <input id="productCount" class="numIn" name="count" type="number" min="1" value="1"/>
+            <input id="productNo" name="productNo" type="number" th:value="${product.productId}" hidden="hidden">
+            <input id="addCart" type="submit" value="카트에 넣기" onclick="return false"/>
           </form>
         </th:block>
 
@@ -595,7 +595,7 @@
 
 <!-- Template Javascript -->
 <script th:src="@{/js/main.js}"></script>
-
+<script src="/js/product/productDetailForCart.js"></script>
 <!-- PopUp Javascript -->
 <script>
   function showTagRegisterPopup(productNo) {
