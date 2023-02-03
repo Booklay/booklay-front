@@ -165,8 +165,7 @@ public class ProductDisplayController {
   //찜 위시리스트 삭제
   @PostMapping("/wishlist/disconnect")
   public String wishlistDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
@@ -176,8 +175,7 @@ public class ProductDisplayController {
 
   //재입고 알람 등록
   @PostMapping("/alarm/connect")
-  public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+  public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
     restService.post(uri.toString(), mapper.convertValue(request, Map.class), String.class);
@@ -188,8 +186,7 @@ public class ProductDisplayController {
   //재입고 알람 등록 해제
   @PostMapping("/alarm/disconnect")
   public String alarmDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
