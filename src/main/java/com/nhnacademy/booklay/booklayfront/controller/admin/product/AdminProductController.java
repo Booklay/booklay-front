@@ -30,9 +30,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Controller;
@@ -341,7 +339,7 @@ public class AdminProductController {
   @PostMapping("/subscribes/connect/{subscribeId}/{pageNum}")
   public String subscribeBookConnection(@PathVariable Long pageNum,
       @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request,
-      @PathVariable Long subscribeId) throws JsonProcessingException {
+      @PathVariable Long subscribeId) {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
     restService.post(uri.toString(), mapper.convertValue(request, Map.class),
@@ -354,8 +352,7 @@ public class AdminProductController {
   @PostMapping("/subscribes/disconnect/{subscribeId}/{pageNum}")
   public String subscribeBookDisconnection(@PathVariable Long pageNum,
       @PathVariable Long subscribeId,
-      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request) {
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
@@ -389,7 +386,7 @@ public class AdminProductController {
   //연관 상품 등록
   @PostMapping("/recommend/create/{pageNum}")
   public String createRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
-      @PathVariable Long pageNum) throws JsonProcessingException {
+      @PathVariable Long pageNum) {
     Long productNo = request.getBaseId();
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
@@ -403,7 +400,7 @@ public class AdminProductController {
   //연관 상품 삭제
   @PostMapping("/recommend/delete/{pageNum}")
   public String deleteRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
-      @PathVariable Long pageNum) throws JsonProcessingException {
+      @PathVariable Long pageNum){
     Long productNo = request.getBaseId();
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
