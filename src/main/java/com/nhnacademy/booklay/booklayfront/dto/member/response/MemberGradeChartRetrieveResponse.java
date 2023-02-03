@@ -15,3 +15,4 @@ public class MemberGradeChartRetrieveResponse {
     private Long goldCount;
     private Long platinumCount;
 }
+
