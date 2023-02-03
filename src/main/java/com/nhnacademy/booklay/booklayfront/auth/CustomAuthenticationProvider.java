@@ -38,7 +38,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         log.info("login start , {}", username);
 
-        JwtInfo jwtInfo = proxy.sendAuth(username, password);
+        JwtInfo jwtInfo = proxy.attemptFormAuthentication(username, password);
 
         CustomMember customMember = (CustomMember) userDetailsService.loadUserByUsername(username);
 

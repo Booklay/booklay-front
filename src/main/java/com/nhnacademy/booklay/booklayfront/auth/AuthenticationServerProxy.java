@@ -29,14 +29,50 @@ public class AuthenticationServerProxy {
     private static final String AUTH_PREFIX = "/auth/v1";
     private static final String SHOP_PREFIX = "/shop/v1";
     private static final String UUID_HEADER = "X-User-UUID";
+    private static final String GITHUB_PREFIX_ID = "GIT_";
 
-    public JwtInfo sendAuth(String username, String password) {
+    public JwtInfo attemptFormAuthentication(String username, String password) {
 
         String url = gatewayIp + AUTH_PREFIX + "/members/login";
 
         var loginRequest = new LoginRequest(username, password);
 
         ResponseEntity<Void> response = restTemplate.postForEntity(url, loginRequest, Void.class);
+
+        List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
+        List<String> refreshTokenHeaders = response.getHeaders().get("Refresh_Token");
+
+        String accessToken = "";
+        String refreshToken = "";
+        String uuid = "";
+
+        if (Objects.nonNull(accessTokenHeaders) && Objects.nonNull(accessTokenHeaders.get(0)) &&
+            Objects.nonNull(refreshTokenHeaders)) {
+            accessToken = accessTokenHeaders.get(0).split(" ")[1];
+            refreshToken = refreshTokenHeaders.get(0);
+        }
+
+        List<String> uuidHeaders = response.getHeaders().get(UUID_HEADER);
+
+        if (Objects.nonNull(uuidHeaders) && Objects.nonNull(uuidHeaders.get(0))) {
+            uuid = uuidHeaders.get(0);
+        }
+
+        return JwtInfo.builder()
+                      .accessToken(accessToken)
+                      .refreshToken(refreshToken)
+                      .uuid(uuid)
+                      .build();
+    }
+
+    public JwtInfo attemptGithubOauth2Authentication(String email, String gitId) {
+        String url = gatewayIp + AUTH_PREFIX + "/members/login/oauth2/github";
+
+        OAuth2LoginRequest oAuth2LoginRequest =
+            new OAuth2LoginRequest(email, GITHUB_PREFIX_ID + gitId);
+
+        ResponseEntity<Void> response =
+            restTemplate.postForEntity(url, oAuth2LoginRequest, Void.class);
 
         List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
         List<String> refreshTokenHeaders = response.getHeaders().get("Refresh_Token");
