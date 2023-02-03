@@ -78,5 +78,4 @@ public class CouponSettingAdminController {
         restService.delete(url);
         return RETURN_PAGE_COUPON_SETTING_LIST;
     }
-
 }

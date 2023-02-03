@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+    <title>쿠폰 등록</title>
     <script src="/js/coupon/couponCreateForm.js"></script>
     <script src="/js/coupon/couponPopup.js"></script>
     <link href="/css/form.css" rel="stylesheet">
@@ -36,14 +37,9 @@
             <label for="limited-true" class="selector">있음</label><input type="radio" name="isLimited" value="true" checked id="limited-true">
             <label for="limited-false" class="selector">없음</label><input type="radio" name="isLimited" value="false" id="limited-false"><br/>
             <label for="validate-term">유효 기간</label>
-            <select id="validate-term" name="validateTerm">
-                <option value="10" selected>10일</option>
-                <option value="30">30일</option>
-            </select><br/>
+            <input type="number" id="validate-term" name="validateTerm"><br/>
             <label for="image-input">쿠폰 이미지</label> <input type="file" accept="image/*" name="image" id="image-input"><br/>
             <input type="submit">
         </form>
     </div>
 </html>
-
-

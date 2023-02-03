@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
@@ -23,6 +24,7 @@ public class CouponZoneController {
     private final String gatewayIp;
 
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
+    private static final String SHOP_DOMAIN_PREFIX = "/shop/v1";
     private static final String RETURN_PAGE = "admin/adminPage";
 
     /**
@@ -53,8 +55,10 @@ public class CouponZoneController {
      *
      */
     @GetMapping("/{couponId}")
-    public String couponZoneIssue(@PathVariable Long couponId) {
+    public String couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
+        Long memberNo = memberInfo.getMemberNo();
 
+        URI getLimitedUri = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone/limited");
         return "redirect:/coupon-zone";
     }
 }

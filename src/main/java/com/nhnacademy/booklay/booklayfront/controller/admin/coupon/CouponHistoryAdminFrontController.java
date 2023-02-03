@@ -48,7 +48,4 @@ public class CouponHistoryAdminFrontController {
         model.addAttribute(TARGET_VIEW, COUPON_HISTORY_HTML_PATH + "historyView");
         return RETURN_ADMIN_PAGE;
     }
-
-
-
 }

@@ -6,6 +6,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberChartRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -31,7 +32,6 @@ public class MemberAdminController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final static String ADMINPAGE = "admin/adminPage";
-
 
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
@@ -149,32 +149,45 @@ public class MemberAdminController {
     }
 
     @GetMapping("/block/cancel/{blockedMemberDetailId}")
-    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId, Model model) {
+    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId,
+                                                Model model) {
         model.addAttribute("blockedMemberDetailId", blockedMemberDetailId);
 
         return "admin/member/memberBlockCancelForm";
     }
 
+    @GetMapping("/chart")
+    public String retrieveMemberChart(Model model) {
+        URI uri = URI.create(redirectGatewayPrefix + "/chart");
+
+        ApiEntity<MemberChartRetrieveResponse> response =
+            restService.get(uri.toString(), null, MemberChartRetrieveResponse.class);
+
+        model.addAttribute("counts", response.getBody());
+        model.addAttribute("targetUrl", "member/memberChart");
+
+        return ADMINPAGE;
+//        return "admin/member/memberChart";
+    }
+
     @PostMapping("/block/{memberNo}")
     public String memberBlock(@Valid @ModelAttribute MemberBlockRequest request,
                               BindingResult bindingResult,
-                              @PathVariable Long memberNo,
-                              Model model) {
+                              @PathVariable Long memberNo) {
         URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
 
-        ApiEntity<Void> response =
-            restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-                Void.class);
+        restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+            Void.class);
 
         return "redirect:/admin/members";
     }
 
     @GetMapping("/block/cancel/process/{blockedMemberDetailId}")
-    public String memberBlockCancel(@PathVariable Long blockedMemberDetailId, Model model){
+    public String memberBlockCancel(@PathVariable Long blockedMemberDetailId,
+                                    Model model) {
         URI uri = URI.create(redirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
 
-        ApiEntity<Void> response =
-            restService.get(uri.toString(), null, Void.class);
+        restService.get(uri.toString(), null, Void.class);
 
         return "redirect:/admin/members/block";
     }

@@ -122,5 +122,4 @@ public class CouponIssueAdminFrontController {
         model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "useHistoryView");
         return RETURN_ADMIN_PAGE;
     }
-
 }

@@ -29,9 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/address")
 public class DeliveryDestinationController {
     private final RestTemplate restTemplate;
-
     private final String redirectGatewayPrefix;
-
     private final static String MYPAGE = "mypage/myPage";
 
     public DeliveryDestinationController(RestTemplate restTemplate, String gateway) {
@@ -67,7 +65,6 @@ public class DeliveryDestinationController {
         model.addAttribute("memberNo", memberNo);
         return "mypage/member/memberAddressRegisterForm";
     }
-
 
     @GetMapping("/{memberNo}")
     public String retrieveAddress(@PathVariable Long memberNo, Model model) {
@@ -108,8 +105,9 @@ public class DeliveryDestinationController {
 
         model.addAttribute("address", response.getBody());
         model.addAttribute("memberNo", memberNo);
+        model.addAttribute("targetUrl", "member/memberAddressUpdateForm");
 
-        return "mypage/member/memberAddressUpdateForm";
+        return MYPAGE;
     }
 
     @PostMapping("/update/{memberNo}/{addressNo}")
@@ -155,5 +153,4 @@ public class DeliveryDestinationController {
 
         return "redirect:/address/" + memberNo;
     }
-
 }

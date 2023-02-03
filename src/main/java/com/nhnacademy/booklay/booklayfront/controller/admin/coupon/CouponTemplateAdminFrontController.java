@@ -94,6 +94,4 @@ public class CouponTemplateAdminFrontController {
         restService.delete(url);
         return RETURN_PAGE_COUPON_TEMPLATE_LIST;
     }
-
-
 }
