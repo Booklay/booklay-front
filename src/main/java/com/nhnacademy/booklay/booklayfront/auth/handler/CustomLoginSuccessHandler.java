@@ -21,9 +21,11 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         CustomMember principal = (CustomMember) authentication.getPrincipal();
 
-        String jwt = principal.getJwt();
+        String accessToken = principal.getAccessToken();
+        String refreshToken = principal.getRefreshToken();
 
-        request.getSession().setAttribute("TOKEN", jwt);
+        request.getSession().setAttribute("TOKEN", accessToken);
+        request.getSession().setAttribute("REFRESH_TOKEN", refreshToken);
 
         response.sendRedirect("/");
     }

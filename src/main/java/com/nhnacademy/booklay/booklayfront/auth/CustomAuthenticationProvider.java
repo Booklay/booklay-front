@@ -46,8 +46,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(customMember.getUsername() + "Invalid password");
         }
 
-        customMember.setJwt(jwtInfo.getAccessToken());
+        customMember.setAccessToken(jwtInfo.getAccessToken());
         customMember.setUuid(jwtInfo.getUuid());
+        customMember.setRefreshToken(jwtInfo.getRefreshToken());
 
         return new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(), customMember.getAuthorities());
     }

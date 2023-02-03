@@ -1,7 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,9 +23,11 @@ public class CustomMember implements UserDetails {
 
     private List<Roles> authorities;
 
-    private String jwt;
+    private String accessToken;
 
     private String uuid;
+
+    private String refreshToken;
 
     public CustomMember(String username, String password, List<Roles> authorities) {
         this.username = username;

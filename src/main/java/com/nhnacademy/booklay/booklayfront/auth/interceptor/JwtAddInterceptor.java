@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.auth.interceptor;
 
 import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,9 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
-import java.util.Optional;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 /**
@@ -61,7 +57,7 @@ public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
         if (Objects.isNull(customMember)) {
             return execution.execute(httpRequest, body);
         }
-        String jwt = customMember.getJwt();
+        String jwt = customMember.getAccessToken();
 
         log.info("token = {}", jwt);
 
