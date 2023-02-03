@@ -98,11 +98,6 @@ public class SecurityConfig {
         return new InMemoryClientRegistrationRepository(clientRegistration);
     }
 
-    // @Bean
-    // public CustomOAuth2AuthenticationFilter customOAuth2AuthenticationFilter(RestTemplate restTemplate, AuthenticationServerProxy proxy, String gatewayIp) {
-    //     return new CustomOAuth2AuthenticationFilter(restTemplate, proxy, gatewayIp);
-    // }
-
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(AuthenticationServerProxy proxy) {
         return new OAuth2LoginSuccessHandler(proxy);

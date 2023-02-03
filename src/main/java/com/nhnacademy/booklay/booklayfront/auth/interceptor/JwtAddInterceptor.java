@@ -24,8 +24,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtAddInterceptor implements ClientHttpRequestInterceptor{
 
-    private final RedisTemplate<String, Object> redisTemplate;
-
     /**
      * {@link ClientHttpRequestInterceptor} 인터페이스 추상 메서드를 재정의하여 서버로 요청을 보내기 전 토큰 정보가 있다면 주입 후 요청을 보냅니다.
      *
