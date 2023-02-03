@@ -19,10 +19,10 @@
 
   <!-- Customized Bootstrap Stylesheet -->
   <link th:href="@{/css/style.css}" rel="stylesheet">
-  <script src="/js/product/categoryPopup.js"></script>
+  <script src="/js/product/categoryReselectPopup.js"></script>
 </head>
 <html lang="ko">
-<h2>카테고리 선택</h2>
+<h2>카테고리 재선택</h2>
 <table>
   <thead>
   <tr>
@@ -70,11 +70,12 @@
       </label>
     </td>
     <td>
-      <input class="cat-select-btn" type="button" value="선택" th:id="${category.id}" th:name="${category.name}"></td>
+      <span th:text="${inputId}"></span>
+      <input class="cat-select-btn" type="button" value="선택" th:id="${category.id}"
+             th:name="${category.name}" th:data="${inputId}"></td>
   </tr>
   </tbody>
 </table>
 <h2 th:if="${list.isEmpty()}">등록된 카테고리가 없습니다.</h2>
-
 
 </html>

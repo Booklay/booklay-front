@@ -117,6 +117,33 @@ public class AdminProductController {
     return "admin/product/popup/categoryPopup";
   }
 
+  //카테고리 수정 팝업 호출
+  @GetMapping("/category/popup/{inputId}")
+  public String retrieveCategoryReselectPopUp(
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model,
+      @PathVariable String inputId) {
+
+    String query = "?page=" + page;
+
+    String redirectGatewayPrefix = gatewayIp + "/shop/v1" + "/admin/categories";
+
+    URI uri = URI.create(redirectGatewayPrefix + query);
+
+    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+    });
+
+    if (response.isSuccess()) {
+      model.addAttribute("list", response.getBody().getData());
+      model.addAttribute("totalPage", response.getBody().getTotalPages());
+      model.addAttribute("currentPage", response.getBody().getPageNumber());
+      model.addAttribute("inputId", inputId);
+    } else {
+      return "/index";
+    }
+
+    return "admin/product/popup/categoryReselectPopup";
+  }
+
   //책 생성 페이지
   @GetMapping("/books/create")
   public String getProductBookCreateForm(Model model) {

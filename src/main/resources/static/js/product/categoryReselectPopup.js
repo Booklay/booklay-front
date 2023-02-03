@@ -4,10 +4,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
   categoryButtons.forEach(
       button => button.addEventListener('click', function (e) {
-        const {id, name} = e.target
-        const event = new CustomEvent('categorySelected', {
+        const {id, name, data} = e.target
+        const event = new CustomEvent('categoryReselected', {
           detail: {
-            category: { id, name }
+            category: { id, name , data}
           }
         })
         opener.document.dispatchEvent(event)
