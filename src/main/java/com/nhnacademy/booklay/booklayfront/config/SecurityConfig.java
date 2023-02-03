@@ -71,5 +71,4 @@ public class SecurityConfig {
     private InitialAuthenticationFilter getInitialAuthenticationFilter() throws Exception {
         return new InitialAuthenticationFilter(authenticationManager(null));
     }
-
 }
