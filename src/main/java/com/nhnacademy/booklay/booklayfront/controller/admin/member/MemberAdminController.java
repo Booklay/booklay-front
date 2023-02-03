@@ -1,5 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.member;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_MEMBER_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -36,7 +39,7 @@ public class MemberAdminController {
 
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
-        this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/members";
+        this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + ADMIN_MEMBER_REST_PREFIX;
         this.restService = restService;
         this.objectMapper = objectMapper;
     }
