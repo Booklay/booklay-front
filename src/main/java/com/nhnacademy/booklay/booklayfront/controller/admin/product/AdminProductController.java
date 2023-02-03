@@ -17,13 +17,12 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdatePro
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveBookForSubscribeResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductSubscribeForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
-import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +46,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author 최규태
@@ -81,13 +79,7 @@ public class AdminProductController {
   public String getProductSoftDelete(@PathVariable Long productId) {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + productId);
 
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-    RequestEntity<Long> requestEntity = new RequestEntity<>(httpHeaders, HttpMethod.DELETE, uri);
-
-    restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
-    });
+    restService.delete(uri.toString(), null);
 
     return "redirect:/product/display";
   }
@@ -98,12 +90,11 @@ public class AdminProductController {
       @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
     String query = "?page=" + page;
-
     String redirectGatewayPrefix = gatewayIp + "/shop/v1" + "/admin/categories";
-
     URI uri = URI.create(redirectGatewayPrefix + query);
 
-    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null,
+        new ParameterizedTypeReference<>() {
         });
 
     if (response.isSuccess()) {
@@ -129,8 +120,9 @@ public class AdminProductController {
 
     URI uri = URI.create(redirectGatewayPrefix + query);
 
-    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
-    });
+    ApiEntity<PageResponse<CategoryResponse>> response = restService.get(uri.toString(), null,
+        new ParameterizedTypeReference<>() {
+        });
 
     if (response.isSuccess()) {
       model.addAttribute("list", response.getBody().getData());
@@ -189,19 +181,11 @@ public class AdminProductController {
   public String getProductBookUpdateForm(Model model, @PathVariable Long productId) {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "books/" + productId);
 
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-    RequestEntity<Long> requestEntity = new RequestEntity<>(
-        httpHeaders, HttpMethod.GET, uri);
-
-    ResponseEntity<RetrieveProductBookForUpdateResponse> response =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<RetrieveProductBookForUpdateResponse> productData = restService.get(uri.toString(),
+        null, new ParameterizedTypeReference<>() {
         });
 
-    RetrieveProductBookForUpdateResponse productData = response.getBody();
-
-    model.addAttribute("product", productData);
+    model.addAttribute("product", productData.getBody());
 
     return PRE_FIX + "/updateProductBookForm";
   }
@@ -279,19 +263,11 @@ public class AdminProductController {
   public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "subscribes/" + productId);
 
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-    RequestEntity<Long> requestEntity = new RequestEntity<>(
-        httpHeaders, HttpMethod.GET, uri);
-
-    ResponseEntity<RetrieveProductSubscribeForUpdateResponse> response =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<RetrieveProductBookForUpdateResponse> productData = restService.get(uri.toString(),
+        null, new ParameterizedTypeReference<>() {
         });
 
-    RetrieveProductSubscribeForUpdateResponse productData = response.getBody();
-
-    model.addAttribute("product", productData);
+    model.addAttribute("product", productData.getBody());
 
     return PRE_FIX + "/updateProductSubscribeForm";
   }
@@ -339,20 +315,14 @@ public class AdminProductController {
     if (pageNum < 0L) {
       pageNum = 1L;
     }
-
     Long size = 20L;
-
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
 
     URI uri = URI.create(
         gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "?page=" + pageNum
             + "&size=" + size);
-    RequestEntity<PageResponse<RetrieveTagResponse>> requestEntity = new RequestEntity<>(
-        httpHeaders, HttpMethod.GET, uri);
 
-    ResponseEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse = restService.get(
+        uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
     int totalPage = bookResponse.getBody().getTotalPages();
@@ -370,18 +340,13 @@ public class AdminProductController {
   //구독 상품 하위 상품 등록
   @PostMapping("/subscribes/connect/{subscribeId}/{pageNum}")
   public String subscribeBookConnection(@PathVariable Long pageNum,
-      @PathVariable Long subscribeId,
-      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request,
+      @PathVariable Long subscribeId) throws JsonProcessingException {
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class),
+        CreateDeleteTagProductRequest.class);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.POST, uri);
-
-    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
     return "redirect:/admin/product" + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
 
@@ -394,13 +359,7 @@ public class AdminProductController {
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.DELETE, uri);
-
-    restTemplate.exchange(requestEntity, CreateDeleteTagProductRequest.class);
+    restService.delete(uri.toString(), mapper.convertValue(request, MultiValueMap.class));
 
     return "redirect:/admin/product" + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "/" + pageNum;
   }
@@ -411,28 +370,18 @@ public class AdminProductController {
       @PathVariable Long productNo, Model model) {
     Long size = 20L;
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
     //최초 상품 상세 정보 호출
     URI uri = URI.create(
         gatewayIp + URI_PRE_FIX + "/recommend/" + productNo + "?page=" + pageNum + "&size=" + size);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(null,
-        headers, HttpMethod.GET, uri);
-
-    ResponseEntity<PageResponse<RetrieveProductResponse>> recommendResponse =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<PageResponse<RetrieveProductResponse>> recommendResponse = restService.get(
+        uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
-    int totalPage = recommendResponse.getBody().getTotalPages();
-    int nowPage = recommendResponse.getBody().getPageNumber();
-    List<RetrieveProductResponse> productList = recommendResponse.getBody().getData();
-
     model.addAttribute("productNo", productNo);
-    model.addAttribute("productList", productList);
-    model.addAttribute("nowPage", nowPage);
-    model.addAttribute("totalPage", totalPage);
+    model.addAttribute("productList", recommendResponse.getBody().getData());
+    model.addAttribute("nowPage", recommendResponse.getBody().getPageNumber());
+    model.addAttribute("totalPage", recommendResponse.getBody().getTotalPages());
 
     return PRE_FIX + "/recommendConnector";
   }
@@ -445,13 +394,8 @@ public class AdminProductController {
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.POST, uri);
-
-    restTemplate.exchange(requestEntity, CreateDeleteProductRecommendRequest.class);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class),
+        CreateDeleteProductRecommendRequest.class);
 
     return "redirect:/admin/product/recommend/" + productNo + "/" + pageNum;
   }
@@ -464,13 +408,7 @@ public class AdminProductController {
 
     URI uri = URI.create(gatewayIp + URI_PRE_FIX + "/recommend");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity = new RequestEntity<>(mapper.writeValueAsString(request),
-        headers, HttpMethod.DELETE, uri);
-
-    restTemplate.exchange(requestEntity, CreateDeleteProductRecommendRequest.class);
+    restService.delete(uri.toString(), mapper.convertValue(request, MultiValueMap.class));
 
     return "redirect:/admin/product/recommend/" + productNo + "/" + pageNum;
   }
