@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -15,7 +16,6 @@ import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author 최규태
@@ -43,176 +42,173 @@ public class AdminTagController {
   private static final String MAINTENANCE_PRE_FIX = "redirect:/admin/tag/maintenance";
   private static final String CONNECTION_PRE_FIX = "redirect:/admin/tag/connection";
   private static final String SHOP_URI_PRE_FIX = "/shop/v1/admin/tag";
-  private final RestTemplate restTemplate;
+  private static final Long SIZE = 20L;
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final RestService restService;
 
-  //페이지 조회
+  /**
+   * 페이지 조회
+   */
   @GetMapping("/maintenance")
   public String retrieveTag(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
-    if (pageNum.isEmpty()) {
-      pageNum = Optional.of(0);
-    }
-    if (pageNum.get() < 0) {
-      pageNum = Optional.of(0);
-    }
-    Long size = 20L;
-    pageNum = Optional.of(pageNum.get() - 1);
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
     URI uri = URI.create(
-        gatewayIp + SHOP_URI_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + SHOP_URI_PRE_FIX + "?page=" + page + "&size=" + SIZE);
 
     ApiEntity<PageResponse<RetrieveTagResponse>> tagResponse = restService.get(
         uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
-    int totalPage = tagResponse.getBody().getTotalPages();
-    int currentPage = tagResponse.getBody().getPageNumber();
-    List<RetrieveTagResponse> tagList = tagResponse.getBody().getData();
+    if (tagResponse.isSuccess()) {
+      List<RetrieveTagResponse> tagList = tagResponse.getBody().getData();
 
-    model.addAttribute("currentPage", currentPage);
-    model.addAttribute("totalPage", totalPage);
-    model.addAttribute("tagList", tagList);
-    model.addAttribute(TARGET_VIEW, "product/adminTag");
+      setCurrentPageAndMaxPageToModel(model, tagResponse.getBody());
+      model.addAttribute("tagList", tagList);
+      model.addAttribute(TARGET_VIEW, "product/adminTag");
 
-    return "admin/adminPage";
+      return "admin/adminPage";
+    }
+    return "/index";
   }
 
   //생성
-  @PostMapping("/maintenance")
-  public String createTagAtMaintenance(@Valid @ModelAttribute CreateTagRequest request) {
+  @PostMapping("/maintenance/{pageNum}")
+  public String createTagAtMaintenance(@Valid @ModelAttribute CreateTagRequest request,
+      @PathVariable Long pageNum) {
     createTag(request);
 
-    return MAINTENANCE_PRE_FIX;
+    log.info("페이지 번호 출력 : " + pageNum);
+    return MAINTENANCE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
   }
 
   //수정
-  @PostMapping("/maintenance/update")
-  public String updateTagAtMaintenance(@Valid @ModelAttribute UpdateTagRequest request) {
+  @PostMapping("/maintenance/update/{pageNum}")
+  public String updateTagAtMaintenance(@Valid @ModelAttribute UpdateTagRequest request,
+      @PathVariable Long pageNum) {
     updateTag(request);
 
-    return MAINTENANCE_PRE_FIX;
+    return MAINTENANCE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
   }
 
   //삭제
-  @PostMapping("/maintenance/delete")
-  public String deleteTagAtMaintenance(@Valid @ModelAttribute DeleteByIdRequest request) {
+  @PostMapping("/maintenance/delete/{pageNum}")
+  public String deleteTagAtMaintenance(@Valid @ModelAttribute DeleteByIdRequest request,
+      @PathVariable Long pageNum) {
     deleteTag(request);
-    return MAINTENANCE_PRE_FIX;
+    return MAINTENANCE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //태그 등록 페이지 조회
-  @GetMapping("/connection/{productNo}/{pageNum}")
-  public String retrieveTagForProductConnect(
-      @PathVariable("pageNum") Long pageNum, Model model,
-      @PathVariable("productNo") Long productNo) {
-    if (pageNum < 0L) {
-      pageNum = 1L;
-    }
+  /**
+   * 태그 등록 페이지 조회
+   */
+  @GetMapping("/connection/{productNo}")
+  public String retrieveTagForProductConnect(@PathVariable("productNo") Long productNo,
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
     Long size = 10L;
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/tag/product/" + productNo + "?page=" + pageNum
-            + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/tag/product/" + productNo + "?page=" + page + "&size=" + size);
 
     ApiEntity<PageResponse<TagProductResponse>> tagResponse = restService.get(
         uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
-    int totalPage = tagResponse.getBody().getTotalPages();
-    int currentPage = tagResponse.getBody().getPageNumber();
     List<TagProductResponse> tagList = tagResponse.getBody().getData();
 
-    model.addAttribute("currentPage", currentPage);
-    model.addAttribute("totalPage", totalPage);
+    setCurrentPageAndMaxPageToModel(model, tagResponse.getBody());
     model.addAttribute("tagList", tagList);
     model.addAttribute("productNo", productNo);
 
     return "admin/product/productTagConnector";
   }
 
-  //상품에 태그 등록
+  /**
+   * 상품에 태그 등록
+   */
   @PostMapping("/connection/{productNo}/{pageNum}")
-  public String tagProductConnect(@PathVariable("pageNum") Long pageNum,
-      @PathVariable("productNo") Long productNo,
-      @Valid @ModelAttribute CreateDeleteTagProductRequest request) {
-    if (pageNum < 0L) {
-      pageNum = 1L;
-    }
+  public String tagProductConnect(@PathVariable("productNo") Long productNo,
+      @PathVariable Long pageNum, @Valid @ModelAttribute CreateDeleteTagProductRequest request) {
 
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
         CreateDeleteTagProductRequest.class);
 
-    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //상품에 등록된 태그 삭제
+  /**
+   * 상품에 등록된 태그 삭제
+   */
   @PostMapping("/connection/disconnect/{productNo}/{pageNum}")
-  public String tagProductDisconnect(@PathVariable("pageNum") Long pageNum,
-      @PathVariable("productNo") Long productNo,
+  public String tagProductDisconnect(
+      @PathVariable("productNo") Long productNo, @PathVariable Long pageNum,
       @Valid @ModelAttribute CreateDeleteTagProductRequest request) {
-    if (pageNum < 0L) {
-      pageNum = 1L;
-    }
 
     URI uri = URI.create(gatewayIp + "/shop/v1/admin/tag/product");
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
 
-    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //연결창에서 태그 생성
+  /**
+   * 연결창에서 태그 생성
+   */
   @PostMapping("/connection/create/{productNo}/{pageNum}")
   public String createTagAtConnector(@Valid @ModelAttribute CreateTagRequest request,
       @PathVariable Long pageNum, @PathVariable Long productNo) {
-    if (pageNum < 0L) {
-      pageNum = 1L;
-    }
     createTag(request);
-    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //연결창에서 태그 수정
+  /**
+   * 연결창에서 태그 수정
+   */
   @PostMapping("/connection/update/{productNo}/{pageNum}")
   public String updateTagAtConnector(@Valid @ModelAttribute UpdateTagRequest request,
       @PathVariable Long pageNum, @PathVariable Long productNo) {
-    if (pageNum < 0L) {
-      pageNum = 1L;
-    }
 
     updateTag(request);
-    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //연결창에서 태그 삭제
+  /**
+   * 연결창에서 태그 삭제
+   */
   @PostMapping("/connection/delete/{productNo}/{pageNum}")
   public String deleteTagAtConnector(@PathVariable Long pageNum, @PathVariable Long productNo,
       @Valid @ModelAttribute DeleteByIdRequest request) {
     deleteTag(request);
-    return CONNECTION_PRE_FIX + "/" + productNo + "/" + pageNum;
+    return CONNECTION_PRE_FIX + "/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
   //공통 부분 리팩토링
 
-  //태그 생성
+  /**
+   * 태그 생성
+   */
   public void createTag(CreateTagRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class), String.class);
   }
 
+  /**
+   * 태그 수정
+   */
   public void updateTag(UpdateTagRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 
     restService.put(uri.toString(), objectMapper.convertValue(request, Map.class), String.class);
   }
 
+  /**
+   * 태그 삭제
+   */
   public void deleteTag(DeleteByIdRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX);
 

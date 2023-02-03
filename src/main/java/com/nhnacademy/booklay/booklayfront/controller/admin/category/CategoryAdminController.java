@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.category;
 
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryCreateRequest;
@@ -116,9 +118,9 @@ public class CategoryAdminController {
         });
 
     if (response.isSuccess()) {
+
+      setCurrentPageAndMaxPageToModel(model, response.getBody());
       model.addAttribute("list", response.getBody().getData());
-      model.addAttribute("totalPage", response.getBody().getTotalPages());
-      model.addAttribute("currentPage", response.getBody().getPageNumber());
       return "admin/category/listView";
     } else {
       return "/index";

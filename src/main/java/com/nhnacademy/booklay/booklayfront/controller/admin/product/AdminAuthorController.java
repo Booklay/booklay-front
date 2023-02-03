@@ -15,7 +15,6 @@ import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +39,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminAuthorController {
 
   private static final String PAGE_PRE_FIX = "redirect:/admin/author/maintenance";
-  private static final String SHOP_PRE_FIX = "/shop/v1/admin/author";
+  private static final String SHOP_PRE_FIX = "/shop/v1/";
+  private static final String AUTHOR_PRE_FIX = "admin/author";
+  private static final Long SIZE = 20L;
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final RestService restService;
@@ -48,9 +50,9 @@ public class AdminAuthorController {
   //작가 관리창 조회
   @GetMapping()
   public String authorMaintenance(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
-    PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(pageNum);
+    PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(page);
 
     List<RetrieveAuthorResponse> authorList = authorPage.getData();
 
@@ -65,9 +67,9 @@ public class AdminAuthorController {
   //작가 팝업창
   @GetMapping("/popup")
   public String authorPopup(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
-    PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(pageNum);
+    PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(page);
 
     List<RetrieveAuthorResponse> authorList = authorPage.getData();
 
@@ -80,52 +82,47 @@ public class AdminAuthorController {
   }
 
   //작가 생성
-  @PostMapping
-  public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
+  @PostMapping("/{pageNum}")
+  public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request,
+      @PathVariable String pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
         CreateDeleteProductRecommendRequest.class);
 
-    return PAGE_PRE_FIX;
+    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
   //작가 수정
-  @PostMapping("/update")
-  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
+  @PostMapping("/update/{pageNum}")
+  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request,
+      @PathVariable Long pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
         CreateDeleteProductRecommendRequest.class);
 
-    return PAGE_PRE_FIX;
+    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
   //작가 삭제
-  @PostMapping("/delete")
-  public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
+  @PostMapping("/delete/{pageNum}")
+  public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request,
+      @PathVariable Long pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
-    return PAGE_PRE_FIX;
+    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
 
   private PageResponse<RetrieveAuthorResponse> retrieveAuthors(
-      Optional<Integer> pageNum) {
-    if (pageNum.isEmpty()) {
-      pageNum = Optional.of(0);
-    }
-    if (pageNum.get() < 0) {
-      pageNum = Optional.of(0);
-    }
-    Long size = 20L;
-
+      int page) {
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX + "?page=" + page + "&size=" + SIZE);
 
     ApiEntity<PageResponse<RetrieveAuthorResponse>> authorResponse = restService.get(
         uri.toString(), null, new ParameterizedTypeReference<>() {
