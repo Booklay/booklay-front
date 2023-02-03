@@ -78,7 +78,7 @@ public class AuthenticationServerProxy {
         //id, email 로
 
         List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
-        List<String> refreshTokenHeaders = response.getHeaders().get("Refresh_Token");
+        List<String> refreshTokenHeaders = response.getHeaders().get("Refresh-Token");
 
         String accessToken = "";
         String refreshToken = "";

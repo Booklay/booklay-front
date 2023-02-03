@@ -41,6 +41,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
         CustomMember customMember = proxy.getCustomMemberFromApiServer(gitId);
+
+        customMember.setAccessToken(jwtInfo.getAccessToken());
+        customMember.setUuid(jwtInfo.getUuid());
+        customMember.setRefreshToken(jwtInfo.getRefreshToken());
+
         UsernamePasswordAuthenticationToken token =
             new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(),
                                                     customMember.getAuthorities());
