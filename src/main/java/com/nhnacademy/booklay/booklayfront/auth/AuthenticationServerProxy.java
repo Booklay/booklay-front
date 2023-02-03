@@ -1,6 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -101,4 +103,14 @@ public class AuthenticationServerProxy {
                       .build();
     }
 
+    public CustomMember getCustomMemberFromApiServer(String gitId) {
+
+        String url = gatewayIp + SHOP_PREFIX;
+
+        MemberResponse
+            memberResponse = restTemplate.getForObject(url + "/members/login/?memberId=" + GITHUB_PREFIX_ID + gitId, MemberResponse.class);
+
+        return new CustomMember(memberResponse.getUserId(), memberResponse.getEmail(),
+                                Collections.singletonList(memberResponse.getAuthority()));
+    }
 }
