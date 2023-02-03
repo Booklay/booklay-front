@@ -1,25 +1,36 @@
 package com.nhnacademy.booklay.booklayfront.coupon.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponIssueAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponTypeAdminController;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
-import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
-import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,24 +45,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.web.client.RestTemplate;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 
@@ -84,6 +84,9 @@ class CouponAdminFrontControllerTest {
     @MockBean
     RedisTemplate<String, Object> redisTemplate;
 
+    @MockBean
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     private static final String RETURN_PAGE = "admin/adminPage";
     private static final String URI_PREFIX = "/admin/coupons";
 
@@ -91,8 +94,9 @@ class CouponAdminFrontControllerTest {
     String gatewayIp;
     CouponHistoryResponse couponHistoryResponse;
     CouponHistory couponHistory;
+
     @BeforeEach
-    void before(){
+    void before() {
         couponHistoryResponse = new CouponHistoryResponse(
                 0L, "1234-gfdd-1234", "쿠폰1", "id"
                 , LocalDateTime.now(), LocalDateTime.now());
