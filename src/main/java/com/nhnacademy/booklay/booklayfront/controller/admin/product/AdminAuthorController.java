@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -20,10 +19,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +26,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author 최규태
@@ -45,7 +39,6 @@ public class AdminAuthorController {
 
   private static final String PAGE_PRE_FIX = "redirect:/admin/author/maintenance";
   private static final String SHOP_PRE_FIX = "/shop/v1/admin/author";
-  private final RestTemplate restTemplate;
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final RestService restService;
@@ -91,8 +84,7 @@ public class AdminAuthorController {
 
   //작가 생성
   @PostMapping
-  public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request)
-      throws JsonProcessingException {
+  public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
@@ -103,8 +95,7 @@ public class AdminAuthorController {
 
   //작가 수정
   @PostMapping("/update")
-  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request)
-      throws JsonProcessingException {
+  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
@@ -115,8 +106,7 @@ public class AdminAuthorController {
 
   //작가 삭제
   @PostMapping("/delete")
-  public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request)
-      throws JsonProcessingException {
+  public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX);
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
