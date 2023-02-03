@@ -30,7 +30,6 @@
 
     <tbody>
     <th:block th:each="author : ${authorList}">
-      <form method="post" action="/admin/author/maintenance/update">
         <tr>
           <td>
             <input name="id" class="authorNo-info" type="number" th:value="${author.authorNo}"
@@ -57,7 +56,7 @@
             <span class="update-button">수정</span>
           </td>
           <td>
-            <form method="post" action="/admin/author/maintenance/delete">
+            <form method="post" th:action="@{/admin/author/maintenance/delete}">
               <input name="id" type="number" th:value="${author.authorNo}"
                      hidden="hidden"/>
               <input type="submit" value="삭제"/>
@@ -65,7 +64,6 @@
           </td>
           <td><a href="">작품 정보</a></td>
         </tr>
-      </form>
     </th:block>
     </tbody>
   </table>
