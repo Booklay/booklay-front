@@ -12,8 +12,3 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-
-
-logging:
-  level:
-    root: debug

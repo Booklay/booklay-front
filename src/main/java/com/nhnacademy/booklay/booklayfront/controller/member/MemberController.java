@@ -10,6 +10,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRe
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.member.MemberService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +38,15 @@ public class MemberController {
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
+    private final MemberService memberService;
     private final static String MYPAGE = "mypage/myPage";
 
     public MemberController(RestTemplate restTemplate, RestService restService, String gateway,
-                            ObjectMapper objectMapper) {
+                            MemberService memberService, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.restService = restService;
         this.objectMapper = objectMapper;
+        this.memberService = memberService;
         redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
     }
 
@@ -51,10 +54,10 @@ public class MemberController {
     @PostMapping("/register")
     public String createMember(@Valid @ModelAttribute MemberCreateRequest memberCreateRequest,
                                BindingResult bindingResult) {
-
         URI uri = URI.create(redirectGatewayPrefix);
 
-        restService.post(uri.toString(), objectMapper.convertValue(memberCreateRequest, Map.class),
+        restService.post(uri.toString(),
+            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
             Void.class);
         //TODO 2: 에러처리
 
@@ -171,7 +174,7 @@ public class MemberController {
     public String deleteMember(@PathVariable Long memberNo) {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
-        restService.delete(uri.toString(), null);
+        restService.delete(uri.toString());
 
         return "redirect:/";
     }
