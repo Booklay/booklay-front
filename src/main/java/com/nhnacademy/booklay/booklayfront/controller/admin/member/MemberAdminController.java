@@ -1,5 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.member;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_MEMBER_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -7,6 +10,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberChartRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeChartRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -35,7 +39,7 @@ public class MemberAdminController {
 
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
-        this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/members";
+        this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + ADMIN_MEMBER_REST_PREFIX;
         this.restService = restService;
         this.objectMapper = objectMapper;
     }
@@ -158,12 +162,17 @@ public class MemberAdminController {
 
     @GetMapping("/chart")
     public String retrieveMemberChart(Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/chart");
+        URI memberUri = URI.create(redirectGatewayPrefix + "/chart");
+        URI gradeUri = URI.create(redirectGatewayPrefix + "/grade/chart");
 
-        ApiEntity<MemberChartRetrieveResponse> response =
-            restService.get(uri.toString(), null, MemberChartRetrieveResponse.class);
+        ApiEntity<MemberChartRetrieveResponse> memberResponse =
+            restService.get(memberUri.toString(), null, MemberChartRetrieveResponse.class);
 
-        model.addAttribute("counts", response.getBody());
+        ApiEntity<MemberGradeChartRetrieveResponse> gradeResponse =
+            restService.get(gradeUri.toString(), null, MemberGradeChartRetrieveResponse.class);
+
+        model.addAttribute("counts", memberResponse.getBody());
+        model.addAttribute("gradeCounts", gradeResponse.getBody());
         model.addAttribute("targetUrl", "member/memberChart");
 
         return ADMINPAGE;
