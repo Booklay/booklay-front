@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
-import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;

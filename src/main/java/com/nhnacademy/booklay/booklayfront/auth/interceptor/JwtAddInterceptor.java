@@ -1,6 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth.interceptor;
 
-import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import java.io.IOException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;

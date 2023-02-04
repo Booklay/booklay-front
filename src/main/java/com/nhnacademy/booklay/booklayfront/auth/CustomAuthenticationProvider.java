@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
-import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;

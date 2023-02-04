@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.auth.domain;
+package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
 import java.util.Collection;

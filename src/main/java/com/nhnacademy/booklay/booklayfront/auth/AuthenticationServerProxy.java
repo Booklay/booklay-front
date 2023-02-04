@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
-import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.dto.LoginRequest;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;

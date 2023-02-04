@@ -1,7 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.auth.handler;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
-import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import java.io.IOException;
 import java.util.Objects;
