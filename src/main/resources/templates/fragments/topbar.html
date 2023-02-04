@@ -40,18 +40,20 @@
         <img class="w-100 h-100" th:src="@{/storage/16}" alt="Image">
       </a>
     </div>
-    <div class="col-lg-6 col-6 text-left">
-      <form action="">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for products">
-          <div class="input-group-append">
-                            <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
-                            </span>
-          </div>
-        </div>
-      </form>
-    </div>
+      <div class="col-lg-6 col-6 text-left">
+          <form action="/search" method="post">
+              <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for products" name="keywords">
+                  <input type="text" name="classification" value="products" hidden>
+                  <div class="input-group-append">
+                      <span class="input-group-text bg-transparent text-primary">
+                          <input type="submit" hidden>
+                          <i class="fa fa-search"></i>
+                      </span>
+                  </div>
+              </div>
+          </form>
+      </div>
     <div class="col-lg-3 col-6 text-right">
       <a href="" class="btn border">
         <i class="fas fa-heart text-primary"></i>

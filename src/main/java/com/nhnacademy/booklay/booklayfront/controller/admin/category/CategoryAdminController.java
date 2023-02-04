@@ -103,32 +103,28 @@ public class CategoryAdminController {
      * 카테고리 리스트 화면.
      *
      * @param page .
-     * @param mav  .
      * @return .
      */
-    @GetMapping
-    public ModelAndView retrieveCategoryList(
+    @GetMapping(value = {"", "/"})
+    public String retrieveCategoryList(
         @RequestParam(value = "page", defaultValue = "0") int page,
-        ModelAndView mav) {
+        Model model) {
 
         String query = "?page=" + page;
 
         URI uri = URI.create(redirectGatewayPrefix + query);
 
         ApiEntity<PageResponse<CategoryResponse>> response =
-            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
-            });
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {});
 
         if (response.isSuccess()) {
-            mav.addObject("list", response.getBody().getData());
-            mav.addObject("totalPage", response.getBody().getTotalPages());
-            mav.addObject("currentPage", response.getBody().getPageNumber());
-            mav.setViewName("admin/category/listView");
-        } else {
-            mav.setViewName("/index");
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+            return "admin/category/list";
         }
 
-        return mav;
+        return "redirect:/admin";
     }
 
     /**

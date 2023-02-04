@@ -22,7 +22,6 @@ public class ControllerStrings {
     public static final String CART_REST_PREFIX = "/cart/";
     public static final String ADMIN_MEMBER_REST_PREFIX = "/admin/members";
 
-
     public static final String COUPON_URL_LIST_PAGE = "pages";
 
     public static final String ATTRIBUTE_NAME_MEMBER_NO = "memberNo";

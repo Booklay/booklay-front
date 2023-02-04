@@ -1,15 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.dto.member.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class MemberForAuthorResponse {
 
-  Long memberNo;
-  String memberId;
+  private Long memberNo;
+  private String memberId;
 }

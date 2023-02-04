@@ -1,0 +1,132 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Member Create Form</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h3>회원가입</h3><br>-->
+<!--<div>-->
+<!--    <form action="/member/register" method="post">-->
+<!--        <span><b>이름</b>: <input type="text" name="name"></span><br>-->
+<!--        <span><b>아이디</b>: <input type="text" name="memberId"></span><br>-->
+<!--        <span><b>비밀번호</b>: <input type="password" name="password"></span><br>-->
+<!--        <span><b>닉네임</b>: <input type="text" name="nickname"></span><br>-->
+<!--        <span><b>성별</b>: <input type='radio' name='gender' value='F'>여성-->
+<!--            <input type='radio' name='gender' value='M'>남성 <br></span>-->
+
+<!--        <span><b>생년월일</b>: <input type="date" name="birthday"></span><br>-->
+<!--        <span><b>전화번호</b>: <input type="text" name="phoneNo" placeholder="01012345678"></span><br>-->
+<!--        <span><b>이메일 주소</b>: <input type="email" name="email"></span><br>-->
+<!--        <input type="submit" value="submit"/>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/thymeleaf/layout/default}">
+<head>
+    <title>회원가입</title>
+
+    <script>
+        // @formatter:off
+        document.addEventListener("DOMContentLoaded", function () {
+            window.Litepicker && (new Litepicker({
+                element: document.getElementById('datepicker-icon'),
+                buttonText: {
+                    previousMonth: '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>',
+                    nextMonth: '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>'
+                },
+        }));
+        });
+        // @formatter:on
+    </script>
+</head>
+<!---->
+<th:block layout:fragment="content">
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+            <h1>회원가입</h1>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Create new account</h2>
+            <form th:action="@{/member/register}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Enter name" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">ID</label>
+                    <input type="text" name="memberId" class="form-control" placeholder="Enter ID" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group input-group-flat">
+                        <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="off" required>
+                        <span class="input-group-text">
+                      <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Show password" data-bs-original-title="Show password"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
+                      </a>
+                    </span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">별명</label>
+                    <input type="text" name="nickname" class="form-control" placeholder="Enter NickName" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" value="M">
+                        <span class="form-check-label">남성</span>
+                    </label>
+                    <label class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gender" value="F">
+                        <span class="form-check-label">여성</span>
+                    </label>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">생일</label>
+                    <div class="input-icon mb-2">
+                        <input class="form-control" name="birthday" placeholder="Select a date" id="datepicker-icon" required>
+                        <span class="input-icon-addon"><!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M16 3l0 4"></path><path d="M8 3l0 4"></path><path d="M4 11l16 0"></path><path d="M11 15l1 0"></path><path d="M12 15l0 3"></path></svg>
+                                  </span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">전화번호</label>
+                    <input type="number" name="phoneNo" class="form-control" placeholder="01012345678" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">이메일</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-check">
+                        <input type="checkbox" class="form-check-input" required>
+                        <span class="form-check-label"><a href="#" tabindex="-1">개인정보 제공 약관</a>에 동의합니다.</span>
+                    </label>
+                </div>
+
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</th:block>
+<!---->
+</html>

@@ -1,13 +1,11 @@
 package com.nhnacademy.booklay.booklayfront.dto.coupon.response;
 
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class CouponZoneRetrieveResponse {
     private Long id;
     private String name;

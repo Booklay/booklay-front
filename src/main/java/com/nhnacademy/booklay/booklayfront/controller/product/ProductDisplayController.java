@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -44,19 +46,36 @@ public class ProductDisplayController extends BaseController {
   private final RestTemplate restTemplate;
   private final ObjectMapper mapper = new ObjectMapper();
 
+  private final CategoryService categoryService;
+
   public ProductDisplayController(RestService restService,
-      String gatewayIp, RestTemplate restTemplate) {
-    super(restService, gatewayIp);
+                                  String gatewayIp, RestTemplate restTemplate,
+                                  CategoryService categoryService) {
     this.gatewayIp = gatewayIp;
     this.restTemplate = restTemplate;
 
+    this.categoryService = categoryService;
   }
 
 
   //게시판형 전채 상품 호출
   @GetMapping("/display")
   public String retrieveProduct(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+      Model model,
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum,
+      @RequestParam(value="CID", required = false) Long cid
+  ) {
+
+    List<CategorySteps> categorySteps = (List<CategorySteps>) model.getAttribute("categories");
+
+    if(Objects.isNull(cid)){
+      cid = categoryService.getDefaultCategoryId(categorySteps);
+    }
+
+    CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps,cid);
+
+    log.error(" currentCategory : {}", currentCategory);
+
     if (pageNum.isEmpty()) {
       pageNum = Optional.of(0);
     }
@@ -90,9 +109,10 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("nowPage", nowPage);
       model.addAttribute("totalPage", totalPage);
       model.addAttribute("productList", productList);
+      model.addAttribute("currentCategory", currentCategory);
     }
 
-    return "product/shop";
+    return "product/display";
   }
 
   //상품 상세 보기
@@ -135,14 +155,14 @@ public class ProductDisplayController extends BaseController {
           headers, HttpMethod.GET, uriForSubscribe);
 
       ResponseEntity<List<RetrieveProductResponse>> subscribeResponse =
-          restTemplate.exchange(subscribeRequestEntity, new ParameterizedTypeReference<>() {
-          });
+          restTemplate.exchange(subscribeRequestEntity, new ParameterizedTypeReference<>() {});
 
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
 
-    return "product/detail";
+    return "product/view";
   }
+
 
   //  @GetMapping("/display")
   public String categoryViewer(

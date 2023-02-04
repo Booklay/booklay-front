@@ -32,7 +32,7 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.formLogin().disable()
-            .logout().logoutUrl("/members/logout")
+            .logout().logoutUrl("/member/logout")
             .deleteCookies("SESSION_ID")
             .invalidateHttpSession(true)
             .logoutSuccessUrl("/");
