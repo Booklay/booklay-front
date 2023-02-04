@@ -1,20 +1,19 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
-import lombok.AllArgsConstructor;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Getter
 @Setter
-@AllArgsConstructor
+@NoArgsConstructor
 public class CustomMember implements UserDetails {
 
     private String username;
@@ -23,11 +22,24 @@ public class CustomMember implements UserDetails {
 
     private List<Roles> authorities;
 
+    private String accessToken;
+
+    private String uuid;
+
+    private String refreshToken;
+
+    public CustomMember(String username, String password, List<Roles> authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream()
-                .map(m -> new SimpleGrantedAuthority(m.getValue()))
-                .collect(Collectors.toList());
+                          .map(m -> new SimpleGrantedAuthority(m.getValue()))
+                          .collect(Collectors.toList());
     }
 
     @Override

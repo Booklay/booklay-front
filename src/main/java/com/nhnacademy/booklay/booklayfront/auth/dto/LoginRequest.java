@@ -1,10 +1,8 @@
-package com.nhnacademy.booklay.booklayfront.auth;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+package com.nhnacademy.booklay.booklayfront.auth.dto;
 
 import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter

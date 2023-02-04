@@ -70,13 +70,12 @@ public class MemberAspect {
 
         MemberInfo memberInfo = new MemberInfo(memberRetrieveResponse.getBody());
 
-        Object[] args = Arrays.stream(pjp.getArgs())
-                              .map(arg -> {
-                                  if (arg instanceof MemberInfo) {
-                                      arg = memberInfo;
-                                  }
-                                  return arg;
-                              }).toArray();
+        Object[] args = Arrays.stream(pjp.getArgs()).map(arg -> {
+            if (arg instanceof MemberInfo) {
+                arg = memberInfo;
+            }
+            return arg;
+        }).toArray();
 
 
         return pjp.proceed(args);
@@ -84,6 +83,6 @@ public class MemberAspect {
 
     private boolean isAnonymous(Authentication authentication) {
         return (Objects.nonNull(authentication) &&
-            authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+                    authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
     }
 }
