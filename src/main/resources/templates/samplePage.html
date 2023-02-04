@@ -1,11 +1,16 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/thymeleaf/layout/default}">
+<!--/* /thymeleaf/layout 폴더 아래에 있는 default.html을 레이아웃으로 사용 */-->
+
 <head>
   <title>Content page 1</title>
+  <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
 </head>
 
 <th:block layout:fragment="content">
   <h1> BODY</h1>
+  <!--/* 상단에 layout:decorate 필드 선언된 레이아웃에 작성된 layout:fragment 부분에
+         th:block 태그 내부에 작성된 코드가 적용  */-->
 </th:block>
 
 </html>
