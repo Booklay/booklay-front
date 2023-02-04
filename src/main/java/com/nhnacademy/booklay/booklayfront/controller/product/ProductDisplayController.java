@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.product;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
@@ -41,7 +42,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
-public class ProductDisplayController {
+public class ProductDisplayController extends BaseController {
 
   private static final String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
