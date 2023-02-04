@@ -1,10 +1,23 @@
 <!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <title>쿠폰 등록</title>
     <script src="/js/coupon/couponCreateForm.js"></script>
     <script src="/js/coupon/couponPopup.js"></script>
-    <link href="/css/form.css" rel="stylesheet">
 </head>
+
+<th:block layout:fragment="content">
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+            <h1>쿠폰 생성</h1>
+        </div>
+
+        <div class="card-body">
+
+        </div>
+    </div>
+</th:block>
     <div id="input-form">
         <form method="post" enctype="multipart/form-data">
             <label for="coupon-name">쿠폰 이름</label><input type="text" name="name" id="coupon-name"><br/>
