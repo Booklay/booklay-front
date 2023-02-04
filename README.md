@@ -22,4 +22,4 @@
       </th:block>
 
 ### 6. 버튼은 하단의 클래스 사용
-    <button class="btn btn-outline-primary w-100" > 버튼 </button>
+    <button class="btn btn-outline-primary" > 버튼 </button>
