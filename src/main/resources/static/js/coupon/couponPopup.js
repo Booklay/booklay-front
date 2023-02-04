@@ -1,11 +1,11 @@
-
 function showCouponPopup() {
     let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
     let ret = window.open("/admin/coupons/popup/coupon", "couponPopup", option);
 }
 
-function setParentText(value){
+function setParentText(value, name){
     opener.document.getElementById("couponId").value = value;
+    opener.document.getElementById("couponName").value = name;
     window.close();
 }
 

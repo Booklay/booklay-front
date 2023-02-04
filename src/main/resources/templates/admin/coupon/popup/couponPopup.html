@@ -50,7 +50,7 @@
                     <p th:if="${coupon.isLimited}">O</p>
                     <p th:unless="${coupon.isLimited}">X</p>
                 </td>
-                <td><input type="button" value="선택" th:id="${coupon.id}" th:onclick="setParentText(this.getAttribute('id'))"></td>
+                <td><input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}" th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))"></td>
             </tr>
             </tbody>
         </table>

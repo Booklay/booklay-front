@@ -42,7 +42,7 @@ public class CouponIssueAdminFrontController {
     @GetMapping("/issue")
     public String issueCouponForm(Model model) {
         model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueCouponForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/issue/issueCouponForm";
     }
 
     /**
