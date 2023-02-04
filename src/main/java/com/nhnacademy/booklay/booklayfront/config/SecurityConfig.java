@@ -2,8 +2,10 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.CustomAuthenticationProvider;
+import com.nhnacademy.booklay.booklayfront.auth.filter.JwtAuthenticationFilter;
 import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
+import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
  * Spring Security 기본 설정
@@ -59,6 +62,8 @@ public class SecurityConfig {
 
         http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository())
             .successHandler(oAuth2LoginSuccessHandler(null)));
+
+        http.addFilterBefore(jwtAuthenticationFilter(null, null), LogoutFilter.class);
 
         return http.build();
     }
@@ -102,5 +107,10 @@ public class SecurityConfig {
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(AuthenticationServerProxy proxy) {
         return new OAuth2LoginSuccessHandler(proxy);
+    }
+
+    @Bean
+    JwtAuthenticationFilter jwtAuthenticationFilter(TokenUtils tokenUtils, AuthenticationServerProxy proxy) {
+        return new JwtAuthenticationFilter(tokenUtils, proxy);
     }
 }
