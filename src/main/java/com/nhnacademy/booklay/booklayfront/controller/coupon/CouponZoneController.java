@@ -1,14 +1,15 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.controller.BaseController;
-import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/coupon-zone")
-public class CouponZoneController extends BaseController {
+@Slf4j
+public class CouponZoneController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
@@ -56,10 +58,17 @@ public class CouponZoneController extends BaseController {
      *
      */
     @GetMapping("/{couponId}")
-    public String couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
-        Long memberNo = memberInfo.getMemberNo();
+    public String couponZoneIssue(@PathVariable Long couponId) {
+//        Long memberNo = memberInfo.getMemberNo();
+        Long memberNo = 3L;
 
-        URI getLimitedUri = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone/limited");
+        CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);
+        Map<String, Object> map = objectMapper.convertValue(request, Map.class);
+
+        URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
+
+        restService.put(requestToShopUrl.toString(), map, String.class);
+
         return "redirect:/coupon-zone";
     }
 }
