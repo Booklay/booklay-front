@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
+import com.nhnacademy.booklay.booklayfront.config.RedisConfig;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
@@ -44,7 +45,7 @@ import org.springframework.web.client.RestTemplate;
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
 @AutoConfigureMockMvc(addFilters = false)
-@Import(WebConfig.class)
+@Import({WebConfig.class, RedisConfig.class})
 class CartControllerTest {
     @MockBean
     RestService restService;

@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
+import com.nhnacademy.booklay.booklayfront.config.RedisConfig;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
@@ -62,7 +63,7 @@ import org.springframework.web.client.RestTemplate;
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
 @AutoConfigureMockMvc(addFilters = false)
-@Import(WebConfig.class)
+@Import({WebConfig.class, RedisConfig.class})
 class CouponAdminFrontControllerTest {
     @MockBean
     RestService restService;
