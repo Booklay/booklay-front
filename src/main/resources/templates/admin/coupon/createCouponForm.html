@@ -14,35 +14,64 @@
         </div>
 
         <div class="card-body">
+            <h5 class="card-title text-center mb-4">쿠폰의 정보를 입력해주세요.</h5>
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">쿠폰 이름</label>
+                    <input type="text" name="name" class="form-control">
 
+                    <label class="form-label">쿠폰 종류</label>
+                    <select type="number" class="form-select" name="typeCode" id="coupon-type" onchange="changeByType()">
+                        <th:block th:each="couponType:${couponTypeList}">
+                            <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
+                        </th:block>
+                    </select>
+
+                    <label class="form-label">할인량</label>
+                    <input type="number" name="amount" ><br/>
+
+                    <div id="select-item">
+                        <label class="form-label">적용 범위</label>
+                        <select class="form-select" id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
+                            <option value="1" selected>주문 쿠폰</option>
+                            <option value="0">상품 쿠폰</option>
+                        </select>
+
+                        <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="text" class="form-control" id="itemName" disabled="disabled">
+                                <input hidden="hidden" type="number" name="applyItemId" id="itemId">
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-icon" aria-label="Button" onclick="showCategoryPopup()">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="form-label">최소 사용 금액</label>
+                    <input type="number" name="minimumUseAmount" id="minimum-amount">
+
+                    <label class="form-label">최대 할인 금액</label>
+                    <input type="number" name="maximumDiscountAmount" id="maximum-amount">
+
+                    <label for="deadline">발급 기한 일시</label><input type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline"><br/>
+
+                </div>
+            </form>
         </div>
+
     </div>
 </th:block>
     <div id="input-form">
         <form method="post" enctype="multipart/form-data">
-            <label for="coupon-name">쿠폰 이름</label><input type="text" name="name" id="coupon-name"><br/>
-            <label for="coupon-type">쿠폰 종류</label>
-                <select type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
-                    <th:block th:each="couponType:${couponTypeList}">
-                        <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
-                    </th:block>
-                </select><br/>
-            <label for="coupon-amount">할인량</label><input type="number" name="amount" id="coupon-amount"><br/>
-            <div id="select-item">
-                <label for="coupon-range">적용 범위</label>
-                <select id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
-                    <option value="1" selected>주문 쿠폰</option>
-                    <option value="0">상품 쿠폰</option>
-                </select><br/>
-                <span>
-                    <label id="apply-item-label" for="apply-item">적용 카테고리 번호</label><input type="number" name="applyItemId" id="apply-item">
-                </span>
-                <input type="button" value="찾기" id="item-search-button" onclick="showCategoryPopup()">
-                <br/>
-            </div>
-            <label for="minimum-amount">최소 사용 금액</label><input type="number" name="minimumUseAmount" id="minimum-amount"><br/>
-            <label for="maximum-amount">최대 할인 금액</label><input type="number" name="maximumDiscountAmount" id="maximum-amount"><br/>
-            <label for="deadline">발급 기한 일시</label><input type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline"><br/>
+
+
+
+
             <label>중복 사용 가능 여부</label><br/>
             <label for="duplicate-true" class="selector">가능</label> <input type="radio" name="isDuplicatable" value="true" checked id="duplicate-true">
             <label for="duplicate-false" class="selector">불가</label> <input type="radio" name="isDuplicatable" value="false" id="duplicate-false"><br/>

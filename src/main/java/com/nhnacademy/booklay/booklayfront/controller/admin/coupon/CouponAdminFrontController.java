@@ -69,8 +69,7 @@ public class CouponAdminFrontController {
     public String createCouponForm(Model model) {
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
-        model.addAttribute(TARGET_VIEW, "coupon/createCouponForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/createCouponForm";
     }
 
     /**

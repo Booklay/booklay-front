@@ -27,8 +27,6 @@ public class CouponIssueAdminFrontController {
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/issue-history";
-    private static final String COUPON_ISSUE_HTML_PATH = "coupon/issue/";
 
     @ModelAttribute("navHead")
     public String addNavHead() {
@@ -40,8 +38,7 @@ public class CouponIssueAdminFrontController {
      *
      */
     @GetMapping("/issue")
-    public String issueCouponForm(Model model) {
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueCouponForm");
+    public String issueCouponForm() {
         return "admin/coupon/issue/issueCouponForm";
     }
 
@@ -56,7 +53,7 @@ public class CouponIssueAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue");
         restService.post(url, map, String.class);
 
-        return "redirect:/admin/coupons/issue/0";
+        return "redirect:/admin/coupons/issue-history";
     }
 
     /**
@@ -65,8 +62,7 @@ public class CouponIssueAdminFrontController {
      */
     @GetMapping("/member/issue")
     public String issueCouponToMemberForm(Model model) {
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueCouponToMemberForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/issue/issueCouponToMemberForm";
     }
 
     /**
@@ -78,7 +74,8 @@ public class CouponIssueAdminFrontController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "members/issue");
         Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
         restService.post(url, map, String.class);
-        return RETURN_PAGE_COUPON_LIST;
+
+        return "redirect:/admin/coupons/member/issue";
     }
 
     /**
@@ -92,9 +89,8 @@ public class CouponIssueAdminFrontController {
 
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueHistoryView");
 
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/issue/issueHistoryView";
     }
 
     /**
@@ -107,7 +103,7 @@ public class CouponIssueAdminFrontController {
         couponRestApiModelSettingService.setCouponIssueToModelByPageAndMemberNo(pageNum, memberNo, model);
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
         model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "issueHistoryView");
+
         return RETURN_ADMIN_PAGE;
     }
 
@@ -119,7 +115,7 @@ public class CouponIssueAdminFrontController {
     public String getCouponUsedHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,
                                        Model model) {
         couponRestApiModelSettingService.setCouponUseHistoryToModelByPage(pageNum, model);
-        model.addAttribute(TARGET_VIEW, COUPON_ISSUE_HTML_PATH + "useHistoryView");
-        return RETURN_ADMIN_PAGE;
+
+        return "admin/coupon/issue/useHistoryView";
     }
 }

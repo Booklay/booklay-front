@@ -29,7 +29,8 @@ function showProductPopup() {
     let ret = window.open("/admin/coupons/popup/product", "productPopup", option);
 }
 
-function setApplyItemText(value){
-    opener.document.getElementById("apply-item").value = value;
+function setApplyItemText(value, name){
+    opener.document.getElementById("itemId").value = value;
+    opener.document.getElementById("itemName").value = name;
     window.close();
 }
