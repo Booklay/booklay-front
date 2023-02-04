@@ -14,6 +14,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ class CouponMemberFrontControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    CategoryService categoryService;
     @MockBean
     AuthenticationManager authenticationManager;
 

@@ -3,37 +3,34 @@ package com.nhnacademy.booklay.booklayfront.dto.product.product.response;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class RetrieveProductResponse {
 
   @NotNull
-  Long productId;
+  private Long productId;
   @Setter
-  Long objectFileId;
+  private Long objectFileId;
   @NotNull
-  String title;
+  private String title;
   @NotNull
-  Long price;
+  private Long price;
   @NotNull
-  Long pointRate;
+  private Long pointRate;
   @NotNull
-  Boolean selling;
+  private Boolean selling;
   @NotNull
-  Boolean pointMethod;
+  private Boolean pointMethod;
   @NotNull
-  String shortDescription;
+  private String shortDescription;
   @NotNull
-  String publisher;
+  private String publisher;
 
-  List<RetrieveAuthorResponse> authors;
+  private List<RetrieveAuthorResponse> authors;
 
-  Boolean recommend;
+  private Boolean recommend;
 }

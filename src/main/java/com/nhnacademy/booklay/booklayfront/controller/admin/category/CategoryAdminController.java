@@ -170,4 +170,5 @@ public class CategoryAdminController {
 
     return REDIRECT_PREFIX + query;
   }
+
 }

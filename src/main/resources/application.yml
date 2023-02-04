@@ -12,3 +12,6 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
+  thymeleaf:
+    cache: false

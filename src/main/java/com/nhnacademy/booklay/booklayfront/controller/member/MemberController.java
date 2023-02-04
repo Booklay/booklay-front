@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
@@ -32,8 +33,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
-@RequestMapping("/members")
-public class MemberController {
+@RequestMapping("/member")
+public class MemberController extends BaseController {
     private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
     private final RestService restService;
@@ -69,10 +70,15 @@ public class MemberController {
         return "member/loginForm";
     }
 
+    @GetMapping(value = {"", "/", "/profile"})
+    private String profileMain(){
+        return "mypage/profile/main";
+    }
+
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     public String retrieveCreateMemberForm(Model model) {
-        return "member/createMemberForm";
+        return "member/register";
     }
 
     @GetMapping("/{memberNo}")
@@ -150,6 +156,7 @@ public class MemberController {
         }
     }
 
+    //TODO memberNo는 세션에서 획득
     @PostMapping("/update/{memberNo}")
     public String updateMember(@PathVariable Long memberNo,
                                @Valid @ModelAttribute MemberUpdateRequest request,
@@ -160,7 +167,7 @@ public class MemberController {
         restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
             Void.class);
 
-        return "redirect:/members/" + memberNo;
+        return "redirect:/member/" + memberNo;
     }
 
     @GetMapping("/drop/{memberNo}")

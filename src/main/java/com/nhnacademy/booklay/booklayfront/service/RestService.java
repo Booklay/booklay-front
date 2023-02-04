@@ -32,6 +32,7 @@ public class RestService {
         return apiEntity;
     }
 
+
     public <T> ApiEntity<T> put(String url, Map<String, Object> requestBody,
                                 Class<T> responseType) {
 
@@ -80,5 +81,26 @@ public class RestService {
     public void delete(String url, MultiValueMap<String, String> params) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
         restTemplate.delete(builder.build().toUriString());
+    }
+
+    /**
+     * @param <T> 인자 값에 들어가는 제네릭 선언 지우지 말고 채워넣어야 제대로된 타입이 넘어옵니다.
+     *  인텔리제이에
+     *   List<String> list = new ArrayList<String>(); // reports array list type argument
+     * After the quick-fix is applied:
+     *   List<String> list = new ArrayList<>();
+     */
+
+    public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody,
+                                 ParameterizedTypeReference<T> responseType) {
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
+
+        ApiEntity<T> apiEntity = new ApiEntity<>();
+        ResponseEntity<T> response =
+            restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
+        apiEntity.setSuccessResponse(response);
+
+        return apiEntity;
     }
 }

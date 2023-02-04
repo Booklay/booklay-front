@@ -9,12 +9,11 @@ public class IndexController extends BaseController {
 
     public IndexController(RestService restService,
                            String gatewayIp) {
-        super(restService, gatewayIp);
     }
 
     @GetMapping(value = {"/index", "/"})
     public String home() {
-        return "index";
+        return "main/main";
     }
 
 }
