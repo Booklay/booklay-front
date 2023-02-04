@@ -33,7 +33,7 @@ public class RetrieveProductViewResponse {
   @NotNull
   private String longDescription;
   @NotNull
-  private Boolean isSelling;
+  private Boolean selling;
   @NotNull
   private Boolean pointMethod;
 

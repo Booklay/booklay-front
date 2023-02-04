@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service;
 
 
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -26,8 +27,7 @@ public class RestService {
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
         ApiEntity<T> apiEntity = new ApiEntity<>();
-        ResponseEntity<T> response =
-            restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
+        ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.POST, entity, responseType);
         apiEntity.setSuccessResponse(response);
         return apiEntity;
     }
@@ -70,6 +70,11 @@ public class RestService {
 
     public void delete(String url) {
         restTemplate.delete(url);
+    }
+
+    public void delete(String url, Map<String, Object> requestBody){
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
+        restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
     }
 
     public void delete(String url, MultiValueMap<String, String> params) {

@@ -24,7 +24,7 @@ public class UpdateProductSubscribeRequest {
   @NotNull
   String longDescription;
   @NotNull
-  Boolean isSelling;
+  Boolean selling;
   @NotNull
   Boolean pointMethod;
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

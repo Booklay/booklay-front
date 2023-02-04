@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>북레이 - 구독 상품 수정</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="/js/product/productUpdate.js"></script>
@@ -41,27 +41,24 @@
 
   <p>판매 여부 :
     <th:block th:if="${product.selling}">
-      <input type="radio" name="isSelling" checked value="true"> Y
-      <input type="radio" name="isSelling" value="false"> N
+      <input type="radio" name="selling" checked value="true"> Y
+      <input type="radio" name="selling" value="false"> N
     </th:block>
 
     <th:block th:unless="${product.selling}">
-      <input type="radio" name="isSelling" value="true"> Y
-      <input type="radio" name="isSelling" checked value="false"> N
+      <input type="radio" name="selling" value="true"> Y
+      <input type="radio" name="selling" checked value="false"> N
     </th:block>
   <p>
 
   <p>
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
     &ensp; &ensp; &ensp;
-    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
-    <br/>
 
-    <th:block th:each="category : ${product.categoryList}">
-      이전 등록 카테고리 <span th:text="${categoryStat.count}"/> :
-      <span th:text="${category.getId()}"/><br/>
-    </th:block>
-
+  <th:block th:each="category : ${product.categoryIds}">
+    이전 등록 카테고리 <span th:text="${categoryStat.count}"/> :
+    <span th:text="${category}"/><br/>
+  </th:block>
 
   <div id="categories"></div>
 
@@ -146,14 +143,7 @@
   </p>
 
   <p>출판사 : <input name="publisher" type="text" th:value="${product.publisher}"/></p>
-
-
-  <p>
-    <input th:id="${productNo}" type="button" value="상품 팝업창 호출" onclick="showProduct();"/>
-    &ensp; &ensp; &ensp;
-    <input name="childProductAdder" type="button" value="구독 책 추가" onclick="addChildProduct();"/>
-  <div id="childProduct"></div>
-
+  </br>
   <input type="submit" value="구독 상품 수정" id="btn-submit"/>
 </form>
 

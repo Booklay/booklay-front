@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>북레이 - 구독 상품 등록</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="/js/product/productRegister.js"></script>
@@ -28,14 +28,12 @@
   <input id="longDescription" name="longDescription" type="text" hidden="hidden"/>
 
   <p>판매 여부 :
-    <input type="radio" name="isSelling" value="true"> Y
-    <input type="radio" name="isSelling" value="false"> N
+    <input type="radio" name="selling" value="true"> Y
+    <input type="radio" name="selling" value="false"> N
   <p>
 
   <p>
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
-    &ensp; &ensp; &ensp;
-    <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
   <div id="categories"></div>
 
   <p>발매 주차 :

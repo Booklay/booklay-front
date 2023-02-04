@@ -14,27 +14,28 @@
                 <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0"
                      id="navbar-vertical">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
+<!--                        TODO: 버릴 부분인거 같아 보이긴 한데, thymeleaf 오류나서 일단 주석처리 합니다-->
                         <!--          카테고리 메뉴 하위 -->
-                        <th:block th:each="category:${steps.getCategories()}">
+<!--                        <th:block th:each="category:${steps.getCategories()}">-->
 
-                            <div class="nav-item dropdown">
+<!--                            <div class="nav-item dropdown">-->
 
-                                <a th:href="@{/product/display(CID=${category.getId()})}" th:class="nav-link"
-                                   th:data-toggle="dropdown">
-                                    <span th:text="${category.getName()}"></span>
-                                    <i class="fa fa-angle-down float-right mt-1"></i>
-                                </a>
+<!--                                <a th:href="@{/product/display(CID=${category.getId()})}" th:class="nav-link"-->
+<!--                                   th:data-toggle="dropdown">-->
+<!--                                    <span th:text="${category.getName()}"></span>-->
+<!--                                    <i class="fa fa-angle-down float-right mt-1"></i>-->
+<!--                                </a>-->
 
-                                <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                    <th:block th:each="child:${category.getCategories()}">
-                                        <a th:href="@{/product/display(CID=${child.getId()})}" th:class="dropdown-item">
-                                            <span th:text="${child.getName()}"></span>
-                                        </a>
-                                    </th:block>
-                                </div>
+<!--                                <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">-->
+<!--                                    <th:block th:each="child:${category.getCategories()}">-->
+<!--                                        <a th:href="@{/product/display(CID=${child.getId()})}" th:class="dropdown-item">-->
+<!--                                            <span th:text="${child.getName()}"></span>-->
+<!--                                        </a>-->
+<!--                                    </th:block>-->
+<!--                                </div>-->
 
-                            </div>
-                        </th:block>
+<!--                            </div>-->
+<!--                        </th:block>-->
 
                     </div>
                 </nav>

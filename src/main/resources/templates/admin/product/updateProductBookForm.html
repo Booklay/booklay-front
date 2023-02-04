@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>상품 수정</title>
+  <title>북레이 - 책 상품 수정</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
   <script src="/js/product/productUpdate.js"></script>
@@ -44,13 +44,13 @@
 
   <p>판매 여부 :
     <th:block th:if="${product.selling}">
-      <input type="radio" name="isSelling" checked value="true"> Y
-      <input type="radio" name="isSelling" value="false"> N
+      <input type="radio" name="selling" checked value="true"> Y
+      <input type="radio" name="selling" value="false"> N
     </th:block>
 
     <th:block th:unless="${product.selling}">
-      <input type="radio" name="isSelling" value="true"> Y
-      <input type="radio" name="isSelling" checked value="false"> N
+      <input type="radio" name="selling" value="true"> Y
+      <input type="radio" name="selling" checked value="false"> N
     </th:block>
   <p>
     <input th:id="${productNo}" type="button" value="카테고리 팝업창 호출" onclick="showCategory();"/>
@@ -58,9 +58,9 @@
     <input name="categoryAdder" type="button" value="카테고리 추가" onclick="addCategory();"/>
   <br>
 
-  <th:block th:each="category : ${product.categoryList}">
+  <th:block th:each="category : ${product.categoryIds}">
     이전 등록 카테고리 <span th:text="${categoryStat.count}"/> :
-    <span th:text="${category.getId()}"/><br/>
+    <span th:text="${category}"/><br/>
   </th:block>
 
   <div id="categories"> </div>
@@ -74,9 +74,10 @@
   <input name="authorAdder" type="button" value="작가 추가" onclick="addAuthor();"/>
   <br>
 
-  <th:block th:each="author : ${product.authorList}">
-    이전 등록 작가 <span th:text="${authorStat.count}"/> :
-    <span th:text="${author.getName()}"/> - No : <span th:text="${author.getAuthorNo()}"/>
+  <th:block th:each="author : ${product.authorIds}">
+    이전 등록 작가 <span th:text="${authorStat.count}"/> 번호 :
+<!--    <span th:text="${author.getName()}"/> - No : <span th:text="${author.getAuthorNo()}"/>-->
+    <span th:text="${author}"/>
     <br>
   </th:block>
   <div id="authors"></div>
