@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.auth;
+package com.nhnacademy.booklay.booklayfront.auth.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.auth.handler;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
-import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import java.io.IOException;
 import java.util.Objects;
@@ -25,8 +25,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication)
-        throws IOException, ServletException {
+                                        Authentication authentication) throws IOException, ServletException {
 
         OAuth2User principal = (OAuth2User) authentication.getPrincipal();
         String gitId = Objects.requireNonNull(principal.getAttribute("id")).toString();
@@ -37,18 +36,24 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         request.getSession().setAttribute("TOKEN", jwtInfo.getAccessToken());
         request.getSession().setAttribute("REFRESH_TOKEN", jwtInfo.getRefreshToken());
 
+        CustomMember customMember = getCustomMember(gitId, jwtInfo);
+
+        UsernamePasswordAuthenticationToken token =
+            new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(),
+                                                    customMember.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(token);
+
+        response.sendRedirect("/");
+
+    }
+
+    private CustomMember getCustomMember(String gitId, JwtInfo jwtInfo) {
         CustomMember customMember = proxy.getCustomMemberFromApiServer(gitId);
 
         customMember.setAccessToken(jwtInfo.getAccessToken());
         customMember.setUuid(jwtInfo.getUuid());
         customMember.setRefreshToken(jwtInfo.getRefreshToken());
-
-        UsernamePasswordAuthenticationToken token =
-            new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(),
-                                                    customMember.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(token);
-
-        response.sendRedirect("/");
-
+        return customMember;
     }
 }

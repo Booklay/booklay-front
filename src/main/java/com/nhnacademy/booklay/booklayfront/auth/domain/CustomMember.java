@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.auth;
+package com.nhnacademy.booklay.booklayfront.auth.domain;
 
 import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
 import java.util.Collection;
@@ -38,8 +38,8 @@ public class CustomMember implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream()
-                .map(m -> new SimpleGrantedAuthority(m.getValue()))
-                .collect(Collectors.toList());
+                          .map(m -> new SimpleGrantedAuthority(m.getValue()))
+                          .collect(Collectors.toList());
     }
 
     @Override

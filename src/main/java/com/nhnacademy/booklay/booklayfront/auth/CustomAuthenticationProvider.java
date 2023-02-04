@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
+import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,7 +18,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider(AuthenticationServerProxy proxy, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public CustomAuthenticationProvider(AuthenticationServerProxy proxy, UserDetailsService userDetailsService,
+                                        PasswordEncoder passwordEncoder) {
         this.proxy = proxy;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
@@ -50,7 +52,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         customMember.setUuid(jwtInfo.getUuid());
         customMember.setRefreshToken(jwtInfo.getRefreshToken());
 
-        return new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(), customMember.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(customMember, customMember.getPassword(),
+                                                       customMember.getAuthorities());
     }
 
     /**

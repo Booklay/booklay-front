@@ -1,6 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth.handler;
 
-import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.domain.CustomMember;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

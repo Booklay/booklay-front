@@ -31,6 +31,7 @@ public class TokenUtils {
     public Claims getClaims(String jwt) {
         return parser.parseClaimsJws(jwt).getBody();
     }
+
     public String getRole(String jwt) {
         Claims claims = getClaims(jwt);
 
@@ -49,10 +50,10 @@ public class TokenUtils {
     public String getEmail(String jwt) {
         Claims claims = getClaims(jwt);
 
-        return  (String) claims.get("email");
+        return (String) claims.get("email");
     }
 
-    public String getShopUrl(){
+    public String getShopUrl() {
         return gatewayIp + MEMBER_INFO_PREFIX;
     }
 
