@@ -1,55 +1,73 @@
 <!DOCTYPE html>
-<html lang="ko">
-<script th:inline="javascript">
-    const couponTypeList = [[${couponTypeList}]];
-    function updateClickEvent(){
-        if (this.classList.contains("editing")){
-            this.classList.remove("editing");
-            this.innerText = "수정";
-            let nameTd = this.parentElement.parentElement.children.item(1);
-            let value = nameTd.firstElementChild.value;
-            nameTd.innerHTML = '<p>'+value+'</p>';
-            let httpRequest = new XMLHttpRequest();
-            let body = {
-                "id": parseInt(this.parentElement.parentElement.children.item(0).firstElementChild.innerHTML),
-                "name": value.toString()
-            };
-            httpRequest.open('POST', '/admin/coupons/types/update');
-            httpRequest.responseType = "json";
-            httpRequest.setRequestHeader("Content-Type", "application/json");
-            httpRequest.send(JSON.stringify(body));
-        }else{
-            this.classList.add("editing");
-            this.innerText = "수정중";
-            let nameTd = this.parentElement.parentElement.children.item(1);
-            nameTd.innerHTML = '<input value="'+nameTd.firstElementChild.innerHTML+'">';
-        }
-    }
-    window.onload = function (){
-        couponTypeList.forEach(value => {
-            let couponType = document.getElementById(value.id+"update");
-            couponType.addEventListener("click", updateClickEvent);
-        });
-    }
-</script>
-    <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <table>
-            <tr>
-                <td>쿠폰 타입 ID</td>
-                <td>쿠폰 타입 이름</td>
-                <td></td>
-                <td></td>
-            </tr>
-        <tbody th:each="couponType:${couponTypeList}">
-            <tr>
-                <td><p th:text="${couponType.id}"></p></td>
-                <td><p th:text="${couponType.name}"></p></td>
-                <td><button th:id="${couponType.id+'update'}">수정</button></td>
-                <td><a th:href="${'/admin/coupons/types/delete/'+couponType.id}">삭제</a></td>
-            </tr>
-        </tbody>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
+<head>
+    <title>쿠폰 타입 목록</title>
+    <script th:inline="javascript">
+        const couponTypeList = [[${couponTypeList}]];
 
-        </table>
+        function updateClickEvent() {
+            if (this.classList.contains("editing")) {
+                this.classList.remove("editing");
+                this.innerText = "수정";
+                let nameTd = this.parentElement.parentElement.children.item(1);
+                let value = nameTd.firstElementChild.value;
+                nameTd.innerHTML = '<p>' + value + '</p>';
+                let httpRequest = new XMLHttpRequest();
+                let body = {
+                    "id": parseInt(this.parentElement.parentElement.children.item(0).firstElementChild.innerHTML),
+                    "name": value.toString()
+                };
+                httpRequest.open('POST', '/admin/coupons/types/update');
+                httpRequest.responseType = "json";
+                httpRequest.setRequestHeader("Content-Type", "application/json");
+                httpRequest.send(JSON.stringify(body));
+            } else {
+                this.classList.add("editing");
+                this.innerText = "수정중";
+                let nameTd = this.parentElement.parentElement.children.item(1);
+                nameTd.innerHTML = '<input value="' + nameTd.firstElementChild.innerHTML + '">';
+            }
+        }
+
+        window.onload = function () {
+            couponTypeList.forEach(value => {
+                let couponType = document.getElementById(value.id + "update");
+                couponType.addEventListener("click", updateClickEvent);
+            });
+        }
+    </script>
+</head>
+
+<th:block layout:fragment="content">
+    <div th:if="${#lists.isEmpty(couponTypeList)}">
+        <div>등록된 쿠폰이 없습니다.</div>
     </div>
 
-</html>
+    <div class="card" th:unless="${#lists.isEmpty(couponTypeList)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>쿠폰 타입 ID</th>
+                    <th>쿠폰 타입 이름</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody th:each="couponType:${couponTypeList}">
+                <tr>
+                    <td><p th:text="${couponType.id}"></p></td>
+                    <td><p th:text="${couponType.name}"></p></td>
+                    <td>
+                        <button th:id="${couponType.id+'update'}">수정</button>
+                    </td>
+                    <td><a th:href="${'/admin/coupons/types/delete/'+couponType.id}">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+        </div>
+    </div>
+</th:block>

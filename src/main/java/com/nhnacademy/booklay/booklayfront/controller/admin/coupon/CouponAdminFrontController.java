@@ -36,6 +36,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildStri
 @RequestMapping("/admin/coupons")
 @Slf4j
 public class CouponAdminFrontController {
+
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
@@ -44,12 +45,6 @@ public class CouponAdminFrontController {
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
-    
-
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
-    }
 
     /**
      * admin/coupons 인덱스 페이지는 쿠폰 조회 페이지.
