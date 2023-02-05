@@ -434,7 +434,16 @@
 <!-- Template Javascript -->
 <script src="/js/main.js"></script>
 <script th:inline="javascript" >
-    const result = [[${cartObjectList}]]
+    const cartData = [];
+    [[${cartObjectList}]].forEach(function (value){
+        let cart = {
+            productNo : value.productNo,
+            productTotal : value.productPrice * value.productCount,
+            categoryNo : value.categoryNo
+        };
+        cartData.push(cart);
+    });
+    const userPointAmount = [[${point}]];
 </script>
 <script src="/js/order/orderPage.js"></script>
 </body>

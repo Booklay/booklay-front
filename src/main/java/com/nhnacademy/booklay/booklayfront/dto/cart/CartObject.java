@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.dto.cart;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,5 @@ public class CartObject {
     private Long productPrice;
     @Setter
     private Integer productCount;
+    private List<Long> categoryNoList;
 }
