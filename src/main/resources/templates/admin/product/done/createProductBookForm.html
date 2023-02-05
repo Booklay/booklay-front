@@ -16,10 +16,7 @@
   </p>
   <p>가격 : <input type="number" min="0" step="1" name="price"/></p>
 
-  <p>적립 여부 :
-    <input type="radio" name="pointMethod" value="true"> Y
-    <input type="radio" name="pointMethod" value="false"> N
-  </p>
+  부
   <p>적립률 : <input type="number" min="0" step="1" name="pointRate" th:value="${defaultPointRate}"
                   size=1/> %</p>
 
@@ -44,12 +41,11 @@
   <p>출판사 : <input type="text" name="publisher" size=40 maxlength=100/></p>
   <p>출판일 : <input type="date" name="publishedDate"/></p>
   <input th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
-  &ensp;&ensp;&ensp;
   <div id="authors"></div>
 
   <!--  둘 중 하나만 입력 가능해야함-->
   <p> 책 종류 설정 :
-    <input type="radio" name="ebookCheck" value="true"> 일반 책 상품
+    <input type="radio" name="ebookCheck" value="true"일> 일반 책 상품
     <input type="radio" name="ebookCheck" value="false"> 이북 상품
   </p>
 

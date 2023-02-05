@@ -13,10 +13,9 @@
         <div class="row">
 
           <div class="col-4">
-            <!--            -->
+            <!-- -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
-
-            <!--          -->
+            <!-- -->
           </div>
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.title}"></p>
@@ -68,25 +67,30 @@
               <span class="text-info">태그</span>
               <span th:text="${#strings.arrayJoin(product.getTagList(), ', ')}"></span>
             </p>
+            <input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출"
+                   onclick="showTagRegisterPopup(id);"/>
 
             <p style="line-height: 5px">
               <span class="text-info">가격</span>
               <span th:text="${#numbers.formatCurrency(product.price)}"></span>
             </p>
 
-            <form class="btnAtVar" method="post" action="">
-              <input name="memberNo" type="number" th:if="${member != null}"
-                     th:value="${member.memberNo}"
-                     hidden="hidden"/>
-              <input type="submit" value="찜 등록"/>
+            <!--<th:block th:if="${member !=null}">-->
+            <form th:if="${product.productDetailId != null}" class="btnAtVar" method="get"
+                  th:action="@{/admin/product/update/books/{productId} (productId = ${productNo})}">
+              <input type="submit" value="수정"/>
             </form>
 
-            <form class="btnAtVar" method="post" action="">
-              <input name="memberNo" type="number" th:if="${member != null}"
-                     th:value="${member.memberNo}"
-                     hidden="hidden"/>
-              <input type="submit" value="알림 등록"/>
+            <form th:if="${product.subscribeId != null}" class="btnAtVar" method="get"
+                  th:action="@{/admin/product/update/subscribes/{productId} (productId = ${productNo})}">
+              <input type="submit" value="수정"/>
             </form>
+
+            <form class="btnAtVar" method="post"
+                  th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
+              <input type="submit" value="삭제"/>
+            </form>
+            <!--        </th:block>-->
 
           </div>
 
@@ -114,6 +118,9 @@
           <div class="row row-cards">
             <div class="card-header">
               <h1>연관 상품</h1>
+              <br>
+              <input th:id="${product.productId}" type="button" value="연관 상품 추가"
+                     onclick="showRecommendRegisterPopup(id);"/>
             </div>
             <th:block th:each="item : ${recommendProducts}">
               <!--        [[${item}]]-->
@@ -184,9 +191,13 @@
           <!--/* 책 소개 */-->
 
           <!--   구독 대상 상품 시작-->
+          <th:block th:if="${product.subscribeId !=null}" >
           <div class="row row-cards">
             <div class="card-header">
-              <h1>연관 상품</h1>
+              <h1>구독 대상 상품</h1>
+              <br>
+              <input th:id="${product.subscribeId}" type="button" value="구독 상품에 책 추가"
+                     onclick="showBookSubscribeRegisterPopup(id);"/>
             </div>
             <th:block th:each="item : ${recommendProducts}">
               <!--        [[${item}]]-->
@@ -247,12 +258,31 @@
               </div>
             </th:block>
           </div>
+          </th:block>
           <!--   구독 대상 상품 종료-->
         </div>
 
       </div>
     </div>
   </div>
+
+
+  <script>
+    function showTagRegisterPopup(productNo) {
+      window.open("/admin/product/tag/connection/" + productNo, "a",
+          "width=450, height=700, left=100, top=50");
+    }
+
+    function showBookSubscribeRegisterPopup(subscribeId) {
+      window.open("/admin/product/subscribes/connect/" + subscribeId, "a",
+          "width=1000, height=550, left=100, top=50");
+    }
+
+    function showRecommendRegisterPopup(productNo) {
+      window.open("/admin/product/recommend/" + productNo, "a",
+          "width=750, height=550, left=100, top=50");
+    }
+  </script>
 </th:block>
 <!---->
 </html>
