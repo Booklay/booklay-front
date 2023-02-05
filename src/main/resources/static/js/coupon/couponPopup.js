@@ -14,8 +14,9 @@ function showMemberPopup() {
     let ret = window.open("/admin/coupons/popup/member", "memberPopup", option);
 }
 
-function setMemberText(value){
+function setMemberText(value, name){
     opener.document.getElementById("memberId").value = value;
+    opener.document.getElementById("memberName").value = name;
     window.close();
 }
 

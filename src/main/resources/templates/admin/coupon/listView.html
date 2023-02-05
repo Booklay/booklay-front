@@ -6,52 +6,49 @@
 </head>
 
 <th:block layout:fragment="content">
+
     <div th:if="${#lists.isEmpty(list)}">
-        <div>
-            <p>등록된 쿠폰이 없습니다.</p>
-        </div>
+        <div>등록된 쿠폰이 없습니다.</div>
     </div>
 
-    <div th:unless="${#lists.isEmpty(list)}">
-        <div class="card">
-            <div class="table-responsive">
-                <table class="table table-vcenter card-table">
-                    <thead>
-                        <tr>
-                            <th>번호</th>
-                            <th>쿠폰 ID</th>
-                            <th>쿠폰 이름</th>
-                            <th>쿠폰 타입</th>
-                            <th>할인량</th>
-                            <th>최소사용금액</th>
-                            <th>최대할인금액</th>
-                            <th>수량제한</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody th:each="coupon, couponStat:${list}">
+    <div class="card" th:unless="${#lists.isEmpty(list)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
                     <tr>
-                        <td><p th:text="${couponStat.count}"></p></td>
-                        <td><p th:text="${coupon.id}"></p></td>
-                        <td><p th:text="${coupon.name}"></p></td>
-                        <td><p th:text="${coupon.typeName}"></p></td>
-                        <td><p th:text="${coupon.amount}"></p></td>
-                        <td><p th:text="${coupon.minimumUseAmount}"></p></td>
-                        <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
-                        <td>
-                            <p th:if="${coupon.isLimited}">O</p>
-                            <p th:unless="${coupon.isLimited}">X</p>
-                        </td>
-                        <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
-                        <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
-                        <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
+                        <th>번호</th>
+                        <th>쿠폰 ID</th>
+                        <th>쿠폰 이름</th>
+                        <th>쿠폰 타입</th>
+                        <th>할인량</th>
+                        <th>최소사용금액</th>
+                        <th>최대할인금액</th>
+                        <th>수량제한</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                    </tbody>
-                </table>
-                <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
-            </div>
+                </thead>
+                <tbody th:each="coupon, couponStat:${list}">
+                <tr>
+                    <td><p th:text="${couponStat.count}"></p></td>
+                    <td><p th:text="${coupon.id}"></p></td>
+                    <td><p th:text="${coupon.name}"></p></td>
+                    <td><p th:text="${coupon.typeName}"></p></td>
+                    <td><p th:text="${coupon.amount}"></p></td>
+                    <td><p th:text="${coupon.minimumUseAmount}"></p></td>
+                    <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
+                    <td>
+                        <p th:if="${coupon.isLimited}">O</p>
+                        <p th:unless="${coupon.isLimited}">X</p>
+                    </td>
+                    <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
+                    <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
+                    <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
         </div>
     </div>
 </th:block>

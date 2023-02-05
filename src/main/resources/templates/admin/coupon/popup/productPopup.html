@@ -19,8 +19,8 @@
     <div>등록된 상품이 없습니다.</div>
 </div>
 
-<div class="card">
-    <div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
+<div class="card" th:unless="${#lists.isEmpty(list)}">
+    <div class="card-table table-responsive">
         <table class="table table-vcenter card-table">
             <thead>
             <tr>

@@ -2,54 +2,60 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-  <title>쿠폰 발행</title>
-  <script src="/js/coupon/couponPopup.js"></script>
+    <title>쿠폰 발행</title>
+    <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
 
-  <div class="card container container-tight py-4">
-    <div class="card-header">
-      <h1>쿠폰 발행</h1>
+    <div class="row-cards">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h4 class="card-title">쿠폰 발행</h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="mb-3">
+                            <label class="form-label">쿠폰 선택
+                                <span class="form-label-description">발급하려는 쿠폰의 종류를 선택하세요.</span>
+                            </label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" id="couponName" disabled="disabled">
+                                    <input hidden="hidden" type="number" name="couponId" id="couponId">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-icon" aria-label="Button"
+                                            onclick="showCouponPopup()">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                                            <path d="M21 21l-6 -6"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">수량
+                                <span class="form-label-description">수량만큼 쿠폰이 생성됩니다.</span>
+                            </label>
+                            <input type="number" class="form-control" name="quantity">
+                        </div>
+
+                        <div class="text-left">
+                            <button type="submit" class="btn btn-primary">발급 하기</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="card-body">
-      <h5 class="card-title text-center mb-4">발행하려는 쿠폰의 종류와 수량을 입력하세요.</h5>
-      <form method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-          <label class="form-label">
-            쿠폰 선택
-            <span class="form-label-description">발급하려는 쿠폰의 종류를 선택하세요.</span>
-          </label>
-          <div class="row g-2">
-            <div class="col">
-              <input type="text" class="form-control" id="couponName" disabled="disabled">
-              <input hidden="hidden" type="number" name="couponId" id="couponId">
-            </div>
-            <div class="col-auto">
-            <button type="button" class="btn btn-icon" aria-label="Button" onclick="showCouponPopup()">
-                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-            </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-2">
-          <label class="form-label">
-            수량
-            <span class="form-label-description">수량만큼 쿠폰이 생성됩니다.</span>
-          </label>
-          <input type="number" class="form-control" name="quantity">
-        </div>
-
-        <div class="form-footer">
-          <button type="submit" class="btn btn-primary w-100">발급 하기</button>
-        </div>
-
-      </form>
-    </div>
-  </div>
 </th:block>
 
-</html>
