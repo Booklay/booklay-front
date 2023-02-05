@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.auth.aspect;
 
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -52,15 +53,16 @@ public class MemberAspect {
             return pjp.proceed();
         }
 
-        String uuid = (String) authentication.getPrincipal();
 
-        String jwt = (String) redisTemplate.opsForHash().get(uuid, "TOKEN");
+        CustomMember principal = (CustomMember) authentication.getPrincipal();
+
+        String jwt = principal.getAccessToken();
 
         if (Objects.isNull(jwt)) {
             return pjp.proceed();
         }
 
-        String email = tokenUtils.getEmail(jwt);
+        String email = principal.getUsername();
         String url = tokenUtils.getShopUrl() + email;
 
 
@@ -70,13 +72,12 @@ public class MemberAspect {
 
         MemberInfo memberInfo = new MemberInfo(memberRetrieveResponse.getBody());
 
-        Object[] args = Arrays.stream(pjp.getArgs())
-                              .map(arg -> {
-                                  if (arg instanceof MemberInfo) {
-                                      arg = memberInfo;
-                                  }
-                                  return arg;
-                              }).toArray();
+        Object[] args = Arrays.stream(pjp.getArgs()).map(arg -> {
+            if (arg instanceof MemberInfo) {
+                arg = memberInfo;
+            }
+            return arg;
+        }).toArray();
 
 
         return pjp.proceed(args);
@@ -84,6 +85,6 @@ public class MemberAspect {
 
     private boolean isAnonymous(Authentication authentication) {
         return (Objects.nonNull(authentication) &&
-            authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+                    authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
     }
 }

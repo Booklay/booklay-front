@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -10,6 +11,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRe
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.member.MemberService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -31,19 +33,21 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
-@RequestMapping("/members")
-public class MemberController {
+@RequestMapping("/member")
+public class MemberController extends BaseController {
     private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
+    private final MemberService memberService;
     private final static String MYPAGE = "mypage/myPage";
 
     public MemberController(RestTemplate restTemplate, RestService restService, String gateway,
-                            ObjectMapper objectMapper) {
+                            MemberService memberService, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.restService = restService;
         this.objectMapper = objectMapper;
+        this.memberService = memberService;
         redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
     }
 
@@ -51,12 +55,12 @@ public class MemberController {
     @PostMapping("/register")
     public String createMember(@Valid @ModelAttribute MemberCreateRequest memberCreateRequest,
                                BindingResult bindingResult) {
-
         URI uri = URI.create(redirectGatewayPrefix);
 
-        restService.post(uri.toString(), objectMapper.convertValue(memberCreateRequest, Map.class),
-            Void.class);
-        //TODO 2: 에러처리
+        restService.post(uri.toString(),
+                         objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+                         Void.class);
+        // TODO 2: 에러처리
 
         return "redirect:/";
     }
@@ -66,10 +70,15 @@ public class MemberController {
         return "member/loginForm";
     }
 
+    @GetMapping(value = { "", "/", "/profile" })
+    private String profileMain() {
+        return "mypage/profile/main";
+    }
+
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
     public String retrieveCreateMemberForm(Model model) {
-        return "member/createMemberForm";
+        return "member/register";
     }
 
     @GetMapping("/{memberNo}")
@@ -147,6 +156,7 @@ public class MemberController {
         }
     }
 
+    // TODO memberNo는 세션에서 획득
     @PostMapping("/update/{memberNo}")
     public String updateMember(@PathVariable Long memberNo,
                                @Valid @ModelAttribute MemberUpdateRequest request,
@@ -155,9 +165,9 @@ public class MemberController {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
         restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
-            Void.class);
+                        Void.class);
 
-        return "redirect:/members/" + memberNo;
+        return "redirect:/member/" + memberNo;
     }
 
     @GetMapping("/drop/{memberNo}")
@@ -171,8 +181,9 @@ public class MemberController {
     public String deleteMember(@PathVariable Long memberNo) {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
-        restService.delete(uri.toString(), null);
+        restService.delete(uri.toString());
 
         return "redirect:/";
     }
+
 }

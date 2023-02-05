@@ -39,7 +39,4 @@ public class ControllerStrings {
     public static final String ATTRIBUTE_NAME_COUPON_TYPE_LIST = "couponTypeList";
     public static final String ATTRIBUTE_NAME_COUPON_SETTING_LIST = "couponSettingList";
     public static final String ATTRIBUTE_NAME_CART_OBJECT_LIST = "cartObjectList";
-
-
-
 }

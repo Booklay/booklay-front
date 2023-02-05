@@ -5,17 +5,14 @@ import com.nhnacademy.booklay.booklayfront.dto.product.tag.response.RetrieveTagR
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
 public class RetrieveProductViewResponse {
 
   @NotNull
@@ -33,7 +30,7 @@ public class RetrieveProductViewResponse {
   @NotNull
   private String longDescription;
   @NotNull
-  private Boolean isSelling;
+  private Boolean selling;
   @NotNull
   private Boolean pointMethod;
 
@@ -63,6 +60,26 @@ public class RetrieveProductViewResponse {
   //책 구독 상품 상세 공통
   @NotNull
   private String publisher;
+
+  public String[] getAuthorNameList(){
+    String[] names = new String[authors.size()];
+
+    for(int i = 0; i < authors.size(); i++){
+      names[i] = authors.get(i).getName();
+    }
+
+    return names;
+  }
+
+  public String[] getTagList(){
+    String[] tags = new String[productTags.size()];
+
+    for(int i = 0; i < productTags.size(); i++){
+      tags[i] = productTags.get(i).getName();
+    }
+
+    return tags;
+  }
 }
 
 

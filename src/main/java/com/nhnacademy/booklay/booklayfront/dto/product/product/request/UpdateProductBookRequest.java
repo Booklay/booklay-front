@@ -26,7 +26,7 @@ public class UpdateProductBookRequest {
   @NotNull
   private String longDescription;
   @NotNull
-  private Boolean isSelling;
+  private Boolean selling;
   @NotNull
   private Boolean pointMethod;
   @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

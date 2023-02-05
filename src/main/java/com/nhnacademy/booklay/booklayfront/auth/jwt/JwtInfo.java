@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 @Builder
 public class JwtInfo {
 
-    private final String jwt;
+    private final String accessToken;
+
+    private final String refreshToken;
 
     private final String uuid;
 }

@@ -41,7 +41,7 @@ public class RetrieveProductBookForUpdateResponse {
   private Integer storage;
 
   @NotNull
-  private List<RetrieveAuthorResponse> authorList;
+  private List<RetrieveAuthorResponse> authorIds;
 
   @NotNull
   private List<CategoryResponse> categoryList;

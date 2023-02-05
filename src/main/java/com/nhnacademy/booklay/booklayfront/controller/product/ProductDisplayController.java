@@ -4,22 +4,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,69 +40,70 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductDisplayController extends BaseController {
 
-  private final static String SHOP_PRE_FIX = "/shop/v1/product";
+  private static final String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
   private final RestTemplate restTemplate;
+  private final RestService restService;
   private final ObjectMapper mapper = new ObjectMapper();
 
-  public ProductDisplayController(RestService restService,
-      String gatewayIp, RestTemplate restTemplate) {
-    super(restService, gatewayIp);
-    this.gatewayIp = gatewayIp;
-    this.restTemplate = restTemplate;
-
-  }
-
+  private final CategoryService categoryService;
 
   //게시판형 전채 상품 호출
   @GetMapping("/display")
   public String retrieveProduct(
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum, Model model) {
+      Model model,
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum,
+      @RequestParam(value="CID", required = false) Long cid
+  ) {
+
+    List<CategorySteps> categorySteps = (List<CategorySteps>) model.getAttribute("categories");
+
+    if(Objects.isNull(cid)){
+      cid = categoryService.getDefaultCategoryId(categorySteps);
+    }
+
+    CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps,cid);
+
+    log.error(" currentCategory : {}", currentCategory);
+
     if (pageNum.isEmpty()) {
       pageNum = Optional.of(0);
     }
     if (pageNum.get() < 0) {
       pageNum = Optional.of(0);
     }
-
     Long size = 20L;
 
     pageNum = Optional.of(pageNum.get() - 1);
 
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
     URI uri = URI.create(
         gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
 
-    RequestEntity<PageResponse<RetrieveProductResponse>> requestEntity = new RequestEntity<>(
-        httpHeaders, HttpMethod.GET, uri);
-
-    ResponseEntity<PageResponse<RetrieveProductResponse>> productResponse =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<PageResponse<RetrieveProductResponse>> productResponse = restService.get(
+        uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
-
       int totalPage = productResponse.getBody().getTotalPages();
-      int nowPage = productResponse.getBody().getPageNumber();
+      int currentPage = productResponse.getBody().getPageNumber();
       List<RetrieveProductResponse> productList = productResponse.getBody().getData();
 
-      model.addAttribute("nowPage", nowPage);
+      model.addAttribute("currentPage", currentPage);
       model.addAttribute("totalPage", totalPage);
       model.addAttribute("productList", productList);
+      model.addAttribute("currentCategory", currentCategory);
     }
 
-    return "product/shop";
+    return "product/display";
   }
 
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
-  public String productViewer(@PathVariable("productNo") Long productNo, Model model)
-      throws JsonProcessingException {
+  public String productViewer(@PathVariable("productNo") Long productNo, Model model) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -106,11 +111,8 @@ public class ProductDisplayController extends BaseController {
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
 
-    RequestEntity<String> mainRequestEntity = new RequestEntity<>(null,
-        headers, HttpMethod.GET, mainUri);
-
-    ResponseEntity<RetrieveProductViewResponse> response =
-        restTemplate.exchange(mainRequestEntity, RetrieveProductViewResponse.class);
+    ApiEntity<RetrieveProductViewResponse> response = restService.get(mainUri.toString(), null,
+        RetrieveProductViewResponse.class);
 
     model.addAttribute("productNo", productNo);
     model.addAttribute("product", response.getBody());
@@ -118,11 +120,8 @@ public class ProductDisplayController extends BaseController {
     //연관 상품 목록 호출
     URI recommendUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/recommend/" + productNo);
 
-    RequestEntity<String> requestEntity = new RequestEntity<>(null,
-        headers, HttpMethod.GET, recommendUri);
-
-    ResponseEntity<List<RetrieveProductResponse>> recommendGoodsResponse =
-        restTemplate.exchange(requestEntity, new ParameterizedTypeReference<>() {
+    ApiEntity<List<RetrieveProductResponse>> recommendGoodsResponse = restService.get(
+        recommendUri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
     model.addAttribute("recommendProducts", recommendGoodsResponse.getBody());
@@ -130,19 +129,19 @@ public class ProductDisplayController extends BaseController {
     //구독 상품의 경우 구독의 자식 상품들 목록 호출
     if (Objects.nonNull(response.getBody().getSubscribeId())) {
       Long subscribeId = response.getBody().getSubscribeId();
-      URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/subscribe/" + subscribeId);
-      RequestEntity<String> subscribeRequestEntity = new RequestEntity<>(null,
-          headers, HttpMethod.GET, uriForSubscribe);
 
-      ResponseEntity<List<RetrieveProductResponse>> subscribeResponse =
-          restTemplate.exchange(subscribeRequestEntity, new ParameterizedTypeReference<>() {
+      URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/subscribe/" + subscribeId);
+
+      ApiEntity<List<RetrieveProductResponse>> subscribeResponse = restService.get(
+          uriForSubscribe.toString(), null, new ParameterizedTypeReference<>() {
           });
 
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
 
-    return "product/detail";
+    return "product/view";
   }
+
 
   //  @GetMapping("/display")
   public String categoryViewer(
@@ -158,7 +157,7 @@ public class ProductDisplayController extends BaseController {
           <p>
                   PageResponse<RetrieveProductResponse> responseBody = response.getBody();
           <p>
-                  model.addAttribute("nowPage", responseBody.getPageNumber());
+                  model.addAttribute("currentPage", responseBody.getPageNumber());
                   model.addAttribute("totalPage", responseBody.getTotalPages());
                   model.addAttribute("productList", responseBody.getData());
          */
@@ -181,42 +180,28 @@ public class ProductDisplayController extends BaseController {
 
     restTemplate.exchange(requestEntity, String.class);
 
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class), String.class);
+
     return "redirect:/product/view/" + request.getProductId();
   }
 
   //찜 위시리스트 삭제
   @PostMapping("/wishlist/disconnect")
   public String wishlistDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity =
-        new RequestEntity<>(mapper.writeValueAsString(request),
-            headers, HttpMethod.DELETE, uri);
-
-    restTemplate.exchange(requestEntity, String.class);
+    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
     return "redirect:/product/view/" + request.getProductId();
   }
 
   //재입고 알람 등록
   @PostMapping("/alarm/connect")
-  public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+  public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity =
-        new RequestEntity<>(mapper.writeValueAsString(request),
-            headers, HttpMethod.POST, uri);
-
-    restTemplate.exchange(requestEntity, String.class);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class), String.class);
 
     return "redirect:/product/view/" + request.getProductId();
   }
@@ -224,18 +209,10 @@ public class ProductDisplayController extends BaseController {
   //재입고 알람 등록 해제
   @PostMapping("/alarm/disconnect")
   public String alarmDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request)
-      throws JsonProcessingException {
+      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity =
-        new RequestEntity<>(mapper.writeValueAsString(request),
-            headers, HttpMethod.DELETE, uri);
-
-    restTemplate.exchange(requestEntity, String.class);
+    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
     return "redirect:/product/view/" + request.getProductId();
   }

@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/coupon-zone")
-public class CouponZoneController {
+public class CouponZoneController extends BaseController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;

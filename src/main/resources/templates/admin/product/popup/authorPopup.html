@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>북레이 - 상품 작가 등록</title>
+  <link href="/css/author.css" rel="stylesheet"/>
+  <script src="/js/product/authorPopup.js"></script>
+</head>
+<body>
+<h2>상품 작가 등록 페이지</h2>
+
+<form>
+  <input type="text"/>
+  <input type="submit" value="검색"/>
+</form>
+<hr>
+
+<div class="authorTable">
+  <table>
+    <thead>
+    <tr>
+      <th>작가 번호</th>
+      <th>작가 이름</th>
+      <th>작가 계정 번호</th>
+      <th>작가 아이디</th>
+      <th>수정</th>
+      <th>삭제</th>
+      <th>작품 정보</th>
+      <th>선택</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <th:block th:each="author : ${authorList}">
+      <form method="post" action="/admin/author/maintenance/update">
+        <tr>
+          <td>
+            <input name="id" class="authorNo-info" type="number" th:value="${author.authorNo}"
+                   disabled="disabled"/>
+          </td>
+          <td>
+            <input name="name" class="update-info" type="text" th:value="${author.name}"
+                   disabled="disabled"/>
+          </td>
+          <td>
+            <th:block th:if="${author.member != null}">
+              <input name="memberNo" class="update-info" type="number"
+                     th:value="${author.member.memberNo}" disabled="disabled"/>
+            </th:block>
+            <th:block th:if="${author.member == null}">
+              <input name="memberNo" class="update-info" type="number" disabled="disabled"/>
+            </th:block>
+          </td>
+          <td>
+            <span th:if="${author.member != null}" th:text="${author.member.memberId}"/>
+          </td>
+          <td>
+            <input type="submit" value="수정 제출" hidden="hidden">
+            <span class="update-button">수정</span>
+          </td>
+          <td>
+            <form method="post" action="/admin/author/maintenance/delete">
+              <input name="id" type="number" th:value="${author.authorNo}" hidden="hidden"/>
+              <input type="submit" value="삭제"/>
+            </form>
+          </td>
+          <td><a href="">작품 정보</a></td>
+          <td><input th:id="${author.authorNo}" th:name="${author.name}" type="button" value="선택" onclick="setApplyAuthorText(id, name)"/></td>
+        </tr>
+      </form>
+
+    </th:block>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const updateBtn = document.querySelectorAll('.update-button');
+  updateBtn.forEach(function (item) {
+    item.addEventListener('click', function () { // 클릭 이벤트 발생시,
+      var form1 = this.parentNode.parentNode
+      console.log(form1)
+      form1.querySelector('.update-info').toggleAttribute('disabled')
+      form1.querySelector('.submit-btn').toggleAttribute('hidden')
+    });
+  });
+</script>
+
+<div>
+  <a th:if="${currentPage - 1 >= 1}" th:href="@{/admin/author/maintenance(page=$ecurrentPage}-2)}">
+    <span th:text="${currentPage}-1"/></a>
+  <a th:if="${currentPage >= 1}" th:href="@{/admin/author/maintenance(page=${currentPage}-1)}">
+    <span th:text="${totalPage}"/></a>
+
+  <a th:if="${currentPage+1 != totalPage}" th:href="@{/admin/author/maintenance(page=${currentPage})}">
+    <span th:text="${totalPage}+1"/></a>
+
+  <a th:if="${currentPage + 2 < totalPage}" th:href="@{/admin/author/maintenance(page=${currentPage}+1)}">
+    <span th:text="${currentPage}+2"/></a>
+  <a th:if="${currentPage + 3 < totalPage}" th:href="@{/admin/author/maintenance(page=${currentPage}+2)}">
+    <span th:text="${currentPage}+3"/></a>
+
+  <span th:if="${currentPage + 3 < totalPage}">...</span>
+
+  <a th:href="@{/admin/author/maintenance(page=${totalPage})}">
+    <span th:text="${totalPage}"/></a>
+</div>
+
+<hr>
+<h3>작가 등록</h3>
+
+<form method="post" action="/admin/author/maintenance">
+  <table>
+    <tr>
+      <td>작가 이름 :</td>
+      <td><input name="name" type="text"/></td>
+    </tr>
+    <tr>
+      <td>작가 계정 (선택사항) :</td>
+      <td><input name="memberNo" type="number" min="0" step="1"/></td>
+    </tr>
+  </table>
+
+  <input type="submit" value="작가 등록"/>
+</form>
+
+
+</body>
+</html>

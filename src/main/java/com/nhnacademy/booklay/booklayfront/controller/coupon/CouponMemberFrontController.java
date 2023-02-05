@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
@@ -25,7 +26,7 @@ import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("member/coupon")
-public class CouponMemberFrontController {
+public class CouponMemberFrontController extends BaseController {
     private final RestService restService;
     private static final String RETURN_PAGE = "mypage/myPage";
     private static final String REST_PRE_FIX = "/shop/v1/member/coupon/";

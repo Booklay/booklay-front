@@ -36,12 +36,12 @@ public class WebConfig {
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder, RedisTemplate<String, Object> redisTemplate) {
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
 
         return builder
                 .setReadTimeout(Duration.ofSeconds(5L))
                 .setConnectTimeout(Duration.ofSeconds(5L))
-                .interceptors(new JwtAddInterceptor(redisTemplate))
+                .interceptors(new JwtAddInterceptor())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .errorHandler(responseErrorHandler())

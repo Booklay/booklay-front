@@ -1,21 +1,17 @@
 package com.nhnacademy.booklay.booklayfront.dto.product.author.response;
 
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberForAuthorResponse;
-import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@ToString
 public class RetrieveAuthorResponse {
 
-  @NotNull
-  Long authorNo;
+  private Long authorNo;
 
-  @NotNull
-  String name;
+  private String name;
 
-  MemberForAuthorResponse member;
+  private MemberForAuthorResponse member;
+
 }

@@ -13,7 +13,5 @@ spring:
       filter:
         enabled: true
 
-
-logging:
-  level:
-    root: debug
+  thymeleaf:
+    cache: false

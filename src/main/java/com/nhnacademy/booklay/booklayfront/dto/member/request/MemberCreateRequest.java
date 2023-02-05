@@ -9,12 +9,15 @@ import java.time.LocalDate;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
-@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
 public class MemberCreateRequest {
     @NotBlank
     private final String gender;
@@ -22,8 +25,9 @@ public class MemberCreateRequest {
     @NotBlank
     private final String memberId;
 
+    @Setter
     @NotBlank
-    private final String password;
+    private String password;
 
     @NotBlank
     private final String nickname;

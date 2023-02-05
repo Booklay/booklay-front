@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>EShopper - Bootstrap Shop Template</title>
+  <title th:text="북레이- + ${product.title}"></title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="Free HTML Templates" name="keywords">
   <meta content="Free HTML Templates" name="description">
@@ -187,7 +187,7 @@
              onclick="showTagRegisterPopup(id);"/>
 
       <div id="button-var">
-        <th:block th:if="${product.isSelling}">
+        <th:block th:if="${product.selling}">
           <form class="btnAtVar" method="post" action="/order/product">
             <input name="memberNo" type="number" th:if="${member != null}"
                    th:value="${member.memberNo}"
@@ -207,7 +207,7 @@
           </form>
         </th:block>
 
-        <span class="btnAtVar" th:if="${!product.isSelling}">품절</span>
+        <span class="btnAtVar" th:if="${!product.selling}">품절</span>
 
         <!--<th:block th:if="${member !=null}">-->
         <form class="btnAtVar" method="post" action="/product/wishlist/connect">

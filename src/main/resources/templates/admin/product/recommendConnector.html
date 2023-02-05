@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>북레이 - 추천 상품 등록</title>
   <link href="/css/product/productBoard.css" rel="stylesheet"/>
 </head>
 <body>
@@ -61,25 +61,25 @@
 
 <hr>
 <div>
-  <a th:if="${nowPage - 1 >= 1}"
-     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-2)}">
-    <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}"
-     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}-1)}">
-    <span th:text="${nowPage}"/></a>
+  <a th:if="${totalPage - 1 >= 1}"
+     th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-2)}">
+    <span th:text="${totalPage}-1"/></a>
+  <a th:if="${totalPage >= 1}"
+     th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
+    <span th:text="${totalPage}"/></a>
 
-  <a th:if="${nowPage+1 != totalPage}"
-     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage})}">
-    <span th:text="${nowPage}+1"/></a>
+  <a th:if="${totalPage+1 != totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage})}">
+    <span th:text="${totalPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}"
-     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+1)}">
-    <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}"
-     th:href="@{/admin/product/recommend/{productNo}/{nowPage} (productNo=${productNo}, nowPage=${nowPage}+2)}">
-    <span th:text="${nowPage}+3"/></a>
+  <a th:if="${totalPage + 2 < totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}+1)}">
+    <span th:text="${totalPage}+2"/></a>
+  <a th:if="${totalPage + 3 < totalPage}"
+     th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}+2)}">
+    <span th:text="${totalPage}+3"/></a>
 
-  <span th:if="${nowPage + 3 < totalPage}">...</span>
+  <span th:if="${totalPage + 3 < totalPage}">...</span>
 
   <a th:href="@{/admin/product/recommend/{productNo}/{totalPage} (productNo=${productNo}, totalPage=${totalPage}-1)}">
     <span th:text="${totalPage}"/></a>

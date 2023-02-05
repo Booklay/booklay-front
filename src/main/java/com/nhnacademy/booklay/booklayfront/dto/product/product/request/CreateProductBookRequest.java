@@ -22,7 +22,7 @@ public class CreateProductBookRequest {
   @NotNull
   private String longDescription;
   @NotNull
-  private Boolean isSelling;
+  private Boolean selling;
   @NotNull
   private Boolean pointMethod;
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+  <title>북레이 - 상품 카테고리 등록</title>
+  <!-- Favicon -->
+  <link th:href="@{/img/favicon.ico}" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+        rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <script src="/js/product/categoryPopup.js"></script>
+</head>
+<html lang="ko">
+<h2>카테고리 선택</h2>
+<table>
+  <thead>
+  <tr>
+    <th>카테고리 번호</th>
+    <th>상위 카테고리</th>
+    <th>카테고리 이름</th>
+    <th>카테고리 깊이</th>
+    <th>노출 여부</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody th:each="category : ${list}">
+  <tr>
+
+    <td>
+      <label>
+        <span th:text="${category.id}"></span>
+      </label>
+    </td>
+
+    <td>
+      <label th:if="${category.getParentCategoryId()} == null">
+        <span th:text="없음"></span>
+      </label>
+      <label th:unless="${category.getParentCategoryId() == null}">
+        <span th:text="${category.getParentCategoryId()}"></span>
+      </label>
+    </td>
+
+    <td>
+      <label>
+        <span th:text="${category.name}"></span>
+      </label>
+    </td>
+
+    <td>
+      <label>
+        <span th:text="${category.depth}"></span>
+      </label>
+    </td>
+
+    <td>
+      <label class="exposure-text">
+        <span th:text="${category.isExposure}"></span>
+      </label>
+    </td>
+    <td>
+      <input class="cat-select-btn" type="button" value="선택" th:id="${category.id}" th:name="${category.name}"></td>
+  </tr>
+  </tbody>
+</table>
+<h2 th:if="${list.isEmpty()}">등록된 카테고리가 없습니다.</h2>
+
+
+</html>

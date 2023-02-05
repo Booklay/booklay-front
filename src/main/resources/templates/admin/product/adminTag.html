@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>북레이 - 태그 관리 페이지</title>
 </head>
 <body>
 <form>
@@ -23,7 +23,7 @@
     <tr>
       <td><span th:text="${tag.id}"/></td>
       <td>
-        <form method="post" action="/admin/tag/maintenance/update">
+        <form method="post" th:action="@{/admin/tag/maintenance/update/{pageNum} (pageNum =${currentPage})}">
           <input name="id" type="number" th:value="${tag.id}" hidden/>
           <input name="name" class="name-input" type="text" th:value="${tag.name}" maxlength=20 disabled="disabled"/>
           <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
@@ -54,20 +54,20 @@
 </table>
 
 <div>
-  <a th:if="${nowPage - 1 >= 1}" th:href="@{/admin/tag/maintenance(page=${nowPage}-2)}">
-    <span th:text="${nowPage}-1"/></a>
-  <a th:if="${nowPage >= 1}" th:href="@{/admin/tag/maintenance(page=${nowPage}-1)}">
-    <span th:text="${nowPage}"/></a>
+  <a th:if="${currentPage - 1 >= 1}" th:href="@{/admin/tag/maintenance(page=${currentPage}-2)}">
+    <span th:text="${currentPage}-1"/></a>
+  <a th:if="${currentPage >= 1}" th:href="@{/admin/tag/maintenance(page=${currentPage}-1)}">
+    <span th:text="${currentPage}"/></a>
 
-  <a  th:if="${nowPage+1 != totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage})}">
-  <span th:text="${nowPage}+1"/></a>
+  <a  th:if="${currentPage+1 != totalPage}" th:href="@{/admin/tag/maintenance(page=${currentPage})}">
+  <span th:text="${currentPage}+1"/></a>
 
-  <a th:if="${nowPage + 2 < totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage}+1)}">
-  <span th:text="${nowPage}+2"/></a>
-  <a th:if="${nowPage + 3 < totalPage}" th:href="@{/admin/tag/maintenance(page=${nowPage}+2)}">
-  <span th:text="${nowPage}+3"/></a>
+  <a th:if="${currentPage + 2 < totalPage}" th:href="@{/admin/tag/maintenance(page=${currentPage}+1)}">
+  <span th:text="${currentPage}+2"/></a>
+  <a th:if="${currentPage + 3 < totalPage}" th:href="@{/admin/tag/maintenance(page=${currentPage}+2)}">
+  <span th:text="${currentPage}+3"/></a>
 
-  <span th:if="${nowPage + 3 < totalPage}">...</span>
+  <span th:if="${currentPage + 3 < totalPage}">...</span>
 
   <a th:href="@{/admin/tag/maintenance(page=${totalPage})}">
     <span th:text="${totalPage}"/></a>

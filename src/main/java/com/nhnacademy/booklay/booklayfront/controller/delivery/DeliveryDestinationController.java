@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.delivery;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.delivery.request.DeliveryDestinationCURequest;
 import com.nhnacademy.booklay.booklayfront.dto.delivery.response.DeliveryDestinationRetrieveResponse;
 import java.net.URI;
@@ -152,5 +153,13 @@ public class DeliveryDestinationController {
         model.addAttribute("address", response.getBody());
 
         return "redirect:/address/" + memberNo;
+    }
+
+    @GetMapping("/test")
+    public String test(MemberInfo memberInfo, Model model) {
+
+        model.addAttribute("memberInfo", memberInfo);
+        return "/";
+
     }
 }

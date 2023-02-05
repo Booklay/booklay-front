@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
-import com.nhnacademy.booklay.booklayfront.config.WebConfig;
+import com.nhnacademy.booklay.booklayfront.config.RedisConfig;
 import com.nhnacademy.booklay.booklayfront.controller.coupon.CouponMemberFrontController;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
@@ -15,6 +15,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -39,12 +41,15 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(CouponMemberFrontController.class)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
+@Import(RedisConfig.class)
 class CouponMemberFrontControllerTest {
     @MockBean
     RestService restService;
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    CategoryService categoryService;
     @MockBean
     AuthenticationManager authenticationManager;
 
@@ -53,6 +58,9 @@ class CouponMemberFrontControllerTest {
 
     @MockBean
     RedisTemplate<String, Object> redisTemplate;
+
+    @MockBean
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final String RETURN_PAGE = "mypage/myPage";
     private final String URI_PREFIX = "/member/coupon/";

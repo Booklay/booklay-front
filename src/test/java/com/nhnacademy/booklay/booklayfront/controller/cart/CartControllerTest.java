@@ -1,17 +1,26 @@
 package com.nhnacademy.booklay.booklayfront.controller.cart;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
+import com.nhnacademy.booklay.booklayfront.config.RedisConfig;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartProductNoListRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
-import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,29 +35,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(CartController.class)
 @ActiveProfiles("test")
 @ComponentScan("com.nhnacademy.booklay.booklayfront.service")
 @AutoConfigureMockMvc(addFilters = false)
-@Import(WebConfig.class)
+@Import({WebConfig.class, RedisConfig.class})
 class CartControllerTest {
     @MockBean
     RestService restService;
@@ -66,6 +63,9 @@ class CartControllerTest {
     TokenUtils tokenUtils;
     @MockBean
     RedisTemplate<String, Object> redisTemplate;
+
+    @MockBean
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final String RETURN_PAGE = "cart/listForm";
     private final String REDIRECT_PAGE = "cart/list";
