@@ -37,9 +37,16 @@
                     <td><p th:text="${coupon.id}"></p></td>
                     <td><p th:text="${coupon.name}"></p></td>
                     <td><p th:text="${coupon.typeName}"></p></td>
-                    <td><p th:text="${coupon.amount}"></p></td>
-                    <td><p th:text="${coupon.minimumUseAmount}"></p></td>
-                    <td><p th:text="${coupon.maximumDiscountAmount}"></p></td>
+                    <td>
+                        <span th:if="${#strings.contains(coupon.typeName, '정률')}">
+                            <p th:text="${coupon.amount}+'%'"></p>
+                        </span>
+                        <span th:unless="${#strings.contains(coupon.typeName, '정률')}">
+                            <p th:text="${coupon.amount}+'원'"></p>
+                        </span>
+                    </td>
+                    <td><p th:text="${coupon.minimumUseAmount}+'원'"></p></td>
+                    <td><p th:text="${coupon.maximumDiscountAmount}+'원'"></p></td>
                     <td>
                         <p th:if="${coupon.isLimited}">O</p>
                         <p th:unless="${coupon.isLimited}">X</p>

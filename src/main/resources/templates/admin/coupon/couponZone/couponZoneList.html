@@ -3,6 +3,7 @@
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <title>쿠폰존 목록</title>
+    <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
@@ -15,7 +16,7 @@
             <h4>수량 제한 쿠폰</h4>
         </div>
         <div class="col-auto">
-            <a href="/admin/coupon-zone/form" class="btn btn-primary">등록하기</a></button>
+            <a th:href="@{/admin/coupon-zone/create-form}" class="btn btn-primary">등록하기</a>
         </div>
     </div>
 
@@ -52,14 +53,13 @@
                         <p th:if="${limited.isBlind}">O</p>
                         <p th:unless="${limited.isBlind}">X</p>
                     </td>
-                    <td><a href="">수정</a></td>
+                    <td><a onclick="" href="">수정</a></td>
                     <td><a href="">삭제</a></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
 
     <h4>수량 무제한 쿠폰</h4>
     <div th:if="${#lists.isEmpty(unlimitedList)}">

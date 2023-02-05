@@ -1,5 +1,5 @@
 function showCouponPopup() {
-    let option = "width = 800, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
+    let option = "width = 800, height = 600, top = 100, left = 200, scrollbars = yes, location = no"
     let ret = window.open("/admin/coupons/popup/coupon", "couponPopup", option);
 }
 
@@ -34,4 +34,10 @@ function setApplyItemText(value, name){
     opener.document.getElementById("itemId").value = value;
     opener.document.getElementById("itemName").value = name;
     window.close();
+}
+
+function setDate() {
+    let origin = document.getElementById("opened-at");
+    let target = document.getElementById("closed-at");
+    target.value = origin.value;
 }
