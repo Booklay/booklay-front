@@ -1,84 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <meta charset="UTF-8">
     <title>쿠폰존 목록</title>
 </head>
-<body>
-<h3>쿠폰존 목록</h3>
-<button><a href="/admin/coupon-zone/form">등록하기</a></button>
-<br/><br/>
-<h3>수량 제한 쿠폰</h3>
-<div th:if="${#lists.isEmpty(limitedList)}">
-    <div>등록된 수량 제한 쿠폰이 없습니다.</div>
-</div>
-<div th:unless="${#lists.isEmpty(limitedList)}">
-    <table border="1px">
-        <tr>
-            <td>번호</td>
-            <td>쿠폰 ID</td>
-            <td>쿠폰 이름</td>
-            <td>설명</td>
-            <td>오픈시간</td>
-            <td>닫힘시간</td>
-            <td>숨김여부</td>
-            <td>숨김수정</td>
-            <td>삭제</td>
-        </tr>
-        <tbody th:each="limited, limitedStat :${limitedList}">
-        <tr>
-            <td><p th:text="${limitedStat.count}"></p></td>
-            <td><p th:text="${limited.id}"></p></td>
-            <td><p th:text="${limited.name}"></p></td>
-            <td><p th:text="${limited.description}"></p></td>
-            <td><p th:text="${limited.openedAt}"></p></td>
-            <td><p th:text="${limited.issuanceDeadlineAt}"></p></td>
-            <td>
-                <p th:if="${limited.isBlind}">O</p>
-                <p th:unless="${limited.isBlind}">X</p>
-            </td>
-            <td><input type="button" value="수정"></td>
-            <td><input type="button" value="삭제"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<br/>
-<h3>수량 무제한 쿠폰</h3>
-<div th:if="${#lists.isEmpty(unlimitedList)}">
-    <div>등록된 수량 무제한 쿠폰이 없습니다.</div>
-</div>
-<div th:unless="${#lists.isEmpty(unlimitedList)}">
-    <table border="1px">
-        <tr>
-            <td>번호</td>
-            <td>쿠폰 ID</td>
-            <td>쿠폰 이름</td>
-            <td>설명</td>
-            <td>오픈시간</td>
-            <td>닫힘시간</td>
-            <td>숨김여부</td>
-            <td>수정</td>
-            <td>삭제</td>
-        </tr>
-        <tbody th:each="unlimited, unlimitedStat :${unlimitedList}">
-        <tr>
-            <td><p th:text="${unlimitedStat.count}"></p></td>
-            <td><p th:text="${unlimited.id}"></p></td>
-            <td><p th:text="${unlimited.name}"></p></td>
-            <td><p th:text="${unlimited.description}"></p></td>
-            <td><p th:text="${unlimited.openedAt}"></p></td>
-            <td><p th:text="${unlimited.issuanceDeadlineAt}"></p></td>
-            <td>
-                <p th:if="${unlimited.isBlind}">O</p>
-                <p th:unless="${unlimited.isBlind}">X</p>
-            </td>
-            <td><input type="button" value="수정"></td>
-            <td><input type="button" value="삭제"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
 
-</body>
-</html>
+<th:block layout:fragment="content">
+    <div class="card-header">
+        <h2 >쿠폰존 목록</h2>
+    </div><br/>
+
+    <div class="row g-2">
+        <div class="col">
+            <h4>수량 제한 쿠폰</h4>
+        </div>
+        <div class="col-auto">
+            <a href="/admin/coupon-zone/form" class="btn btn-primary">등록하기</a></button>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(limitedList)}">
+        <div>등록된 수량 제한 쿠폰이 없습니다.</div>
+    </div>
+
+    <div class="card" th:unless="${#lists.isEmpty(limitedList)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>쿠폰 ID</th>
+                    <th>쿠폰 이름</th>
+                    <th>설명</th>
+                    <th>오픈시간</th>
+                    <th>닫힘시간</th>
+                    <th>숨김여부</th>
+                    <th>숨김수정</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+
+                <tbody th:each="limited, limitedStat :${limitedList}">
+                <tr>
+                    <td><p th:text="${limitedStat.count}"></p></td>
+                    <td><p th:text="${limited.id}"></p></td>
+                    <td><p th:text="${limited.name}"></p></td>
+                    <td><p th:text="${limited.description}"></p></td>
+                    <td><p th:text="${limited.openedAt}"></p></td>
+                    <td><p th:text="${limited.issuanceDeadlineAt}"></p></td>
+                    <td>
+                        <p th:if="${limited.isBlind}">O</p>
+                        <p th:unless="${limited.isBlind}">X</p>
+                    </td>
+                    <td><a href="">수정</a></td>
+                    <td><a href="">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <h4>수량 무제한 쿠폰</h4>
+    <div th:if="${#lists.isEmpty(unlimitedList)}">
+        <div>등록된 수량 무제한 쿠폰이 없습니다.</div>
+    </div>
+
+    <div class="card" th:unless="${#lists.isEmpty(unlimitedList)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>쿠폰 ID</th>
+                    <th>쿠폰 이름</th>
+                    <th>설명</th>
+                    <th>오픈시간</th>
+                    <th>닫힘시간</th>
+                    <th>숨김여부</th>
+                    <th>숨김수정</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+
+                <tbody th:each="unlimited, unlimitedStat :${unlimitedList}">
+                <tr>
+                    <td><p th:text="${unlimitedStat.count}"></p></td>
+                    <td><p th:text="${unlimited.id}"></p></td>
+                    <td><p th:text="${unlimited.name}"></p></td>
+                    <td><p th:text="${unlimited.description}"></p></td>
+                    <td><p th:text="${unlimited.openedAt}"></p></td>
+                    <td><p th:text="${unlimited.issuanceDeadlineAt}"></p></td>
+                    <td>
+                        <p th:if="${unlimited.isBlind}">O</p>
+                        <p th:unless="${unlimited.isBlind}">X</p>
+                    </td>
+                    <td><a href="">수정</a></td>
+                    <td><a href="">삭제</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>

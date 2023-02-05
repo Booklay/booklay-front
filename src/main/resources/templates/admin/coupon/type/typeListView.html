@@ -61,7 +61,7 @@
                     <td><p th:text="${couponType.id}"></p></td>
                     <td><p th:text="${couponType.name}"></p></td>
                     <td>
-                        <button th:id="${couponType.id+'update'}">수정</button>
+                        <button class="btn btn-outline-primary" th:id="${couponType.id+'update'}">수정</button>
                     </td>
                     <td><a th:href="${'/admin/coupons/types/delete/'+couponType.id}">삭제</a></td>
                 </tr>

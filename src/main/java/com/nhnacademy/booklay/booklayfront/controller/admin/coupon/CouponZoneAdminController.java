@@ -62,7 +62,7 @@ public class CouponZoneAdminController {
         model.addAttribute("limitedList", limitedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
-        return RETURN_PAGE;
+        return "admin/coupon/couponZone/couponZoneList";
     }
 
     /**
@@ -72,7 +72,7 @@ public class CouponZoneAdminController {
     public String getCouponZoneAddForm(Model model) {
         model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneAddForm");
 
-        return RETURN_PAGE;
+        return "admin/coupon/couponZone/couponZoneAddForm";
     }
 
     /**
