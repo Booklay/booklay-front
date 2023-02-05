@@ -121,7 +121,7 @@ public class CategoryAdminController {
 
       setCurrentPageAndMaxPageToModel(model, response.getBody());
       model.addAttribute("list", response.getBody().getData());
-      return "admin/category/listView";
+      return "admin/category/list";
     } else {
       return "/index";
     }
