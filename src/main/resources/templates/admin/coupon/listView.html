@@ -3,6 +3,7 @@
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <title>쿠폰 목록</title>
+    <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
@@ -51,9 +52,9 @@
                         <p th:if="${coupon.isLimited}">O</p>
                         <p th:unless="${coupon.isLimited}">X</p>
                     </td>
-                    <td><a th:href="${'/admin/coupons/detail/'+coupon.id}">상세</a></td>
-                    <td><a th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
-                    <td><a th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
+                    <td><a class="btn btn-outline-primary" th:onclick="'showCouponDetail(' + ${coupon.id} + ')'">상세</a></td>
+                    <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/update/'+coupon.id}">수정</a></td>
+                    <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
                 </tr>
                 </tbody>
             </table>

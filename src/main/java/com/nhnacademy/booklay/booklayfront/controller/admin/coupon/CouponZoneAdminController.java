@@ -81,6 +81,9 @@ public class CouponZoneAdminController {
         return "redirect:/admin/coupon-zone";
     }
 
+    /**
+     * 쿠폰존에 등록된 정보를 변경합니다.
+     */
     @GetMapping("/update-form")
     public String getCouponZoneUpdateForm(Model model) {
         return "admin/coupon/couponZone/couponZoneUpdateForm";

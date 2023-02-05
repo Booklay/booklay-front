@@ -41,3 +41,12 @@ function setDate() {
     let target = document.getElementById("closed-at");
     target.value = origin.value;
 }
+
+function showCouponDetail(couponId) {
+    let option = "width = 400, height = 600, top = 100, left = 200, scrollbars = yes, location = no"
+    window.open("/admin/coupons/detail/" + couponId, "couponDetailPopup", option);
+}
+
+function closeWindow() {
+    window.close();
+}

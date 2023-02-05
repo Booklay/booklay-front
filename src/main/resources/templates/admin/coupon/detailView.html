@@ -1,41 +1,93 @@
 <!DOCTYPE html>
-<html lang="ko">
-    <button><a href="/admin/coupons/list">목록</a></button>
-    <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        쿠폰 ID : <span th:text="${couponDetail.id}"> </span><br/>
-        쿠폰 이름 : <span th:text="${couponDetail.name}"> </span><br/>
-        쿠폰 종류 : <span th:text="${couponDetail.typeName}"></span><br/>
-        <span th:if="${couponDetail.typeName == '포인트'}">
-            적립 포인트 :
-            <span th:text="${couponDetail.amount}"></span><br/>
-        </span>
-        <span th:unless="${couponDetail.typeName == '포인트'}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
+<head>
+    <title>쿠폰 상세</title>
+    <script src="/js/coupon/couponPopup.js"></script>
+</head>
 
-            <span th:if="${couponDetail.typeName == '정률쿠폰'}">
-            할인율 : <span th:text="${couponDetail.amount}"></span>%<br/>
-            </span>
+<th:block layout:fragment="content">
+    <div class="row row-cards">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-md-6 col-xl-3">
+                    <table class="table table-vcenter card-table">
+                        <tr>
+                            <td><strong>쿠폰 ID</strong></td>
+                            <td><p th:text="${couponDetail.id}"></p></td>
+                        </tr>
+                        <tr>
+                            <td><strong>쿠폰 이름</strong></td>
+                            <td><p th:text="${couponDetail.name}"></p></td>
+                        </tr>
+                        <tr>
+                            <td><strong>쿠폰 종류</strong></td>
+                            <td><p th:text="${couponDetail.typeName}"></p></td>
+                        </tr>
 
-            <span th:if="${couponDetail.typeName == '정액쿠폰'}">
-            할인 금액 : <span th:text="${couponDetail.amount}"></span>원<br/>
-            </span>
+                        <span th:if="${couponDetail.typeName == '포인트'}">
+                            <td><strong>적립 포인트</strong></td>
+                            <td><p th:text="${couponDetail.amount} + '원'"></p></td>
+                        </span>
 
-            <span th:if="${couponDetail.isOrderCoupon}">
-                적용 카테고리 ID : <span th:text="${couponDetail.applyItemId}"></span><br/>
-                적용 카테고리 : <span th:text="${couponDetail.itemName}"></span><br/>
-            </span>
+                        <span th:unless="${couponDetail.typeName == '포인트'}">
+                            <tr>
+                            <span th:if="${couponDetail.typeName == '정률쿠폰'}">
+                                <td><strong>할인율</strong></td>
+                                <td><p th:text="${couponDetail.amount} + '%'"></p></td>
+                            </span>
+                            <span th:if="${couponDetail.typeName == '정액쿠폰'}">
+                                <td><strong>할인 금액</strong></td>
+                                <td><p th:text="${couponDetail.amount} + '원'"></p></td>
+                            </span>
+                            </tr>
 
-            <span th:unless="${couponDetail.isOrderCoupon}">
-                적용 상품 ID : <span th:text="${couponDetail.applyItemId}"></span><br/>
-                적용 상품 : <span th:text="${couponDetail.itemName}"></span><br/>
-            </span>
+                            <tr>
+                            <span th:if="${couponDetail.isOrderCoupon}">
+                                <td><strong>적용 카테고리 ID</strong></td>
+                                <td><p th:text="${couponDetail.itemName}"></p></td>
+                            </span>
+                            <span th:unless="${couponDetail.isOrderCoupon}">
+                                <td><strong>적용 상품 ID</strong></td>
+                                <td><p th:text="${couponDetail.itemName}"></p></td>
+                            </span>
+                            </tr>
+                        </span>
 
-        </span>
-        최소 사용 금액 : <span th:text="${couponDetail.minimumUseAmount}"></span><br/>
-        최대 할인 금액 : <span th:text="${couponDetail.maximumDiscountAmount}"></span><br/>
-        발급 기한 일시 : <span th:text="${couponDetail.issuanceDeadlineAt}"></span><br/>
-        중복 사용 여부 : <span th:if="${couponDetail.isDuplicatable == true}">중복 사용 가능</span>
-                           <span th:if="${couponDetail.isDuplicatable == false}">중복 사용 불가</span><br/>
-        등록 이미지
+                        <tr>
+                            <td><strong>최소 사용 금액</strong></td>
+                            <td><p th:text="${couponDetail.minimumUseAmount} + '원'"></p></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>최대 할인 금액</strong></td>
+                            <td><p th:text="${couponDetail.minimumUseAmount} + '원'"></p></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>발급 기한 일시</strong></td>
+                            <td><p th:text="${#temporals.format(couponDetail.issuanceDeadlineAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>중복 사용 여부</strong></td>
+                            <td>
+                                <p th:if="${couponDetail.isDuplicatable == true}">가능</p>
+                                <p th:if="${couponDetail.isDuplicatable == false}">불가</p>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>등록 이미지</strong></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <div class="text-center">
+                <a class="btn btn-primary w-50" onclick="closeWindow()">닫기</a>
+            </div>
+        </div>
     </div>
-    <br/>
-</html>
+</th:block>
