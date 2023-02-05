@@ -1,11 +1,14 @@
 package com.nhnacademy.booklay.booklayfront.auth.filter;
 
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
+import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
+import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import io.jsonwebtoken.Claims;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -50,18 +54,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 session.setAttribute(ACCESS_TOKEN_HEADER, jwtInfo.getAccessToken());
 
+                accessToken = jwtInfo.getAccessToken();
             }
+
+            String email = tokenUtils.getEmail(accessToken);
+            String role = tokenUtils.getRole(accessToken);
+
+            CustomMember customMember = new CustomMember(email, null, Collections.singletonList(Roles.valueOf(role)));
+            customMember.setAccessToken(accessToken);
+
+            UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(customMember, null, customMember.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(token);
+            filterChain.doFilter(request, response);
 
         } catch (Exception e) {
             log.error(e.getMessage());
+            filterChain.doFilter(request, response);
         } finally {
-            log.info("Security Context Remove");
-            request.getSession().invalidate();
+            log.info("security context cleared");
             SecurityContextHolder.clearContext();
-
-            response.sendRedirect("/");
         }
-
     }
 
     private boolean isEmptyAccessToken(HttpServletRequest request) {
@@ -77,8 +91,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean isTokenNotValid(String jwt) {
         Claims claims = tokenUtils.getClaims(jwt);
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, 5);
+        c.add(Calendar.MINUTE, -5);
 
-        return claims.getExpiration().after(c.getTime());
+        return claims.getExpiration().before(c.getTime());
     }
+
 }

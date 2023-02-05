@@ -22,6 +22,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
@@ -63,7 +64,7 @@ public class SecurityConfig {
         http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository())
             .successHandler(oAuth2LoginSuccessHandler(null)));
 
-        http.addFilterBefore(jwtAuthenticationFilter(null, null), LogoutFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(null, null), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -71,7 +72,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring()
-                         .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**");
+                         .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**", "/css/**", "/js/**", "/scss/**", "/plugins/**", "/mail/**");
     }
 
     @Bean
