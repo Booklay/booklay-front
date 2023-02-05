@@ -54,7 +54,7 @@
                                                 <input hidden="hidden" type="number" name="applyItemId" id="itemId">
                                             </div>
                                             <div class="col-auto">
-                                                <button type="button" class="btn btn-icon" aria-label="Button" onclick="showCategoryPopup()">
+                                                <button type="button" id="item-search-button" class="btn btn-icon" aria-label="Button" onclick="showCategoryPopup()">
                                                     <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                                                 </button>
@@ -85,7 +85,7 @@
                             </div>
 
                             <div class="col-md-6 col-xl-3">
-                                <div class="mb-3">
+                                <div class="mb-4">
                                     <div class="form-label">중복 사용 가능 여부</div>
                                     <div>
                                         <label class="form-check form-check-inline">
@@ -118,6 +118,9 @@
                                     <input class="form-control" type="file" accept="image/*" name="image" id="image-input">
                                 </div>
 
+                                <div class="text-end">
+                                    <input class="btn btn-primary" type="submit">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -126,7 +129,4 @@
         </div>
     </div>
 </th:block>
-            <input type="submit">
-        </form>
-    </div>
 </html>

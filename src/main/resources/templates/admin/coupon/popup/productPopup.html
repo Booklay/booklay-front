@@ -1,49 +1,54 @@
 <!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
 <head>
-    <!-- Favicon -->
-    <link th:href="@{/img/favicon.ico}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-  <script src="/js/coupon/couponPopup.js"></script>
+    <title>카테고리 선택</title>
+    <script src="/js/coupon/couponPopup.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Dashboard - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <!-- CSS files -->
+    <link href="/plugins/tabler/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/demo.min.css" rel="stylesheet"/>
 </head>
-<html lang="ko">
-<h2>상품 선택</h2>
-<table border=1>
-    <thead>
-    <tr>
-        <th>상품 번호</th>
-        <th>제목</th>
-        <th>가격</th>
-        <th>판매 여부</th>
-        <th>출판사</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <th:block th:each="product : ${list}">
-        <tr>
-            <td><span th:text="${product.productId}"></span></td>
-            <td><span th:text="${product.title}"></span></td>
-            <td><span th:text="${product.price}"></span></td>
-            <td><span th:text="${product.selling}"></span></td>
-            <td><span th:text="${product.publisher}"></span></td>
-            <td><input type="button" value="선택" th:id="${product.productId}" th:onclick="setApplyItemText(this.getAttribute('id'))"></td>
-        </tr>
-    </th:block>
-    </tbody>
-</table>
-<h2 th:if="${list.isEmpty()}">등록된 상품이 없습니다.</h2>
+<body>
+<div th:if="${#lists.isEmpty(list)}">
+    <div>등록된 상품이 없습니다.</div>
+</div>
 
+<div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
+    <table class="table table-vcenter card-table">
+        <thead>
+        <tr>
+            <td>번호</td>
+            <td>상품 번호</td>
+            <td>제목</td>
+            <td>가격</td>
+            <td>판매 여부</td>
+            <td>출판사</td>
+            <td></td>
+        </tr>
+        </thead>
+
+        <tbody th:each="product, productStat :${list}">
+        <td><p th:text="${productStat.count}"></p></o></td>
+        <td><p th:text="${product.productId}"></p></td>
+        <td><p th:text="${product.title}"></p></td>
+        <td><p th:text="${product.price}"></p></td>
+        <td><p th:text="${product.selling}"></p></td>
+        <td><p th:text="${product.publisher}"></p></td>
+        <td>
+            <input class="btn btn-outline-primary" type="button" value="선택"
+                   th:id="${product.productId}" th:name="${product.title}"
+                   th:onclick="setApplyItemText(this.getAttribute('id'), this.getAttribute('name'))">
+        </td>
+       </tbody>
+    </table>
+
+    <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+</div>
+</body>
 </html>

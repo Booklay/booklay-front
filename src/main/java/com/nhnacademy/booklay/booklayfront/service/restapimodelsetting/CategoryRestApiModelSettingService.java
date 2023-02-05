@@ -1,8 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class CategoryRestApiModelSettingService {
         ApiEntity<PageResponse<CategoryResponse>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
         model.addAttribute("list", apiEntity.getBody().getData());
     }
 }

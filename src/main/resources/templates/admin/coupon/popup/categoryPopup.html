@@ -15,65 +15,50 @@
     <link href="/plugins/tabler/dist/css/demo.min.css" rel="stylesheet"/>
 </head>
 <body>
-    <div th:if="${#lists.isEmpty(list)}">
-        <div>등록된 카테고리가 없습니다.</div>
-    </div>
+<div th:if="${#lists.isEmpty(list)}">
+    <div>등록된 카테고리가 없습니다.</div>
+</div>
 
-    <div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
-        <table class="table table-vcenter card-table">
-            <thead>
-            <tr>
-                <td>카테고리 번호</td>
-                <td>상위 카테고리</td>
-                <td>카테고리 이름</td>
-                <td>카테고리 깊이</td>
-                <td>노출 여부</td>
-                <td></td>
-            </tr>
-            </thead>
-
-            <tbody th:each="category :${list}">
-                <td><p th:text="${category.id}"></p></td>
-                <td>
-                    <label th:if="${category.getParentCategoryId()} == null">
-                        <span th:text="없음"></span>
-                    </label>
-                    <label th:unless="${category.getParentCategoryId() == null}">
-                        <span th:text="${category.getParentCategoryId()}"></span>
-                    </label>
-                </td>
-                <td><input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}" th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))"></td>
-            </tbody>
-        </table>
-    </div>
-
-    <table>
-        <tbody th:each="category : ${list}">
+<div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
+    <table class="table table-vcenter card-table">
+        <thead>
         <tr>
-            <td>
-
-            </td>
-
-            <td>
-                <label>
-                    <span th:text="${category.name}"></span>
-                </label>
-            </td>
-
-            <td>
-                <label>
-                    <span th:text="${category.depth}"></span>
-                </label>
-            </td>
-
-            <td>
-                <label class="exposure-text">
-                    <span th:text="${category.isExposure}"></span>
-                </label>
-            </td>
-            <td><input type="button" value="선택" th:id="${category.id}" th:onclick="setApplyItemText(this.getAttribute('id'))"></td>
+            <td>번호</td>
+            <td>카테고리 번호</td>
+            <td>상위 카테고리</td>
+            <td>카테고리 이름</td>
+            <td>카테고리 깊이</td>
+            <td>노출 여부</td>
+            <td></td>
         </tr>
+        </thead>
+
+        <tbody th:each="category, categoryStat :${list}">
+        <td><p th:text="${categoryStat.count}"></p></o></td>
+        <td><p th:text="${category.id}"></p></td>
+        <td>
+            <label th:if="${category.getParentCategoryId()} == null">
+                <span th:text="없음"></span>
+            </label>
+            <label th:unless="${category.getParentCategoryId() == null}">
+                <span th:text="${category.getParentCategoryId()}"></span>
+            </label>
+        </td>
+        <td><p th:text="${category.name}"></p></td>
+        <td><p th:text="${category.depth}"></p></td>
+        <td>
+            <p th:if="${category.isExposure}">O</p>
+            <p th:unless="${category.isExposure}">X</p>
+        </td>
+        <td>
+            <input class="btn btn-outline-primary" type="button" value="선택"
+                   th:id="${category.id}" th:name="${category.name}"
+                   th:onclick="setApplyItemText(this.getAttribute('id'), this.getAttribute('name'))">
+        </td>
         </tbody>
     </table>
+
+    <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+</div>
 </body>
 </html>
