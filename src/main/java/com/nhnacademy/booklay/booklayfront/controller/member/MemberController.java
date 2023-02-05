@@ -1,8 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
@@ -58,9 +58,9 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix);
 
         restService.post(uri.toString(),
-            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
-            Void.class);
-        //TODO 2: 에러처리
+                         objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+                         Void.class);
+        // TODO 2: 에러처리
 
         return "redirect:/";
     }
@@ -70,8 +70,8 @@ public class MemberController extends BaseController {
         return "member/loginForm";
     }
 
-    @GetMapping(value = {"", "/", "/profile"})
-    private String profileMain(){
+    @GetMapping(value = { "", "/", "/profile" })
+    private String profileMain() {
         return "mypage/profile/main";
     }
 
@@ -156,7 +156,7 @@ public class MemberController extends BaseController {
         }
     }
 
-    //TODO memberNo는 세션에서 획득
+    // TODO memberNo는 세션에서 획득
     @PostMapping("/update/{memberNo}")
     public String updateMember(@PathVariable Long memberNo,
                                @Valid @ModelAttribute MemberUpdateRequest request,
@@ -165,7 +165,7 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
         restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
-            Void.class);
+                        Void.class);
 
         return "redirect:/member/" + memberNo;
     }
@@ -185,4 +185,5 @@ public class MemberController extends BaseController {
 
         return "redirect:/";
     }
+
 }
