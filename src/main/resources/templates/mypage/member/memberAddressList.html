@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>회원 주소 목록</title>
     <script src="/js/member/addressCreatePopup.js"></script>
 </head>
-<body>
+
+<th:block layout:fragment="content">
 <h3>[배송지 목록]</h3><br>
 <input type="button" value="추가하기" th:id="${memberNo}" onclick="showAddressPopup(this.getAttribute('id'))">
 <br>
@@ -40,5 +43,6 @@
         </td>
     </tr>
 </table>
-</body>
+
+</th:block>
 </html>

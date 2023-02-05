@@ -1,57 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <meta charset="UTF-8">
     <title>차단 회원 리스트</title>
     <script src="/js/member/memberBlockPopup.js"></script>
 </head>
-<body>
-<div>
-    <h3>[차단 회원 리스트]</h3>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>회원번호</th>
-            <th>회원ID</th>
-            <th>회원이름</th>
-            <th>차단사유</th>
-            <th>차단일자</th>
-            <th>history</th>
-            <th>해제하기</th>
-            <th>등급이력</th>
-            <th>권한이력</th>
-        </tr>
-        </thead>
+<th:block layout:fragment="content">
+    <div>
+        <h3>[차단 회원 리스트]</h3>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>회원ID</th>
+                        <th>회원이름</th>
+                        <th>차단사유</th>
+                        <th>차단일자</th>
+                        <th>이력</th>
+                        <th>해제하기</th>
+                        <th>등급이력</th>
+                        <th>권한이력</th>
+                    </tr>
+                    </thead>
 
-        <tbody th:each="member, memberStat : ${list}">
-        <tr>
-            <td th:text="${memberStat.count}"></td>
-            <td th:text="${member.getMemberNo()}"></td>
-            <td th:text="${member.getMemberId()}"></td>
-            <td th:text="${member.getName()}"></td>
-            <td th:text="${member.getReason()}"></td>
-            <td th:text="${#temporals.format(member.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
-            <td><input type="button" value="상세보기" th:id="${member.getMemberNo()}"
-                       onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))"></td>
-            <td>
-                <input type="button" value="차단해제" th:id="${member.getId()}"
-                       onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">
-            </td>
-            <td>
-                <button><a th:href="@{/members/grade/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a></button>
-            </td>
-            <td>
-                <button><a th:href="@{/members/authority/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                    <tbody th:each="member, memberStat : ${list}">
+                    <tr>
+                        <td th:text="${memberStat.count}"></td>
+                        <td th:text="${member.getMemberId()}"></td>
+                        <td th:text="${member.getName()}"></td>
+                        <td th:text="${member.getReason()}"></td>
+                        <td th:text="${#temporals.format(member.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+                        <td>
+                            <button class="btn btn-outline-primary" th:id="${member.getMemberNo()}"
+                                    onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))">상세보기</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary" th:id="${member.getId()}"
+                                    onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">차단해제</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary">
+                                <a th:href="@{/members/grade/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary">
+                                <a th:href="@{/members/authority/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <th:block th:if="${list.isEmpty()}">
-        <h2>차단된 회원이 없습니다.</h2>
-    </th:block>
+        <th:block th:if="${list.isEmpty()}">
+            <h2>차단된 회원이 없습니다.</h2>
+        </th:block>
 
-</div>
-</body>
+    </div>
+</th:block>
 </html>
