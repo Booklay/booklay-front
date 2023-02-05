@@ -23,15 +23,15 @@
         <table class="table table-vcenter card-table">
             <thead>
             <tr>
-                <td>번호</td>
-                <td>쿠폰 ID</td>
-                <td>쿠폰 이름</td>
-                <td>쿠폰 타입</td>
-                <td>할인량</td>
-                <td>최소사용금액</td>
-                <td>최대할인금액</td>
-                <td>수량제한</td>
-                <td></td>
+                <th>번호</th>
+                <th>쿠폰 ID</th>
+                <th>쿠폰 이름</th>
+                <th>쿠폰 타입</th>
+                <th>할인량</th>
+                <th>최소사용금액</th>
+                <th>최대할인금액</th>
+                <th>수량제한</th>
+                <th></th>
             </tr>
             </thead>
             <tbody th:each="coupon, couponStat :${list}">
@@ -49,6 +49,7 @@
             <td><input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}" th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))"></td>
             </tbody>
         </table>
+        <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
     </div>
 </body>
 </html>

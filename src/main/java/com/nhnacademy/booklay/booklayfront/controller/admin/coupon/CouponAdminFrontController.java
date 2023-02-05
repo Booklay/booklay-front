@@ -124,7 +124,7 @@ public class CouponAdminFrontController {
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
 
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/listView";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")
@@ -134,6 +134,7 @@ public class CouponAdminFrontController {
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
+
         return RETURN_ADMIN_PAGE;
     }
 
@@ -146,7 +147,7 @@ public class CouponAdminFrontController {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
 
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/detailView";
     }
 
     /**
@@ -159,7 +160,7 @@ public class CouponAdminFrontController {
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
         model.addAttribute(TARGET_VIEW, "coupon/couponUpdateForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/couponUpdateForm";
     }
 
     /**
@@ -182,6 +183,7 @@ public class CouponAdminFrontController {
     public String deleteCoupon(@PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
         restService.delete(url);
+
         return RETURN_PAGE_COUPON_LIST;
     }
 }

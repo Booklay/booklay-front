@@ -8,124 +8,121 @@
 </head>
 
 <th:block layout:fragment="content">
+    <div class="row row-cards">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h4 class="card-title">쿠폰 생성</h4>
+                </div>
 
-    <div class="container-xl">
-        <div class="row row-cards">
-            <div class="col-12">
-                <form method="post" enctype="multipart/form-data">
-                    <div class="card-header">
-                        <h4 class="card-title">쿠폰 생성</h4>
-                    </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-3">
+                                <label class="form-label">쿠폰 이름</label>
+                                <input class="form-control" type="text" name="name">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">쿠폰 종류</label>
+                                <select class="form-select" type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
+                                    <th:block th:each="couponType:${couponTypeList}">
+                                        <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">할인량</label>
+                                <input class="form-control" type="number" name="amount">
+                            </div>
 
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 col-xl-3">
+                            <div id="select-item">
                                 <div class="mb-3">
-                                    <label class="form-label">쿠폰 이름</label>
-                                    <input class="form-control" type="text" name="name">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">쿠폰 종류</label>
-                                    <select class="form-select" type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
-                                        <th:block th:each="couponType:${couponTypeList}">
-                                            <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
-                                        </th:block>
+                                    <label class="form-label">적용 범위</label>
+                                    <select class="form-select" id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
+                                        <option value="1" selected>주문 쿠폰</option>
+                                        <option value="0">상품 쿠폰</option>
                                     </select>
                                 </div>
+
                                 <div class="mb-3">
-                                    <label class="form-label">할인량</label>
-                                    <input class="form-control" type="number" name="amount">
-                                </div>
-
-                                <div id="select-item">
-                                    <div class="mb-3">
-                                        <label class="form-label">적용 범위</label>
-                                        <select class="form-select" id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
-                                            <option value="1" selected>주문 쿠폰</option>
-                                            <option value="0">상품 쿠폰</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
-                                        <div class="row g-2">
-                                            <div class="col">
-                                                <input type="text" class="form-control" id="itemName" disabled="disabled">
-                                                <input hidden="hidden" type="number" name="applyItemId" id="itemId">
-                                            </div>
-                                            <div class="col-auto">
-                                                <button type="button" id="item-search-button" class="btn btn-icon" aria-label="Button" onclick="showCategoryPopup()">
-                                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-                                                </button>
-                                            </div>
+                                    <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
+                                    <div class="row g-2">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="itemName" disabled="disabled">
+                                            <input hidden="hidden" type="number" name="applyItemId" id="itemId">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" id="item-search-button" class="btn btn-icon" aria-label="Button" onclick="showCategoryPopup()">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-6 col-xl-3">
-                                <div class="mb-3">
-                                    <label class="form-label">최소 사용 금액</label>
-                                    <input class="form-control" type="number" name="minimumUseAmount" id="minimum-amount">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">최대 할인 금액</label>
-                                    <input class="form-control" type="number" name="maximumDiscountAmount" id="maximum-amount">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">발급 기한 일시</label>
-                                    <input class="form-control" type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline">
-                                </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-3">
+                                <label class="form-label">최소 사용 금액</label>
+                                <input class="form-control" type="number" name="minimumUseAmount" id="minimum-amount">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">최대 할인 금액</label>
+                                <input class="form-control" type="number" name="maximumDiscountAmount" id="maximum-amount">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">발급 기한 일시</label>
+                                <input class="form-control" type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline">
+                            </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">유효 기간</label>
-                                    <input class="form-control" type="number" name="validateTerm" id="validate-term">
+                            <div class="mb-3">
+                                <label class="form-label">유효 기간</label>
+                                <input class="form-control" type="number" name="validateTerm" id="validate-term">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-4">
+                                <div class="form-label">중복 사용 가능 여부</div>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isDuplicatable" value="true" checked id="duplicate-true">
+                                        <span class="form-check-label">중복 가능</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isDuplicatable" value="false" id="duplicate-false">
+                                        <span class="form-check-label">중복 불가</span>
+                                    </label>
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-xl-3">
-                                <div class="mb-4">
-                                    <div class="form-label">중복 사용 가능 여부</div>
-                                    <div>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="isDuplicatable" value="true" checked id="duplicate-true">
-                                            <span class="form-check-label">중복 가능</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="isDuplicatable" value="false" id="duplicate-false">
-                                            <span class="form-check-label">중복 불가</span>
-                                        </label>
-                                    </div>
+                            <div class="mb-3">
+                                <div class="form-label">수량 제한 여부</div>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isLimited" value="true" checked id="limited-true">
+                                        <span class="form-check-label">제한 있음</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isLimited" value="false" id="limited-false">
+                                        <span class="form-check-label">제한 없음</span>
+                                    </label>
                                 </div>
+                            </div>
 
-                                <div class="mb-3">
-                                    <div class="form-label">수량 제한 여부</div>
-                                    <div>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="isLimited" value="true" checked id="limited-true">
-                                            <span class="form-check-label">제한 있음</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="isLimited" value="false" id="limited-false">
-                                            <span class="form-check-label">제한 없음</span>
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">쿠폰 이미지</label>
+                                <input class="form-control" type="file" accept="image/*" name="image" id="image-input">
+                            </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">쿠폰 이미지</label>
-                                    <input class="form-control" type="file" accept="image/*" name="image" id="image-input">
-                                </div>
-
-                                <div class="text-end">
-                                    <input class="btn btn-primary" type="submit">
-                                </div>
+                            <div class="text-end">
+                                <input class="btn btn-primary" type="submit">
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </th:block>

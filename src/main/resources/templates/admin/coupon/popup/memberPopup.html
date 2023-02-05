@@ -27,11 +27,11 @@
     <div th:unless="${#lists.isEmpty(list)}">
         <table border="1px">
             <tr>
-                <td>번호</td>
-                <td>회원 ID</td>
-                <td>회원 닉네임</td>
-                <td>생일</td>
-                <td></td>
+                <th>번호</th>
+                <th>회원 ID</th>
+                <th>회원 닉네임</th>
+                <th>생일</th>
+                <th></th>
             </tr>
             <tbody th:each="member, memberStat :${list}">
             <tr>
