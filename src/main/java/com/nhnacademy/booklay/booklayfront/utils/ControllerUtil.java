@@ -51,16 +51,17 @@ public class ControllerUtil {
     }
 
     public static Map<String, String> getMemberInfoMap(MemberInfo memberInfo){
-        if (memberInfo.getMemberId() == null) {
+        if (memberInfo.getMemberNo() == null) {
             Map<String, String> map = new HashMap<>();
-            map.put("memberNo", null);
-            map.put("gender", null);
-            map.put("memberId", null);
-            map.put("nickname", null);
-            map.put("name", null);
-            map.put("birthday", null);
-            map.put("phoneNo", null);
-            map.put("email", null);
+            String nullChangeText = "\u0000";
+            map.put("memberNo", nullChangeText);
+            map.put("gender", nullChangeText);
+            map.put("memberId", nullChangeText);
+            map.put("nickname", nullChangeText);
+            map.put("name", nullChangeText);
+            map.put("birthday", nullChangeText);
+            map.put("phoneNo", nullChangeText);
+            map.put("email", nullChangeText);
             return map;
         }else {
             return objectMapper.convertValue(memberInfo, Map.class);
