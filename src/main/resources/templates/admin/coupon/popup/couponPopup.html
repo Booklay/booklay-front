@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="ko">
 <head>
     <title>쿠폰 선택</title>
     <script src="/js/coupon/couponPopup.js"></script>
@@ -13,14 +14,14 @@
     <link href="/plugins/tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
     <link href="/plugins/tabler/dist/css/demo.min.css" rel="stylesheet"/>
 </head>
-<html lang="ko">
 
-<div th:if="${#lists.isEmpty(list)}">
-    <div>등록된 쿠폰이 없습니다.</div>
-</div>
-<div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
-    <table class="table table-vcenter card-table">
-        <thead>
+<body>
+    <div th:if="${#lists.isEmpty(list)}">
+        <div>등록된 쿠폰이 없습니다.</div>
+    </div>
+    <div class="card-table table-responsive" th:unless="${#lists.isEmpty(list)}">
+        <table class="table table-vcenter card-table">
+            <thead>
             <tr>
                 <td>번호</td>
                 <td>쿠폰 ID</td>
@@ -32,8 +33,8 @@
                 <td>수량제한</td>
                 <td></td>
             </tr>
-        </thead>
-        <tbody th:each="coupon, couponStat :${list}">
+            </thead>
+            <tbody th:each="coupon, couponStat :${list}">
             <td><p th:text="${couponStat.count}"></p></td>
             <td><p th:text="${coupon.id}"></p></td>
             <td><p th:text="${coupon.name}"></p></td>
@@ -46,7 +47,8 @@
                 <p th:unless="${coupon.isLimited}">X</p>
             </td>
             <td><input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}" th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))"></td>
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
+</body>
 </html>

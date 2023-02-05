@@ -52,18 +52,15 @@ public class CouponAdminFrontController {
     }
 
     /**
-     * coupon index
-     *
+     * admin/coupons 인덱스 페이지는 쿠폰 조회 페이지.
      */
     @GetMapping
-    public String adminCouponPage(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/empty");
-        return RETURN_ADMIN_PAGE;
+    public String adminCouponPage() {
+        return RETURN_PAGE_COUPON_LIST;
     }
 
     /**
      * 쿠폰 생성 폼.
-     *
      */
     @GetMapping("/create-form")
     public String createCouponForm(Model model) {
