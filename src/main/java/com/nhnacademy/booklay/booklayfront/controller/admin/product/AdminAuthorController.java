@@ -111,24 +111,6 @@ public class AdminAuthorController {
   }
 
   /**
-   * 작가 수정
-   * @param request
-   * @param pageNum
-   * @return
-   */
-  @PostMapping("/maintenance/update/{pageNum}")
-  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request,
-      @PathVariable Long pageNum) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
-
-    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-        CreateDeleteProductRecommendRequest.class);
-
-    return MAINTENANCE + "?page=" + pageNum + "&size=" + SIZE;
-
-  }
-
-  /**
    * 작가 삭제
    * @param request
    * @param pageNum
@@ -163,24 +145,6 @@ public class AdminAuthorController {
   }
 
   /**
-   * 작가 수정
-   * @param request
-   * @param pageNum
-   * @return
-   */
-  @PostMapping("/popup/update/{pageNum}")
-  public String updateAuthorFromPopup(@Valid @ModelAttribute UpdateAuthorRequest request,
-      @PathVariable Long pageNum) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
-
-    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-        CreateDeleteProductRecommendRequest.class);
-
-    return POPUP + "?page=" + pageNum + "&size=" + SIZE;
-
-  }
-
-  /**
    * 작가 삭제
    * @param request
    * @param pageNum
@@ -196,6 +160,41 @@ public class AdminAuthorController {
 
   }
 
+  /**
+   * 작가 수정 팝업 조회
+   * @param authorNo
+   * @return
+   */
+  @GetMapping("/edit/{authorNo}")
+  public String getAuthorEditPopup(@PathVariable String authorNo, Model model){
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX + "/" + authorNo);
+
+    ApiEntity<RetrieveAuthorResponse> author = restService.get(uri.toString(), null,
+        RetrieveAuthorResponse.class);
+
+    model.addAttribute("author", author.getBody());
+    return "admin/product/author/edit";
+  }
+
+
+  /**
+   * 작가 수정 요청
+   * @param request
+   * @return
+   */
+  @PostMapping()
+  public void updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
+
+    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+        CreateDeleteProductRecommendRequest.class);
+  }
+
+  /**
+   * 작가 페이지 조회 rest Service
+   * @param page
+   * @return
+   */
   private PageResponse<RetrieveAuthorResponse> retrieveAuthors(
       int page) {
     URI uri = URI.create(

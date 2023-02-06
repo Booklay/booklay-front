@@ -1,4 +1,3 @@
-
 let catNo = 1;
 
 let authorNo = 1;

@@ -36,11 +36,10 @@ public class UpdateProductSubscribeRequest {
 
   @NotNull
   Long subscribeId;
-  @NotNull
   Long subscribeWeek;
-  @NotNull
   Long subscribeDay;
+  List<Long> childProducts;
+
   @NotNull
   String publisher;
-  List<Long> childProducts;
 }

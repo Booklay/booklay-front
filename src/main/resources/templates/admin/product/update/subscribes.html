@@ -12,10 +12,14 @@
 <!---->
 <th:block layout:fragment="content">
   <!--/* 프레그먼트 내용 작성 */-->
-  <form method="post" action="/admin/product/create/subscribes" enctype="multipart/form-data">
+  <form method="post" action="/admin/product/update/subscribes" enctype="multipart/form-data">
     <div class="mb-3">
+      <input type="number" name="subscribeId" th:value="${product.subscribe.id}" hidden="hidden"/>
+      <input type="number" name="productId" th:value="${product.info.id}" hidden="hidden"/>
+      <input type="datetime-local" name="createdAt" th:value="${product.info.createdAt}" hidden="hidden"/>
+
       <label class="form-label">제목</label>
-      <input type="text" class="form-control" name="title" placeholder="Input placeholder">
+      <input type="text" class="form-control" name="title" th:value="${product.info.title}">
     </div>
 
     <div class="mb-3">
@@ -26,18 +30,18 @@
 
     <div class="mb-3">
       <label class="form-label">가격</label>
-      <input type="number" class="form-control" min="0" step="1" name="price">
+      <input type="number" class="form-control" min="0" step="1" name="price" th:value="${product.info.price}">
     </div>
 
     <div class="mb-3">
       <div class="form-label">포인트 적립 정책 선택</div>
       <div>
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="pointMethod" value="true" checked>
+          <input class="form-check-input" type="radio" name="pointMethod" value="true" th:checked="${product.info.pointMethod}">
           <span class="form-check-label">적립 O</span>
         </label>
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="pointMethod" value="false">
+          <input class="form-check-input" type="radio" name="pointMethod" value="false" th:checked="${!product.info.pointMethod}">
           <span class="form-check-label">적립 X</span>
         </label>
       </div>
@@ -45,7 +49,7 @@
 
     <div class="mb-3">
       <label class="form-label">적립률</label>
-      <input type="number" class="form-control" min="0" step="1" name="pointRate" th:value="${defaultPointRate}">
+      <input type="number" class="form-control" min="0" step="1" name="pointRate" th:value="${product.info.pointRate}">
     </div>
 
     <label class="form-label">짧은 설명</label>
@@ -63,18 +67,18 @@
     <div class="mb-3">
       <label class="form-label">출판사</label>
       <input type="text" class="form-control" name="publisher"
-             placeholder="Input placeholder">
+             th:value="${product.subscribe.publisher}">
     </div>
 
     <div class="mb-3">
       <div class="form-label">품절 지정</div>
       <div>
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="selling" value="true" checked>
+          <input class="form-check-input" type="radio" name="selling" value="true" th:checked="${product.info.selling}">
           <span class="form-check-label">품절 설정</span>
         </label>
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="selling" value="false">
+          <input class="form-check-input" type="radio" name="selling" value="false" th:checked="${product.info.selling}">
           <span class="form-check-label">재고 있음</span>
         </label>
       </div>
@@ -83,7 +87,7 @@
     <div class="card-footer text-end">
       <div class="d-flex">
         <a href="#" class="btn btn-link">취소</a>
-        <button type="submit" class="btn btn-primary ms-auto" id="btn-submit">구독 상품 생성</button>
+        <button type="submit" class="btn btn-primary ms-auto" id="btn-submit">구독 상품 수정</button>
       </div>
     </div>
   </form>
@@ -97,7 +101,7 @@
         height: '500px',
         initialEditType: 'markdown',
         previewStyle: 'vertical',
-        initialValue: [[${product.shortDescription}]],
+        initialValue: [[${product.info.shortDescription}]],
         autofocus: false
       });
       editor1.getMarkdown();
@@ -107,7 +111,7 @@
         height: '500px',
         initialEditType: 'markdown',
         previewStyle: 'vertical',
-        initialValue: [[${product.longDescription}]],
+        initialValue: [[${product.info.longDescription}]],
         autofocus: false
       });
       editor2.getMarkdown();

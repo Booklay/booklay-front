@@ -11,12 +11,14 @@
       <div class="card-body">
         <div class="row">
 
+<!--          사진 부분-->
           <div class="col-4">
             <!--            -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
 
             <!--          -->
           </div>
+<!--          안내 부분-->
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.info.title}"></p>
             <p class="h4" th:utext="${product.info.shortDescription}"></p>
@@ -94,31 +96,31 @@
                      value="태그 등록 팝업창 호출"
                      onclick="showTagRegisterPopup(id);"/>
 
-              <form class="btnAtVar" th:if="${product.detail != null}" method="get"
+              <form th:if="${product.detail != null}" method="get"
                     th:action="@{/admin/product/update/books/{productId} (productId = ${productNo})}">
-                <input class="btn btn-outline-primary btnAtVar" type="submit" value="수정"/>
+                <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
 
-              <form class="btnAtVar" th:if="${product.subscribe != null}" method="get"
+              <form th:if="${product.subscribe != null}" method="get"
                     th:action="@{/admin/product/update/subscribes/{productId} (productId = ${productNo})}">
-                <input class="btn btn-outline-primary btnAtVar" type="submit" value="수정"/>
+                <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
 
-              <form class="btnAtVar" method="post"
+              <form method="post"
                     th:if="${!product.info.deleted}"
                     th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
-                <input class="btn btn-outline-danger btnAtVar" type="submit" value="삭제"/>
+                <input class="btn btn-outline-danger" type="submit" value="삭제"/>
               </form>
 
-              <form class="btnAtVar" method="post"
+              <form method="post"
                     th:if="${product.info.deleted}"
                     th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
-                <input class="btn btn-outline-primary btnAtVar" type="submit" value="복구"/>
+                <input class="btn btn-outline-primary" type="submit" value="복구"/>
               </form>
 
             </th:block>
           </div>
-
+          <!--카테고리-->
           <div class="col-12 my-4">
             <h1>관련 분류</h1>
 
@@ -240,6 +242,8 @@
           <!--          구독 상품 자식 상품 종료-->
 
         </div>
+
+        <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
 
       </div>
     </div>
