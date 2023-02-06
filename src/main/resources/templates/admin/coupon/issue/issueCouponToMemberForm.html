@@ -1,24 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <meta charset="UTF-8">
     <title>사용자 쿠폰 발급</title>
     <script src="/js/coupon/couponPopup.js"></script>
-    <link href="/css/form.css" rel="stylesheet">
 </head>
-<body>
-<div id="input-form">
-    <form method="post" enctype="multipart/form-data">
-        <label for="couponId">쿠폰 종류</label>
-        <input type="text" id="couponId" name="couponId">
-        <input type="button" value="쿠폰 찾기" onclick="showCouponPopup();"> <br/>
 
-        <label for="memberId">발급할 회원</label>
-        <input type="text" id="memberId" name="memberId">
-        <input type="button" value="회원 찾기" onclick="showMemberPopup();"> <br/>
+<th:block layout:fragment="content">
+    <div class="row-cards">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h4 class="card-title">사용자에게 쿠폰 발급</h4>
+                </div>
 
-        <input type="submit" value="발급">
-    </form>
-</div>
-</body>
-</html>
+                <div class="card-body">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="mb-3">
+                            <label class="form-label">쿠폰 종류
+                                <span class="form-label-description">발급하려는 쿠폰의 종류를 선택하세요.</span>
+                            </label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" id="couponName" disabled="disabled" required>
+                                    <input hidden="hidden" type="number" name="couponId" id="couponId">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-icon" aria-label="Button" onclick="showCouponPopup()">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">발급할 회원
+                                <span class="form-label-description">발급 대상 회원을 선택하세요.</span>
+                            </label>
+                            <div class="row g-2">
+                                <div class="col">
+                                    <input type="text" class="form-control" id="memberName" disabled="disabled">
+                                    <input hidden="hidden" type="number" name="memberId" id="memberId">
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-icon" aria-label="Button" onclick="showMemberPopup()">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-left">
+                            <input class="btn btn-primary" type="submit" value="발급 하기">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>

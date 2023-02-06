@@ -1,13 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_MEMBER_REST_PREFIX;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,7 @@ public class MemberRestApiModelSettingService {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, "/admin/members");
         ApiEntity<PageResponse<MemberRetrieveResponse>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
         model.addAttribute("list", apiEntity.getBody().getData());
     }
 }

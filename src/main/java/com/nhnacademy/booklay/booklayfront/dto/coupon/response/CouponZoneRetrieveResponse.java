@@ -8,6 +8,7 @@ import lombok.ToString;
 @ToString
 public class CouponZoneRetrieveResponse {
     private Long id;
+    private Long couponId;
     private String name;
     private String description;
     private LocalDateTime openedAt;

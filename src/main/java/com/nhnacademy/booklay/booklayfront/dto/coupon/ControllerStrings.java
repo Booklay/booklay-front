@@ -12,7 +12,7 @@ public class ControllerStrings {
     public static final String TARGET_VIEW = "targetUrl";
     public static final String PAGE_NUM = "pageNum";
     public static final String ERROR = "error";
-    public static final String RETURN_ADMIN_PAGE = "/admin/adminPage";
+    public static final String RETURN_ADMIN_PAGE = "admin/adminPage";
 
     public static final String ADMIN_COUPON_REST_PREFIX = "/admin/coupons/";
     public static final String ADMIN_COUPON_TYPES_REST_PREFIX = "/admin/couponTypes/";

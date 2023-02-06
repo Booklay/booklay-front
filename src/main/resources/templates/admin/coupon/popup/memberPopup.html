@@ -1,48 +1,46 @@
 <!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
 <head>
-    <!-- Favicon -->
-    <link th:href="@{/img/favicon.ico}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-  <script src="/js/coupon/couponPopup.js"></script>
+    <title>회원 선택</title>
+    <script src="/js/coupon/couponPopup.js"></script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Dashboard - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <!-- CSS files -->
+    <link href="/plugins/tabler/dist/css/tabler.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="/plugins/tabler/dist/css/demo.min.css" rel="stylesheet"/>
 </head>
-<html lang="ko">
-<h2>회원 선택</h2>
-<div id="header-carousel" class="carousel slide" data-ride="carousel">
-    <div th:if="${#lists.isEmpty(list)}">
-        등록된 회원이 없습니다.
-    </div>
-    <div th:unless="${#lists.isEmpty(list)}">
-        <table border="1px">
+<body>
+<div th:if="${#lists.isEmpty(list)}">
+    <div>등록된 멤버가 없습니다.</div>
+</div>
+
+<div class="card" th:unless="${#lists.isEmpty(list)}">
+    <div class="card-table table-responsive">
+        <table class="table table-vcenter card-table">
+            <thead>
             <tr>
-                <td>번호</td>
-                <td>회원 ID</td>
-                <td>회원 닉네임</td>
-                <td>생일</td>
-                <td></td>
+                <th>번호</th>
+                <th>회원 ID</th>
+                <th>회원 닉네임</th>
+                <th>생일</th>
+                <th></th>
             </tr>
+            </thead>
             <tbody th:each="member, memberStat :${list}">
-            <tr>
                 <td><p th:text="${memberStat.count}"></p></td>
                 <td><p th:text="${member.memberNo}"></p></td>
                 <td><p th:text="${member.nickname}"></p></td>
                 <td><p th:text="${member.birthday}"></p></td>
-                <td><input type="button" value="선택" th:id="${member.memberNo}" th:onclick="setMemberText(this.getAttribute('id'))"></td>
-            </tr>
+                <td><input type="button" value="선택" th:id="${member.memberNo}" th:name="${member.nickname}" th:onclick="setMemberText(this.getAttribute('id'), this.getAttribute('name'))"></td>
             </tbody>
         </table>
+        <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
     </div>
 </div>
+</body>
 </html>

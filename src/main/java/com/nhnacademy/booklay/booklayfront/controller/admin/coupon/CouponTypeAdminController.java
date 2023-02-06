@@ -24,21 +24,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupons/types")
 public class CouponTypeAdminController {
+
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
     private final CouponRestApiModelSettingService restApiService;
     private static final String COUPON_TYPE_REDIRECT_LIST = "redirect:/admin/coupons/types/list";
 
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
-    }
-
     @GetMapping("/create")
     public String createCouponTypeForm(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/type/createCouponTypeForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/type/createCouponTypeForm";
     }
 
     @PostMapping("/create")
@@ -48,16 +43,16 @@ public class CouponTypeAdminController {
 
         Map<String, Object> map = objectMapper.convertValue(couponTypeAddRequest, Map.class);
         restService.post(url, map, String.class);
-        return COUPON_TYPE_REDIRECT_LIST;
+
+        return "redirect:/admin/coupons/types/list";
     }
 
     @GetMapping("/list")
     public String allCouponTypeList(Model model, @RequestParam(value = "page", defaultValue = "0")
     Integer pageNum) {
         restApiService.setCouponTypeListToModelByPage(pageNum, model);
-        model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/type/typeListView");
-        return RETURN_ADMIN_PAGE;
+
+        return "admin/coupon/type/typeListView";
     }
 
     @PostMapping("/update")

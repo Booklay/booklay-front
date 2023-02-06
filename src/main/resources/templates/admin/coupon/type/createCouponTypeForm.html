@@ -1,15 +1,37 @@
 <!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <title>쿠폰 종류 생성</title>
 </head>
-<html lang="ko">
-    <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <form action="/admin/coupons/types/create" method="post" enctype="multipart/form-data">
-            <label>쿠폰 코드 : <input type="number" name="id"> </label> <br/>
-            <label>쿠폰 타입 이름 : <input type="text" name="name"> </label> <br/>
-            <input type="submit">
-        </form>
-    </div>
-</html>
 
+<th:block layout:fragment="content">
+    <div class="row-cards">
+        <div class="col-12">
+            <form action="/admin/coupons/types/create" method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h4 class="card-title">쿠폰 타입 생성</h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="col-md-6 col-xl-3">
+                        <div class="mb-3">
+                            <label class="form-label">쿠폰 타입 코드</label>
+                            <input class="form-control" type="number" name="id">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">쿠폰 타입 이름</label>
+                            <input class="form-control" type="text" name="name">
+                        </div>
+
+                        <div class="text-left">
+                            <input type="submit" class="btn btn-primary" value="생성 하기">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
 

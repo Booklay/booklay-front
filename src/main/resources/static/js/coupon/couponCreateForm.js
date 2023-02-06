@@ -16,14 +16,21 @@ function changeByType() {
 function changeByRange() {
     let couponRange = document.getElementById("coupon-range");
     let rangeValue = couponRange.value;
+
     let itemLabel = document.getElementById("apply-item-label");
     let searchButton = document.getElementById("item-search-button");
+    let itemName = document.getElementById("itemName");
+    let itemId = document.getElementById("itemId");
 
     if(rangeValue === "1") {
         itemLabel.innerText = "적용 카테고리 번호"
-        searchButton.setAttribute("onClick", "showCategoryPopup()")
+        searchButton.setAttribute("onclick", "showCategoryPopup()");
+        itemId.value = null;
+        itemName.value = null;
     } else if(rangeValue === "0") {
         itemLabel.innerText = "적용 상품 번호"
-        searchButton.setAttribute("onClick", "showProductPopup()")
+        searchButton.setAttribute("onclick", "showProductPopup()");
+        itemId.value = null;
+        itemName.value = null;
     }
 }
