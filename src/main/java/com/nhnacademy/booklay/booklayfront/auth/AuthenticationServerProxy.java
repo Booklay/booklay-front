@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.auth;
 
 import com.nhnacademy.booklay.booklayfront.auth.dto.LoginRequest;
+import com.nhnacademy.booklay.booklayfront.auth.dto.RefreshTokenRequest;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberResponse;
 import java.util.Collections;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -64,6 +67,23 @@ public class AuthenticationServerProxy {
                                 Collections.singletonList(memberResponse.getAuthority()));
     }
 
+    public JwtInfo refreshAccessToken(String refreshToken, String accessToken) {
+        String url = gatewayIp + AUTH_PREFIX + "/members/refresh";
+
+        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(refreshToken, accessToken);
+        ResponseEntity<Void> response = restTemplate.postForEntity(url, refreshTokenRequest, Void.class);
+        List<String> accessTokenHeaders = response.getHeaders().get(HttpHeaders.AUTHORIZATION);
+
+        if (Objects.isNull(accessTokenHeaders) ||!accessTokenHeaders.get(0).startsWith("Bearer ")) {
+            throw new JwtException("Invalid Access Token");
+        }
+
+        String newAccessToken = accessTokenHeaders.get(0).replace("Bearer ", "");
+
+        return JwtInfo.builder()
+                   .accessToken(newAccessToken)
+                   .build();
+    }
     private JwtInfo getJwtInfo(String url, LoginRequest loginRequest) {
         ResponseEntity<Void> response = restTemplate.postForEntity(url, loginRequest, Void.class);
 

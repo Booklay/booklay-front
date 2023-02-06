@@ -8,7 +8,9 @@ import java.io.IOException;
 import com.nhnacademy.booklay.booklayfront.auth.interceptor.JwtAddInterceptor;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 import java.time.Duration;
+import org.springframework.web.multipart.support.MultipartFilter;
 import org.springframework.web.server.MethodNotAllowedException;
 
 @Configuration
@@ -53,6 +56,17 @@ public class WebConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
+    }
+
+    @Bean
+    public FilterRegistrationBean<MultipartFilter> multipartFilter() {
+        FilterRegistrationBean<MultipartFilter> registrationBean
+            = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new MultipartFilter());
+        registrationBean.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER - 1);
+
+        return registrationBean;
     }
 
     @Bean
