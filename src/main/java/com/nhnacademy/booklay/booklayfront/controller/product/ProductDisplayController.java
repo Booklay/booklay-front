@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
@@ -54,19 +54,17 @@ public class ProductDisplayController extends BaseController {
 
   //게시판형 전채 상품 호출
   @GetMapping("/display")
-  public String retrieveProduct(
-      Model model,
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum,
-      @RequestParam(value="CID", required = false) Long cid
-  ) {
+  public String retrieveProduct(Model model,
+      @RequestParam(value = "CID", required = false) Long cid,
+      @RequestParam(value = "page", required = false) Optional<Integer> pageNum) {
 
     List<CategorySteps> categorySteps = (List<CategorySteps>) model.getAttribute("categories");
 
-    if(Objects.isNull(cid)){
+    if (Objects.isNull(cid)) {
       cid = categoryService.getDefaultCategoryId(categorySteps);
     }
 
-    CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps,cid);
+    CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps, cid);
 
     log.error(" currentCategory : {}", currentCategory);
 
@@ -141,7 +139,6 @@ public class ProductDisplayController extends BaseController {
 
     return "product/view";
   }
-
 
   //  @GetMapping("/display")
   public String categoryViewer(

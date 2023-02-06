@@ -36,11 +36,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/tag")
+@RequestMapping("/admin/product/tag")
 public class AdminTagController {
 
-  private static final String MAINTENANCE_PRE_FIX = "redirect:/admin/tag/maintenance";
-  private static final String CONNECTION_PRE_FIX = "redirect:/admin/tag/connection";
+  private static final String MAINTENANCE_PRE_FIX = "redirect:/admin/product/tag/maintenance";
+  private static final String CONNECTION_PRE_FIX = "redirect:/admin/product/tag/connection";
   private static final String SHOP_URI_PRE_FIX = "/shop/v1/admin/tag";
   private static final Long SIZE = 20L;
   private final String gatewayIp;
@@ -68,7 +68,7 @@ public class AdminTagController {
       model.addAttribute("tagList", tagList);
       model.addAttribute(TARGET_VIEW, "product/adminTag");
 
-      return "admin/adminPage";
+      return "admin/product/tag/maintenance";
     }
     return "/index";
   }
@@ -122,7 +122,7 @@ public class AdminTagController {
     model.addAttribute("tagList", tagList);
     model.addAttribute("productNo", productNo);
 
-    return "admin/product/productTagConnector";
+    return "admin/product/tag/connector";
   }
 
   /**

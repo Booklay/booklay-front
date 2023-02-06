@@ -1,0 +1,9 @@
+input[type='text']:disabled {
+  border: none;
+  background: none;
+}
+
+input[type='number']:disabled {
+  border: none;
+  background: none;
+}

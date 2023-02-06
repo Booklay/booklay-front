@@ -9,7 +9,7 @@ booklay:
   gateway-origin: http://localhost:8080
 
   redis:
-    host: 127.0.0.1
+    host: 133.186.151.141
     port: 6379
-    database: 0
-    password:
+    database: 4
+    password: "*N2vya7H@muDTwdNMR!"
