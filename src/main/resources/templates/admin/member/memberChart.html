@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <meta charset="UTF-8">
     <title>회원 통계 페이지</title>
@@ -43,8 +45,10 @@
 
 <!--TODO 등급별 통계도 구현해야 함-->
 
-<body>
+<th:block layout:fragment="content">
 <h3>[회원 통계]</h3>
 <div id="chart_div"></div>
-</body>
+
+</th:block>>
 </html>
+

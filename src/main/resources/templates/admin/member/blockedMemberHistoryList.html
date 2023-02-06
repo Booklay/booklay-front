@@ -1,37 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
 <head>
     <meta charset="UTF-8">
     <title>회원 차단 내역</title>
 </head>
-<body>
-<div>
-  <h3>[회원 차단 내역 리스트]</h3>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>회원 ID</th>
-            <th>차단사유</th>
-            <th>차단일자</th>
-            <th>해제일자</th>
-        </tr>
-        </thead>
 
-        <tbody th:each="history, historyStat : ${list}">
-        <tr>
-            <td th:text="${historyStat.count}"></td>
-            <td th:text="${history.getMemberId()}"></td>
-            <td th:text="${history.getReason()}"></td>
-            <td th:text="${#temporals.format(history.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
-            <td th:text="${#temporals.format(history.getReleasedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
-        </tr>
-        </tbody>
-    </table>
+<th:block layout:fragment="content">
+    <div>
+        <h3>[회원 차단 내역 리스트]</h3>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>회원 ID</th>
+                        <th>차단사유</th>
+                        <th>차단일자</th>
+                        <th>해제일자</th>
+                    </tr>
+                    </thead>
 
-    <th:block th:if="${list.isEmpty()}">
-        <h2>등록된 차단내역이 없습니다.</h2>
-    </th:block>
-</div>
-</body>
+                    <tbody th:each="history, historyStat : ${list}">
+                    <tr>
+                        <td th:text="${historyStat.count}"></td>
+                        <td th:text="${history.getMemberId()}"></td>
+                        <td th:text="${history.getReason()}"></td>
+                        <td th:text="${#temporals.format(history.getBlockedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+                        <td th:text="${#temporals.format(history.getReleasedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <th:block th:if="${list.isEmpty()}">
+                    <h2>등록된 차단내역이 없습니다.</h2>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</th:block>
 </html>

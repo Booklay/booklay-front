@@ -35,7 +35,6 @@ public class MemberAdminController {
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
-    private final static String ADMINPAGE = "admin/adminPage";
 
     public MemberAdminController(String gateway, RestService restService,
                                  ObjectMapper objectMapper) {
@@ -59,9 +58,8 @@ public class MemberAdminController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-            model.addAttribute("targetUrl", "member/memberList");
 
-            return ADMINPAGE;
+            return "admin/member/memberList";
         } else {
             return "/";
         }
@@ -83,9 +81,8 @@ public class MemberAdminController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-            model.addAttribute("targetUrl", "member/blockedMemberList");
 
-            return ADMINPAGE;
+            return "admin/member/blockedMemberList";
         } else {
             return "/";
         }
@@ -132,9 +129,8 @@ public class MemberAdminController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-            model.addAttribute("targetUrl", "member/droppedMemberList");
 
-            return ADMINPAGE;
+            return "admin/member/droppedMemberList";
         } else {
             return "/";
         }
@@ -173,10 +169,8 @@ public class MemberAdminController {
 
         model.addAttribute("counts", memberResponse.getBody());
         model.addAttribute("gradeCounts", gradeResponse.getBody());
-        model.addAttribute("targetUrl", "member/memberChart");
 
-        return ADMINPAGE;
-//        return "admin/member/memberChart";
+        return "admin/member/memberChart";
     }
 
     @PostMapping("/block/{memberNo}")

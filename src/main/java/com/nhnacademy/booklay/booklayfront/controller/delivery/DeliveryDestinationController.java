@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.delivery;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
@@ -27,28 +29,27 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
-@RequestMapping("/address")
+@RequestMapping("/member/profile/address")
 public class DeliveryDestinationController {
     private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
-    private final static String MYPAGE = "mypage/myPage";
 
     public DeliveryDestinationController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
-        redirectGatewayPrefix = gateway + "/shop/v1" + "/delivery/destination";
+        redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/delivery/destination";
     }
 
-    @PostMapping("/register/{memberNo}")
+    @PostMapping("/register")
     public String create(@Valid @ModelAttribute DeliveryDestinationCURequest requestDto,
                          BindingResult bindingResult,
-                         @PathVariable Long memberNo,
+                         MemberInfo memberInfo,
                          Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = URI.create(redirectGatewayPrefix + "/create/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/create/" + memberInfo.getMemberNo());
 
         RequestEntity<String> requestEntity =
             new RequestEntity<>(objectMapper.writeValueAsString(requestDto), headers,
@@ -57,22 +58,22 @@ public class DeliveryDestinationController {
         ResponseEntity<Void> response =
             restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/address/" + memberNo;
+        return "redirect:/member/profile/address";
     }
 
-    @GetMapping("/register/{memberNo}")
-    public String retrieveCreateForm(@PathVariable Long memberNo,
+    @GetMapping("/register")
+    public String retrieveCreateForm(MemberInfo memberInfo,
                                      Model model) {
-        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
         return "mypage/member/memberAddressRegisterForm";
     }
 
-    @GetMapping("/{memberNo}")
-    public String retrieveAddress(@PathVariable Long memberNo, Model model) {
+    @GetMapping
+    public String retrieveAddress(Model model, MemberInfo memberInfo) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefix + "/list/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/list/" + memberInfo.getMemberNo());
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.GET, uri);
@@ -83,14 +84,13 @@ public class DeliveryDestinationController {
                 });
 
         model.addAttribute("addresses", response.getBody());
-        model.addAttribute("memberNo", memberNo);
-        model.addAttribute("targetUrl", "member/memberAddressList");
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
 
-        return MYPAGE;
+        return "mypage/member/memberAddressList";
     }
 
-    @GetMapping("/update/{memberNo}/{addressNo}")
-    public String retrieveUpdateAddressForm(@PathVariable Long memberNo,
+    @GetMapping("/update/{addressNo}")
+    public String retrieveUpdateAddressForm(MemberInfo memberInfo,
                                             @PathVariable Long addressNo,
                                             Model model) {
         HttpHeaders headers = new HttpHeaders();
@@ -105,16 +105,15 @@ public class DeliveryDestinationController {
             restTemplate.exchange(requestEntity, DeliveryDestinationRetrieveResponse.class);
 
         model.addAttribute("address", response.getBody());
-        model.addAttribute("memberNo", memberNo);
-        model.addAttribute("targetUrl", "member/memberAddressUpdateForm");
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
 
-        return MYPAGE;
+        return "mypage/member/memberAddressUpdateForm";
     }
 
-    @PostMapping("/update/{memberNo}/{addressNo}")
+    @PostMapping("/update/{addressNo}")
     public String updateAddress(@Valid @ModelAttribute DeliveryDestinationCURequest requestDto,
                                 BindingResult bindingResult,
-                                @PathVariable Long memberNo,
+                                MemberInfo memberInfo,
                                 @PathVariable Long addressNo,
                                 Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -122,27 +121,28 @@ public class DeliveryDestinationController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = URI.create(redirectGatewayPrefix + "/update/" + memberNo + "/" + addressNo);
+        URI uri = URI.create(
+            redirectGatewayPrefix + "/update/" + memberInfo.getMemberNo() + "/" + addressNo);
 
 
         RequestEntity<String> requestEntity =
             new RequestEntity<>(objectMapper.writeValueAsString(requestDto), headers,
                 HttpMethod.POST, uri);
 
-        ResponseEntity<Void> response =
-            restTemplate.exchange(requestEntity, Void.class);
+        restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/address/" + memberNo;
+        return "redirect:/member/profile/address";
     }
 
-    @GetMapping("/delete/{memberNo}/{addressNo}")
-    public String deleteAddress(@PathVariable Long memberNo,
+    @GetMapping("/delete/{addressNo}")
+    public String deleteAddress(MemberInfo memberInfo,
                                 @PathVariable Long addressNo,
                                 Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefix + "/delete/" + memberNo + "/" + addressNo);
+        URI uri = URI.create(
+            redirectGatewayPrefix + "/delete/" + memberInfo.getMemberNo() + "/" + addressNo);
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.DELETE, uri);
@@ -152,14 +152,6 @@ public class DeliveryDestinationController {
 
         model.addAttribute("address", response.getBody());
 
-        return "redirect:/address/" + memberNo;
-    }
-
-    @GetMapping("/test")
-    public String test(MemberInfo memberInfo, Model model) {
-
-        model.addAttribute("memberInfo", memberInfo);
-        return "/";
-
+        return "redirect:/member/profile/address";
     }
 }
