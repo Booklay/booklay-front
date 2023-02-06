@@ -207,7 +207,7 @@ public class AdminProductController extends BaseController {
       return "index";
     }
 
-    return "admin/product/popup/categoryPopup";
+    return "admin/product/category/popup";
 
   }
 

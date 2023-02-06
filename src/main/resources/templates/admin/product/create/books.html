@@ -100,7 +100,7 @@
              id="datepicker-icon-prepend" value="2020-06-20" required/>
     </div>
 
-    <label class="form-label">카테고리 등록</label>
+    <label class="form-label">작가 등록</label>
     <input class="btn btn-outline-primary" th:id="${productNo}" type="button" value="작가 팝업창 호출" onclick="showAuthor();"/>
     <div id="authors"></div>
 
@@ -120,11 +120,11 @@
       <div>
         <label class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="selling" value="true" checked>
-          <span class="form-check-label">품절 설정</span>
+          <span class="form-check-label">재고 있음</span>
         </label>
         <label class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="selling" value="false">
-          <span class="form-check-label">재고 있음</span>
+          <span class="form-check-label">품절 설정</span>
         </label>
       </div>
     </div>
