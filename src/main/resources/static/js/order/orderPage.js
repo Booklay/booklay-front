@@ -91,14 +91,15 @@ function setCouponData(couponCode, productNo, duplicable){
 }
 
 function updatePoint(){
-    let usingPoint = document.getElementById("usePoint").value;
-    let usingPointAmount = usingPoint.value;
+    let usingPoint = document.getElementById("usePoint");
+    let usingPointAmount = parseInt(usingPoint.value);
     if (usingPointAmount<0){
         usingPoint.value = 0;
     }
     if (userPointAmount< usingPointAmount){
         usingPoint.value = userPointAmount;
     }
+    let orderData = couponSettingData[couponSettingData.length-1];
     let paymentAmount = orderData.orderTotalProductAmount + orderData.orderTotalProductAmount>30000?0:3000
         - orderData.orderTotalDiscount;
     if (paymentAmount<usingPointAmount){
@@ -126,9 +127,12 @@ function drawOrderSummary(){
 }
 
 function drawProductCouponData(){
-    couponSettingData.forEach(function (value){
+    couponSettingData.filter(value => value.productNo !== "order").forEach(function (value){
         drawTr(value.productNo + "couponTr", value.coupon);
         drawTr(value.productNo + "douponTr", value.doupon);
+        let couponDiscount = value.coupon != null?value.coupon.discountAmount:0;
+        let douponDiscount = value.doupon != null?value.doupon.discountAmount:0;
+        document.getElementById(value.productNo + "last").innerText =  couponDiscount+douponDiscount;
     });
 }
 
@@ -141,7 +145,8 @@ function drawOrderCouponData(){
 function drawTr(id, couponData){
     let couponTr = document.getElementById(id);
     if (couponData !== null){
-        couponTr.outerHTML = createTrForCouponBody(couponData).toString();
+        couponTr.innerText = "";
+        couponTr.appendChild(createTrForCouponBody(couponData));
         couponTr.setAttribute("id", id)
         couponTr.classList.remove("hidden");
     } else {
@@ -160,7 +165,7 @@ function updateCouponSettingData(){
             });
             value.orderTotalProductAmount = orderTotal;
             value.totalDiscount = couponDiscount + douponDiscount;
-            if (value.coupon.categoryNo === value.doupon.categoryNo){
+            if (value.coupon!==null && value.doupon !== null && value.coupon.categoryNo === value.doupon.categoryNo){
                 let categoryTotalAmount = 0;
                 couponSettingData.filter((value, index) => index !== couponSettingData.length - 1).forEach(function (value){
                     if(isCategoryContains(getCategoryNoList(value.categoryNo), categoryNo)){
@@ -206,6 +211,7 @@ function calculateProductCouponDiscountAmount(couponData, cartDataNo){
         discount = parseInt(couponData.amount);
     }
     discount = discount>maxDiscount?maxDiscount:discount;
+    couponData.discountAmount = discount;
     return discount;
 }
 
@@ -343,9 +349,9 @@ function updateOrderLastMoney(){
 
 function cancelCoupon(couponCode){
     for(let couponSetting of couponSettingData){
-        if (couponSetting.coupon.couponCode === couponCode){
+        if (couponSetting.coupon !== null && couponSetting.coupon.couponCode === couponCode){
             couponSetting.coupon = null;
-        }else if (couponSetting.doupon.couponCode === couponCode){
+        }else if (couponSetting.doupon !== null && couponSetting.doupon.couponCode === couponCode){
             couponSetting.doupon = null;
         }
     }
@@ -390,7 +396,8 @@ function cancelCoupon(couponCode){
 
 function createTrForCouponBody(couponData){
     const beforeEnd = "beforeend";
-    let tr = document.createElement("tr");
+    let td = document.createElement("td");
+    td.setAttribute("colSpan", "6");
 
     //쿠폰번호, 쿠폰이름, 쿠폰코드
     let div1Data = [
@@ -399,27 +406,30 @@ function createTrForCouponBody(couponData){
         couponDataPrefix.typeName + couponData.typeName,
         couponData.couponCode
     ];
-    tr.insertAdjacentElement(beforeEnd, createTd([2, 5, 5, 0], div1Data));
+    td.insertAdjacentElement(beforeEnd, createDiv([2, 5, 5, 0], div1Data));
 
     let div2Data = [
         couponDataPrefix.amount + couponData.amount,
         couponDataPrefix.minimumUseAmount + couponData.minimumUseAmount,
         couponDataPrefix.maximumDiscountAmount + couponData.maximumDiscountAmount
     ]
-    tr.insertAdjacentElement(beforeEnd, createTd([4, 4, 4], div2Data));
+    td.insertAdjacentElement(beforeEnd, createDiv([4, 4, 4], div2Data));
 
+    let button = document.createElement("button");
+    button.setAttribute("id", couponData.couponCode);
+    button.setAttribute("onclick", "cancelCoupon(id)");
+    button.innerText = "쿠폰 적용 취소";
     let div3Data = [
         couponDataPrefix.discountAmount + couponData.discountAmount,
         "",
-        "<button id=\""+couponData.couponCode+"\" onClick=\"cancelCoupon(id)\">쿠폰 적용 취소</button>"
+        button
     ]
-    tr.insertAdjacentElement(beforeEnd, createTd([4, 4, 4], div3Data));
-    return tr;
+    td.insertAdjacentElement(beforeEnd, createDiv([4, 4, 4], div3Data));
+    return td;
 }
 
-function createTd(size, data){
-    let td = document.createElement("td");
-    td.setAttribute("colSpan", "5");
+function createDiv(size, data){
+    let parentDiv = document.createElement("div");
     for(let i = 0; i<size.length;i++){
         let div = document.createElement("div");
         if (size[i] === 0){
@@ -427,8 +437,12 @@ function createTd(size, data){
         }else {
             div.setAttribute("class", "col-lg-"+size[i]);
         }
-        div.innerText = data[i];
-        td.insertAdjacentElement("beforeend", div);
+        if (data[i] instanceof Element){
+            div.appendChild(data[i]);
+        }else {
+            div.innerText = data[i];
+        }
+        parentDiv.insertAdjacentElement("beforeend", div);
     }
-    return td;
+    return parentDiv;
 }
