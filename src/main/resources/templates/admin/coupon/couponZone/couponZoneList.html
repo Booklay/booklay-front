@@ -44,7 +44,7 @@
                 <tbody th:each="limited, limitedStat :${limitedList}">
                 <tr>
                     <td><p th:text="${limitedStat.count}"></p></td>
-                    <td><p th:text="${limited.id}"></p></td>
+                    <td><p th:text="${limited.couponId}"></p></td>
                     <td><p th:text="${limited.name}"></p></td>
                     <td><p th:text="${limited.description}"></p></td>
                     <td><p th:text="${limited.openedAt}"></p></td>
@@ -54,7 +54,9 @@
                         <p th:unless="${limited.isBlind}">X</p>
                     </td>
                     <td><a onclick="" href="">수정</a></td>
-                    <td><a href="">삭제</a></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${limited.id})}">삭제</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -86,7 +88,7 @@
                 <tbody th:each="unlimited, unlimitedStat :${unlimitedList}">
                 <tr>
                     <td><p th:text="${unlimitedStat.count}"></p></td>
-                    <td><p th:text="${unlimited.id}"></p></td>
+                    <td><p th:text="${unlimited.couponId}"></p></td>
                     <td><p th:text="${unlimited.name}"></p></td>
                     <td><p th:text="${unlimited.description}"></p></td>
                     <td><p th:text="${unlimited.openedAt}"></p></td>
@@ -96,7 +98,9 @@
                         <p th:unless="${unlimited.isBlind}">X</p>
                     </td>
                     <td><a href="">수정</a></td>
-                    <td><a href="">삭제</a></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${unlimited.id})}">삭제</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

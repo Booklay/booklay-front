@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,6 +92,15 @@ public class CouponZoneAdminController {
 
     @PostMapping("/update-form")
     public String updateCouponZone() {
+        return "redirect:/admin/coupon-zone";
+    }
+
+    @GetMapping("/delete/{couponZoneId}")
+    public String deleteAtCouponZone(@PathVariable Long couponZoneId) {
+        URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
+
+        restService.delete(uri.toString());
+
         return "redirect:/admin/coupon-zone";
     }
 }
