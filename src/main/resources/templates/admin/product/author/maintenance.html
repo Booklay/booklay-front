@@ -1,0 +1,119 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/thymeleaf/layout/admin}">
+
+<head>
+  <title>북레이 - 작가 관리</title>
+  <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
+  <link href="/css/product/inputDisabled.css" rel="stylesheet"/>
+  <link href="tabler/dist/css/tabler.min.css" rel="stylesheet"/>
+  <link href="tabler/dist/css/tabler-flags.min.css" rel="stylesheet"/>
+  <link href="tabler/dist/css/tabler-payments.min.css" rel="stylesheet"/>
+  <link href="tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+  <link href="./dist/css/demo.min.css" rel="stylesheet"/>
+  <link href="/css/product/inputDisabled.css" rel="stylesheet">
+</head>
+
+<th:block layout:fragment="content">
+
+  <div id="search-bar">
+    <form>
+      <input type="text"/>
+      <input type="submit" value="검색"/>
+    </form>
+  </div>
+  <hr>
+
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <thead>
+        <tr>
+          <th>작가 번호</th>
+          <th>작가 이름</th>
+          <th>작가 계정 번호</th>
+          <th>작가 아이디</th>
+          <th>수정</th>
+          <th>삭제</th>
+          <th>작품 정보</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <th:block th:each="author : ${authorList}">
+          <tr>
+            <td>
+              <input name="id" class="authorNo-info" type="number" th:value="${author.authorNo}"
+                     disabled="disabled"/>
+            </td>
+            <td>
+              <input name="name" class="update-info" type="text" th:value="${author.name}"
+                     disabled="disabled"/>
+            </td>
+            <td>
+              <th:block th:if="${author.member != null}">
+                <input name="memberNo" class="update-info" type="number"
+                       th:value="${author.member.memberNo}" disabled="disabled"/>
+              </th:block>
+              <th:block th:if="${author.member == null}">
+                <input name="memberNo" class="update-info" type="number" disabled="disabled"/>
+              </th:block>
+            </td>
+            <td>
+              <span th:if="${author.member != null}" th:text="${author.member.memberId}"/>
+            </td>
+            <td>
+              <input type="submit" value="수정 제출" hidden="hidden">
+              <span class="btn btn-outline-primary update-button">수정</span>
+            </td>
+            <td>
+              <form method="post"
+                    th:action="@{/admin/author/maintenance/delete/{pageNum} (pageNum=${currentPage})}">
+                <input name="id" type="number" th:value="${author.authorNo}"
+                       hidden="hidden"/>
+                <input class="btn btn-outline-primary" type="submit" value="삭제"/>
+              </form>
+            </td>
+            <td><a href="">작품 정보</a></td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+  <!--  <script>-->
+  <!--    const updateBtns = document.querySelectorAll('.update-button');-->
+  <!--    updateBtns.forEach(function (item) {-->
+  <!--      item.addEventListener('click', function () { // 클릭 이벤트 발생시,-->
+  <!--        var form1 = this.parentNode.parentNode-->
+  <!--        form1.querySelector('.update-info').toggleAttribute('disabled')-->
+  <!--        form1.querySelector('.submit-btn').toggleAttribute('hidden')-->
+  <!--      });-->
+  <!--    });-->
+  <!--  </script>-->
+
+  <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+
+  <hr>
+
+  <h3>작가 등록</h3>
+
+  <form method="post"
+        th:action="@{/admin/product/author/maintenance/{pageNum} (pageNum=${currentPage})}">
+    <table>
+      <tr>
+        <td>작가 이름 :</td>
+        <td><input name="name" type="text" required/></td>
+      </tr>
+      <tr>
+        <td>작가 계정 (선택사항) :</td>
+        <td><input name="memberNo" type="number" min="0" step="1"/></td>
+      </tr>
+    </table>
+
+    <input type="submit" value="작가 등록"/>
+  </form>
+</th:block>
+
+</html>

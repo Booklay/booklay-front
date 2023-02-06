@@ -35,10 +35,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/author/maintenance")
+@RequestMapping("/admin/product/author")
 public class AdminAuthorController {
 
-  private static final String PAGE_PRE_FIX = "redirect:/admin/author/maintenance";
+  private static final String MAINTENANCE = "redirect:/admin/product/author/maintenance";
+  private static final String POPUP = "redirect:/admin/product/author/popup";
   private static final String SHOP_PRE_FIX = "/shop/v1/";
   private static final String AUTHOR_PRE_FIX = "admin/author";
   private static final Long SIZE = 20L;
@@ -47,8 +48,13 @@ public class AdminAuthorController {
   private final RestService restService;
 
 
-  //작가 관리창 조회
-  @GetMapping()
+  /**
+   * 작가 관리창 조회
+   * @param page
+   * @param model
+   * @return
+   */
+  @GetMapping("/maintenance")
   public String authorMaintenance(
       @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
@@ -60,11 +66,16 @@ public class AdminAuthorController {
     model.addAttribute("authorList", authorList);
     model.addAttribute(TARGET_VIEW, "product/adminAuthor");
 
-    return "admin/adminPage";
+    return "admin/product/author/maintenance";
 
   }
 
-  //작가 팝업창
+  /**
+   * 작가 팝업창
+   * @param page
+   * @param model
+   * @return
+   */
   @GetMapping("/popup")
   public String authorPopup(
       @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
@@ -77,12 +88,17 @@ public class AdminAuthorController {
     model.addAttribute("authorList", authorList);
     model.addAttribute(TARGET_VIEW, "product/adminAuthor");
 
-    return "admin/product/popup/authorPopup";
+    return "admin/product/author/popup";
 
   }
 
-  //작가 생성
-  @PostMapping("/{pageNum}")
+  /**
+   * 작가 생성
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/maintenance/{pageNum}")
   public String createAuthor(@Valid @ModelAttribute CreateAuthorRequest request,
       @PathVariable String pageNum) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
@@ -90,12 +106,17 @@ public class AdminAuthorController {
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
         CreateDeleteProductRecommendRequest.class);
 
-    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
+    return MAINTENANCE + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
-  //작가 수정
-  @PostMapping("/update/{pageNum}")
+  /**
+   * 작가 수정
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/maintenance/update/{pageNum}")
   public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request,
       @PathVariable Long pageNum) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
@@ -103,21 +124,77 @@ public class AdminAuthorController {
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
         CreateDeleteProductRecommendRequest.class);
 
-    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
+    return MAINTENANCE + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
-  //작가 삭제
-  @PostMapping("/delete/{pageNum}")
+  /**
+   * 작가 삭제
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/maintenance/delete/{pageNum}")
   public String deleteAuthor(@Valid @ModelAttribute DeleteByIdRequest request,
       @PathVariable Long pageNum) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
-    return PAGE_PRE_FIX + "?page=" + pageNum + "&size=" + SIZE;
+    return MAINTENANCE + "?page=" + pageNum + "&size=" + SIZE;
 
   }
 
+  /**
+   * 작가 생성
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/popup/{pageNum}")
+  public String createAuthorFromPopup(@Valid @ModelAttribute CreateAuthorRequest request,
+      @PathVariable String pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
+
+    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+        CreateDeleteProductRecommendRequest.class);
+
+    return POPUP + "?page=" + pageNum + "&size=" + SIZE;
+
+  }
+
+  /**
+   * 작가 수정
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/popup/update/{pageNum}")
+  public String updateAuthorFromPopup(@Valid @ModelAttribute UpdateAuthorRequest request,
+      @PathVariable Long pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
+
+    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+        CreateDeleteProductRecommendRequest.class);
+
+    return POPUP + "?page=" + pageNum + "&size=" + SIZE;
+
+  }
+
+  /**
+   * 작가 삭제
+   * @param request
+   * @param pageNum
+   * @return
+   */
+  @PostMapping("/popup/delete/{pageNum}")
+  public String deleteAuthorFromPopup(@Valid @ModelAttribute DeleteByIdRequest request,
+      @PathVariable Long pageNum) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
+
+    restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
+    return POPUP + "?page=" + pageNum + "&size=" + SIZE;
+
+  }
 
   private PageResponse<RetrieveAuthorResponse> retrieveAuthors(
       int page) {

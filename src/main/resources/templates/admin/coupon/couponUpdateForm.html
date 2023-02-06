@@ -1,69 +1,176 @@
 <!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <title>쿠폰 수정</title>
-    <link href="/css/form.css" rel="stylesheet">
     <script src="/js/coupon/couponCreateForm.js"></script>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
-<html lang="ko">
 
-    <div id="header-carousel" class="carousel slide" data-ride="carousel">
-        <form method="post" enctype="multipart/form-data">
-            <label>쿠폰 이름 : <input type="text" name="name" th:value="${couponDetail.name}"> </label><br/>
-            <label>쿠폰 종류 :
-            <select type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
-                <div th:each="couponType:${couponTypeList}">
-                    <option th:value="${couponType.id}" th:text="${couponType.name}" th:selected="${#strings.equals(couponType.name, couponDetail.typeName)}"></option>
-                </div>
-            </select></label><br/>
-            <label>할인량 : <input type="number" name="amount" th:value="${couponDetail.amount}"></label><br/>
+<th:block layout:fragment="content">
 
-                <div id="select-item" th:style="${couponDetail.typeName == '포인트' ? 'display: none' : 'display: block'}">
-                    <label for="coupon-range">적용 범위</label>
-                    <select id="coupon-range" onchange="changeByRange()" name="isOrderCoupon">
-                        <option value="1" th:selected="${couponDetail.isOrderCoupon}">주문 쿠폰</option>
-                        <option value="0" th:selected="!${couponDetail.isOrderCoupon}">상품 쿠폰</option>
-                    </select><br/>
+    <div class="row row-cards">
+        <div class="col-12">
+            <div class="card-header">
+                <h4 class="card-title">쿠폰 수정</h4>
+            </div>
 
-                    <span>
-                        <h5>변경 전</h5>
-                        <span th:if="${couponDetail.isOrderCoupon}">
-                        적용 카테고리 ID : <span th:text="${couponDetail.applyItemId}"></span><br/>
-                        적용 카테고리 : <span th:text="${couponDetail.itemName}"></span><br/>
-                         </span>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md col-xl-3">
+                            <div class="mb-3">
+                                <label class="form-label">쿠폰 이름</label>
+                                <input class="form-control" type="text" name="name" th:value="${couponDetail.name}">
+                            </div>
 
-                        <span th:unless="${couponDetail.isOrderCoupon}">
-                        적용 상품 ID : <span th:text="${couponDetail.applyItemId}"></span><br/>
-                        적용 상품 : <span th:text="${couponDetail.itemName}"></span><br/>
-                        </span>
+                            <div class="mb-3">
+                                <label class="form-label">쿠폰 종류</label>
+                                <select class="form-select" type="number" name="typeCode" id="coupon-type"
+                                        onchange="changeByType()">
+                                    <th:block th:each="couponType:${couponTypeList}">
+                                        <option th:value="${couponType.id}" th:text="${couponType.name}"
+                                                th:selected="${#strings.equals(couponType.name, couponDetail.typeName)}">
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
 
-                        <label id="apply-item-label" for="apply-item">
-                            <span th:if="${couponDetail.isOrderCoupon}">
-                                적용 카테고리 번호
-                            </span>
-                            <span th:if="${!couponDetail.isOrderCoupon}">
-                                적용 상품 번호
-                            </span>
-                        </label>
-                    </span>
-                    <input type="number" name="applyItemId" id="apply-item" th:value="${couponDetail.applyItemId}">
-                    <input type="button" value="찾기" id="item-search-button" onclick="showCategoryPopup()">
-                    <br/>
-                </div>
-            <label>최소 사용 금액 : <input type="number" name="minimumUseAmount" th:value="${couponDetail.minimumUseAmount}"></label><br/>
-            <label>최대 할인 금액 : <input type="number" name="maximumDiscountAmount" th:value="${couponDetail.maximumDiscountAmount}"></label><br/>
-            <label>발급 기한 일시 : <input type="datetime-local" name="issuanceDeadlineAt" th:value="${couponDetail.issuanceDeadlineAt}"></label><br/>
-            <label>중복 사용 가능 여부<br/>
-                <label for="duplicate-true" class="selector">가능</label> <input type="radio" name="isDuplicatable" value="true" th:checked="${couponDetail.isDuplicatable}" id="duplicate-true">
-                <label for="duplicate-false" class="selector">불가</label> <input type="radio" name="isDuplicatable" value="false" th:checked="${!couponDetail.isDuplicatable}" id="duplicate-false"><br/>
-            </label><br/>
-            <label>수량 제한 여부<br/>
-                <label for="limited-true" class="selector">있음</label><input type="radio" name="isLimited" value="true" th:checked="${couponDetail.isLimited}" id="limited-true">
-                <label for="limited-false" class="selector">없음</label><input type="radio" name="isLimited" value="false" th:checked="${!couponDetail.isLimited}" id="limited-false"><br/>
-            </label><br/>
-            <label for="validate-term">유효 기간</label>
-            <input type="number" id="validate-term" name="validateTerm" th:value="${couponDetail.validateTerm}"><br/>
-            <input type="submit" value="변경 제출">
-        </form>
+                            <div class="mb-3">
+                                <label class="form-label">할인량</label>
+                                <input class="form-control" type="number" name="amount"
+                                       th:value="${couponDetail.amount}">
+                            </div>
+
+                            <div id="select-item"
+                                 th:style="${couponDetail.typeName == '포인트' ? 'display: none' : 'display: block'}">
+                                <div class="mb-3">
+                                    <label class="form-label">적용 범위</label>
+                                    <select class="form-select" id="coupon-range" onchange="changeByRange()"
+                                            name="isOrderCoupon">
+                                        <option value="1" th:selected="${couponDetail.isOrderCoupon}">주문 쿠폰</option>
+                                        <option value="0" th:selected="!${couponDetail.isOrderCoupon}">상품 쿠폰</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
+                                    <div class="row g-2">
+                                        <div class="col">
+                                            <input type="text" class="form-control" id="itemName" disabled="disabled">
+                                            <input hidden="hidden" type="number" name="applyItemId" id="itemId">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" id="item-search-button" class="btn btn-icon"
+                                                    aria-label="Button" th:attr="onclick=${couponDetail.isOrderCoupon ? 'showCategoryPopup()' : 'showProductPopup()'}">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                     height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                     stroke="currentColor" fill="none" stroke-linecap="round"
+                                                     stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                                                    <path d="M21 21l-6 -6"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5>변경 전</h5>
+                                                <span th:if="${couponDetail.isOrderCoupon}">
+                                            <div class="mb-1">
+                                                <strong class="form-label">적용 카테고리 ID</strong>
+                                                <span th:text="${couponDetail.applyItemId}"></span>
+                                            </div>
+                                            <div class="mb-1">
+                                                <strong class="form-label">적용 카테고리</strong>
+                                                <span th:text="${couponDetail.itemName}"></span>
+                                            </div>
+                                        </span>
+
+                                                <span th:unless="${couponDetail.isOrderCoupon}">
+                                            <div class="mb-1">
+                                                <strong>적용 상품 ID</strong>
+                                                <span th:text="${couponDetail.applyItemId}"></span>
+                                            </div>
+                                            <div class="mb-1">
+                                                <strong>적용 상품</strong>
+                                                <span th:text="${couponDetail.itemName}"></span>
+                                            </div>
+                                      </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md col-xl-3">
+                            <div class="mb-3">
+                                <label class="form-label">최소 사용 금액</label>
+                                <input class="form-control" type="number" name="minimumUseAmount"
+                                       th:value="${couponDetail.minimumUseAmount}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">최대 할인 금액</label>
+                                <input class="form-control" type="number" name="maximumDiscountAmount"
+                                       th:value="${couponDetail.maximumDiscountAmount}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">발급 기한 일시</label>
+                                <input class="form-control" type="datetime-local" name="issuanceDeadlineAt"
+                                       th:value="${couponDetail.issuanceDeadlineAt}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">유효 기간</label>
+                                <input class="form-control" type="number" name="validateTerm"
+                                       th:value="${couponDetail.validateTerm}">
+                            </div>
+                        </div>
+
+                        <div class="col-md col-xl-3">
+                            <div class="mb-4">
+                                <div class="form-label">중복 사용 가능 여부</div>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isDuplicatable" value="true"
+                                               th:checked="${couponDetail.isDuplicatable}" id="duplicate-true">
+                                        <span class="form-check-label">중복 가능</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isDuplicatable" value="false"
+                                               th:checked="${!couponDetail.isDuplicatable}" id="duplicate-false">
+                                        <span class="form-check-label">중복 불가</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-label">수량 제한 여부</div>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isLimited" value="true"
+                                               th:checked="${couponDetail.isLimited}" id="limited-true">
+                                        <span class="form-check-label">제한 있음</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isLimited" value="false"
+                                               th:checked="${!couponDetail.isLimited}" id="limited-false">
+                                        <span class="form-check-label">제한 없음</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="text-left">
+                                <input class="btn btn-primary" type="submit" value="변경 제출">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</html>
+</th:block>

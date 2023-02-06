@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,11 +31,6 @@ public class CouponZoneAdminController {
     private final String gatewayIp;
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String RETURN_PAGE = "admin/adminPage";
-
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
-    }
 
     /**
      * 관리자의 쿠폰존 조회.
@@ -62,32 +58,48 @@ public class CouponZoneAdminController {
         model.addAttribute("limitedList", limitedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
-        return RETURN_PAGE;
+        return "admin/coupon/couponZone/couponZoneList";
     }
 
     /**
      * 쿠폰존에 쿠폰을 등록하기 위한 폼 호출.
      */
-    @GetMapping("/form")
+    @GetMapping("/create-form")
     public String getCouponZoneAddForm(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneAddForm");
-
-        return RETURN_PAGE;
+        return "admin/coupon/couponZone/couponZoneAddForm";
     }
 
     /**
      * 관리자가 쿠폰을 쿠폰존에 등록합니다.
      * 쿠폰존에 등록된 쿠폰 중, isBlind = false 인 쿠폰만 사용자가 조회 가능합니다.
      */
-    @PostMapping
-    public String createAtCouponZone(@Valid @ModelAttribute CouponZoneCreateRequest createRequest,
-                                     @RequestParam(required = false, defaultValue = "false")
-                                     Boolean isBlind) {
-        createRequest.setIsBlind(isBlind);
-
+    @PostMapping("/create-form")
+    public String createAtCouponZone(@Valid @ModelAttribute CouponZoneCreateRequest createRequest) {
         URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone");
         restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
             String.class);
+
+        return "redirect:/admin/coupon-zone";
+    }
+
+    /**
+     * 쿠폰존에 등록된 정보를 변경합니다.
+     */
+    @GetMapping("/update-form")
+    public String getCouponZoneUpdateForm(Model model) {
+        return "admin/coupon/couponZone/couponZoneUpdateForm";
+    }
+
+    @PostMapping("/update-form")
+    public String updateCouponZone() {
+        return "redirect:/admin/coupon-zone";
+    }
+
+    @GetMapping("/delete/{couponZoneId}")
+    public String deleteAtCouponZone(@PathVariable Long couponZoneId) {
+        URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
+
+        restService.delete(uri.toString());
 
         return "redirect:/admin/coupon-zone";
     }

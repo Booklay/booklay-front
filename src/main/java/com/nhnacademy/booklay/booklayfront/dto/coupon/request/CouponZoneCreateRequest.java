@@ -23,5 +23,5 @@ public class CouponZoneCreateRequest {
     private LocalDateTime issuanceDeadlineAt;
 
     @Setter
-    Boolean isBlind;
+    private Boolean isBlind;
 }

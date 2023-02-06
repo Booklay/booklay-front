@@ -36,6 +36,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildStri
 @RequestMapping("/admin/coupons")
 @Slf4j
 public class CouponAdminFrontController {
+
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
@@ -44,33 +45,23 @@ public class CouponAdminFrontController {
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
-    
-
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
-    }
 
     /**
-     * coupon index
-     *
+     * admin/coupons 인덱스 페이지는 쿠폰 조회 페이지.
      */
     @GetMapping
-    public String adminCouponPage(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/empty");
-        return RETURN_ADMIN_PAGE;
+    public String adminCouponPage() {
+        return RETURN_PAGE_COUPON_LIST;
     }
 
     /**
      * 쿠폰 생성 폼.
-     *
      */
     @GetMapping("/create-form")
     public String createCouponForm(Model model) {
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
-        model.addAttribute(TARGET_VIEW, "coupon/createCouponForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/createCouponForm";
     }
 
     /**
@@ -128,7 +119,7 @@ public class CouponAdminFrontController {
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
 
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/listView";
     }
 
     @GetMapping("list/{memberNo}/{pageNum}")
@@ -138,6 +129,7 @@ public class CouponAdminFrontController {
         model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
         model.addAttribute(PAGE_NUM, pageNum);
         model.addAttribute(TARGET_VIEW, "coupon/listView");
+
         return RETURN_ADMIN_PAGE;
     }
 
@@ -150,20 +142,20 @@ public class CouponAdminFrontController {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         model.addAttribute(TARGET_VIEW, "coupon/detailView");
 
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/detailView";
     }
 
     /**
      * 쿠폰 수정 폼.
      * @param couponId 수정하려는 쿠폰의 id
      */
-    @GetMapping("update/{couponId}")
+    @GetMapping("update-form/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
         model.addAttribute(TARGET_VIEW, "coupon/couponUpdateForm");
-        return RETURN_ADMIN_PAGE;
+        return "admin/coupon/couponUpdateForm";
     }
 
     /**
@@ -171,7 +163,7 @@ public class CouponAdminFrontController {
      * @param couponRequest 수정 내용
      * @param couponId 수정하려는 쿠폰의 id
      */
-    @PostMapping("update/{couponId}")
+    @PostMapping("update-form/{couponId}")
     public String postUpdateCouponForm(@Valid @ModelAttribute CouponAddRequest couponRequest,
                                        @PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
@@ -186,6 +178,7 @@ public class CouponAdminFrontController {
     public String deleteCoupon(@PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
         restService.delete(url);
+
         return RETURN_PAGE_COUPON_LIST;
     }
 }
