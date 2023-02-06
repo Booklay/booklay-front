@@ -1,52 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <meta charset="UTF-8">
-    <title>Category Update</title>
+    <title>카테고리 추가</title>
+
 </head>
-<body>
-<div>
-    <form th:action="@{/admin/categories/{categoryId}(categoryId=${category.id})}"
-          th:method="post">
-        <input type="hidden" name="_method" value="put"> <!-- HiddenHttpMethodFilter 사용 -->
-        <h2>카테고리 등록 정보 수정</h2>
+<!---->
+<th:block layout:fragment="content">
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+            <h1>카테고리 등록 정보</h1>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Create new account</h2>
+            <form th:action="@{/admin/categories/{categoryId}(categoryId=${category.id})}" th:method="post" >
+                <input type="hidden" name="_method" value="put"> <!-- HiddenHttpMethodFilter 사용 -->
 
-        카테고리 번호
-        <label>
-            <input type="number" name="id" th:value="${category.id}">
-        </label> <br/>
+                <div class="mb-3">
+                    <label class="form-label">카테고리 번호</label>
+                    <input type="number" name="id" th:value="${category.id}" class="form-control" placeholder="Enter ID" required>
+                </div>
 
-        상위 카테고리 번호
-        <label th:if="${category.getParentCategoryId()} == null">
-            <input type="number" name="parentCategoryId" th:value="0"
-                   placeholder="없을 시, 0 혹은 빈칸"/>
-        </label>
-        <label th:unless="${category.getParentCategoryId() == null}">
-            <input type="number" name="parentCategoryId"
-                   th:value="${category.getParentCategoryId()}" placeholder="없을 시, 0 혹은 빈칸"/>
-        </label><br/>
+<!--                상위 카테고리 번호-->
+<!--                <label th:if="${category.getParentCategoryId()} == null">-->
+<!--                    <input type="number" name="parentCategoryId" th:value="0"-->
+<!--                           placeholder="없을 시, 0 혹은 빈칸"/>-->
+<!--                </label>-->
+<!--                <label th:unless="${category.getParentCategoryId() == null}">-->
+<!--                    <input type="number" name="parentCategoryId"-->
+<!--                           th:value="${category.getParentCategoryId()}" placeholder="없을 시, 0 혹은 빈칸"/>-->
+<!--                </label><br/>-->
 
-        카테고리 이름
-        <label>
-            <input type="text" name="name" th:value="${category.name}"/>
-        </label><br/>
+                <div class="mb-3">
+                    <label class="form-label">상위 카테고리 번호</label>
+                    <input type="number" name="parentCategoryId" th:value="${category.getParentCategoryId()}" class="form-control" placeholder="Enter Parent Category ID, 없을 시 0 혹은 빈칸" required>
+                </div>
 
-        노출 여부 :
-        <div>
-            <th:block th:if="${category.getIsExposure()}">
-                <input type="radio" name="isExposure" value="true" checked> Y
-                <input type="radio" name="isExposure" value="false"> N
-            </th:block>
+                <div class="mb-3">
+                    <label class="form-label">카테고리 이름</label>
+                    <input type="text" name="name" th:value="${category.name}" class="form-control" placeholder="Enter Name" required>
+                </div>
 
-            <th:block th:unless="${category.getIsExposure()}">
-                <input type="radio" name="isExposure" value="true"> Y
-                <input type="radio" name="isExposure" value="false" checked> N
-            </th:block>
+                <div class="custom-radio">
+                    노출 여부 :
+                    <input type="radio" id="yes" name="isExposure" value="true" th:checked="${category.getIsExposure()}">
+                    <label for="yes">Y</label>
+                    <input type="radio" id="no" name="isExposure" value="false" th:checked="${!category.getIsExposure()}">
+                    <label for="no">N</label>
+                </div>
+                <br/>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Create new account</button>
+                </div>
+
+            </form>
 
         </div>
-        <br/>
-        <input type="submit" value="제출">
-    </form>
-</div>
-</body>
+    </div>
+</th:block>
+<!---->
 </html>
+
+
