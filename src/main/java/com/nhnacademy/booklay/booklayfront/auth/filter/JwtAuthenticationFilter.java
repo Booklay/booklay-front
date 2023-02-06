@@ -96,4 +96,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return claims.getExpiration().before(c.getTime());
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().contains("login");
+    }
 }

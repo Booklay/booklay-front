@@ -17,4 +17,6 @@ public class MemberResponse {
     private Roles authority;
 
     private String email;
+
+    private Boolean isBlocked;
 }

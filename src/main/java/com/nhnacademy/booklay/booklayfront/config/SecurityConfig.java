@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.config;
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.CustomAuthenticationProvider;
 import com.nhnacademy.booklay.booklayfront.auth.filter.JwtAuthenticationFilter;
+import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginFailureHandler;
 import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
@@ -23,7 +24,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 /**
  * Spring Security 기본 설정
@@ -47,6 +47,7 @@ public class SecurityConfig {
             .usernameParameter("memberId")
             .passwordParameter("password")
             .successHandler(new CustomLoginSuccessHandler())
+            .failureHandler(customLoginFailureHandler())
             .and()
             .logout().logoutUrl("/member/logout")
             .deleteCookies("SESSION_ID")
@@ -62,7 +63,8 @@ public class SecurityConfig {
             .disable();
 
         http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository())
-            .successHandler(oAuth2LoginSuccessHandler(null)));
+                               .successHandler(oAuth2LoginSuccessHandler(null))
+                               .failureHandler(customLoginFailureHandler()));
 
         http.addFilterBefore(jwtAuthenticationFilter(null, null), UsernamePasswordAuthenticationFilter.class);
 
@@ -72,7 +74,8 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
         return web -> web.ignoring()
-                         .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**", "/css/**", "/js/**", "/scss/**", "/plugins/**", "/mail/**");
+                         .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**", "/css/**", "/js/**",
+                                      "/scss/**", "/plugins/**", "/mail/**");
     }
 
     @Bean
@@ -93,10 +96,10 @@ public class SecurityConfig {
 
     private ClientRegistration clientRegistration() {
         return CommonOAuth2Provider.GITHUB
-            .getBuilder("github")
-            .clientId("11750a6c662e8dd0135c")
-            .clientSecret("4066e502af0568041afa744a0205d803be24842f")
-            .build();
+                   .getBuilder("github")
+                   .clientId("11750a6c662e8dd0135c")
+                   .clientSecret("4066e502af0568041afa744a0205d803be24842f")
+                   .build();
     }
 
     @Bean
@@ -111,7 +114,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtAuthenticationFilter jwtAuthenticationFilter(TokenUtils tokenUtils, AuthenticationServerProxy proxy) {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(TokenUtils tokenUtils, AuthenticationServerProxy proxy) {
         return new JwtAuthenticationFilter(tokenUtils, proxy);
     }
+
+    @Bean
+    public CustomLoginFailureHandler customLoginFailureHandler() {
+        return new CustomLoginFailureHandler();
+    }
+
 }
