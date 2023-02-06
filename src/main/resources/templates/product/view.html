@@ -65,9 +65,14 @@
             <hr/>
 
             <p style="line-height: 5px">
-              <span class="text-info">적립률</span>
-              <span th:text="${product.info.pointRate}"></span>
-              <span>%</span>
+              <th:block th:if="${product.info.pointMethod}">
+                <span class="text-info">적립률</span>
+                <span th:text="${product.info.pointRate}"></span>
+                <span>%</span>
+              </th:block>
+              <th:block th:if="${!product.info.pointMethod}">
+                <span class="text-info">미적립 상품</span>
+              </th:block>
             </p>
 
             <p style="line-height: 5px">

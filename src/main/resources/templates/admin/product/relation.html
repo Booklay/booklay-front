@@ -35,8 +35,7 @@
                   <input type="submit" value="등록 취소">
                 </form>
                 <form th:if="${!product.recommend}" method="post"
-                      th:action="@{/admin/product/recommend/create/{pageNum} (pageNum = ${pageNum})}"
-                      )>
+                      th:action="@{/admin/product/recommend/create/{pageNum} (pageNum = ${pageNum})}">
                   <input name="targetId" type="number" th:value="${product.productId}"
                          hidden="hidden">
                   <input name="baseId" type="number" th:value="${productNo}" hidden="hidden">
