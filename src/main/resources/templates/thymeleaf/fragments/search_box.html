@@ -1,12 +1,12 @@
 <th:block th:fragment="search_box" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<!--[[${#request.getParameterValues('keywords')}]]-->
     <form action="/search" method="post" class="row col-auto">
         <div class="col-auto p-1">
             <select type="text" name="classification" class="form-select" placeholder="검색 분류를 선택해주세요" id="select-tags-advanced" required>
-                <option value="keywords" selected>키워드</option>
-                <option value="category">카테고리</option>
-                <option value="tag">태그</option>
-                <option value="author">작가</option>
+                <option value="keywords" th:selected="${#request.getParameter('classification') == 'keyword'} or ${#request.getParameter('classification') == null}">키워드</option>
+                <option value="category" th:selected="${#request.getParameter('classification') == 'category'}">카테고리</option>
+                <option value="tags" th:selected="${#request.getParameter('classification') == 'tags'}">태그</option>
+                <option value="authors" th:selected="${#request.getParameter('classification') == 'authors'}">작가</option>
             </select>
         </div>
 
@@ -16,7 +16,7 @@
                     <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" /></svg>
                   </span>
-                <input type="text" name="keywords" class="form-control" placeholder="Search…" aria-label="Search in website" required>
+                <input type="text" name="keywords" th:value="${#request.getParameter('keywords')}" class="form-control" placeholder="Search…" aria-label="Search in website" required>
             </div>
         </div>
     </form>
