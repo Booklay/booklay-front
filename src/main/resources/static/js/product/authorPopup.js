@@ -1,25 +1,17 @@
-function setApplyAuthorText(idValue, nameValue) {
+window.addEventListener('DOMContentLoaded', function () {
+  const authorButtons = document.querySelectorAll('.author-select-btn')
+  console.log(authorButtons)
 
-  const authorSpan = opener.document.createElement("span")
-  const innerAuthorSpan = "작가" + opener.authorNo + " : "
-  authorSpan.innerText = innerAuthorSpan;
+  authorButtons.forEach(
+      button => button.addEventListener('click', function (e) {
+        const {id, name} = e.target
+        const event = new CustomEvent('authorSelected', {
+          detail: {
+            author: { id, name }
+          }
+        })
+        opener.document.dispatchEvent(event)
+        window.close();
+      }))
+})
 
-  const authorInput = opener.document.createElement("input")
-  authorInput.setAttribute('type', 'number')
-  authorInput.setAttribute('id', 'authorIds[' + (opener.authorNo - 1) + ']')
-  authorInput.setAttribute('value', idValue)
-  authorInput.hidden=true;
-
-  const authorDisplay = opener.document.createElement("span")
-  authorDisplay.innerText = nameValue
-
-  const br = opener.document.createElement("br");
-
-  opener.document.getElementById('authors').appendChild(authorSpan);
-  opener.document.getElementById('authors').appendChild(authorInput);
-  opener.document.getElementById('authors').appendChild(authorDisplay);
-  opener.document.getElementById('authors').appendChild(br);
-  opener.authorNo = opener.authorNo + 1;
-
-  window.close();
-}

@@ -3,10 +3,12 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
+import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateDeleteProductRecommendRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreateProductBookRequest;
@@ -17,12 +19,15 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdatePro
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveBookForSubscribeResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.tag.request.CreateDeleteTagProductRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +58,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
-public class AdminProductController {
+public class AdminProductController extends BaseController{
 
   private static final Long DEFAULT_POINT_RATE = 5L;
   private static final Long SIZE = 20L;
@@ -67,13 +72,103 @@ public class AdminProductController {
   private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
   private final RestService restService;
 
-  //총 관리 인덱스 페이지
+  private final CategoryService categoryService;
+
+  /**
+   * 상품 총괄 관리 리스트 페이지
+   * @param model
+   * @param cid
+   * @param page
+   * @return
+   */
   @GetMapping
-  public String getProductMainPage() {
-    return PRE_FIX + "/productMainManage";
+  public String retrieveProduct(Model model,
+      @RequestParam(value = "CID", required = false) Long cid,
+      @RequestParam(value = "page", defaultValue = "0") int page) {
+
+    List<CategorySteps> categorySteps = (List<CategorySteps>) model.getAttribute("categories");
+
+    if (Objects.isNull(cid)) {
+      cid = categoryService.getDefaultCategoryId(categorySteps);
+    }
+
+    CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps, cid);
+
+    log.error(" currentCategory : {}", currentCategory);
+
+    URI uri = URI.create(
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "?page=" + page + "&size=" + SIZE);
+
+    ApiEntity<PageResponse<RetrieveProductResponse>> productResponse = restService.get(
+        uri.toString(), null, new ParameterizedTypeReference<>() {
+        });
+
+    if (Objects.nonNull(productResponse.getBody())) {
+      int totalPage = productResponse.getBody().getTotalPages();
+      int currentPage = productResponse.getBody().getPageNumber();
+      List<RetrieveProductResponse> productList = productResponse.getBody().getData();
+
+      model.addAttribute("currentPage", currentPage);
+      model.addAttribute("totalPage", totalPage);
+      model.addAttribute("productList", productList);
+      model.addAttribute("currentCategory", currentCategory);
+    }
+
+    return "admin/product/display";
   }
 
-  //상품 soft delete
+  /**
+   * 관리용 상품 상세 보기
+   * @param productNo
+   * @param model
+   * @return
+   */
+  @GetMapping("/view/{productNo}")
+  public String productViewer(@PathVariable("productNo") Long productNo, Model model) {
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    //최초 상품 상세 정보 호출
+    URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/product/view/" + productNo);
+
+    ApiEntity<RetrieveProductViewResponse> response = restService.get(mainUri.toString(), null,
+        RetrieveProductViewResponse.class);
+
+    model.addAttribute("productNo", productNo);
+    model.addAttribute("product", response.getBody());
+
+    //연관 상품 목록 호출
+    URI recommendUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/product/recommend/" + productNo);
+
+    ApiEntity<List<RetrieveProductResponse>> recommendGoodsResponse = restService.get(
+        recommendUri.toString(), null, new ParameterizedTypeReference<>() {
+        });
+
+    model.addAttribute("recommendProducts", recommendGoodsResponse.getBody());
+
+    //구독 상품의 경우 구독의 자식 상품들 목록 호출
+    if (Objects.nonNull(response.getBody().getSubscribeId())) {
+      Long subscribeId = response.getBody().getSubscribeId();
+
+      URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/product/view/subscribe/" + subscribeId);
+
+      ApiEntity<List<RetrieveProductResponse>> subscribeResponse = restService.get(
+          uriForSubscribe.toString(), null, new ParameterizedTypeReference<>() {
+          });
+
+      model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
+    }
+
+    return "admin/product/view";
+  }
+
+
+  /**
+   * 상품 soft delete
+   * @param productId
+   * @return
+   */
   @PostMapping("/delete/{productId}")
   public String getProductSoftDelete(@PathVariable Long productId) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + productId);
@@ -84,7 +179,12 @@ public class AdminProductController {
 
   }
 
-  //카테고리 팝업 호출
+  /**
+   * 카테고리 팝업 호출
+   * @param page
+   * @param model
+   * @return
+   */
   @GetMapping("/category/popup")
   public String retrieveCategoryPopUp(
       @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
@@ -108,7 +208,12 @@ public class AdminProductController {
 
   }
 
-  //카테고리 수정 팝업 호출
+  /**
+   * 카테고리 수정 팝업 호출
+   * @param page
+   * @param model
+   * @return
+   */
   @GetMapping("/category/popup/{inputId}")
   public String retrieveCategoryReselectPopUp(
       @RequestParam(value = "page", defaultValue = "0") int page, Model model,
@@ -136,16 +241,26 @@ public class AdminProductController {
 
   }
 
-  //책 생성 페이지
-  @GetMapping("/books/create")
+  /**
+   * 책 생성 페이지 조회
+   * @param model
+   * @return
+   */
+  @GetMapping("/create/books")
   public String getProductBookCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
     model.addAttribute(TARGET_VIEW, "product/createProductBookForm");
-    return RETURN_PAGE;
+    return "admin/product/create/books";
   }
 
-  //책 생성 요청
-  @PostMapping("/books/create")
+  /**
+   * 책 생성 요청
+   * @param request
+   * @param image
+   * @return
+   * @throws IOException
+   */
+  @PostMapping("/create/books")
   public String createProductBook(@Valid @ModelAttribute CreateProductBookRequest request,
       MultipartFile image)
       throws IOException {
@@ -173,13 +288,20 @@ public class AdminProductController {
         Long.class);
 
     Long productNo = responseEntity.getBody();
-    return REDIRECT_PRE_FIX + productNo;
+    return REDIRECT_PRE_FIX + "/" + productNo;
   }
 
+  /**
+   * 책 수정 페이지 조회
+   * @param model
+   * @param productId
+   * @return
+   */
   //책 수정 페이지 조회
-  @GetMapping("/books/update/{productId}")
+  @GetMapping("/update/books/{productId}")
   public String getProductBookUpdateForm(Model model, @PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "books/" + productId);
+    log.info("진입 확인");
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/books/" + productId);
 
     ApiEntity<RetrieveProductBookForUpdateResponse> productData = restService.get(uri.toString(),
         null, new ParameterizedTypeReference<>() {
@@ -187,11 +309,17 @@ public class AdminProductController {
 
     model.addAttribute("product", productData.getBody());
 
-    return PRE_FIX + "/updateProductBookForm";
+    return PRE_FIX + "/update/books";
   }
 
-  //책 수정 요청
-  @PostMapping("/books/update")
+  /**
+   * 책 수정 요청
+   * @param request
+   * @param image
+   * @return
+   * @throws IOException
+   */
+  @PostMapping("/update/books")
   public String updateProductBook(@Valid @ModelAttribute UpdateProductBookRequest request,
       MultipartFile image)
       throws IOException {
@@ -220,19 +348,29 @@ public class AdminProductController {
     return REDIRECT_PRE_FIX + request.getProductId();
   }
 
-  //구독 상품 생성 페이지 조회
-  @GetMapping("/subscribes/create")
+  /**
+   * 구독 상품 생성 페이지 조회
+   * @param model
+   * @return
+   */
+  @GetMapping("/create/subscribes")
   public String getProductSubscribeCreateForm(Model model) {
     model.addAttribute("defaultPointRate", DEFAULT_POINT_RATE);
     model.addAttribute(TARGET_VIEW, "product/createProductSubscribeForm");
-    return RETURN_PAGE;
+    return "admin/product/create/subscribes";
   }
 
-  //구독 상품 생성
-  @PostMapping("/subscribes/create")
+  /**
+   * 구독 상품 생성 요청
+   * @param request
+   * @param image
+   * @return
+   * @throws IOException
+   */
+  @PostMapping("/create/subscribes")
   public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
-      MultipartFile image, @PathVariable Long pageNum) throws IOException {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "subscribes");
+      MultipartFile image) throws IOException {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/subscribes");
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
       public String getFilename() {
@@ -255,13 +393,18 @@ public class AdminProductController {
         Long.class);
 
     Long productNo = responseEntity.getBody();
-    return REDIRECT_PRE_FIX + productNo;
+    return REDIRECT_PRE_FIX + "/" + productNo;
   }
 
-  //구독 상품 수정 페이지 조회
-  @GetMapping("/subscribes/update/{productId}")
+  /**
+   * 구독 상품 수정 페이지 조회
+   * @param model
+   * @param productId
+   * @return
+   */
+  @GetMapping("/update/subscribes/{productId}")
   public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "subscribes/" + productId);
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/subscribes/" + productId);
 
     ApiEntity<RetrieveProductBookForUpdateResponse> productData = restService.get(uri.toString(),
         null, new ParameterizedTypeReference<>() {
@@ -269,11 +412,17 @@ public class AdminProductController {
 
     model.addAttribute("product", productData.getBody());
 
-    return PRE_FIX + "/updateProductSubscribeForm";
+    return PRE_FIX + "/update/subscribes";
   }
 
-  //구독 수정 요청
-  @PostMapping("/subscribes/update")
+  /**
+   * 구독 상품 수정 요청
+   * @param request
+   * @param image
+   * @return
+   * @throws IOException
+   */
+  @PostMapping("/update/subscribes")
   public String updateProductSubscribe(@Valid @ModelAttribute UpdateProductSubscribeRequest request,
       MultipartFile image)
       throws IOException {
@@ -302,20 +451,30 @@ public class AdminProductController {
     return REDIRECT_PRE_FIX + request.getProductId();
   }
 
-  //작가 팝업창
+  /**
+   * 작가 팝업창 호출
+   * @return
+   */
   @GetMapping("/author")
   public String getAuthorMaintain() {
     return PRE_FIX + "/adminAuthor";
   }
 
-  //구독 상품 하위 상품 등록용 조회
+  /**
+   * 구독 상품의 하위상품 등록용 조회
+   * @param model
+   * @param page
+   * @param subscribeId
+   * @return
+   */
   @GetMapping("/subscribes/connect/{subscribeId}")
   public String getBooksForSubscribe(Model model,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @PathVariable Long subscribeId) {
 
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "?page=" + page
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "?page="
+            + page
             + "&size=" + SIZE);
 
     ApiEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse = restService.get(
@@ -331,12 +490,19 @@ public class AdminProductController {
     return PRE_FIX + "/productSubscribeConnector";
   }
 
-  //구독 상품 하위 상품 등록
+  /**
+   * 구독 상품 하위 상품 등록 요청
+   * @param request
+   * @param subscribeId
+   * @param pageNum
+   * @return
+   */
   @PostMapping("/subscribes/connect/{subscribeId}/{pageNum}")
   public String subscribeBookConnection(
       @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request,
       @PathVariable Long subscribeId, @PathVariable Long pageNum) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
+    URI uri = URI.create(
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
     restService.post(uri.toString(), mapper.convertValue(request, Map.class),
         CreateDeleteTagProductRequest.class);
@@ -345,13 +511,20 @@ public class AdminProductController {
         + "&size=" + SIZE;
   }
 
-  //구독 상품 하위 상품 등록 취소
+  /**
+   * 구독 상품 하위 상품 등록 취소 요청
+   * @param subscribeId
+   * @param request
+   * @param pageNum
+   * @return
+   */
   @PostMapping("/subscribes/disconnect/{subscribeId}/{pageNum}")
   public String subscribeBookDisconnection(@PathVariable Long subscribeId,
       @Valid @ModelAttribute DisAndConnectBookWithSubscribeRequest request,
       @PathVariable Long pageNum) {
 
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
+    URI uri = URI.create(
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
@@ -359,14 +532,22 @@ public class AdminProductController {
         + "&size=" + SIZE;
   }
 
-  //연관 상품 등록 위해 조회
+  /**
+   * 연관상품 등록화면 호출
+   * @param page
+   * @param productNo
+   * @param model
+   * @return
+   */
   @GetMapping("/recommend/{productNo}")
-  public String retrieveProductForRecommend(@RequestParam(value = "page", defaultValue = "0") int page,
+  public String retrieveProductForRecommend(
+      @RequestParam(value = "page", defaultValue = "0") int page,
       @PathVariable Long productNo, Model model) {
 
     //최초 상품 상세 정보 호출
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend/" + productNo + "?page=" + page + "&size=" + SIZE);
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend/" + productNo + "?page=" + page + "&size="
+            + SIZE);
 
     ApiEntity<PageResponse<RetrieveProductResponse>> recommendResponse = restService.get(
         uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -379,7 +560,12 @@ public class AdminProductController {
     return PRE_FIX + "/recommendConnector";
   }
 
-  //연관 상품 등록
+  /**
+   * 연관 상품 등록 요청
+   * @param request
+   * @param pageNum
+   * @return
+   */
   @PostMapping("/recommend/create/{pageNum}")
   public String createRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
       @PathVariable Long pageNum) {
@@ -393,7 +579,12 @@ public class AdminProductController {
     return "redirect:/admin/product/recommend/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
-  //연관 상품 삭제
+  /**
+   * 연관 상품 등록 취소 요청
+   * @param request
+   * @param pageNum
+   * @return
+   */
   @PostMapping("/recommend/delete/{pageNum}")
   public String deleteRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
       @PathVariable Long pageNum) {

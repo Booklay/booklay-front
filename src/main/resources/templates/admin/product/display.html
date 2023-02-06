@@ -1,0 +1,62 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
+<head>
+  <title>북레이 - 상품 관리 조회</title>
+</head>
+
+<th:block layout:fragment="content">
+  <div class="container-xl">
+    <div class="row row-cards">
+      <div class="card-header">
+        <h1 th:if="${currentCategory} != null" th:text="${currentCategory.name}"></h1>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>상품 번호</th>
+              <th>제목</th>
+              <th>작가</th>
+              <th>적립여부</th>
+              <th>적립률</th>
+              <th>품절여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--     반복 -->
+            <th:block th:each="item : ${productList}">
+              <tr>
+                <td><span th:text="${item.productId}"/></td>
+                <td><a th:text="${item.title}"
+                       th:href="@{/admin/product/view/{productId} (productId = ${item.productId})}"></a>
+                </td>
+                <td>
+                  <th:block th:each="author : ${item.authors}">
+                    <span th:text="${author.name}"/>
+                  </th:block>
+                </td>
+                <td class="w-5">
+                  <span th:if="${item.pointMethod}">적립</span>
+                  <span th:if="${!item.pointMethod}">미적립</span>
+                </td>
+                <td><span th:text="${item.pointRate}"/></td>
+                <td class="w-5">
+                  <span th:if="${item.selling}">판매중</span>
+                  <span th:if="${!item.selling}">품절</span>
+                </td>
+              </tr>
+            </th:block>
+            <!--     반복-->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <th:block th:replace="thymeleaf/fragments/pagination :: pagination"/>
+    </div>
+  </div>
+</th:block>
+
+</html>

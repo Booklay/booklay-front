@@ -27,14 +27,11 @@ public class CreateProductSubscribeRequest {
   @NotNull
   private List<Long> categoryIds;
 
-  @NotNull
+  //TODO : 삭제 예정
   private Integer subscribeWeek;
-
-  @NotNull
   private Integer subscribeDay;
+  private List<Long> childProducts;
 
   @NotNull
   private String publisher;
-
-  private List<Long> childProducts;
 }
