@@ -71,10 +71,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            filterChain.doFilter(request, response);
-        } finally {
             log.info("security context cleared");
             SecurityContextHolder.clearContext();
+            filterChain.doFilter(request, response);
         }
     }
 
@@ -91,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean isTokenNotValid(String jwt) {
         Claims claims = tokenUtils.getClaims(jwt);
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, -5);
+        c.add(Calendar.MINUTE, +5);
 
         return claims.getExpiration().before(c.getTime());
     }
