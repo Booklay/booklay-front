@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.service.search.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.search.request.SearchRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -34,14 +35,14 @@ public class SearchServiceImpl implements SearchService {
      * @return Optional 을 이용해 컨트롤러에서 분기가 가능하도록 처리
      */
     @Override
-    public Optional<PageResponse<RetrieveProductResponse>> getSearchResponse(SearchRequest searchRequest, int page) {
+    public Optional<PageResponse<ProductAllInOneResponse>> getSearchResponse(SearchRequest searchRequest, int page) {
 
         String query = "?page=" + page;
 
         URI uri = URI.create(gatewayIp + REQUEST_SEARCH_PRODUCT_URI + query);
 
         // 리팩토링 시 인자에 작성된 제네릭 타입 지우지 말 것, 요청에 대한 response 타입이 제대로 적용되지 않음.
-        ApiEntity<PageResponse<RetrieveProductResponse>> response = restService.post(uri.toString(), objectMapper.convertValue(searchRequest, Map.class), new ParameterizedTypeReference<PageResponse<RetrieveProductResponse>>(){});
+        ApiEntity<PageResponse<ProductAllInOneResponse>> response = restService.post(uri.toString(), objectMapper.convertValue(searchRequest, Map.class), new ParameterizedTypeReference<PageResponse<ProductAllInOneResponse>>(){});
 
         if (response.isSuccess()) {
             return Optional.of(response.getBody());

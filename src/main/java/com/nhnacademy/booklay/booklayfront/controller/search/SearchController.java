@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.search;
 
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.search.request.SearchRequest;
 import com.nhnacademy.booklay.booklayfront.service.search.SearchService;
@@ -35,7 +36,7 @@ public class SearchController extends BaseController {
                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                 Model model) {
 
-        Optional<PageResponse<RetrieveProductResponse>> response = searchService.getSearchResponse(searchRequest, page);
+        Optional<PageResponse<ProductAllInOneResponse>> response = searchService.getSearchResponse(searchRequest, page);
 
         if (response.isPresent()) {
             model.addAttribute("productList", response.get().getData());
