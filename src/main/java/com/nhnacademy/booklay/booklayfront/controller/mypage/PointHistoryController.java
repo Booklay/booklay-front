@@ -132,24 +132,24 @@ public class PointHistoryController {
 
         List<PointCouponRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
 
-        model.addAttribute("pointCouponList", list);
+        model.addAttribute("list", list);
         model.addAttribute("memberNo", memberInfo.getMemberNo());
         model.addAttribute("targetUrl", "member/memberPointCouponList");
 
         return "mypage/member/memberPointCouponList";
     }
 
-    @PostMapping("/present/{memberNo}")
+    @PostMapping("/present")
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
-                               @PathVariable Long memberNo,
+                               MemberInfo memberInfo,
                                Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = URI.create(redirectGatewayPrefix + "/present/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/present/" + memberInfo.getMemberNo());
 
         RequestEntity<String> requestEntity =
             new RequestEntity<>(objectMapper.writeValueAsString(pointPresentRequest), headers,
@@ -157,7 +157,7 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/point/" + memberNo;
+        return "redirect:/point/" + memberInfo.getMemberNo();
     }
 
     @GetMapping("/coupon/{memberNo}/{couponId}")
