@@ -1,0 +1,58 @@
+<!--/* default 레이아웃을 사용하는 템플릿*/-->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/popup}">
+<head>
+  <title>Content page 1</title>
+</head>
+<!---->
+<th:block layout:fragment="content">
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <thead>
+        <tr>
+          <th>상품 번호</th>
+          <th>제목</th>
+          <th>작가</th>
+          <th>출판사</th>
+          <th>등록 여부</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="book : ${bookList}">
+          <tr>
+            <td><span th:text="${book.productId}"/></td>
+            <td><span th:text="${book.title}"/></td>
+            <td>
+              <th:block th:each="author : ${book.authors}">
+                <span th:text="${author}"/>
+              </th:block>
+            </td>
+            <td><span th:text="${book.publisher}"/></td>
+            <td>
+              <form th:if="${!book.isRegistered}" method="post"
+                    th:action="@{/admin/product/subscribes/connect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${currentPage})}">
+                <input name="productId" type="number" th:value="${book.productId}" hidden="hidden"/>
+                <input name="subscribeId" type="number" th:value="${subscribeId}" hidden="hidden"/>
+                <input name="releaseDate" type="date"/>
+                <input type="submit" value="등록"/>
+              </form>
+
+              <form th:if="${book.isRegistered}" method="post"
+                    th:action="@{/admin/product/subscribes/disconnect/{subscribeId}/{pageNum} (subscribeId = ${subscribeId}, pageNum = ${currentPage})}">
+                <input name="productId" type="number" th:value="${book.productId}" hidden="hidden"/>
+                <input name="subscribeId" type="number" th:value="${subscribeId}" hidden="hidden"/>
+                <input type="submit" value="등록 취소"/>
+              </form>
+            </td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
+      <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+    </div>
+  </div>
+
+</th:block>
+<!---->
+</html>

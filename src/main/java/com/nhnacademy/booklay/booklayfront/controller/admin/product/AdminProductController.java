@@ -16,6 +16,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.request.CreatePro
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.DisAndConnectBookWithSubscribeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductBookRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.request.UpdateProductSubscribeRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveBookForSubscribeResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductBookForUpdateResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
@@ -132,8 +133,8 @@ public class AdminProductController extends BaseController{
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/product/view/" + productNo);
 
-    ApiEntity<RetrieveProductViewResponse> response = restService.get(mainUri.toString(), null,
-        RetrieveProductViewResponse.class);
+    ApiEntity<ProductAllInOneResponse> response = restService.get(mainUri.toString(), null,
+        ProductAllInOneResponse.class);
 
     model.addAttribute("productNo", productNo);
     model.addAttribute("product", response.getBody());
@@ -148,8 +149,8 @@ public class AdminProductController extends BaseController{
     model.addAttribute("recommendProducts", recommendGoodsResponse.getBody());
 
     //구독 상품의 경우 구독의 자식 상품들 목록 호출
-    if (Objects.nonNull(response.getBody().getSubscribeId())) {
-      Long subscribeId = response.getBody().getSubscribeId();
+    if (Objects.nonNull(response.getBody().getSubscribe())) {
+      Long subscribeId = response.getBody().getSubscribe().getId();
 
       URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/product/view/subscribe/" + subscribeId);
 
@@ -487,7 +488,7 @@ public class AdminProductController extends BaseController{
     model.addAttribute("subscribeId", subscribeId);
     model.addAttribute("bookList", bookList);
 
-    return PRE_FIX + "/productSubscribeConnector";
+    return PRE_FIX + "/subscribes";
   }
 
   /**
@@ -557,7 +558,7 @@ public class AdminProductController extends BaseController{
     model.addAttribute("productNo", productNo);
     model.addAttribute("productList", recommendResponse.getBody().getData());
 
-    return PRE_FIX + "/recommendConnector";
+    return PRE_FIX + "/relation";
   }
 
   /**
