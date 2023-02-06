@@ -56,9 +56,9 @@ public class PointHistoryController {
         this.redirectGatewayPrefixCoupon = gateway + DOMAIN_PREFIX_COUPON + "/members";
     }
 
-    @GetMapping(value = {"/{memberNo}"})
+    @GetMapping("{memberNo}")
     public String adminRetrievePointList(@RequestParam(value = "page", defaultValue = "0") int page,
-                                         @PathVariable(required = false) Long memberNo,
+                                         @PathVariable Long memberNo,
                                          Model model) {
 
         ApiEntity<PageResponse<PointHistoryRetrieveResponse>> response =
