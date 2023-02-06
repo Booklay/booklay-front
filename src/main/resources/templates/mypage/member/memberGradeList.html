@@ -1,32 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>회원 등급 조회 페이지</title>
 </head>
-<body>
-<div>
-    <h3>[회원 등급 리스트]</h3><br>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>등급이름</th>
-            <th>갱신일</th>
-        </tr>
-        </thead>
-        <tbody th:each="grade, gradeStat : ${list}">
-        <tr>
-            <td th:text="${gradeStat.count}"></td>
-            <td th:text="${grade.getName()}"></td>
-            <td th:text="${grade.getDate()}"></td>
-        </tr>
-        </tbody>
-    </table>
+<th:block layout:fragment="content">
 
-    <th:block th:if="${list.isEmpty()}">
-        <h2>등급 이력이 없습니다.</h2>
-    </th:block>
-</div>
-</body>
+    <div>
+        <h3>[회원 등급 조회]</h3><br>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>등급이름</th>
+                        <th>갱신일</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="grade, gradeStat : ${list}">
+                    <tr>
+                        <td th:text="${gradeStat.count}"></td>
+                        <td th:text="${grade.getName()}"></td>
+                        <td th:text="${grade.getDate()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <th:block th:if="${list.isEmpty()}">
+            <h2>등급 이력이 없습니다.</h2>
+        </th:block>
+    </div>
+</th:block>
 </html>

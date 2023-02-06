@@ -96,7 +96,7 @@ public class MemberController extends BaseController {
         return "mypage/member/memberDetail";
     }
 
-    @GetMapping("/grade")
+    @GetMapping("/profile/grade")
     public String retrieveMemberGrade(@RequestParam(value = "page", defaultValue = "0") int page,
                                       MemberInfo memberInfo,
                                       Model model) {
