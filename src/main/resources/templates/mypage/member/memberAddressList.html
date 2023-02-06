@@ -9,40 +9,47 @@
 </head>
 
 <th:block layout:fragment="content">
-<h3>[배송지 목록]</h3><br>
-<input type="button" value="추가하기" th:id="${memberNo}" onclick="showAddressPopup(this.getAttribute('id'))">
-<br>
-<table border="1">
-    <tr>
-        <th scope="col">번호</th>
-        <th scope="col">이름</th>
-        <th scope="col">우편번호</th>
-        <th scope="col">상세 주소</th>
-        <th scope="col">기본 배송지 여부</th>
-        <th scope="col">수정 여부</th>
-        <th scope="col">삭제 여부</th>
-    </tr>
-    <tr th:each="address, addressStat :${addresses}">
-        <td th:text="${addressStat.count}"></td>
-        <td th:text="${address.getName()}"></td>
-        <td th:text="${address.getZipCode()}"></td>
-        <td th:text="${address.getAddress()}"></td>
-        <td>
-            <span th:if="${address.getIsDefaultDestination()}">O</span>
-            <span th:unless="${address.getIsDefaultDestination()}">X</span>
-        </td>
-        <td>
-            <button><a
-                    th:href="@{/address/update/{memberNo}/{addressNo}(memberNo=${memberNo}, addressNo=${address.getId()})}">수정하기</a>
-            </button>
-        </td>
-        <td>
-            <button><a
-                    th:href="@{/address/delete/{memberNo}/{addressNo}(memberNo=${memberNo}, addressNo=${address.getId()})}">삭제하기</a>
-            </button>
-        </td>
-    </tr>
-</table>
-
+    <div>
+        <h3>[배송지 목록]</h3>
+        <button class="btn btn-outline-primary" onclick="showAddressPopup()">
+            추가하기
+        </button>
+        <br>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <tr>
+                        <th scope="col">번호</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">우편번호</th>
+                        <th scope="col">상세 주소</th>
+                        <th scope="col">기본 배송지 여부</th>
+                        <th scope="col">수정 여부</th>
+                        <th scope="col">삭제 여부</th>
+                    </tr>
+                    <tr th:each="address, addressStat :${addresses}">
+                        <td th:text="${addressStat.count}"></td>
+                        <td th:text="${address.getName()}"></td>
+                        <td th:text="${address.getZipCode()}"></td>
+                        <td th:text="${address.getAddress()}"></td>
+                        <td>
+                            <span th:if="${address.getIsDefaultDestination()}">O</span>
+                            <span th:unless="${address.getIsDefaultDestination()}">X</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary">
+                                <a th:href="@{/member/profile/address/update/{addressNo}(addressNo=${address.getId()})}">수정하기</a>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary">
+                                <a th:href="@{/member/profile/address/delete/{addressNo}(addressNo=${address.getId()})}">삭제하기</a>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </th:block>
 </html>

@@ -1,5 +1,8 @@
 package com.nhnacademy.booklay.booklayfront.controller.mypage;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -41,12 +44,10 @@ public class PointHistoryController {
     private final String redirectGatewayPrefix;
     private final String redirectGatewayPrefixCoupon;
 
-    private final static String MYPAGE = "mypage/myPage";
-
     public PointHistoryController(RestTemplate restTemplate, String gateway) {
         this.restTemplate = restTemplate;
-        this.redirectGatewayPrefix = gateway + "/shop/v1" + "/point";
-        this.redirectGatewayPrefixCoupon = gateway + "/coupon/v1" + "/members";
+        this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/point";
+        this.redirectGatewayPrefixCoupon = gateway + DOMAIN_PREFIX_COUPON + "/members";
     }
 
     @GetMapping("/{memberNo}")
@@ -72,10 +73,8 @@ public class PointHistoryController {
         List<PointHistoryRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
 
         model.addAttribute("pointList", list);
-        model.addAttribute("targetUrl", "member/memberPointList");
 
-        return MYPAGE;
-//        return "mypage/member/memberPointList";
+        return "mypage/member/memberPointList";
     }
 
     @GetMapping("/present/{memberNo}")
@@ -93,9 +92,8 @@ public class PointHistoryController {
             restTemplate.exchange(requestEntity, TotalPointRetrieveResponse.class);
 
         model.addAttribute("totalPoint", response.getBody());
-        model.addAttribute("targetUrl", "member/memberPointPresent");
 
-        return MYPAGE;
+        return "mypage/member/memberPointPresent";
     }
 
     @GetMapping("/coupon/{memberNo}")
@@ -120,8 +118,7 @@ public class PointHistoryController {
         model.addAttribute("memberNo", memberNo);
         model.addAttribute("targetUrl", "member/memberPointCouponList");
 
-        return MYPAGE;
-//        return "mypage/member/memberPointCouponList";
+        return "mypage/member/memberPointCouponList";
     }
 
     @PostMapping("/present/{memberNo}")

@@ -1,5 +1,5 @@
 <!--/* 새로운 프레그먼트 작성*/-->
-<th:block th:fragment="profile_side" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="profile_side" xmlns:th="http://www.thymeleaf.org">
     <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,7 +144,7 @@
                         <div class="dropdown-menu">
                             <div class="dropdown-menu-columns">
                                 <div class="dropdown-menu-column">
-                                    <a class="dropdown-item" th:href="@{/member}">
+                                    <a class="dropdown-item" th:href="@{/member/detail}">
                                         개인정보
                                     </a>
                                     <a class="dropdown-item" th:href="@{/member/profile/grade}">

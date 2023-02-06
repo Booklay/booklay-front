@@ -1,13 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
 <head>
     <meta charset="UTF-8">
     <title>회원 탈퇴하기</title>
 </head>
-<body>
-<h3>[회원 탈퇴하기]</h3><br>
-<b>탈퇴하시겠습니까?</b><br>
-<button><a th:href="@{/members/drop/process/{memberNo}(memberNo=${memberNo})}">탈퇴</a></button>
-<input type="button" value="취소" onclick="window.close()">
-</body>
+
+<th:block layout:fragment="content">
+    <h3>[회원 탈퇴하기]</h3><br>
+    <b>탈퇴하시겠습니까?</b><br>
+    <button class="btn btn-outline-primary"><a href="/member/drop/process">탈퇴</a></button>
+    <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
+</th:block>
 </html>
