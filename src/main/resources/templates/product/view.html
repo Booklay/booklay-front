@@ -107,18 +107,19 @@
             </ul>
           </div>
 
+          <!--          연관상품 시작-->
           <div class="row row-cards">
             <div class="card-header">
               <h1>연관 상품</h1>
             </div>
             <th:block th:each="item : ${recommendProducts}">
-              <div class="col-sm-6 col-lg-4">
+              <div class="col-sm-4 col-lg-2">
                 <div class="card card-sm">
                   <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                      class="d-block">
-                    <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                    <div class="text-center">
                       <img class="product-img"
-                           style="max-height: 413px; width: 95%; margin-top:10px;"
+                           style="max-height: 413px; width: 95%; margin-top:10px; overflow: auto;"
                            th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
                     </div>
                   </a>
@@ -169,6 +170,8 @@
               </div>
             </th:block>
           </div>
+          <!--          연관상품 종료-->
+
           <!--/* 책 소개 */-->
           <div class="col-12 my-4">
             <h1>책 소개</h1>
@@ -180,14 +183,14 @@
           <th:block th:if="${product.subscribe != null}">
             <div class="row row-cards">
               <div class="card-header">
-                <h1>연관 상품</h1>
+                <h1>구독 하위 상품</h1>
               </div>
               <th:block th:each="item : ${booksAtSubscribe}">
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-4 col-lg-2">
                   <div class="card card-sm">
                     <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                        class="d-block">
-                      <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                      <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
                         <img class="product-img"
                              style="max-height: 413px; width: 95%; margin-top:10px;"
                              th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
@@ -196,8 +199,9 @@
                     <div class="card-body">
                       <div class="d-flex align-items-center">
                         <div>
-                          <div><a th:text="${item.title}"
-                                  th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
+                          <div>
+                            <a th:text="${item.title}"
+                               th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
                           </div>
                           <div class="text-muted">
                             <th:block th:each="author : ${item.authors}">

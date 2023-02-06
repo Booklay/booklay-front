@@ -89,22 +89,31 @@
             <!--        관리자 식별-->
             <th:block>
               </br>
-              <input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출"
+
+              <input class="btn btn-outline-primary btnAtVar" th:id="${productNo}" type="button"
+                     value="태그 등록 팝업창 호출"
                      onclick="showTagRegisterPopup(id);"/>
 
-              <form th:if="${product.detail != null}" class="btnAtVar" method="get"
+              <form class="btnAtVar" th:if="${product.detail != null}" method="get"
                     th:action="@{/admin/product/books/update/{productId} (productId = ${productNo})}">
-                <input type="submit" value="수정"/>
+                <input class="btn btn-outline-primary btnAtVar" type="submit" value="수정"/>
               </form>
 
-              <form th:if="${product.subscribe != null}" class="btnAtVar" method="get"
+              <form class="btnAtVar" th:if="${product.subscribe != null}" method="get"
                     th:action="@{/admin/product/subscribes/update/{productId} (productId = ${productNo})}">
-                <input type="submit" value="수정"/>
+                <input class="btn btn-outline-primary btnAtVar" type="submit" value="수정"/>
               </form>
 
               <form class="btnAtVar" method="post"
+                    th:if="${!product.info.deleted}"
                     th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
-                <input type="submit" value="삭제"/>
+                <input class="btn btn-outline-danger btnAtVar" type="submit" value="삭제"/>
+              </form>
+
+              <form class="btnAtVar" method="post"
+                    th:if="${product.info.deleted}"
+                    th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
+                <input class="btn btn-outline-primary btnAtVar" type="submit" value="복구"/>
               </form>
 
             </th:block>
@@ -129,20 +138,22 @@
             </ul>
           </div>
 
-<!--          연관 상품 시작-->
+          <!--          연관 상품 시작-->
           <div class="row row-cards">
             <div class="card-header">
               <h1>연관 상품</h1>
-              <br>
-              <input th:id="${product.info.id}" type="button" value="연관 상품 추가"
+              </br>
+              <input class="btn btn-outline-primary" th:id="${product.info.id}" type="button"
+                     value="연관 상품 추가"
+                     style="margin-left:4rem;"
                      onclick="showRecommendRegisterPopup(id);"/>
             </div>
             <th:block th:each="item : ${recommendProducts}">
-              <div class="col-sm-6 col-lg-4">
+              <div class="col-sm-4 col-lg-2">
                 <div class="card card-sm">
                   <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                      class="d-block">
-                    <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                    <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
                       <img class="product-img"
                            style="max-height: 413px; width: 95%; margin-top:10px;"
                            th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
@@ -195,7 +206,7 @@
               </div>
             </th:block>
           </div>
-<!--          연관 상품 종료-->
+          <!--          연관 상품 종료-->
           <!--/* 책 소개 */-->
           <div class="col-12 my-4">
             <h1>책 소개</h1>
@@ -207,17 +218,18 @@
           <th:block th:if="${product.subscribe != null}">
             <div class="row row-cards">
               <div class="card-header">
-                <h1>구독 자식 상품</h1>
-                <input th:id="${product.subscribe.id}" type="button" value="구독 상품에 책 추가"
+                <h1>구독 대상 상품</h1>
+                <input class="btn btn-outline-primary" th:id="${product.subscribe.id}" type="button"
+                       value="구독 상품에 책 추가" style="margin-left:4rem;"
                        onclick="showBookSubscribeRegisterPopup(id);"/>
                 <hr>
               </div>
               <th:block th:each="item : ${booksAtSubscribe}">
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-4 col-lg-2">
                   <div class="card card-sm">
                     <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                        class="d-block">
-                      <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                      <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
                         <img class="product-img"
                              style="max-height: 413px; width: 95%; margin-top:10px;"
                              th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>

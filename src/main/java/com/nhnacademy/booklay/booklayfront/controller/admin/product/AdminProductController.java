@@ -572,6 +572,8 @@ public class AdminProductController extends BaseController{
       @PathVariable Long pageNum) {
     Long productNo = request.getBaseId();
 
+    log.info("진입 확인");
+
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend");
 
     restService.post(uri.toString(), mapper.convertValue(request, Map.class),
