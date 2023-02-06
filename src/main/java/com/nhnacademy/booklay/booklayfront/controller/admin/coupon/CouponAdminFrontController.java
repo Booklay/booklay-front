@@ -149,7 +149,7 @@ public class CouponAdminFrontController {
      * 쿠폰 수정 폼.
      * @param couponId 수정하려는 쿠폰의 id
      */
-    @GetMapping("update/{couponId}")
+    @GetMapping("update-form/{couponId}")
     public String updateCouponForm(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
@@ -163,7 +163,7 @@ public class CouponAdminFrontController {
      * @param couponRequest 수정 내용
      * @param couponId 수정하려는 쿠폰의 id
      */
-    @PostMapping("update/{couponId}")
+    @PostMapping("update-form/{couponId}")
     public String postUpdateCouponForm(@Valid @ModelAttribute CouponAddRequest couponRequest,
                                        @PathVariable String couponId) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, couponId);
