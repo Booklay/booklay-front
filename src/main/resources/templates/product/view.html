@@ -85,26 +85,35 @@
               <span class="text-info">가격</span>
               <span th:text="${#numbers.formatCurrency(product.info.price)}"></span>
             </p>
-            <button class="btn btn-outline-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                <path d="M17 17h-11v-14h-2"></path>
-                <path d="M6 5l6 .429m7.138 6.573l-.143 1h-13"></path>
-                <path d="M15 6h6m-3 -3v6"></path>
-              </svg>
-            </button>
 
-            <button class="btn btn-outline-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                <path d="M12 10l0 3l2 0"></path>
-                <path d="M7 4l-2.75 2"></path>
-                <path d="M17 4l2.75 2"></path>
-              </svg>
-            </button>
+            <th:block th:if="${thisMember.memberNo != null}">
+              <button class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-shopping-cart-plus" width="24" height="24"
+                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                  <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                  <path d="M17 17h-11v-14h-2"></path>
+                  <path d="M6 5l6 .429m7.138 6.573l-.143 1h-13"></path>
+                  <path d="M15 6h6m-3 -3v6"></path>
+                </svg>
+              </button>
+
+              <button class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
+                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                     stroke="currentColor" fill="none" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
+                  <path d="M12 10l0 3l2 0"></path>
+                  <path d="M7 4l-2.75 2"></path>
+                  <path d="M17 4l2.75 2"></path>
+                </svg>
+              </button>
+            </th:block>
 
           </div>
 
