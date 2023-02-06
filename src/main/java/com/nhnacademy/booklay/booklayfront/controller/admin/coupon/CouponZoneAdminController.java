@@ -1,7 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
@@ -29,12 +27,13 @@ public class CouponZoneAdminController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
-    private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
-    private static final String RETURN_PAGE = "admin/adminPage";
+
+    private final String COUPON_ZONE_RESOURCE_BASE = "admin/coupon/couponZone/";
+    private final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
 
     /**
      * 관리자의 쿠폰존 조회.
-     * 수량 제한 있는 쿠폰과, 제한 없는 쿠폰을 각 각 받아와서 보여줍니다.
+     * 이달의 쿠폰(수량 제한 쿠폰), 등급별 쿠폰, 무제한 쿠폰을 불러옵니다.
      */
     @GetMapping
     public String getCouponZoneList(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -42,6 +41,8 @@ public class CouponZoneAdminController {
         String query = "?page=" + page;
 
         URI getLimitedUri =
+            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
+        URI getGradedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
         URI getUnlimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited" + query);
@@ -54,19 +55,19 @@ public class CouponZoneAdminController {
             restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
-        model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneList");
         model.addAttribute("limitedList", limitedList.getBody().getData());
+        model.addAttribute("gradedList", null);
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
-        return "admin/coupon/couponZone/couponZoneList";
+        return COUPON_ZONE_RESOURCE_BASE + "couponZoneList";
     }
 
     /**
      * 쿠폰존에 쿠폰을 등록하기 위한 폼 호출.
      */
     @GetMapping("/create-form")
-    public String getCouponZoneAddForm(Model model) {
-        return "admin/coupon/couponZone/couponZoneAddForm";
+    public String getCouponZoneAddForm() {
+        return COUPON_ZONE_RESOURCE_BASE + "couponZoneAddForm";
     }
 
     /**
@@ -97,7 +98,8 @@ public class CouponZoneAdminController {
 
     @GetMapping("/delete/{couponZoneId}")
     public String deleteAtCouponZone(@PathVariable Long couponZoneId) {
-        URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
+        URI uri =
+            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
 
         restService.delete(uri.toString());
 

@@ -13,5 +13,6 @@ public class CouponZoneRetrieveResponse {
     private String description;
     private LocalDateTime openedAt;
     private LocalDateTime issuanceDeadlineAt;
+    // TODO 등급 넣기
     private Boolean isBlind;
 }

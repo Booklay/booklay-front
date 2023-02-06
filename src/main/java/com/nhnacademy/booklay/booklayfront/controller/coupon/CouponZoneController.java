@@ -28,7 +28,6 @@ public class CouponZoneController {
 
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String SHOP_DOMAIN_PREFIX = "/shop/v1";
-    private static final String RETURN_PAGE = "admin/adminPage";
 
     /**
      * 사용자의 쿠폰존 페이지.
