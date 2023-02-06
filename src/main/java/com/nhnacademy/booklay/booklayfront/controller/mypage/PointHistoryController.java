@@ -94,13 +94,13 @@ public class PointHistoryController {
         }
     }
 
-    @GetMapping("/present/{memberNo}")
-    public String retrievePointPresentForm(@PathVariable Long memberNo,
+    @GetMapping("/present")
+    public String retrievePointPresentForm(MemberInfo memberInfo,
                                            Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefix + "/total/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/total/" + memberInfo.getMemberNo());
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.GET, uri);
@@ -113,13 +113,14 @@ public class PointHistoryController {
         return "mypage/member/memberPointPresent";
     }
 
-    @GetMapping("/coupon/{memberNo}")
-    public String retrievePointCouponList(@PathVariable Long memberNo,
+    @GetMapping("/coupon")
+    public String retrievePointCouponList(MemberInfo memberInfo,
                                           Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefixCoupon + "/" + memberNo + "/coupons/point");
+        URI uri = URI.create(
+            redirectGatewayPrefixCoupon + "/" + memberInfo.getMemberNo() + "/coupons/point");
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.GET, uri);
@@ -132,7 +133,7 @@ public class PointHistoryController {
         List<PointCouponRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
 
         model.addAttribute("pointCouponList", list);
-        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
         model.addAttribute("targetUrl", "member/memberPointCouponList");
 
         return "mypage/member/memberPointCouponList";
