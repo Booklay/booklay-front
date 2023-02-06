@@ -30,21 +30,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
 @RequestMapping("/member")
 public class MemberController extends BaseController {
-    private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final MemberService memberService;
 
-    public MemberController(RestTemplate restTemplate, RestService restService, String gateway,
+    public MemberController(RestService restService, String gateway,
                             MemberService memberService, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
         this.restService = restService;
         this.objectMapper = objectMapper;
         this.memberService = memberService;
