@@ -1,14 +1,27 @@
 package com.nhnacademy.booklay.booklayfront.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+@SuppressWarnings("unchecked")
 public class ControllerUtil {
+    private static ObjectMapper objectMapper;
+
+    @Autowired
+    private ControllerUtil(ObjectMapper objectMapper) {
+        ControllerUtil.objectMapper = objectMapper;
+    }
+
     public static String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
         for (String s : strings) {
@@ -18,14 +31,41 @@ public class ControllerUtil {
     }
 
     public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, Integer size) {
+        return getDefaultPageMap(pageNum, size, new MemberInfo());
+    }
+
+    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum) {
+        return getDefaultPageMap(pageNum, 20);
+    }
+
+    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, MemberInfo memberInfo){
+        return getDefaultPageMap(pageNum, 20, memberInfo);
+    }
+
+    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, Integer size, MemberInfo memberInfo){
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.setAll(getMemberInfoMap(memberInfo));
         map.add("page", pageNum.toString());
         map.add("size", size.toString());
         return map;
     }
 
-    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum) {
-        return getDefaultPageMap(pageNum, 20);
+    public static Map<String, String> getMemberInfoMap(MemberInfo memberInfo){
+        if (memberInfo.getMemberNo() == null) {
+            Map<String, String> map = new HashMap<>();
+            String nullChangeText = "\u0000";
+            map.put("memberNo", nullChangeText);
+            map.put("gender", nullChangeText);
+            map.put("memberId", nullChangeText);
+            map.put("nickname", nullChangeText);
+            map.put("name", nullChangeText);
+            map.put("birthday", nullChangeText);
+            map.put("phoneNo", nullChangeText);
+            map.put("email", nullChangeText);
+            return map;
+        }else {
+            return objectMapper.convertValue(memberInfo, Map.class);
+        }
     }
 
     public static void setCurrentPageAndMaxPageToModel(Model model, PageResponse<?> response){
