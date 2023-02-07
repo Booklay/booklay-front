@@ -54,9 +54,10 @@
                         <th>최소사용금액</th>
                         <th>최대할인금액</th>
                         <th>수량제한</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>상세보기</th>
+                        <th>정보수정</th>
+                        <th>이미지수정</th>
+                        <th>삭제하기</th>
                     </tr>
                 </thead>
                 <tbody th:each="coupon, couponStat:${list}">
@@ -81,6 +82,7 @@
                     </td>
                     <td><a class="btn btn-outline-primary" th:onclick="'showCouponDetail(' + ${coupon.id} + ')'">상세</a></td>
                     <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/update-form/'+coupon.id}">수정</a></td>
+                    <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/update-image/'+coupon.id}">이미지변경</a></td>
                     <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
                 </tr>
                 </tbody>
