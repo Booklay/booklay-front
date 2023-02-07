@@ -1,0 +1,76 @@
+<!--/* default 레이아웃을 사용하는 템플릿*/-->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/popup}">
+<head>
+  <title>북레이 - 연관상품 등록</title>
+</head>
+<!---->
+<th:block layout:fragment="content">
+  <form>
+    <input type="text" name="search"/>
+    <input type="submit" value="검색"/>
+  </form>
+
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <tbody>
+        <th:block th:each="product : ${productList}">
+          <tr>
+            <td rowspan="3">
+              <img class="product-img"
+                   th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
+            </td>
+            <td colspan="2"><a
+                th:href="@{/product/view/{productId} (productId = ${product.productId})}"
+                th:text="${product.title}"/></td>
+            <td rowspan="3">
+              <th:block th:if="${product.productId != productNo}">
+                <form th:if="${product.recommend}" method="post"
+                      th:action="@{/admin/product/recommend/delete/{pageNum} (pageNum = ${currentPage})}"
+                      )>
+                  <input name="targetId" type="number" th:value="${product.productId}"
+                         hidden="hidden">
+                  <input name="baseId" type="number" th:value="${productNo}" hidden="hidden">
+                  <input type="submit" value="등록 취소">
+                </form>
+                <form th:if="${!product.recommend}" method="post"
+                      th:action="@{/admin/product/recommend/create/{pageNum} (pageNum = ${currentPage})}">
+                  <input name="targetId" type="number" th:value="${product.productId}"
+                         hidden="hidden">
+                  <input name="baseId" type="number" th:value="${productNo}" hidden="hidden">
+                  <input type="submit" value="등록">
+                </form>
+              </th:block>
+              <th:block th:if="${product.productId == productNo}">
+                <span>등록 불가능</span>
+              </th:block>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              작가 :
+              <th:block th:each="author : ${product.authors}"><span th:text="${author.name}"/>
+              </th:block>
+            </td>
+            <td>출판사 : <span th:text="${product.publisher}"/></td>
+          </tr>
+
+          <tr>
+            <td><span th:text="${product.price}"/> 원</td>
+            <td>적립률 : <span th:if="${product.pointMethod}" th:text="${product.pointRate}"/> %</td>
+          </tr>
+        </th:block>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+  <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+
+
+</th:block>
+<!---->
+</html>

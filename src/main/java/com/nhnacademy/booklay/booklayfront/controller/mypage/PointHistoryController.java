@@ -1,12 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.controller.mypage;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointCouponRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.service.mypage.PointHistoryService;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -34,57 +40,67 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Controller
-@RequestMapping("/point")
+@RequestMapping("/member/profile/point")
 public class PointHistoryController {
     private final RestTemplate restTemplate;
 
     private final String redirectGatewayPrefix;
     private final String redirectGatewayPrefixCoupon;
+    private final PointHistoryService pointHistoryService;
 
-    private final static String MYPAGE = "mypage/myPage";
-
-    public PointHistoryController(RestTemplate restTemplate, String gateway) {
+    public PointHistoryController(RestTemplate restTemplate,
+                                  PointHistoryService pointHistoryService, String gateway) {
         this.restTemplate = restTemplate;
-        this.redirectGatewayPrefix = gateway + "/shop/v1" + "/point";
-        this.redirectGatewayPrefixCoupon = gateway + "/coupon/v1" + "/members";
+        this.pointHistoryService = pointHistoryService;
+        this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/point";
+        this.redirectGatewayPrefixCoupon = gateway + DOMAIN_PREFIX_COUPON + "/members";
     }
 
-    @GetMapping("/{memberNo}")
-    public String retrievePointList(@RequestParam(value = "page", defaultValue = "0") int page,
-                                    @PathVariable Long memberNo,
-                                    Model model) {
+    @GetMapping("{memberNo}")
+    public String adminRetrievePointList(@RequestParam(value = "page", defaultValue = "0") int page,
+                                         @PathVariable Long memberNo,
+                                         Model model) {
 
-        String query = "?page=" + page;
+        ApiEntity<PageResponse<PointHistoryRetrieveResponse>> response =
+            pointHistoryService.retrievePointHistory(memberNo, page);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
 
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo + query);
-
-        RequestEntity<Void> requestEntity =
-            new RequestEntity<>(headers, HttpMethod.GET, uri);
-
-        ResponseEntity<PageResponse<PointHistoryRetrieveResponse>> response =
-            restTemplate.exchange(requestEntity,
-                new ParameterizedTypeReference<>() {
-                });
-
-        List<PointHistoryRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
-
-        model.addAttribute("pointList", list);
-        model.addAttribute("targetUrl", "member/memberPointList");
-
-        return MYPAGE;
-//        return "mypage/member/memberPointList";
+            return "mypage/member/memberPointList";
+        } else {
+            return "/";
+        }
     }
 
-    @GetMapping("/present/{memberNo}")
-    public String retrievePointPresentForm(@PathVariable Long memberNo,
+    @GetMapping(value = {"/", ""})
+    public String memberRetrievePointList(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        MemberInfo memberInfo,
+        Model model) {
+        ApiEntity<PageResponse<PointHistoryRetrieveResponse>> response =
+            pointHistoryService.retrievePointHistory(memberInfo.getMemberNo(), page);
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+
+            return "mypage/member/memberPointList";
+        } else {
+            return "/";
+        }
+    }
+
+    @GetMapping("/present")
+    public String retrievePointPresentForm(MemberInfo memberInfo,
                                            Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefix + "/total/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/total/" + memberInfo.getMemberNo());
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.GET, uri);
@@ -93,18 +109,18 @@ public class PointHistoryController {
             restTemplate.exchange(requestEntity, TotalPointRetrieveResponse.class);
 
         model.addAttribute("totalPoint", response.getBody());
-        model.addAttribute("targetUrl", "member/memberPointPresent");
 
-        return MYPAGE;
+        return "mypage/member/memberPointPresent";
     }
 
-    @GetMapping("/coupon/{memberNo}")
-    public String retrievePointCouponList(@PathVariable Long memberNo,
+    @GetMapping("/coupon")
+    public String retrievePointCouponList(MemberInfo memberInfo,
                                           Model model) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        URI uri = URI.create(redirectGatewayPrefixCoupon + "/" + memberNo + "/coupons/point");
+        URI uri = URI.create(
+            redirectGatewayPrefixCoupon + "/" + memberInfo.getMemberNo() + "/coupons/point");
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.GET, uri);
@@ -116,25 +132,24 @@ public class PointHistoryController {
 
         List<PointCouponRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
 
-        model.addAttribute("pointCouponList", list);
-        model.addAttribute("memberNo", memberNo);
+        model.addAttribute("list", list);
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
         model.addAttribute("targetUrl", "member/memberPointCouponList");
 
-        return MYPAGE;
-//        return "mypage/member/memberPointCouponList";
+        return "mypage/member/memberPointCouponList";
     }
 
-    @PostMapping("/present/{memberNo}")
+    @PostMapping("/present")
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
-                               @PathVariable Long memberNo,
+                               MemberInfo memberInfo,
                                Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = URI.create(redirectGatewayPrefix + "/present/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/present/" + memberInfo.getMemberNo());
 
         RequestEntity<String> requestEntity =
             new RequestEntity<>(objectMapper.writeValueAsString(pointPresentRequest), headers,
@@ -142,7 +157,7 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/point/" + memberNo;
+        return "redirect:/point/" + memberInfo.getMemberNo();
     }
 
     @GetMapping("/coupon/{memberNo}/{couponId}")

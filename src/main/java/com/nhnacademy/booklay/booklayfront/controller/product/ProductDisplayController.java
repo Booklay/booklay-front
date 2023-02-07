@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
@@ -81,14 +82,14 @@ public class ProductDisplayController extends BaseController {
     URI uri = URI.create(
         gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
 
-    ApiEntity<PageResponse<RetrieveProductResponse>> productResponse = restService.get(
+    ApiEntity<PageResponse<ProductAllInOneResponse>> productResponse = restService.get(
         uri.toString(), null, new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
       int totalPage = productResponse.getBody().getTotalPages();
       int currentPage = productResponse.getBody().getPageNumber();
-      List<RetrieveProductResponse> productList = productResponse.getBody().getData();
+      List<ProductAllInOneResponse> productList = productResponse.getBody().getData();
 
       model.addAttribute("currentPage", currentPage);
       model.addAttribute("totalPage", totalPage);
@@ -101,7 +102,8 @@ public class ProductDisplayController extends BaseController {
 
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
-  public String productViewer(@PathVariable("productNo") Long productNo, Model model) {
+  public String productViewer(@PathVariable("productNo") Long productNo, Model model,
+      MemberInfo memberInfo) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -109,8 +111,8 @@ public class ProductDisplayController extends BaseController {
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
 
-    ApiEntity<RetrieveProductViewResponse> response = restService.get(mainUri.toString(), null,
-        RetrieveProductViewResponse.class);
+    ApiEntity<ProductAllInOneResponse> response = restService.get(mainUri.toString(), null,
+        ProductAllInOneResponse.class);
 
     model.addAttribute("productNo", productNo);
     model.addAttribute("product", response.getBody());
@@ -125,8 +127,8 @@ public class ProductDisplayController extends BaseController {
     model.addAttribute("recommendProducts", recommendGoodsResponse.getBody());
 
     //구독 상품의 경우 구독의 자식 상품들 목록 호출
-    if (Objects.nonNull(response.getBody().getSubscribeId())) {
-      Long subscribeId = response.getBody().getSubscribeId();
+    if (Objects.nonNull(response.getBody().getSubscribe())) {
+      Long subscribeId = response.getBody().getSubscribe().getId();
 
       URI uriForSubscribe = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/subscribe/" + subscribeId);
 
@@ -136,7 +138,7 @@ public class ProductDisplayController extends BaseController {
 
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
-
+    model.addAttribute("thisMember", memberInfo);
     return "product/view";
   }
 

@@ -1,25 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <meta charset="UTF-8">
     <title>회원 권한</title>
 </head>
-<body>
-<h3>[회원 권한 보기]</h3><br>
-<table border="1">
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>권한</th>
-    </tr>
-    </thead>
 
-    <tbody th:each="authority :${authorities}">
-    <tr>
-        <td th:text="${authorityStat.count}"></td>
-        <td th:text="${authority.getName()}"></td>
-    </tr>
-    </tbody>
-</table>
-</body>
+<th:block layout:fragment="content">
+    <h3>[회원 권한 보기]</h3><br>
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>권한</th>
+                </tr>
+                </thead>
+
+                <tbody th:each="authority :${authorities}">
+                <tr>
+                    <td th:text="${authorityStat.count}"></td>
+                    <td th:text="${authority.getName()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
 </html>

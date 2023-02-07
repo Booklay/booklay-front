@@ -1,0 +1,69 @@
+<!--/* default 레이아웃을 사용하는 템플릿*/-->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/popup}">
+<head>
+  <title>북레이 - 카테고리 선택</title>
+  <script src="/js/product/categoryPopup.js"></script>
+</head>
+<!---->
+<th:block layout:fragment="content">
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <thead>
+        <tr>
+          <th>카테고리 번호</th>
+          <th>상위 카테고리</th>
+          <th>카테고리 이름</th>
+          <th>카테고리 깊이</th>
+          <th>노출 여부</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody th:each="category : ${list}">
+        <tr>
+
+          <td>
+            <label>
+              <span th:text="${category.id}"></span>
+            </label>
+          </td>
+
+          <td>
+            <label th:if="${category.getParentCategoryId()} == null">
+              <span th:text="없음"></span>
+            </label>
+            <label th:unless="${category.getParentCategoryId() == null}">
+              <span th:text="${category.getParentCategoryId()}"></span>
+            </label>
+          </td>
+
+          <td>
+            <label>
+              <span th:text="${category.name}"></span>
+            </label>
+          </td>
+
+          <td>
+            <label>
+              <span th:text="${category.depth}"></span>
+            </label>
+          </td>
+
+          <td>
+            <label class="exposure-text">
+              <span th:text="${category.isExposure}"></span>
+            </label>
+          </td>
+          <td>
+            <input class="cat-select-btn" type="button" value="선택" th:id="${category.id}"
+                   th:name="${category.name}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+</th:block>
+<!---->
+</html>

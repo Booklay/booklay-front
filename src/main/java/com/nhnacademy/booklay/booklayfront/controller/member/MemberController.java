@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -24,31 +26,26 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Controller
 @RequestMapping("/member")
 public class MemberController extends BaseController {
-    private final RestTemplate restTemplate;
     private final String redirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final MemberService memberService;
-    private final static String MYPAGE = "mypage/myPage";
 
-    public MemberController(RestTemplate restTemplate, RestService restService, String gateway,
+    public MemberController(RestService restService, String gateway,
                             MemberService memberService, ObjectMapper objectMapper) {
-        this.restTemplate = restTemplate;
         this.restService = restService;
         this.objectMapper = objectMapper;
         this.memberService = memberService;
-        redirectGatewayPrefix = gateway + "/shop/v1" + "/members";
+        redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/members";
     }
 
 
@@ -58,9 +55,9 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix);
 
         restService.post(uri.toString(),
-                         objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
-                         Void.class);
-        // TODO 2: 에러처리
+            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+            Void.class);
+        //TODO 2: 에러처리
 
         return "redirect:/";
     }
@@ -70,8 +67,9 @@ public class MemberController extends BaseController {
         return "member/loginForm";
     }
 
-    @GetMapping(value = { "", "/", "/profile" })
-    private String profileMain() {
+    @GetMapping(value = {"", "/", "/profile"})
+    private String profileMain(MemberInfo memberInfo, Model model) {
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
         return "mypage/profile/main";
     }
 
@@ -81,28 +79,27 @@ public class MemberController extends BaseController {
         return "member/register";
     }
 
-    @GetMapping("/{memberNo}")
-    public String retrieveMemberDetail(@PathVariable Long memberNo, Model model, MemberInfo memberInfo) {
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
+    @GetMapping("/detail")
+    public String retrieveMemberDetail(Model model, MemberInfo memberInfo) {
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         ApiEntity<MemberRetrieveResponse> response =
             restService.get(uri.toString(), null, MemberRetrieveResponse.class);
 
         model.addAttribute("member", response.getBody());
-        model.addAttribute("memberNo", memberNo);
-        model.addAttribute("targetUrl", "member/memberDetail");
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
 
         log.info("member id = {}", memberInfo.getMemberId());
-        return MYPAGE;
+        return "mypage/member/memberDetail";
     }
 
-    @GetMapping("/grade/{memberNo}")
+    @GetMapping("/profile/grade")
     public String retrieveMemberGrade(@RequestParam(value = "page", defaultValue = "0") int page,
-                                      @PathVariable Long memberNo,
+                                      MemberInfo memberInfo,
                                       Model model) {
         String query = "?page=" + page;
 
-        URI uri = URI.create(redirectGatewayPrefix + "/grade/" + memberNo + query);
+        URI uri = URI.create(redirectGatewayPrefix + "/grade/" + memberInfo.getMemberNo() + query);
 
         ApiEntity<PageResponse<MemberGradeRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -112,34 +109,30 @@ public class MemberController extends BaseController {
             model.addAttribute("list", response.getBody().getData());
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
-            model.addAttribute("targetUrl", "member/memberGradeList");
 
-            return MYPAGE;
-//            return "mypage/member/memberGradeList";
+            return "mypage/member/memberGradeList";
         } else {
             return "/";
         }
     }
 
-    @GetMapping("/authority/{memberNo}")
-    public String retrieveMemberAuthority(@PathVariable Long memberNo, Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/authority/" + memberNo);
+    @GetMapping("/authority")
+    public String retrieveMemberAuthority(MemberInfo memberInfo, Model model) {
+        URI uri = URI.create(redirectGatewayPrefix + "/authority/" + memberInfo.getMemberNo());
 
         ApiEntity<List<MemberAuthorityRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
         model.addAttribute("authorities", response.getBody());
-        model.addAttribute("memberNo", memberNo);
-        model.addAttribute("targetUrl", "member/memberAuthorityList");
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
 
-        return MYPAGE;
-//        return "mypage/member/memberAuthorityList";
+        return "mypage/member/memberAuthorityList";
     }
 
-    @GetMapping("/update/{memberNo}")
-    public String retrieveMemberUpdateForm(@PathVariable Long memberNo, Model model) {
-        String query = "/" + memberNo;
+    @GetMapping("/update")
+    public String retrieveMemberUpdateForm(MemberInfo memberInfo, Model model) {
+        String query = "/" + memberInfo.getMemberNo();
 
         URI uri = URI.create(redirectGatewayPrefix + query);
 
@@ -148,7 +141,7 @@ public class MemberController extends BaseController {
 
         if (response.isSuccess()) {
             model.addAttribute("member", response.getBody());
-            model.addAttribute("memberNo", memberNo);
+            model.addAttribute("memberNo", memberInfo.getMemberNo());
 
             return "mypage/member/memberUpdateForm";
         } else {
@@ -156,34 +149,32 @@ public class MemberController extends BaseController {
         }
     }
 
-    // TODO memberNo는 세션에서 획득
-    @PostMapping("/update/{memberNo}")
-    public String updateMember(@PathVariable Long memberNo,
+    @PostMapping("/update")
+    public String updateMember(MemberInfo memberInfo,
                                @Valid @ModelAttribute MemberUpdateRequest request,
                                BindingResult bindingResult) {
 
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
-                        Void.class);
+            Void.class);
 
-        return "redirect:/member/" + memberNo;
+        return "redirect:/member/" + memberInfo.getMemberNo();
     }
 
-    @GetMapping("/drop/{memberNo}")
-    public String retrieveDeleteMemberForm(@PathVariable Long memberNo, Model model) {
-        model.addAttribute("memberNo", memberNo);
+    @GetMapping("/drop")
+    public String retrieveDeleteMemberForm(MemberInfo memberInfo, Model model) {
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
 
         return "mypage/member/memberDeleteForm";
     }
 
-    @GetMapping("/drop/process/{memberNo}")
-    public String deleteMember(@PathVariable Long memberNo) {
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
+    @GetMapping("/drop/process")
+    public String deleteMember(MemberInfo memberInfo) {
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         restService.delete(uri.toString());
 
         return "redirect:/";
     }
-
 }

@@ -1,18 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
     <title>포인트 선물</title>
 </head>
-<body>
-<h3>포인트 선물하기</h3><br>
-<div>
-    <form th:action="@{/point/present/{memberNo}(memberNo=${totalPoint.getMember()})}" method="post">
-        <b>선물 대상 사용자 ID</b>: <input type="text" name="targetMemberId"><br>
-        <b>선물할 포인트</b> (현재 보유 포인트: <span th:text="${totalPoint.getTotalPoint()}"></span>p)
-        : <input type="text" name="targetPoint" step="1">p<br>
-        <input type="submit" value="선물하기"/>
-    </form>
-</div>
-</body>
+
+<th:block layout:fragment="content">
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">포인트 선물하기</h2>
+            <form action="/member/profile/point/present" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">선물 대상 사용자 ID</label>
+                    <input type="text" name="targetMemberId" class="form-control" placeholder="Id" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="display: inline">선물할 포인트</label>
+                    (현재 보유 포인트: <span th:text="${totalPoint.getTotalPoint()}"></span>p)
+                    <input type="text" name="targetPoint" class="form-control" placeholder="point" required>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">선물하기</button>
+                </div>
+            </form>
+</th:block>
 </html>

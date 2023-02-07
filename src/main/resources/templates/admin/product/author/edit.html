@@ -1,0 +1,45 @@
+<!--/* default 레이아웃을 사용하는 템플릿*/-->
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/popup}">
+<head>
+  <title>북레이 - 작가 수정</title>
+</head>
+<!---->
+<th:block layout:fragment="content">
+  <form method="post" th:action="@{/admin/product/author}">
+    <div class="mb-3">
+      <label class="form-label">작가번호</label>
+      <input type="number" name="id" th:value="${author.authorNo}" disabled="disabled"/>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">작가 이름</label>
+      <input type="text" name="name" th:value="${author.name}"/>
+    </div>
+    <th:block th:if="${author.member !=null}">
+      <div class="mb-3">
+        <label class="form-label">회원 번호</label>
+        <input type="number" name="memberNo" th:value="${author.getMember().memberNo}"/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">회원 닉네임</label>
+        <span th:text="${author.getMember().memberId}" />
+      </div>
+    </th:block>
+
+    <th:block th:if="${author.member ==null}">
+      <div class="mb-3">
+        <label class="form-label">회원 번호</label>
+        <input type="number"/>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">회원 닉네임</label>
+        <input type="text" disabled="disabled"/>
+      </div>
+    </th:block>
+    <div class="mb-3">
+      <input class="btn" type="submit" value="작가 수정"/>
+    </div>
+  </form>
+</th:block>
+<!---->
+</html>

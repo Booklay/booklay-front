@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
 <head>
     <meta charset="UTF-8">
     <title>탈퇴 회원 리스트</title>
 </head>
-<body>
-<div>
-    <h3>[탈퇴 회원 리스트]</h3>
-    <table border="1">
-        <thead>
-        <tr>
-            <td>번호</td>
-            <td>회원ID</td>
-            <td>탈퇴일</td>
-        </tr>
-        </thead>
+<th:block layout:fragment="content">
+    <div>
+        <h3>[탈퇴 회원 리스트]</h3>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <td>번호</td>
+                        <td>회원ID</td>
+                        <td>탈퇴일</td>
+                    </tr>
+                    </thead>
 
-        <tbody th:each="member, memberStat : ${list}">
-        <tr>
-            <td th:text="${memberStat.count}"></td>
-            <td th:text="${member.getMemberId()}"></td>
-            <td th:text="${#temporals.format(member.getDeletedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
-        </tr>
-        </tbody>
-    </table>
+                    <tbody th:each="member, memberStat : ${list}">
+                    <tr>
+                        <td th:text="${memberStat.count}"></td>
+                        <td th:text="${member.getMemberId()}"></td>
+                        <td th:text="${#temporals.format(member.getDeletedAt(), 'yyyy.MM.dd HH:mm:ss')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-    <th:block th:if="${list.isEmpty()}">
-        <h2>탈퇴한 회원이 없습니다.</h2>
-    </th:block>
-</div>
-</body>
+        <th:block th:if="${list.isEmpty()}">
+            <h2>탈퇴한 회원이 없습니다.</h2>
+        </th:block>
+    </div>
+</th:block>
 </html>

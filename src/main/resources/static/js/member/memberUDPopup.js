@@ -1,9 +1,9 @@
-function showMemberUpdatePopup(value) {
+function showMemberUpdatePopup() {
     let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
-    let ret = window.open("/member/update/" + value, "memberUpdatePopup", option);
+    let ret = window.open("/member/update", "memberUpdatePopup", option);
 }
 
-function showMemberDropPopup(value) {
+function showMemberDropPopup() {
     let option = "width = 500, height = 300, top = 100, left = 200, scrollbars = yes, location = no"
-    let ret = window.open("/member/drop/" + value, "memberDropPopup", option);
+    let ret = window.open("/member/drop", "memberDropPopup", option);
 }

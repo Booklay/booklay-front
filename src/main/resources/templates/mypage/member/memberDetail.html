@@ -1,29 +1,32 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="https://www.thymeleaf.org">
+<html lang="ko" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
     <title>Member Detail</title>
     <script src="/js/member/memberUDPopup.js"></script>
 </head>
-<body>
-<div>
-    <h3>[회원 개인정보]</h3>
-    <b>이름</b> : <span th:text="${member.getName()}"></span><br>
-    <b>아이디</b> : <span th:text="${member.getMemberId()}"></span><br>
-    <b>닉네임</b> : <span th:text="${member.getNickname()}"></span><br>
-    <b>성별</b> : <span th:if="${member.getGender().equals('F')}">여</span>
-    <span th:if="${member.getGender().equals('M')}">남</span>
-    <br>
-    <b>생년월일</b> : <span th:text="${member.getBirthday()}"></span><br>
-    <b>전화번호</b> : <span th:text="${member.getPhoneNo()}"></span><br>
-    <b>이메일주소</b> : <span th:text="${member.getEmail()}"></span><br>
-    <b>주소</b> :
-    <button><a th:href="@{/address/{memberNo}(memberNo=${memberNo})}">주소록으로 이동</a></button>
-    <br>
-    <br>
 
-    <input type="button" value="수정하기" th:id="${memberNo}" onclick="showMemberUpdatePopup(this.getAttribute('id'))">
-    <input type="button" value="탈퇴하기" th:id="${memberNo}" onclick="showMemberDropPopup(this.getAttribute('id'))">
-</div>
-</body>
+<th:block layout:fragment="content">
+    <div>
+        <h1>[회원 개인정보]</h1>
+        <b>이름</b> : <span th:text="${member.getName()}"></span><br>
+        <b>아이디</b> : <span th:text="${member.getMemberId()}"></span><br>
+        <b>닉네임</b> : <span th:text="${member.getNickname()}"></span><br>
+        <b>성별</b> : <span th:if="${member.getGender().equals('F')}">여</span>
+        <span th:if="${member.getGender().equals('M')}">남</span>
+        <br>
+        <b>생년월일</b> : <span th:text="${member.getBirthday()}"></span><br>
+        <b>전화번호</b> : <span th:text="${member.getPhoneNo()}"></span><br>
+        <b>이메일주소</b> : <span th:text="${member.getEmail()}"></span><br>
+        <b>주소</b> :
+        <button class="btn btn-outline-primary"><a href="/member/profile/address">주소록으로 이동</a></button>
+        <br>
+        <br>
+
+        <button class="btn btn-outline-primary" onclick="showMemberUpdatePopup()"> 수정하기</button>
+        <button class="btn btn-outline-primary" onclick="showMemberDropPopup()"> 탈퇴하기</button>
+    </div>
+</th:block>
 </html>

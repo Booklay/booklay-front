@@ -1,55 +1,75 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
 <head>
     <meta charset="UTF-8">
     <title>회원 주소 등록</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
-
-    <!-- Favicon -->
-    <link th:href="@{/img/favicon.ico}" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body>
-<h3>배송지 등록하기</h3><br>
 
-<form th:action="@{/address/register/{memberNo}(memberNo=${memberNo})}" method="post"
-      name="DeliveryDestinationCURequest">
-    <b>배송지 이름</b>: <input type="text" name="name"><br>
-    <b>우편번호</b>: <input type="text" id="sample6_postcode" name="zipCode" placeholder="우편번호">
-    <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-    <b>주소</b>: <input type="text" id="sample6_address" name="address" placeholder="주소"><br>
-    <b>상세주소</b>: <input type="text" id="sample6_detailAddress" name="addressDetail" placeholder="상세주소">
-    <b>참고항목</b>: <input type="text" id="sample6_extraAddress" name="addDetail" placeholder="참고항목"><br>
-    <b>기본 배송지 여부</b>:
-    설정 <input type="radio" value="true" name="isDefaultDestination">
-    해제 <input type="radio" value="false" name="isDefaultDestination" checked><br>
-    <input type="submit" value="등록하기"/>
-</form>
+<th:block layout:fragment="content">
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script>
-    function sample6_execDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                var addr = '';
-                var extraAddr = '';
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">배송지 등록</h2>
+            <form action="/member/profile/address/register" method="post">
 
-                if (data.userSelectedType === 'R') {
+                <div class="mb-3">
+                    <label class="form-label">배송지 이름</label>
+                    <input type="text" name="name" class="form-control" placeholder="배송지 이름" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">우편번호</label>
+                    <input type="text" id="sample6_postcode" name="zipCode" class="form-control" placeholder="우편번호"
+                           required>
+                    <button class="btn btn-outline-primary" onclick="sample6_execDaumPostcode()"> 우편번호 찾기</button>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">주소</label>
+                    <input type="text" id="sample6_address" name="addressDetail" placeholder="상세주소" class="form-control"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">상세주소</label>
+                    <input type="text" id="sample6_detailAddress" name="address" placeholder="주소" class="form-control"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">참고항목</label>
+                    <input type="text" id="sample6_extraAddress" name="addDetail" placeholder="참고항목"
+                           class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">기본 배송지 여부</label>
+                    설정 <input type="radio" value="true" name="isDefaultDestination">
+                    해제 <input type="radio" value="false" name="isDefaultDestination" checked>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">등록하기</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function sample6_execDaumPostcode() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    var addr = '';
+                    var extraAddr = '';
+
+                    if (data.userSelectedType === 'R') {
                     addr = data.roadAddress;
                 } else {
                     addr = data.jibunAddress;
@@ -71,12 +91,12 @@
                     document.getElementById("sample6_extraAddress").value = '';
                 }
 
-                document.getElementById('sample6_postcode').value = data.zonecode;
-                document.getElementById("sample6_address").value = addr;
-                document.getElementById("sample6_detailAddress").focus();
-            }
-        }).open();
-    }
-</script>
-</body>
+                    document.getElementById('sample6_postcode').value = data.zonecode;
+                    document.getElementById("sample6_address").value = addr;
+                    document.getElementById("sample6_detailAddress").focus();
+                }
+            }).open();
+        }
+    </script>
+</th:block>
 </html>
