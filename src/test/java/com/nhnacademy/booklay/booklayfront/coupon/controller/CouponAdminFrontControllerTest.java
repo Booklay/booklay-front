@@ -187,9 +187,7 @@ class CouponAdminFrontControllerTest {
         mockMvc.perform(get(URI_PREFIX + "/list")
                         .param("page", "0"))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/listView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/listView"))
             .andDo(print())
             .andReturn();
     }
@@ -233,11 +231,9 @@ class CouponAdminFrontControllerTest {
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
-        mockMvc.perform(get(URI_PREFIX + "/list/0/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/list/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/listView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/listView"))
             .andReturn();
     }
 
@@ -255,9 +251,7 @@ class CouponAdminFrontControllerTest {
 
         mockMvc.perform(get(URI_PREFIX + "/detail/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/detailView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/detailView"))
             .andDo(print())
             .andReturn();
     }
