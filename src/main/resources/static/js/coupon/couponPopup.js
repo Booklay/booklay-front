@@ -43,7 +43,7 @@ function setDate() {
 }
 
 function showCouponDetail(couponId) {
-    let option = "width = 400, height = 600, top = 100, left = 200, scrollbars = yes, location = no"
+    let option = "width = 400, height = 660, top = 100, left = 200, scrollbars = yes, location = no"
     window.open("/admin/coupons/detail/" + couponId, "couponDetailPopup", option);
 }
 

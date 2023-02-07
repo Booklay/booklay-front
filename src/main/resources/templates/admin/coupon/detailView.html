@@ -45,10 +45,21 @@
                             <tr>
                             <span th:if="${couponDetail.isOrderCoupon}">
                                 <td><strong>적용 카테고리 ID</strong></td>
-                                <td><p th:text="${couponDetail.itemName}"></p></td>
+                                <td><p th:text="${couponDetail.applyItemId}"></p></td>
                             </span>
                             <span th:unless="${couponDetail.isOrderCoupon}">
                                 <td><strong>적용 상품 ID</strong></td>
+                                <td><p th:text="${couponDetail.applyItemId}"></p></td>
+                            </span>
+                            </tr>
+
+                            <tr>
+                            <span th:if="${couponDetail.isOrderCoupon}">
+                                <td><strong>적용 카테고리</strong></td>
+                                <td><p th:text="${couponDetail.itemName}"></p></td>
+                            </span>
+                            <span th:unless="${couponDetail.isOrderCoupon}">
+                                <td><strong>적용 상품</strong></td>
                                 <td><p th:text="${couponDetail.itemName}"></p></td>
                             </span>
                             </tr>
@@ -65,11 +76,6 @@
                         </tr>
 
                         <tr>
-                            <td><strong>발급 기한 일시</strong></td>
-                            <td><p th:text="${#temporals.format(couponDetail.issuanceDeadlineAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
-                        </tr>
-
-                        <tr>
                             <td><strong>중복 사용 여부</strong></td>
                             <td>
                                 <p th:if="${couponDetail.isDuplicatable == true}">가능</p>
@@ -79,9 +85,19 @@
 
                         <tr>
                             <td><strong>등록 이미지</strong></td>
-                            <td></td>
+                            <td>
+                                <div th:if="${couponDetail.objectFileId == null}">
+                                    <span>등록된 이미지가 없습니다.</span>
+                                </div>
+                                <div th:if="${couponDetail.objectFileId != null}">
+                                    <div class="text-center" style="width:100px;">
+                                        <img class="product-img"
+                                             style="max-height: 200px; width: 95%; margin-top:10px;"
+                                             th:src="@{/storage/{objectFileId} (objectFileId = ${couponDetail.objectFileId})}"/>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-
                     </table>
                 </div>
             </div>

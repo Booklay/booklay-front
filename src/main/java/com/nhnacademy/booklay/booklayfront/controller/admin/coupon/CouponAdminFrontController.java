@@ -80,9 +80,8 @@ public class CouponAdminFrontController {
             Long fileId = couponAdminService.saveCouponImage(image);
             map.put("fileId", fileId);
         }
-        // 이미지 저장
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
 
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX);
         restService.post(url, map, String.class);
 
         return RETURN_PAGE_COUPON_LIST;
@@ -97,20 +96,17 @@ public class CouponAdminFrontController {
                                 Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
 
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
-        model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/listView");
-
         return COUPON_RESOURCE_BASE + "listView";
     }
 
-    @GetMapping("list/{memberNo}/{pageNum}")
+    /**
+     * 특정 사용자의 쿠폰 조회
+     * @param memberNo 특정 사용자의 Id
+     */
+    @GetMapping("list/{memberNo}")
     public String memberCouponList(Model model, @PathVariable String memberNo,
-                                   @PathVariable Integer pageNum) {
+                                   @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         couponRestApiModelSettingService.setCouponListToModelByPageAndMemberNo(pageNum, memberNo, model);
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, memberNo + "/");
-        model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/listView");
 
         return RETURN_ADMIN_PAGE;
     }
@@ -122,7 +118,6 @@ public class CouponAdminFrontController {
     @GetMapping("/detail/{couponId}")
     public String viewCoupon(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
-        model.addAttribute(TARGET_VIEW, "coupon/detailView");
 
         return COUPON_RESOURCE_BASE + "detailView";
     }

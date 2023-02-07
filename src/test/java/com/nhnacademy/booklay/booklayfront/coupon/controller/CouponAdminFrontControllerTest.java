@@ -244,8 +244,7 @@ class CouponAdminFrontControllerTest {
     @Test
     void viewCoupon() throws Exception {
         CouponDetail couponDetail = new CouponDetail(null, "c1", "정률", 1000
-            , 101L, "booklay", 10000, 1000,
-            LocalDateTime.now(), false, false, 1L, true, 30);
+            , 101L, "booklay", 10000, 1000, false, false, 1L, true);
         ResponseEntity<CouponDetail> responseEntity =
             new ResponseEntity<>(couponDetail, HttpStatus.OK);
         //mocking
