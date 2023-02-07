@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class CreateDeleteWishlistAndAlarmRequest {
   @NotNull
-  Long memberNo;
+  private Long memberNo;
   @NotNull
-  Long productId;
+  private Long productId;
 }

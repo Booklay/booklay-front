@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.product;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -10,6 +9,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
@@ -22,9 +22,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -139,6 +137,15 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
     model.addAttribute("thisMember", memberInfo);
+    if (memberInfo.getMemberNo() != null) {
+      URI uriForMember = URI.create(
+          gatewayIp + "/shop/v1/mypage/product/boolean/" + memberInfo.getMemberNo());
+
+      ApiEntity<WishlistAndAlarmBooleanResponse> wishlistAndAlarmResponse = restService.get(
+          uriForMember.toString(), null, WishlistAndAlarmBooleanResponse.class);
+
+      model.addAttribute("memberProduct", wishlistAndAlarmResponse.getBody());
+    }
     return "product/view";
   }
 
@@ -166,20 +173,11 @@ public class ProductDisplayController extends BaseController {
 
   //찜(위시리스트) 등록
   @PostMapping("/wishlist/connect")
-  public String wishlistConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request
-  ) throws JsonProcessingException {
+  public String wishlistConnect(
+      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    RequestEntity<String> requestEntity =
-        new RequestEntity<>(mapper.writeValueAsString(request),
-            headers, HttpMethod.POST, uri);
-
-    restTemplate.exchange(requestEntity, String.class);
-
-    restService.post(uri.toString(), mapper.convertValue(request, Map.class), String.class);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class), Void.class);
 
     return "redirect:/product/view/" + request.getProductId();
   }
@@ -200,7 +198,7 @@ public class ProductDisplayController extends BaseController {
   public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    restService.post(uri.toString(), mapper.convertValue(request, Map.class), String.class);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class), CreateDeleteWishlistAndAlarmRequest.class);
 
     return "redirect:/product/view/" + request.getProductId();
   }
