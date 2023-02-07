@@ -2,12 +2,11 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <title>쿠폰존 등록</title>
+    <title>[관리자] 쿠폰존 등록</title>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
-
     <div class="row-cards">
         <div class="col-12">
             <form method="post" enctype="multipart/form-data" id="couponzone-form">
@@ -16,64 +15,140 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="mb-3">
-                            <label class="form-label">쿠폰
-                                <span class="form-label-description">쿠폰존에 등록하는 쿠폰을 선택하세요.</span>
-                            </label>
-                            <div class="row g-2">
-                                <div class="col">
-                                    <input type="text" class="form-control" id="couponName" disabled="disabled">
-                                    <input hidden="hidden" type="number" name="couponId" id="couponId">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-3">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">쿠폰 종류</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>쿠폰존에 등록할 쿠폰을 선택해주세요.</p>"
+                                          data-bs-html="true">?
+                                    </span>
+                                    </div>
                                 </div>
-                                <div class="col-auto">
-                                    <button type="button" class="btn btn-icon" aria-label="Button"
-                                            onclick="showCouponPopup()">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/search -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
-                                            <path d="M21 21l-6 -6"/>
-                                        </svg>
-                                    </button>
+
+                                <div class="row g-2">
+                                    <div class="col">
+                                        <input type="text" class="form-control" id="couponName" disabled="disabled">
+                                        <input hidden="hidden" type="number" name="couponId" id="couponId">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-icon" aria-label="Button"
+                                                onclick="showCouponPopup()">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
+                                                <path d="M21 21l-6 -6"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">설명</label>
+                                <input class="form-control" type="text" name="description" required="required">
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">적용 등급</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>등급별 쿠폰일 때, 어떤 등급이 이 쿠폰을 받을지 정해주세요.</p>
+                                          <strong>모든 등급이 받을 수 있다면, '제한 없음'을 선택해주세요.</strong>"
+                                          data-bs-html="true">?
+                                    </span>
+                                    </div>
+                                </div>
+                                <select class="form-select" name="grade">
+                                    <option value="0">제한 없음</option>
+                                    <th:block th:each="grade:${grades}">
+                                        <option th:value="${grade.value}" th:text="${grade.korGrade}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">숨김 여부</label>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isBlind" value="true"
+                                               checked>
+                                        <span class="form-check-label">숨김</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isBlind" value="false">
+                                        <span class="form-check-label">보임</span>
+                                    </label>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">설명</label>
-                            <input class="form-control" type="text" name="description" required="required">
-                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-3">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">오픈 일자</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>이 시간부터 쿠폰을 발급받을 수 있습니다.</p>"
+                                          data-bs-html="true">?
+                                    </span>
+                                    </div>
+                                </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">오픈 시간</label>
-                            <input class="form-control" type="datetime-local" name="openedAt" id="opened-at" onchange="setDate()">
-                        </div>
+                                <input class="form-control" type="datetime-local" name="openedAt" id="opened-at"
+                                       onchange="setDate()">
+                            </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">마감 시간
-                            </label>
-                            <input class="form-control" type="datetime-local" name="issuanceDeadlineAt" id="closed-at">
-                        </div>
+                            <div class="mb-3">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">발급 만료 일자</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>이 시간까지 쿠폰을 발급받을 수 있습니다.</p>"
+                                          data-bs-html="true">?
+                                    </span>
+                                    </div>
+                                </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">숨김 여부</label>
-                            <div>
-                                <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="isBlind" value="true" checked>
-                                    <span class="form-check-label">숨김</span>
-                                </label>
-                                <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="isBlind" value="false">
-                                    <span class="form-check-label">보임</span>
-                                </label>
+                                <input class="form-control" type="datetime-local" name="issuanceDeadlineAt"
+                                       id="closed-at">
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">쿠폰 유효 일자</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>이 날짜까지 쿠폰을 사용할 수 있습니다.</p>"
+                                          data-bs-html="true">?
+                                    </span>
+                                    </div>
+                                </div>
+                                <input class="form-control" type="datetime-local" name="expiredAt"
+                                       id="expired-at">
+                            </div>
+
+                            <div class="text-end">
+                                <a class="btn btn-secondary" th:href="@{/admin/coupon-zone}">뒤로가기</a>
+                                <input class="btn btn-primary" type="submit" value="등록 하기" id="button">
                             </div>
                         </div>
-                    </div>
-                    <div class="text-left">
-                        <input class="btn btn-primary" type="submit" value="생성 하기" onclick="closeWindow()" id="button">
                     </div>
                 </div>
             </form>

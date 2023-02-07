@@ -5,6 +5,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.grade.Grade;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.Map;
@@ -66,7 +67,9 @@ public class CouponZoneAdminController {
      * 쿠폰존에 쿠폰을 등록하기 위한 폼 호출.
      */
     @GetMapping("/create-form")
-    public String getCouponZoneAddForm() {
+    public String getCouponZoneAddForm(Model model) {
+        model.addAttribute("grades", Grade.values());
+
         return COUPON_ZONE_RESOURCE_BASE + "couponZoneAddForm";
     }
 

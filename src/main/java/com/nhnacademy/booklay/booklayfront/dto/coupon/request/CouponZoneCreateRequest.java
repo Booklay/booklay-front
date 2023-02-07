@@ -22,6 +22,9 @@ public class CouponZoneCreateRequest {
     @NotNull
     private final String description;
 
+    @NotNull
+    private final String grade;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime openedAt;
 
