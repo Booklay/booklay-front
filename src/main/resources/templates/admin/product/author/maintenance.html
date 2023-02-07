@@ -11,6 +11,8 @@
   <link href="tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
   <link href="./dist/css/demo.min.css" rel="stylesheet"/>
   <link href="/css/product/inputDisabled.css" rel="stylesheet">
+
+  <script src="/js/product/author.js"></script>
 </head>
 
 <th:block layout:fragment="content">
@@ -62,18 +64,19 @@
               <span th:if="${author.member != null}" th:text="${author.member.memberId}"/>
             </td>
             <td>
-              <input type="submit" value="수정 제출" hidden="hidden">
-              <span class="btn btn-outline-primary update-button">수정</span>
+              <button class="btn btn-outline-primary" th:id="${author.authorNo}" onclick="showAuthorEdit(id)">
+                수정
+              </button>
             </td>
             <td>
               <form method="post"
                     th:action="@{/admin/author/maintenance/delete/{pageNum} (pageNum=${currentPage})}">
                 <input name="id" type="number" th:value="${author.authorNo}"
                        hidden="hidden"/>
-                <input class="btn btn-outline-primary" type="submit" value="삭제"/>
+                <input class="btn btn-outline-danger" type="submit" value="삭제"/>
               </form>
             </td>
-            <td><a href="">작품 정보</a></td>
+            <td><a class="btn btn-outline-primary" href="">작품 정보</a></td>
           </tr>
         </th:block>
         </tbody>
