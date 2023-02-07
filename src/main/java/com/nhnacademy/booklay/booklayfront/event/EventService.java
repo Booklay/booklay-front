@@ -2,7 +2,7 @@ package com.nhnacademy.booklay.booklayfront.event;
 
 public interface EventService {
 
-    void doRegister(Long memberNo);
+    void doRegister(String username);
 
-    void doLogin(Long memberNo);
+    void doLogin(String username);
 }

@@ -6,21 +6,21 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class MemberEvent extends ApplicationEvent {
 
-    private final Long memberNo;
+    private final String username;
     private final Type type;
 
-    public MemberEvent(Object source, Long memberNo, Type type) {
+    public MemberEvent(Object source, String username, Type type) {
         super(source);
-        this.memberNo = memberNo;
+        this.username = username;
         this.type = type;
     }
 
-    public static MemberEvent created(Object source, Long memberNo) {
-        return new MemberEvent(source, memberNo, Type.CREATE);
+    public static MemberEvent created(Object source, String username) {
+        return new MemberEvent(source, username, Type.CREATE);
     }
 
-    public static MemberEvent loggedIn(Object source, Long memberNo) {
-        return new MemberEvent(source, memberNo, Type.LOGIN);
+    public static MemberEvent loggedIn(Object source, String username) {
+        return new MemberEvent(source, username, Type.LOGIN);
     }
 
     public enum Type {

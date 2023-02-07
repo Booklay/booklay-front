@@ -15,13 +15,13 @@ public class MemberEventListener implements ApplicationListener<MemberEvent> {
     @Override
     public void onApplicationEvent(MemberEvent event) {
         if (MemberEvent.Type.CREATE == event.getType()) {
-            log.info("Member created: {}", event.getMemberNo());
-            eventService.doRegister(event.getMemberNo());
+            log.info("Member created: {}", event.getUsername());
+            eventService.doRegister(event.getUsername());
         }
 
         if (MemberEvent.Type.LOGIN == event.getType()){
-            log.info("Member logged in: {}", event.getMemberNo());
-            eventService.doLogin(event.getMemberNo());
+            log.info("Member logged in: {}", event.getUsername());
+            eventService.doLogin(event.getUsername());
         }
     }
 }
