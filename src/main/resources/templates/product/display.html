@@ -13,10 +13,10 @@
       <!--     반복 -->
       <th:block th:each="item : ${productList}">
         <!--        [[${item}]]-->
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-3">
           <div class="card card-sm">
             <a th:href="@{/product/view/{productId} (productId = ${item.info.id})}" class="d-block">
-              <div class="text-center" style="width:313px; height:413px; margin: auto;">
+              <div class="text-center" style="width:auto; height:413px; margin: auto;">
                 <img class="product-img" style="max-height: 413px; width: 95%; margin-top:10px;" th:src="@{/storage/{objectFileId} (objectFileId = ${item.info.objectFileId})}"/>
               </div>
             </a>

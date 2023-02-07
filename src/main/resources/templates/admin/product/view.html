@@ -11,12 +11,14 @@
       <div class="card-body">
         <div class="row">
 
+<!--          사진 부분-->
           <div class="col-4">
             <!--            -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
 
             <!--          -->
           </div>
+<!--          안내 부분-->
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.info.title}"></p>
             <p class="h4" th:utext="${product.info.shortDescription}"></p>
@@ -89,27 +91,36 @@
             <!--        관리자 식별-->
             <th:block>
               </br>
-              <input th:id="${productNo}" type="button" value="태그 등록 팝업창 호출"
+
+              <input class="btn btn-outline-primary btnAtVar" th:id="${productNo}" type="button"
+                     value="태그 등록 팝업창 호출"
                      onclick="showTagRegisterPopup(id);"/>
 
-              <form th:if="${product.detail != null}" class="btnAtVar" method="get"
-                    th:action="@{/admin/product/books/update/{productId} (productId = ${productNo})}">
-                <input type="submit" value="수정"/>
+              <form th:if="${product.detail != null}" method="get"
+                    th:action="@{/admin/product/update/books/{productId} (productId = ${productNo})}">
+                <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
 
-              <form th:if="${product.subscribe != null}" class="btnAtVar" method="get"
-                    th:action="@{/admin/product/subscribes/update/{productId} (productId = ${productNo})}">
-                <input type="submit" value="수정"/>
+              <form th:if="${product.subscribe != null}" method="get"
+                    th:action="@{/admin/product/update/subscribes/{productId} (productId = ${productNo})}">
+                <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
 
-              <form class="btnAtVar" method="post"
+              <form method="post"
+                    th:if="${!product.info.deleted}"
                     th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
-                <input type="submit" value="삭제"/>
+                <input class="btn btn-outline-danger" type="submit" value="삭제"/>
+              </form>
+
+              <form method="post"
+                    th:if="${product.info.deleted}"
+                    th:action="@{/admin/product/delete/{productId} (productId = ${productNo})}">
+                <input class="btn btn-outline-primary" type="submit" value="복구"/>
               </form>
 
             </th:block>
           </div>
-
+          <!--카테고리-->
           <div class="col-12 my-4">
             <h1>관련 분류</h1>
 
@@ -129,20 +140,22 @@
             </ul>
           </div>
 
-<!--          연관 상품 시작-->
+          <!--          연관 상품 시작-->
           <div class="row row-cards">
             <div class="card-header">
               <h1>연관 상품</h1>
-              <br>
-              <input th:id="${product.info.id}" type="button" value="연관 상품 추가"
+              </br>
+              <input class="btn btn-outline-primary" th:id="${product.info.id}" type="button"
+                     value="연관 상품 추가"
+                     style="margin-left:4rem;"
                      onclick="showRecommendRegisterPopup(id);"/>
             </div>
             <th:block th:each="item : ${recommendProducts}">
-              <div class="col-sm-6 col-lg-4">
+              <div class="col-sm-4 col-lg-2">
                 <div class="card card-sm">
                   <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                      class="d-block">
-                    <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                    <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
                       <img class="product-img"
                            style="max-height: 413px; width: 95%; margin-top:10px;"
                            th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
@@ -165,37 +178,14 @@
                       </div>
                     </div>
                     <div class="ms-auto">
-                      <a href="#" class="text-muted">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                          <path
-                              d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                        </svg>
-                        467
-                      </a>
-                      <a href="#" class="ms-3 text-muted">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <path
-                              d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                        </svg>
-                        67
-                      </a>
+                      <p th:if="${!item.selling}" class="btn btn-danger w-5 h-2">품절</p>
                     </div>
-
                   </div>
                 </div>
               </div>
             </th:block>
           </div>
-<!--          연관 상품 종료-->
+          <!--          연관 상품 종료-->
           <!--/* 책 소개 */-->
           <div class="col-12 my-4">
             <h1>책 소개</h1>
@@ -207,17 +197,18 @@
           <th:block th:if="${product.subscribe != null}">
             <div class="row row-cards">
               <div class="card-header">
-                <h1>구독 자식 상품</h1>
-                <input th:id="${product.subscribe.id}" type="button" value="구독 상품에 책 추가"
+                <h1>구독 대상 상품</h1>
+                <input class="btn btn-outline-primary" th:id="${product.subscribe.id}" type="button"
+                       value="구독 상품에 책 추가" style="margin-left:4rem;"
                        onclick="showBookSubscribeRegisterPopup(id);"/>
                 <hr>
               </div>
               <th:block th:each="item : ${booksAtSubscribe}">
-                <div class="col-sm-6 col-lg-4">
+                <div class="col-sm-4 col-lg-2">
                   <div class="card card-sm">
                     <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                        class="d-block">
-                      <div class="text-center" style="width:313px; height:413px; margin: auto;">
+                      <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
                         <img class="product-img"
                              style="max-height: 413px; width: 95%; margin-top:10px;"
                              th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
@@ -240,35 +231,8 @@
                         </div>
                       </div>
                       <div class="ms-auto">
-                        <a href="#" class="text-muted">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                               height="24"
-                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                               fill="none"
-                               stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                            <path
-                                d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                          </svg>
-                          467
-                        </a>
-                        <a href="#" class="ms-3 text-muted">
-                          <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                               height="24"
-                               viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                               fill="none"
-                               stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path
-                                d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                          </svg>
-                          67
-                        </a>
+                        <p th:if="${!item.selling}" class="btn btn-danger w-5 h-2">품절</p>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -278,6 +242,8 @@
           <!--          구독 상품 자식 상품 종료-->
 
         </div>
+
+        <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
 
       </div>
     </div>

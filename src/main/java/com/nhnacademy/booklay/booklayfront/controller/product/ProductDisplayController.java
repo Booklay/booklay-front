@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductViewResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
@@ -102,7 +102,8 @@ public class ProductDisplayController extends BaseController {
 
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
-  public String productViewer(@PathVariable("productNo") Long productNo, Model model) {
+  public String productViewer(@PathVariable("productNo") Long productNo, Model model,
+      MemberInfo memberInfo) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -137,7 +138,7 @@ public class ProductDisplayController extends BaseController {
 
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
-
+    model.addAttribute("thisMember", memberInfo);
     return "product/view";
   }
 

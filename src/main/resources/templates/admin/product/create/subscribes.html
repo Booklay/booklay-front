@@ -26,7 +26,7 @@
 
     <div class="mb-3">
       <label class="form-label">가격</label>
-      <input type="number" class="form-control" min="0" step="1" name="price">
+      <input type="number" class="form-control" min="0" step="1" name="price" required>
     </div>
 
     <div class="mb-3">
@@ -63,7 +63,7 @@
     <div class="mb-3">
       <label class="form-label">출판사</label>
       <input type="text" class="form-control" name="publisher"
-             placeholder="Input placeholder">
+             placeholder="Input placeholder" required>
     </div>
 
     <div class="mb-3">
@@ -71,11 +71,11 @@
       <div>
         <label class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="selling" value="true" checked>
-          <span class="form-check-label">품절 설정</span>
+          <span class="form-check-label">재고 있음</span>
         </label>
         <label class="form-check form-check-inline">
           <input class="form-check-input" type="radio" name="selling" value="false">
-          <span class="form-check-label">재고 있음</span>
+          <span class="form-check-label">품절 설정</span>
         </label>
       </div>
     </div>
