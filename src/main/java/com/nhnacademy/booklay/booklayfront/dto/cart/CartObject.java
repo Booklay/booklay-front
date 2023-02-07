@@ -16,4 +16,5 @@ public class CartObject {
     @Setter
     private Integer productCount;
     private List<Long> categoryNoList;
+    private Long imageNo;
 }

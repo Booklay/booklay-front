@@ -42,6 +42,8 @@ public class CouponPopupAdminController {
                                         Model model, MemberInfo memberInfo){
         couponRestApiModelSettingService.setOrderCouponListToModelByPageAndMemberNo(pageNum, dupl, memberInfo, model);
         model.addAttribute("targetId", "ordercoupon");
+        model.addAttribute("productNo", "order");
+        model.addAttribute("isDuplicable", dupl);
         return RESOURCE_BASE + "couponPopupForOrder";
     }
     @GetMapping("/coupon/{productNo}")
@@ -52,6 +54,8 @@ public class CouponPopupAdminController {
         couponRestApiModelSettingService.setProductCouponListToModelByPageAndMemberNoAndProductNo(
                 pageNum, productNo, memberInfo, dupl, model);
         model.addAttribute("targetId", productNo+"coupon");
+        model.addAttribute("productNo", productNo);
+        model.addAttribute("isDuplicable", dupl);
         return RESOURCE_BASE + "couponPopupForOrder";
     }
 

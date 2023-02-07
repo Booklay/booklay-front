@@ -18,7 +18,6 @@ import javax.servlet.http.Cookie;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("unchecked")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("order")
@@ -47,10 +46,13 @@ public class OrderController {
                     )
             );
         }
-        if (memberInfo.getMemberId()==null){
-            model.addAttribute("point", 0);
-        }else {
-            memberRestApiModelSettingService.setMemberPointToModelByMemberNo(memberInfo.getMemberId(), model);
+        model.addAttribute("point", 0);
+        if (memberInfo.getMemberId()!=null){
+            try {
+                memberRestApiModelSettingService.setMemberPointToModelByMemberNo(memberInfo.getMemberNo(), model);
+            }catch (Exception e){
+                model.addAttribute("point", "포인트 조회 실패");
+            }
         }
         model.addAttribute("memberInfo", memberInfo);
         return "order/orderPage";

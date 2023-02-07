@@ -23,6 +23,8 @@
 <h2>쿠폰 선택</h2>
 <th:block th:if="${not #strings.isEmpty(targetId)}">
     <span style="display: none" id="targetId" th:text="${targetId}"></span>
+    <span style="display: none" id="productNo" th:text="${productNo}"></span>
+    <span style="display: none" id="isDuplicable" th:text="${isDuplicable}"></span>
 </th:block>
 <div id="header-carousel" class="carousel slide" data-ride="carousel">
     <div th:if="${#lists.isEmpty(list)}">
