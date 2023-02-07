@@ -18,5 +18,10 @@ public class MemberEventListener implements ApplicationListener<MemberEvent> {
             log.info("Member created: {}", event.getMemberNo());
             eventService.doRegister(event.getMemberNo());
         }
+
+        if (MemberEvent.Type.LOGIN == event.getType()){
+            log.info("Member logged in: {}", event.getMemberNo());
+            eventService.doLogin(event.getMemberNo());
+        }
     }
 }

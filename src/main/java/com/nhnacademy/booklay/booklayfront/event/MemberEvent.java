@@ -19,6 +19,10 @@ public class MemberEvent extends ApplicationEvent {
         return new MemberEvent(source, memberNo, Type.CREATE);
     }
 
+    public static MemberEvent loggedIn(Object source, Long memberNo) {
+        return new MemberEvent(source, memberNo, Type.LOGIN);
+    }
+
     public enum Type {
         CREATE,
         UPDATE,

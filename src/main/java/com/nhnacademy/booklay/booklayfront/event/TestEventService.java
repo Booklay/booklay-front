@@ -9,6 +9,12 @@ public class TestEventService implements EventService{
 
     @Override
     public void doRegister(Long memberNo) {
+        log.info("TestEventService.doRegister");
+    }
+
+    @Override
+    public void doLogin(Long memberNo) {
         log.info("TestEventService.doLogin");
     }
+
 }

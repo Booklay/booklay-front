@@ -18,4 +18,10 @@ public class MemberEventPublisher {
         applicationEventPublisher.publishEvent(memberEvent);
     }
 
+    public void publishMemberLoggedIn(Long memberNo) {
+        MemberEvent memberEvent = MemberEvent.loggedIn(this, memberNo);
+        log.info("Member logged in: {}", memberEvent.getMemberNo());
+        applicationEventPublisher.publishEvent(memberEvent);
+    }
+
 }
