@@ -21,8 +21,6 @@
             <p class="h3" th:text="${product.info.title}"></p>
             <p class="h4" th:utext="${product.info.shortDescription}"></p>
 
-
-            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-2">품절</p>
             <p class="mt-4" style="line-height: 5px">
               <span class="badge bg-azure">저자</span>
               <span th:unless="${product.authors == null}"
@@ -178,9 +176,15 @@
               </div>
             </th:block>
 
-            <div style="display:flex; margin-top:10px;">
-              <input style="margin-right: 10px;"  type="number" step="1" min="1" th:max="${product.detail.storage}"/>
+            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4" style="margin-top: 10px;">품절</p>
+
+<!--            구매 부분 시작-->
+            <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
+
+              <input style="margin-right: 10px;"  type="number" step="1" min="1" value=1 th:max="${product.detail.storage}"/>
+
               <button class="btn btn-primary" style="margin-right: 10px;" >바로 구매</button>
+
               <button class="btn btn-outline-primary" style="margin-right: 10px;" >
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -191,6 +195,7 @@
                 </svg>
                 카트
               </button>
+
             </div>
 
           </div>
