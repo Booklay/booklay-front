@@ -33,4 +33,6 @@ public class RetrieveProductResponse {
   private List<RetrieveAuthorResponse> authors;
 
   private Boolean recommend;
+
+  private Boolean alarm;
 }
