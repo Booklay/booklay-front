@@ -4,10 +4,12 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveRes
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class MemberInfo {
 
     private Long memberNo;

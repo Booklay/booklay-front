@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SearchRequest {
+public class SearchKeywordsRequest {
 
     @NotBlank
     String keywords;
