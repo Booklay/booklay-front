@@ -2,6 +2,8 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
   <title th:text="${product.info.title}"></title>
+<!--  <script src="/js/product/view.js" />-->
+<!--  <script src="/js/product/productDetailForCart.js" />-->
 </head>
 <!---->
 <th:block layout:fragment="content">
@@ -12,10 +14,10 @@
         <div class="row">
 
           <div class="col-4">
-            <!--            -->
+            <!--   사진  -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
 
-            <!--          -->
+            <!--  사진   -->
           </div>
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.info.title}"></p>
@@ -84,13 +86,15 @@
               <span th:text="${#numbers.formatCurrency(product.info.price)}"></span>
             </p>
 
+<!--            wishlist, alarm-->
             <th:block th:if="${thisMember.memberNo != null}">
               <div style="display: flex;">
                 <!--              위시리스트 등록-->
                 <form style="margin-right: 10px;" th:if="${!memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/connect}">
                   <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                  <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                  <input id="productNo" name="productId" type="number" th:value="${product.info.id}"
+                         hidden>
                   <label class="btn btn-outline-primary">
                     <input type="submit" hidden>
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -175,25 +179,33 @@
                 </form>
               </div>
             </th:block>
+<!--            wishlist alarm end-->
 
-            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4" style="margin-top: 10px;">품절</p>
+            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4"
+               style="margin-top: 10px;">품절</p>
 
-<!--            구매 부분 시작-->
+            <!--            구매 부분 시작-->
             <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
 
-              <input style="margin-right: 10px;"  type="number" step="1" min="1" value=1 th:max="${product.detail.storage}"/>
+              <input id="count" style="margin-right: 10px;" type="number" step="1" min="1" th:max="${product.detail.storage}"
+                     value="1">
+<!--              th:max="${product.detail.storage}"-->
 
-              <button class="btn btn-primary" style="margin-right: 10px;" >바로 구매</button>
+              <button class="btn btn-primary" id="toOrder" style="margin-right: 10px;">바로 구매
+              </button>
 
-              <button class="btn btn-outline-primary" style="margin-right: 10px;" >
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <button class="btn btn-outline-primary" id="addCart" style="margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24"
+                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                   <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                   <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                   <path d="M17 17h-11v-14h-2"></path>
                   <path d="M6 5l14 1l-1 7h-13"></path>
                 </svg>
-                카트
+                카트에 넣기
               </button>
 
             </div>
