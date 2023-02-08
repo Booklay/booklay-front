@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.dto.grade;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 
 @Getter
@@ -15,5 +17,15 @@ public enum Grade {
     Grade(int value, String korGrade) {
         this.value = value;
         this.korGrade = korGrade;
+    }
+
+    public static final Map<Integer, Grade> map = new HashMap<>();
+    static {
+        for (Grade grade : Grade.values()) {
+            map.put(grade.getValue(), grade);
+        }
+    }
+    public static Grade getGradeByValue(int code) {
+        return map.get(code);
     }
 }

@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
@@ -36,10 +37,15 @@ public class CouponZoneController {
     @GetMapping
     public String getCouponZone(Model model) {
         URI getLimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/limited");
+        URI getGradedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/graded");
         URI getUnlimitedUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/unlimited");
 
         ApiEntity<PageResponse<CouponZoneRetrieveResponse>> limitedList =
             restService.get(getLimitedUri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        ApiEntity<PageResponse<CouponZoneRetrieveResponse>> gradedList =
+            restService.get(getGradedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
         ApiEntity<PageResponse<CouponZoneRetrieveResponse>> unlimitedList =
@@ -47,6 +53,7 @@ public class CouponZoneController {
             });
 
         model.addAttribute("limitedList", limitedList.getBody().getData());
+        model.addAttribute("gradedList", gradedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
         return "coupon/couponZone";
@@ -57,9 +64,8 @@ public class CouponZoneController {
      *
      */
     @GetMapping("/{couponId}")
-    public String couponZoneIssue(@PathVariable Long couponId) {
-//        Long memberNo = memberInfo.getMemberNo();
-        Long memberNo = 3L;
+    public String couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
+        Long memberNo = memberInfo.getMemberNo();
 
         CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);
         Map<String, Object> map = objectMapper.convertValue(request, Map.class);

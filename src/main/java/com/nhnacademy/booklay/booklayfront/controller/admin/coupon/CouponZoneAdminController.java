@@ -44,7 +44,7 @@ public class CouponZoneAdminController {
         URI getLimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
         URI getGradedUri =
-            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
+            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/graded" + query);
         URI getUnlimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited" + query);
 
@@ -52,12 +52,16 @@ public class CouponZoneAdminController {
             restService.get(getLimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
+        ApiEntity<PageResponse<CouponZoneRetrieveResponse>> gradedList =
+            restService.get(getGradedUri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
         ApiEntity<PageResponse<CouponZoneRetrieveResponse>> unlimitedList =
             restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
         model.addAttribute("limitedList", limitedList.getBody().getData());
-        model.addAttribute("gradedList", null);
+        model.addAttribute("gradedList", gradedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
         return COUPON_ZONE_RESOURCE_BASE + "couponZoneList";
@@ -80,8 +84,13 @@ public class CouponZoneAdminController {
     @PostMapping("/create-form")
     public String createAtCouponZone(@Valid @ModelAttribute CouponZoneCreateRequest createRequest) {
         URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone");
-        restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
-            String.class);
+        Map map = objectMapper.convertValue(createRequest, Map.class);
+
+        if(createRequest.getGrade().equals("0")) {
+            map.replace("grade", null);
+        }
+
+        restService.post(uri.toString(), map, String.class);
 
         return "redirect:/admin/coupon-zone";
     }

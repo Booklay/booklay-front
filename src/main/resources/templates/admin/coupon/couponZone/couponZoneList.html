@@ -67,13 +67,13 @@
         </div>
     </div>
 
-                                <!--/* 이달의 쿠폰 */-->
+                                <!--/* 등급별 쿠폰 */-->
     <h3>등급별 쿠폰</h3>
-    <div th:if="${#lists.isEmpty(unlimitedList)}">
+    <div th:if="${#lists.isEmpty(gradedList)}">
         <div class="mb-3">등록된 등급별 쿠폰이 없습니다.</div>
     </div>
 
-    <div class="card" th:unless="${#lists.isEmpty(unlimitedList)}">
+    <div class="card" th:unless="${#lists.isEmpty(gradedList)}">
         <div class="table-responsive">
             <table class="table table-vcenter card-table">
                 <thead>
@@ -82,6 +82,7 @@
                     <th>쿠폰 ID</th>
                     <th>쿠폰 이름</th>
                     <th>설명</th>
+                    <th>발급 등급</th>
                     <th>오픈시간</th>
                     <th>닫힘시간</th>
                     <th>숨김여부</th>
@@ -90,21 +91,22 @@
                 </tr>
                 </thead>
 
-                <tbody th:each="unlimited, unlimitedStat :${unlimitedList}">
+                <tbody th:each="graded, gradedStat :${gradedList}">
                 <tr>
-                    <td><p th:text="${unlimitedStat.count}"></p></td>
-                    <td><p th:text="${unlimited.couponId}"></p></td>
-                    <td><p th:text="${unlimited.name}"></p></td>
-                    <td><p th:text="${unlimited.description}"></p></td>
-                    <td><p th:text="${unlimited.openedAt}"></p></td>
-                    <td><p th:text="${unlimited.issuanceDeadlineAt}"></p></td>
+                    <td><p th:text="${gradedStat.count}"></p></td>
+                    <td><p th:text="${graded.couponId}"></p></td>
+                    <td><p th:text="${graded.name}"></p></td>
+                    <td><p th:text="${graded.description}"></p></td>
+                    <td><p th:text="${graded.grade}"></p></td>
+                    <td><p th:text="${graded.openedAt}"></p></td>
+                    <td><p th:text="${graded.issuanceDeadlineAt}"></p></td>
                     <td>
-                        <p th:if="${unlimited.isBlind}">O</p>
-                        <p th:unless="${unlimited.isBlind}">X</p>
+                        <p th:if="${graded.isBlind}">O</p>
+                        <p th:unless="${graded.isBlind}">X</p>
                     </td>
                     <td><a href="">수정</a></td>
                     <td>
-                        <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${unlimited.id})}">삭제</a>
+                        <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${graded.id})}">삭제</a>
                     </td>
                 </tr>
                 </tbody>
