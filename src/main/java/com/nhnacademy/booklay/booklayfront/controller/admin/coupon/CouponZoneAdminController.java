@@ -1,12 +1,11 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.grade.Grade;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.Map;
@@ -29,12 +28,13 @@ public class CouponZoneAdminController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
-    private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
-    private static final String RETURN_PAGE = "admin/adminPage";
+
+    private final String COUPON_ZONE_RESOURCE_BASE = "admin/coupon/couponZone/";
+    private final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
 
     /**
      * 관리자의 쿠폰존 조회.
-     * 수량 제한 있는 쿠폰과, 제한 없는 쿠폰을 각 각 받아와서 보여줍니다.
+     * 이달의 쿠폰(수량 제한 쿠폰), 등급별 쿠폰, 무제한 쿠폰을 불러옵니다.
      */
     @GetMapping
     public String getCouponZoneList(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -43,6 +43,8 @@ public class CouponZoneAdminController {
 
         URI getLimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
+        URI getGradedUri =
+            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/graded" + query);
         URI getUnlimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/unlimited" + query);
 
@@ -50,15 +52,19 @@ public class CouponZoneAdminController {
             restService.get(getLimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
+        ApiEntity<PageResponse<CouponZoneRetrieveResponse>> gradedList =
+            restService.get(getGradedUri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
         ApiEntity<PageResponse<CouponZoneRetrieveResponse>> unlimitedList =
             restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
-        model.addAttribute(TARGET_VIEW, "coupon/couponZone/couponZoneList");
         model.addAttribute("limitedList", limitedList.getBody().getData());
+        model.addAttribute("gradedList", gradedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
 
-        return "admin/coupon/couponZone/couponZoneList";
+        return COUPON_ZONE_RESOURCE_BASE + "couponZoneList";
     }
 
     /**
@@ -66,7 +72,9 @@ public class CouponZoneAdminController {
      */
     @GetMapping("/create-form")
     public String getCouponZoneAddForm(Model model) {
-        return "admin/coupon/couponZone/couponZoneAddForm";
+        model.addAttribute("grades", Grade.values());
+
+        return COUPON_ZONE_RESOURCE_BASE + "couponZoneAddForm";
     }
 
     /**
@@ -76,8 +84,13 @@ public class CouponZoneAdminController {
     @PostMapping("/create-form")
     public String createAtCouponZone(@Valid @ModelAttribute CouponZoneCreateRequest createRequest) {
         URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone");
-        restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
-            String.class);
+        Map map = objectMapper.convertValue(createRequest, Map.class);
+
+        if(createRequest.getGrade().equals("0")) {
+            map.replace("grade", null);
+        }
+
+        restService.post(uri.toString(), map, String.class);
 
         return "redirect:/admin/coupon-zone";
     }
@@ -97,7 +110,8 @@ public class CouponZoneAdminController {
 
     @GetMapping("/delete/{couponZoneId}")
     public String deleteAtCouponZone(@PathVariable Long couponZoneId) {
-        URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
+        URI uri =
+            URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/" + couponZoneId);
 
         restService.delete(uri.toString());
 

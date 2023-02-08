@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <title>쿠폰 등록</title>
+    <title>[관리자] 쿠폰 등록</title>
     <script src="/js/coupon/couponCreateForm.js"></script>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
@@ -20,11 +20,20 @@
                         <div class="col-md-6 col-xl-3">
                             <div class="mb-3">
                                 <label class="form-label">쿠폰 이름</label>
-                                <input class="form-control" type="text" name="name">
+                                <input class="form-control" type="text" name="name" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">쿠폰 종류</label>
-                                <select class="form-select" type="number" name="typeCode" id="coupon-type" onchange="changeByType()">
+                                <div class="row g-2">
+                                    <div class="col-auto">
+                                        <label class="form-label">쿠폰 종류</label>
+                                    </div>
+                                    <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-1'>쿠폰의 할인 종류를 선택하세요.</p><p>포인트 쿠폰은 적용 카테고리 또는 상품을 지정하지 않아도 됩니다.</>" data-bs-html="true">?
+                                    </span>
+                                    </div>
+                                </div>
+                                <select class="form-select" type="number" name="typeCode" id="coupon-type" onchange="changeByType()" required>
                                     <th:block th:each="couponType:${couponTypeList}">
                                         <option th:value="${couponType.id}" th:text="${couponType.name}"></option>
                                     </th:block>
@@ -32,7 +41,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">할인량</label>
-                                <input class="form-control" type="number" name="amount">
+                                <input class="form-control" type="number" name="amount" required>
                             </div>
 
                             <div id="select-item">
@@ -48,7 +57,7 @@
                                     <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="text" class="form-control" id="itemName" disabled="disabled">
+                                            <input type="text" class="form-control" id="itemName" disabled="disabled" required>
                                             <input hidden="hidden" type="number" name="applyItemId" id="itemId">
                                         </div>
                                         <div class="col-auto">
@@ -65,24 +74,13 @@
                         <div class="col-md-6 col-xl-3">
                             <div class="mb-3">
                                 <label class="form-label">최소 사용 금액</label>
-                                <input class="form-control" type="number" name="minimumUseAmount" id="minimum-amount">
+                                <input class="form-control" type="number" name="minimumUseAmount" id="minimum-amount" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">최대 할인 금액</label>
-                                <input class="form-control" type="number" name="maximumDiscountAmount" id="maximum-amount">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">발급 기한 일시</label>
-                                <input class="form-control" type="datetime-local" name="issuanceDeadlineAt" value="2030-01-01T00:00" id="deadline">
+                                <input class="form-control" type="number" name="maximumDiscountAmount" id="maximum-amount" required>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">유효 기간</label>
-                                <input class="form-control" type="number" name="validateTerm" id="validate-term">
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xl-3">
                             <div class="mb-4">
                                 <div class="form-label">중복 사용 가능 여부</div>
                                 <div>
@@ -111,12 +109,13 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <label class="form-label">쿠폰 이미지</label>
                                 <input class="form-control" type="file" accept="image/*" name="image" id="image-input">
                             </div>
 
-                            <div class="text-left">
+                            <div class="text-end">
+                                <a class="btn btn-secondary" th:href="@{/admin/coupons/list}">뒤로가기</a>
                                 <input class="btn btn-primary" type="submit" value="생성 하기">
                             </div>
                         </div>

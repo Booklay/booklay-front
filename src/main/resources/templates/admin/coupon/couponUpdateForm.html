@@ -2,18 +2,18 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <title>쿠폰 수정</title>
+    <title>[관리자] 쿠폰 수정</title>
     <script src="/js/coupon/couponCreateForm.js"></script>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
+    <div class="card-header">
+        <h4 class="card-title">쿠폰 수정</h4>
+    </div>
 
     <div class="row row-cards">
         <div class="col-12">
-            <div class="card-header">
-                <h4 class="card-title">쿠폰 수정</h4>
-            </div>
 
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
@@ -21,7 +21,8 @@
                         <div class="col-md col-xl-3">
                             <div class="mb-3">
                                 <label class="form-label">쿠폰 이름</label>
-                                <input class="form-control" type="text" name="name" th:value="${couponDetail.name}">
+                                <input class="form-control" type="text" name="name" th:value="${couponDetail.name}"
+                                       required>
                             </div>
 
                             <div class="mb-3">
@@ -57,12 +58,13 @@
                                     <label class="form-label" id="apply-item-label">적용 카테고리 번호</label>
                                     <div class="row g-2">
                                         <div class="col">
-                                            <input type="text" class="form-control" id="itemName" disabled="disabled">
-                                            <input hidden="hidden" type="number" name="applyItemId" id="itemId">
+                                            <input required type="text" class="form-control" id="itemName" disabled="disabled">
+                                            <input hidden="hidden" type="number" name="applyItemId" id="itemId" th:value="${couponDetail.applyItemId}">
                                         </div>
                                         <div class="col-auto">
                                             <button type="button" id="item-search-button" class="btn btn-icon"
-                                                    aria-label="Button" th:attr="onclick=${couponDetail.isOrderCoupon ? 'showCategoryPopup()' : 'showProductPopup()'}">
+                                                    aria-label="Button"
+                                                    th:attr="onclick=${couponDetail.isOrderCoupon ? 'showCategoryPopup()' : 'showProductPopup()'}">
                                                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                                      height="24" viewBox="0 0 24 24" stroke-width="2"
@@ -118,20 +120,7 @@
                                 <input class="form-control" type="number" name="maximumDiscountAmount"
                                        th:value="${couponDetail.maximumDiscountAmount}">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">발급 기한 일시</label>
-                                <input class="form-control" type="datetime-local" name="issuanceDeadlineAt"
-                                       th:value="${couponDetail.issuanceDeadlineAt}">
-                            </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">유효 기간</label>
-                                <input class="form-control" type="number" name="validateTerm"
-                                       th:value="${couponDetail.validateTerm}">
-                            </div>
-                        </div>
-
-                        <div class="col-md col-xl-3">
                             <div class="mb-4">
                                 <div class="form-label">중복 사용 가능 여부</div>
                                 <div>
@@ -148,7 +137,7 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <div class="form-label">수량 제한 여부</div>
                                 <div>
                                     <label class="form-check form-check-inline">
@@ -164,10 +153,14 @@
                                 </div>
                             </div>
 
-                            <div class="text-left">
-                                <input class="btn btn-primary" type="submit" value="변경 제출">
+                            <div class="mb-3">
+                                <div class="text-end">
+                                    <a class="btn btn-secondary" th:href="@{/admin/coupons/list}">뒤로가기</a>
+                                    <input class="btn btn-primary" type="submit" value="변경하기">
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </form>
             </div>

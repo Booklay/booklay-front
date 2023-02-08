@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProductRestApiModelSettingService {
 
     public void setProductListToModelByPage(Integer pageNum, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, "/product");
-        ApiEntity<PageResponse<RetrieveProductResponse>> apiEntity =
+        ApiEntity<PageResponse<ProductAllInOneResponse>> apiEntity =
                 restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());

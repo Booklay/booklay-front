@@ -54,8 +54,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-
-
 @WebMvcTest(controllers = {CouponAdminFrontController.class
         , CouponHistoryAdminFrontController.class
         , CouponTypeAdminController.class
@@ -187,9 +185,7 @@ class CouponAdminFrontControllerTest {
         mockMvc.perform(get(URI_PREFIX + "/list")
                         .param("page", "0"))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/listView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/listView"))
             .andDo(print())
             .andReturn();
     }
@@ -233,19 +229,16 @@ class CouponAdminFrontControllerTest {
         ReflectionTestUtils.setField(object, "successResponse", responseEntity);
         when(restService.get(anyString(), any(),
             (ParameterizedTypeReference<Object>) any())).thenReturn(object);
-        mockMvc.perform(get(URI_PREFIX + "/list/0/0").accept(MediaType.TEXT_HTML))
+        mockMvc.perform(get(URI_PREFIX + "/list/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/listView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/listView"))
             .andReturn();
     }
 
     @Test
     void viewCoupon() throws Exception {
         CouponDetail couponDetail = new CouponDetail(null, "c1", "정률", 1000
-            , 101L, "booklay", 10000, 1000,
-            LocalDateTime.now(), false, false, 1L, true, 30);
+            , 101L, "booklay", 10000, 1000, false, false, 1L, true);
         ResponseEntity<CouponDetail> responseEntity =
             new ResponseEntity<>(couponDetail, HttpStatus.OK);
         //mocking
@@ -256,9 +249,7 @@ class CouponAdminFrontControllerTest {
 
         mockMvc.perform(get(URI_PREFIX + "/detail/0").accept(MediaType.TEXT_HTML))
             .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/detailView"))
+            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals("coupon/detailView"))
             .andDo(print())
             .andReturn();
     }

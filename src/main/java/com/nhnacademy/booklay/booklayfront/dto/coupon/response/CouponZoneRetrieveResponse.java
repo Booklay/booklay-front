@@ -9,9 +9,12 @@ import lombok.ToString;
 public class CouponZoneRetrieveResponse {
     private Long id;
     private Long couponId;
+    private Long fileId;
     private String name;
     private String description;
+    private String grade;
     private LocalDateTime openedAt;
     private LocalDateTime issuanceDeadlineAt;
+    private LocalDateTime expiredAt;
     private Boolean isBlind;
 }

@@ -8,7 +8,36 @@
 
 <th:block layout:fragment="content">
 
-    <h2 class="page-title">쿠폰 목록</h2>
+    <div class="page-header d-print-none">
+        <div class="row mb-3">
+            <div class="card-header">
+                <div class="col">
+                    <h4 class="page-title">쿠폰 목록</h4>
+                </div>
+                <div class="col">
+                    <div class="align-content-end">
+                        <div class="input-group mb-3">
+                            <div class="col-3">
+                                <select class="form-select">
+                                    <option>쿠폰 이름</option>
+                                    <option>쿠폰 타입</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-auto">
+                                <a href="#" class="btn btn-icon" aria-label="Button">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div th:if="${#lists.isEmpty(list)}">
         <div>등록된 쿠폰이 없습니다.</div>
@@ -27,9 +56,10 @@
                         <th>최소사용금액</th>
                         <th>최대할인금액</th>
                         <th>수량제한</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>상세보기</th>
+                        <th>정보수정</th>
+                        <th>이미지수정</th>
+                        <th>삭제하기</th>
                     </tr>
                 </thead>
                 <tbody th:each="coupon, couponStat:${list}">
@@ -54,7 +84,8 @@
                     </td>
                     <td><a class="btn btn-outline-primary" th:onclick="'showCouponDetail(' + ${coupon.id} + ')'">상세</a></td>
                     <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/update-form/'+coupon.id}">수정</a></td>
-                    <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
+                    <td><a class="btn btn-outline-primary" th:href="${'/admin/coupons/update-image/'+coupon.id}">이미지변경</a></td>
+                    <td><a class="btn btn-outline-danger" th:href="${'/admin/coupons/delete/'+coupon.id}">삭제</a></td>
                 </tr>
                 </tbody>
             </table>

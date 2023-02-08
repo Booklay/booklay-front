@@ -10,7 +10,7 @@ function setParentText(value, name){
 }
 
 function showMemberPopup() {
-    let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
+    let option = "width = 1000, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
     let ret = window.open("/admin/coupons/popup/member", "memberPopup", option);
 }
 
@@ -43,7 +43,7 @@ function setDate() {
 }
 
 function showCouponDetail(couponId) {
-    let option = "width = 400, height = 600, top = 100, left = 200, scrollbars = yes, location = no"
+    let option = "width = 400, height = 700, top = 100, left = 200, scrollbars = yes, location = no"
     window.open("/admin/coupons/detail/" + couponId, "couponDetailPopup", option);
 }
 
