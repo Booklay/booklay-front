@@ -1,9 +1,8 @@
-package com.nhnacademy.booklay.booklayfront.service.coupon;
+package com.nhnacademy.booklay.booklayfront.service;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 
 import com.nhnacademy.booklay.booklayfront.dto.storage.response.ObjectFileResponse;
-import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
@@ -21,14 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class CouponAdminServiceImpl implements CouponAdminService {
+public class ObjectFileService {
+
+    private final RestTemplate restTemplate;
     private final String gatewayIp;
 
-    private final RestService restService;
-    private final RestTemplate restTemplate;
 
-    @Override
-    public Long saveCouponImage(MultipartFile image) throws IOException {
+    public Long uploadImage(MultipartFile image) throws IOException {
         URI storageUrl = URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/storage");
 
         ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
@@ -40,7 +38,7 @@ public class CouponAdminServiceImpl implements CouponAdminService {
 
         MultipartBodyBuilder resource = new MultipartBodyBuilder();
         resource.part("file", contentsAsResource,
-                      MediaType.valueOf(Objects.requireNonNull(image.getContentType())));
+            MediaType.valueOf(Objects.requireNonNull(image.getContentType())));
 
         MultiValueMap<String, HttpEntity<?>> multipartBody = resource.build();
 
@@ -55,6 +53,6 @@ public class CouponAdminServiceImpl implements CouponAdminService {
             responseEntity = restTemplate.postForEntity(storageUrl, httpEntity,
             ObjectFileResponse.class);
 
-        return responseEntity.getBody().getId();
+        return Objects.requireNonNull(responseEntity.getBody()).getId();
     }
 }

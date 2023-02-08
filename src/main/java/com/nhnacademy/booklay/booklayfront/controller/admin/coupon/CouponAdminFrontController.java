@@ -1,20 +1,16 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.PAGE_NUM;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.RETURN_ADMIN_PAGE;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponAddRequest;
+import com.nhnacademy.booklay.booklayfront.service.ObjectFileService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import com.nhnacademy.booklay.booklayfront.service.coupon.CouponAdminService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
@@ -43,11 +39,11 @@ public class CouponAdminFrontController {
     private final String gatewayIp;
     private final RestTemplate restTemplate;
 
-    private final CouponAdminService couponAdminService;
+    private final ObjectFileService fileService;
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-    private final String COUPON_RESOURCE_BASE = "admin/coupon/";
-    private final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
+    private static final String COUPON_RESOURCE_BASE = "admin/coupon/";
+    private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
 
     /**
      * admin/coupons 인덱스 페이지는 쿠폰 조회 페이지.
@@ -78,7 +74,7 @@ public class CouponAdminFrontController {
         Map<String, Object> map = objectMapper.convertValue(couponAddRequest, Map.class);
 
         if (!Objects.isNull(image) && !image.isEmpty()) {
-            Long fileId = couponAdminService.saveCouponImage(image);
+            Long fileId = fileService.uploadImage(image);
             map.put("fileId", fileId);
         }
 
@@ -176,7 +172,7 @@ public class CouponAdminFrontController {
         throws IOException {
 
         if (!Objects.isNull(image) && !image.isEmpty()) {
-            Long fileId = couponAdminService.saveCouponImage(image);
+            Long fileId = fileService.uploadImage(image);
 
             String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "image/", couponId.toString(), "/", fileId.toString());
             restService.put(url, null, String.class);
