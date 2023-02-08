@@ -6,9 +6,11 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponMemberResponse;
+import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,46 +35,43 @@ public class CouponZoneRestController {
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
 
-    @Value("${booklay.gw-url}")
-    private String gwUrl;
-
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String SHOP_DOMAIN_PREFIX = "/shop/v1";
 
     /**
-     * 사용자의 쿠폰 발급.
-     *
+     * 사용자의 쿠폰 발급 요청을 shop 서버로 보냅니다.
      */
     @GetMapping("/{couponId}")
     public ResponseEntity<CouponIssueResponse> couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
         Long memberNo = memberInfo.getMemberNo();
+        if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
+
+
+        URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
 
         CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);
         Map<String, Object> map = objectMapper.convertValue(request, Map.class);
 
-        URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
-
-        log.info(memberInfo.getMemberId() + ", " + couponId + " :: 보냅니다.");
         ApiEntity<CouponIssueResponse>
             response = restService.post(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
-        log.warn(response.getBody().getRequestId());
 
         return response.getSuccessResponse();
     }
 
     /**
-     * Fetch Polling
+     * Polling Mapping
+     * 발급 요청 후에 받은 requestId로, 요청에 대한 응답 결과를 가지고 옵니다.
      */
     @GetMapping("/member/response/{requestId}")
     public ResponseEntity<CouponMemberResponse> couponZoneIssue(@PathVariable String requestId) {
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone/" + requestId);
-        log.info("**********************************" + requestId);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("requestId", requestId);
 
-        ApiEntity<CouponMemberResponse> response = restService.get(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
-        log.info(response.getBody().getMessage() + "******************");
+        ApiEntity<CouponMemberResponse> response =
+            restService.get(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
+
         return response.getSuccessResponse();
     }
 }

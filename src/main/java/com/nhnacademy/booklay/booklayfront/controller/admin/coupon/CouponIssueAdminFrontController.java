@@ -74,23 +74,17 @@ public class CouponIssueAdminFrontController {
 
     /**
      * 발급한 쿠폰 리스트 조회.
-     *
      */
     @GetMapping("issue-history")
     public String getCouponIssueHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,
                                             Model model) {
         couponRestApiModelSettingService.setCouponIssueToModelByPage(pageNum, model);
 
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
         model.addAttribute(PAGE_NUM, pageNum);
 
         return "admin/coupon/issue/issueHistoryView";
     }
 
-    /**
-     *
-     *
-     */
     @GetMapping("issue-history/{memberNo}")
     public String memberIssueCoupon(Model model, @RequestParam(value = "page", defaultValue = "0") int pageNum,
                                     @PathVariable String memberNo) {
@@ -103,7 +97,6 @@ public class CouponIssueAdminFrontController {
 
     /**
      * 사용된 쿠폰 리스트 조회
-     *
      */
     @GetMapping("/use-history")
     public String getCouponUsedHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,

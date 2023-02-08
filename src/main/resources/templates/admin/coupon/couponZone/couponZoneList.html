@@ -57,7 +57,7 @@
                         <p th:if="${limited.isBlind}">O</p>
                         <p th:unless="${limited.isBlind}">X</p>
                     </td>
-                    <td><a onclick="" href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${graded.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${limited.id})}">삭제</a>
                     </td>
@@ -149,7 +149,7 @@
                         <p th:if="${unlimited.isBlind}">O</p>
                         <p th:unless="${unlimited.isBlind}">X</p>
                     </td>
-                    <td><a href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${graded.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${unlimited.id})}">삭제</a>
                     </td>

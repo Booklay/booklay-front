@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 public class CouponHistoryResponse {
     private Long id;
     private String code;
-    private String name;
-    private String memberId;
+    private String couponName;
+    private String memberMemberId;
     private LocalDateTime issuedAt;
     private LocalDateTime expiredAt;
 }

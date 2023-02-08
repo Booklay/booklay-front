@@ -61,8 +61,8 @@
                     <td><p th:text="${historyStat.count}+${currentPage}*20"></p></td>
                     <td><p th:text="${history.id}"></p></td>
                     <td><p th:text="${history.code}"></p></td>
-                    <td><p th:text="${history.name}"></p></td>
-                    <td><p th:text="${history.memberId}"></p></td>
+                    <td><p th:text="${history.couponName}"></p></td>
+                    <td><p th:text="${history.memberMemberId}"></p></td>
                     <td><p th:text="${#temporals.format(history.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                     <td><p th:text="${#temporals.format(history.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                 </tr>
