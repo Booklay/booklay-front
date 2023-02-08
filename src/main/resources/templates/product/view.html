@@ -87,32 +87,93 @@
             </p>
 
             <th:block th:if="${thisMember.memberNo != null}">
-              <button class="btn btn-outline-primary">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="icon icon-tabler icon-tabler-shopping-cart-plus" width="24" height="24"
-                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                     stroke-linecap="round" stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                  <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                  <path d="M17 17h-11v-14h-2"></path>
-                  <path d="M6 5l6 .429m7.138 6.573l-.143 1h-13"></path>
-                  <path d="M15 6h6m-3 -3v6"></path>
-                </svg>
-              </button>
-
-              <button class="btn btn-outline-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alarm"
-                     width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
-                     stroke="currentColor" fill="none" stroke-linecap="round"
-                     stroke-linejoin="round">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M12 13m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path>
-                  <path d="M12 10l0 3l2 0"></path>
-                  <path d="M7 4l-2.75 2"></path>
-                  <path d="M17 4l2.75 2"></path>
-                </svg>
-              </button>
+              <!--              위시리스트 등록-->
+              <form th:if="${!memberProduct.wishlist}" method="post"
+                    th:action="@{/product/wishlist/connect}">
+                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                <label class="btn btn-outline-primary">
+                  <input type="submit" hidden>
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+                    <path d="M14 19l2 2l4 -4"></path>
+                    <path d="M9 8h4"></path>
+                    <path d="M9 12h2"></path>
+                  </svg>
+                  찜 등록
+                  </input>
+                </label>
+              </form>
+              <!--              위시리스트 삭제-->
+              <form th:if="${memberProduct.wishlist}" method="post"
+                    th:action="@{/product/wishlist/disconnect}">
+                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                <label class="btn btn-primary">
+                  <input type="submit" hidden>
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+                    <path d="M14 19l2 2l4 -4"></path>
+                    <path d="M9 8h4"></path>
+                    <path d="M9 12h2"></path>
+                  </svg>
+                  찜 취소
+                  </input>
+                </label>
+              </form>
+              <!--              알람 등록-->
+              <form th:if="${!memberProduct.alarm}" method="post"
+                    th:action="@{/product/alarm/connect}">
+                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                <label class="btn btn-outline-primary">
+                  <input type="submit" hidden>
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       class="icon icon-tabler icon-tabler-bell-ringing" width="24" height="24"
+                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path
+                        d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
+                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                    <path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727"></path>
+                    <path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727"></path>
+                  </svg>
+                  재입고 알림
+                  </input>
+                </label>
+              </form>
+              <!--              알람 삭제-->
+              <form th:if="${memberProduct.alarm}" method="post"
+                    th:action="@{/product/alarm/disconnect}">
+                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                <label class="btn btn-primary">
+                  <input type="submit" hidden>
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       class="icon icon-tabler icon-tabler-bell-off" width="24" height="24"
+                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                       stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M3 3l18 18"></path>
+                    <path
+                        d="M17 17h-13a4 4 0 0 0 2 -3v-3a7 7 0 0 1 1.279 -3.716m2.072 -1.934c.209 -.127 .425 -.244 .649 -.35a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3"></path>
+                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                  </svg>
+                  </input>
+                  재입고 알림 중
+                </label>
+              </form>
             </th:block>
 
           </div>

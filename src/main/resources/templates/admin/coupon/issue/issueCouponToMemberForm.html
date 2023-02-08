@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <title>사용자 쿠폰 발급</title>
+    <title>[관리자] 사용자 쿠폰 발급</title>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
@@ -17,9 +17,17 @@
                 <div class="card-body">
                     <div class="col-md-6 col-xl-3">
                         <div class="mb-3">
-                            <label class="form-label">쿠폰 종류
-                                <span class="form-label-description">발급하려는 쿠폰의 종류를 선택하세요.</span>
-                            </label>
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label class="form-label">쿠폰 종류</label>
+                                </div>
+                                <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                        data-bs-content="<p class='mb-0'>발급하려는 쿠폰을 선택해주세요.</p><strong>쿠폰의 수량과 관계없이 생성됩니다.</strong>" data-bs-html="true">?
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="row g-2">
                                 <div class="col">
                                     <input type="text" class="form-control" id="couponName" disabled="disabled" required>
@@ -35,9 +43,16 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">발급할 회원
-                                <span class="form-label-description">발급 대상 회원을 선택하세요.</span>
-                            </label>
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label class="form-label">발급 대상 회원</label>
+                                </div>
+                                <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="발급 대상 회원을 선택하세요." data-bs-html="true">?
+                                    </span>
+                                </div>
+                            </div>
                             <div class="row g-2">
                                 <div class="col">
                                     <input type="text" class="form-control" id="memberName" disabled="disabled">
@@ -52,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="text-left">
+                        <div class="text-end">
                             <input class="btn btn-primary" type="submit" value="발급 하기">
                         </div>
                     </div>

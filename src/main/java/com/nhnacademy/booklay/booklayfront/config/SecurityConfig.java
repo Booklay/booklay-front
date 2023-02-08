@@ -7,7 +7,9 @@ import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginFailureHandle
 import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
+import com.nhnacademy.booklay.booklayfront.event.MemberEventPublisher;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +48,7 @@ public class SecurityConfig {
             .loginProcessingUrl("/login")
             .usernameParameter("memberId")
             .passwordParameter("password")
-            .successHandler(new CustomLoginSuccessHandler())
+            .successHandler(new CustomLoginSuccessHandler(memberEventPublisher(null)))
             .failureHandler(customLoginFailureHandler())
             .and()
             .logout().logoutUrl("/member/logout")
@@ -56,6 +58,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/admin/coupon-zone/**").hasRole("ADMIN")
             .anyRequest()
             .permitAll();
 
@@ -63,7 +66,7 @@ public class SecurityConfig {
             .disable();
 
         http.oauth2Login(c -> c.clientRegistrationRepository(clientRegistrationRepository())
-                               .successHandler(oAuth2LoginSuccessHandler(null))
+                               .successHandler(oAuth2LoginSuccessHandler(null, null))
                                .failureHandler(customLoginFailureHandler()));
 
         http.addFilterBefore(jwtAuthenticationFilter(null, null), UsernamePasswordAuthenticationFilter.class);
@@ -109,8 +112,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(AuthenticationServerProxy proxy) {
-        return new OAuth2LoginSuccessHandler(proxy);
+    public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler(AuthenticationServerProxy proxy, MemberEventPublisher memberEventPublisher) {
+        return new OAuth2LoginSuccessHandler(proxy, memberEventPublisher);
     }
 
     @Bean
@@ -121,6 +124,11 @@ public class SecurityConfig {
     @Bean
     public CustomLoginFailureHandler customLoginFailureHandler() {
         return new CustomLoginFailureHandler();
+    }
+
+    @Bean
+    public MemberEventPublisher memberEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        return new MemberEventPublisher(applicationEventPublisher);
     }
 
 }

@@ -27,23 +27,33 @@
                 <th>번호</th>
                 <th>상품 번호</th>
                 <th>제목</th>
+                <th>작가</th>
                 <th>가격</th>
                 <th>판매 여부</th>
-                <th>출판사</th>
+                <th>삭제 여부</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody th:each="product, productStat :${list}">
             <td><p th:text="${productStat.count}"></p></o></td>
-            <td><p th:text="${product.productId}"></p></td>
-            <td><p th:text="${product.title}"></p></td>
-            <td><p th:text="${product.price}"></p></td>
-            <td><p th:text="${product.selling}"></p></td>
-            <td><p th:text="${product.publisher}"></p></td>
+            <td><p th:text="${product.info.id}"></p></td>
+            <td><p th:text="${product.info.title}"></p></td>
+            <td>
+                <p th:if="${product.authors != null}" th:text="${#strings.arrayJoin(product.getAuthorNameList(), ', ')}"></p>
+            </td>
+            <td><p th:text="${product.info.price}"></p></td>
+            <td>
+                <p th:if="${product.info.selling}">판매중</p>
+                <p th:unless="${product.info.selling}">품절</p>
+            </td>
+            <td>
+                <p th:if="${product.info.deleted}">삭제</p>
+                <p th:unless="${product.info.deleted}">존재</p>
+            </td>
             <td>
                 <input class="btn btn-outline-primary" type="button" value="선택"
-                       th:id="${product.productId}" th:name="${product.title}"
+                       th:id="${product.info.id}" th:name="${product.info.title}"
                        th:onclick="setApplyItemText(this.getAttribute('id'), this.getAttribute('name'))">
             </td>
            </tbody>

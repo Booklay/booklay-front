@@ -7,21 +7,24 @@
 </head>
 
 <th:block layout:fragment="content">
-    <div class="card-header">
-        <h2 >쿠폰존 목록</h2>
-    </div><br/>
-
-    <div class="row g-2">
+    <div class="row mb-3">
         <div class="col">
-            <h4>수량 제한 쿠폰</h4>
+            <div class="card-header">
+                <h4 class="page-title">쿠폰존 목록</h4>
+            </div>
         </div>
-        <div class="col-auto">
-            <a th:href="@{/admin/coupon-zone/create-form}" class="btn btn-primary">등록하기</a>
+        <div class="col">
+            <div class="text-end">
+                <a th:href="@{/admin/coupon-zone/create-form}" class="btn btn-primary">등록하기</a>
+            </div>
         </div>
     </div>
 
+                                <!--/* 이달의 쿠폰 */-->
+    <h3>이달의 쿠폰</h3>
+
     <div th:if="${#lists.isEmpty(limitedList)}">
-        <div>등록된 수량 제한 쿠폰이 없습니다.</div>
+        <div class="mb-3">등록된 이달의 쿠폰 쿠폰이 없습니다.</div>
     </div>
 
     <div class="card" th:unless="${#lists.isEmpty(limitedList)}">
@@ -34,7 +37,8 @@
                     <th>쿠폰 이름</th>
                     <th>설명</th>
                     <th>오픈시간</th>
-                    <th>닫힘시간</th>
+                    <th>발급만료기간</th>
+                    <th>쿠폰만료기간</th>
                     <th>숨김여부</th>
                     <th>숨김수정</th>
                     <th>삭제</th>
@@ -63,9 +67,57 @@
         </div>
     </div>
 
-    <h4>수량 무제한 쿠폰</h4>
+                                <!--/* 등급별 쿠폰 */-->
+    <h3>등급별 쿠폰</h3>
+    <div th:if="${#lists.isEmpty(gradedList)}">
+        <div class="mb-3">등록된 등급별 쿠폰이 없습니다.</div>
+    </div>
+
+    <div class="card" th:unless="${#lists.isEmpty(gradedList)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>쿠폰 ID</th>
+                    <th>쿠폰 이름</th>
+                    <th>설명</th>
+                    <th>발급 등급</th>
+                    <th>오픈시간</th>
+                    <th>닫힘시간</th>
+                    <th>숨김여부</th>
+                    <th>숨김수정</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+
+                <tbody th:each="graded, gradedStat :${gradedList}">
+                <tr>
+                    <td><p th:text="${gradedStat.count}"></p></td>
+                    <td><p th:text="${graded.couponId}"></p></td>
+                    <td><p th:text="${graded.name}"></p></td>
+                    <td><p th:text="${graded.description}"></p></td>
+                    <td><p th:text="${graded.grade}"></p></td>
+                    <td><p th:text="${graded.openedAt}"></p></td>
+                    <td><p th:text="${graded.issuanceDeadlineAt}"></p></td>
+                    <td>
+                        <p th:if="${graded.isBlind}">O</p>
+                        <p th:unless="${graded.isBlind}">X</p>
+                    </td>
+                    <td><a href="">수정</a></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${graded.id})}">삭제</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+                                <!--/* 이달의 쿠폰 */-->
+    <h3>수량 무제한 쿠폰</h3>
     <div th:if="${#lists.isEmpty(unlimitedList)}">
-        <div>등록된 수량 무제한 쿠폰이 없습니다.</div>
+        <div class="mb-3">등록된 수량 무제한 쿠폰이 없습니다.</div>
     </div>
 
     <div class="card" th:unless="${#lists.isEmpty(unlimitedList)}">

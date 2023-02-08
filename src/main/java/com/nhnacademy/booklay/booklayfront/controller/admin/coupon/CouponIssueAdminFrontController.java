@@ -27,12 +27,6 @@ public class CouponIssueAdminFrontController {
 
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
-    }
-
     /**
      * 수량만큼의 쿠폰 발급 폼.
      *

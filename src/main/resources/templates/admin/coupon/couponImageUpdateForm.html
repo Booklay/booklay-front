@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
+<head>
+    <title>[관리자] 쿠폰 이미지 수정</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="card-header">
+            <h4 class="card-title">쿠폰 이미지 수정</h4>
+        </div>
+
+        <div class="card-body">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <label class="form-label">쿠폰 이미지</label>
+                        </div>
+                        <div class="col-auto ">
+                            <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                  data-bs-content="<p class='mb-0'>변경할 이미지를 등록해주세요.</p><p>이미지 삭제는 '삭제' 버튼을 눌러주세요.</p>"
+                                  data-bs-html="true">?
+                            </span>
+                        </div>
+                    </div>
+                    <input class="form-control" type="file" accept="image/*" name="image" id="image-input">
+
+                </div>
+
+                <div class="mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>변경 전</h5>
+                            <span th:if="${couponDetail.objectFileId == null}">
+                                <span>등록된 이미지가 없습니다.</span>
+                            </span>
+                            <span th:if="${couponDetail.objectFileId != null}">
+                                <div class="text-center" style="width:100px;">
+                                <img class="product-img"
+                                     style="max-height: 200px; width: 95%; margin-top:10px;"
+                                     th:src="@{/storage/{objectFileId} (objectFileId = ${couponDetail.objectFileId})}"/>
+                                </div>
+                             </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="row g-2">
+                        <div class="col">
+                            <div class="text-left">
+                                <a class="btn btn-primary" th:href="@{/admin/coupons/list}">목록</a>
+                            </div>
+                        </div>
+                        <div class="col-auto ">
+                            <div class="text-end">
+                                <input class="btn btn-primary" type="submit" value="변경">
+                                <a class="btn btn-danger"
+                                   th:href="@{/admin/coupons/delete-image/{couponId} (couponId = ${couponDetail.id})}">삭제</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</th:block>

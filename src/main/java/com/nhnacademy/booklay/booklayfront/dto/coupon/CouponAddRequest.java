@@ -35,15 +35,8 @@ public class CouponAddRequest {
     private Long maximumDiscountAmount;
 
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime issuanceDeadlineAt;
-
-    @NotNull
     private Boolean isDuplicatable;
 
     @NotNull
     private Boolean isLimited;
-
-    @NotNull
-    private int validateTerm;
 }
