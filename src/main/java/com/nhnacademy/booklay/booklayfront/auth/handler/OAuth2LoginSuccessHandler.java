@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.auth.handler;
 import com.nhnacademy.booklay.booklayfront.auth.AuthenticationServerProxy;
 import com.nhnacademy.booklay.booklayfront.auth.CustomMember;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.JwtInfo;
+import com.nhnacademy.booklay.booklayfront.event.MemberEventPublisher;
 import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final AuthenticationServerProxy proxy;
+    private final MemberEventPublisher memberEventPublisher;
 
 
     @Override
@@ -43,6 +45,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                                                     customMember.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(token);
+
+        memberEventPublisher.publishMemberLoggedIn(customMember.getUsername());
 
         response.sendRedirect("/");
 
