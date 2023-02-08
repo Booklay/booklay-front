@@ -37,6 +37,7 @@ public class OrderController {
 
         List<CartObject> cartObjectList = productRestApiModelSettingService.setProductObjectListToModelByProductNoList(
                 cartToOrderPageRequest.getProductNo(), model);
+        // 카트에서 넘어온 수량을 적용해줌
         for (CartObject cartObject : cartObjectList) {
             cartObject.setProductCount(
                     cartToOrderPageRequest.getCount().get(
@@ -54,6 +55,10 @@ public class OrderController {
                 model.addAttribute("point", "포인트 조회 실패");
             }
         }
+
+        memberRestApiModelSettingService.setMemberDeliveryDestinationToModelByMemberNo(
+                memberInfo.getMemberNo()==null?0L:memberInfo.getMemberNo(), model);
+
         model.addAttribute("memberInfo", memberInfo);
         return "order/orderPage";
     }
