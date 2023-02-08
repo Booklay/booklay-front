@@ -15,12 +15,15 @@ public class ControllerStrings {
     public static final String RETURN_ADMIN_PAGE = "admin/adminPage";
 
     public static final String ADMIN_COUPON_REST_PREFIX = "/admin/coupons/";
+    public static final String COUPON_REST_PREFIX = "/coupons/";
     public static final String ADMIN_COUPON_TYPES_REST_PREFIX = "/admin/couponTypes/";
     public static final String ADMIN_COUPON_TEMPLATE_REST_PREFIX = "/admin/couponTemplates/";
     public static final String ADMIN_COUPON_SETTING_REST_PREFIX = "/admin/couponSettings/";
 
     public static final String CART_REST_PREFIX = "/cart/";
-    public static final String ADMIN_MEMBER_REST_PREFIX = "/admin/members";
+    public static final String ORDER_REST_PREFIX = "/order/";
+    public static final String ADMIN_MEMBER_REST_PREFIX = "/admin/members/";
+
 
     public static final String COUPON_URL_LIST_PAGE = "pages";
 

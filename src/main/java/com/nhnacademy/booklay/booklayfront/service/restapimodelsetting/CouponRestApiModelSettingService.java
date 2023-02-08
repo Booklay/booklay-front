@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,36 @@ public class CouponRestApiModelSettingService {
     }
 
     /**
+     * 해당 상품에 적용가능한 쿠폰 리스트를 모델에 추가함
+     *
+     * @param pageNum   페이지번호
+     * @param productNo 상품번호
+     * @param dupl      중복쿠폰여부
+     */
+    public void setProductCouponListToModelByPageAndMemberNoAndProductNo(int pageNum, String productNo, MemberInfo memberInfo, Boolean dupl, Model model) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "product/", productNo);
+        setCouponListToModelForPopUpPage(url, pageNum, dupl, memberInfo, model);
+    }
+    /**
+     * 사용자의 주문 쿠폰 리스트를 모델에 추가함
+     * @param pageNum       페이지번호
+     * @param dupl          중복쿠폰여부
+     */
+    public void setOrderCouponListToModelByPageAndMemberNo(int pageNum, Boolean dupl, MemberInfo memberInfo, Model model) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "order");
+        setCouponListToModelForPopUpPage(url, pageNum, dupl, memberInfo, model);
+    }
+    /**
+     * 팝업창 쿠폰리스트 조회 중복코드 처리
+     */
+    private void setCouponListToModelForPopUpPage(String url, int pageNum, Boolean dupl, MemberInfo memberInfo, Model model){
+        MultiValueMap<String, String> map = getDefaultPageMap(pageNum, memberInfo);
+        map.add("isDuplicable", dupl.toString());
+        ApiEntity<PageResponse<CouponUsing>> apiEntity = restService.get(url, map, new ParameterizedTypeReference<>() {});
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
+    }
+    /**
      * 쿠폰의 상세 정보를 요청합니다.
      * @param couponId 상세 조회 하려는 쿠폰의 id
      */
@@ -74,12 +106,14 @@ public class CouponRestApiModelSettingService {
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
+
     public void setCouponTemplateDetailToModelByCouponTemplateId(String couponTemplateId, Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_TEMPLATE_REST_PREFIX, couponTemplateId);
         ApiEntity<CouponTemplateDetail> apiEntity = restService.get(url, null, CouponTemplateDetail.class);
         apiEntity.getBody().setId(couponTemplateId);
         model.addAttribute(ATTRIBUTE_NAME_COUPON_TEMPLATE_DETAIL, apiEntity.getBody());
     }
+
     public void setCouponSettingListToModelByPage(Integer pageNum, Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_SETTING_REST_PREFIX, COUPON_URL_LIST_PAGE);
         ApiEntity<PageResponse<CouponSetting>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});

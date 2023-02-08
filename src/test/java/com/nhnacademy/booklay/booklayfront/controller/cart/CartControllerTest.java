@@ -84,7 +84,9 @@ class CartControllerTest {
 
     @BeforeEach
     void before(){
-        cartObject = new CartObject(3L, "dummy", 0L, 1);
+        List<Long> longList = new ArrayList<>();
+        longList.add(1L);
+        cartObject = new CartObject(3L, "dummy", 0L, 1, longList, 1L);
         cartObjectList = new ArrayList<>();
         cartObjectList.add(cartObject);
         cartDto = new CartDto(cartObject.getProductNo(), cartObject.getProductCount());

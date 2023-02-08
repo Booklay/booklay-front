@@ -1,0 +1,155 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
+<head>
+    <title>Content page 1</title>
+
+</head>
+
+<th:block layout:fragment="content">
+    <span id="ordertotal" hidden>4294967295</span>
+    <div class="container-xl">
+        <div class="row row-cards">
+
+            <!-- Order Start -->
+            <div class="container-fluid pt-5 col-10">
+                <div>
+                    <!--            order 본체-->
+                    <div class="table-responsive card">
+                        <table class="table table-vcenter card-table">
+                            <thead class="bg-secondary text-dark">
+                            <tr>
+                                <th></th>
+                                <th>상품</th>
+                                <th>가격</th>
+                                <th>수량</th>
+                                <th>합계</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody class="align-middle">
+
+                            <!--     반복 -->
+                            <!-- cartList 시작-->
+                            <th:block th:each="cart : ${cartObjectList}">
+                                <tr th:id="${cart.productNo+'tr'}">
+                                    <td class="align-middle"><img th:src="${'/storage/'+cart.imageNo}" alt="" style="width: 50px;"> </td>
+                                    <td class="align-middle" th:text="${cart.productName}"></td>
+                                    <td class="align-middle" th:text="${cart.productPrice}"></td>
+                                    <td class="align-middle" th:id="${cart.productNo+'count'}" th:text="${cart.productCount}"></td>
+                                    <td class="align-middle productTotal" th:id="${cart.productNo+'total'}" th:text="${cart.productPrice * cart.productCount}"></td>
+                                    <td><button th:id="${'coupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'false')">상품 쿠폰 적용</button></td>
+                                    <td><button th:id="${'doupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'true')">중복 쿠폰 적용</button></td>
+                                </tr>
+                                <tr th:id="${cart.productNo+'couponTr'}" hidden>
+                                </tr>
+                                <tr th:id="${cart.productNo+'douponTr'}" hidden>
+                                </tr>
+                                <tr><td>최종가격 : <span th:id="${cart.productNo+'last'}" class="productLastAmount" th:text="${cart.productPrice * cart.productCount}"></span></td></tr>
+                            </th:block>
+
+                            <!--     반복-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <div class="card">
+                        <div id="orderCouponDiv" class="text-center mb-0">
+                            <table class="table table-bordered text-center mb-0">
+                                <tr><td><button id="ordercouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(false)">주문 쿠폰 적용</button>
+                                <button id="orderDouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(true)">중복 쿠폰 적용</button></td></tr>
+                                <tr id="orderCouponTr" hidden>
+                                </tr>
+                                <tr id="orderDouponTr" hidden>
+                                </tr>
+                            </table>
+                            <div>최종가격 : <span id="orderLast">0</span></div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="card">
+                        <div id="pointUseDiv" class="text-center mb-0">
+                            보유 포인트 : <span th:text="${point}"></span><br/>
+                            <input id="usePoint" type="number" min="0" value="0" th:max="${point}">
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div class="row px-xl-5">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="font-weight-semi-bold text-light">Order Summary</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3 pt-1">
+                                    <h6 class="font-weight-medium">상품 금액 합계</h6>
+                                    <h6 id="allProductTotal" class="font-weight-medium">0</h6>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">배송비</h6>
+                                    <h6 id="shippingFee" class="font-weight-medium">0</h6>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">쿠폰 할인</h6>
+                                    <h6 id="couponDiscount" class="font-weight-medium">0</h6>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="font-weight-medium">포인트 사용</h6>
+                                    <h6 id="pointDiscount" class="font-weight-medium">0</h6>
+                                </div>
+                            </div>
+                            <div class="card-footer border-secondary bg-transparent">
+                                <div class="d-flex justify-content-between mt-2">
+                                    <h5 class="font-weight-bold">총 금액</h5>
+                                    <h5 class="font-weight-bold" id="totalPay">0</h5>
+                                </div>
+                                <div style="text-align: end;">
+                                    <button id="toOrder" class="btn btn-block btn-primary py-3">주문하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Order End -->
+
+
+        </div>
+    </div>
+
+</th:block>
+
+</html>
+
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/lib/easing/easing.min.js"></script>
+<script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Contact Javascript File -->
+<script src="/mail/jqBootstrapValidation.min.js"></script>
+<script src="/mail/contact.js"></script>
+
+<!-- Template Javascript -->
+<script src="/js/main.js"></script>
+<script th:inline="javascript" >
+    const cartData = [];
+    [[${cartObjectList}]].forEach(function (value){
+        let cart = {
+            productNo : value.productNo,
+            productTotal : value.productPrice * value.productCount,
+            categoryNoList : value.categoryNoList
+        };
+        cartData.push(cart);
+    });
+    const userPointAmount = [[${point}]];
+</script>
+<script src="/js/order/orderPage.js"></script>
+</body>
+
+</html>

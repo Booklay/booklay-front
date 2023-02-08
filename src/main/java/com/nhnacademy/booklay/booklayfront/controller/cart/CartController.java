@@ -3,12 +3,12 @@ package com.nhnacademy.booklay.booklayfront.controller.cart;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
-import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartProductNoListRequest;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.CART_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 
 @SuppressWarnings("unchecked")
@@ -34,11 +34,12 @@ public class CartController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
+    private final ProductRestApiModelSettingService productRestApiModelSettingService;
     private static final String STRING_CART_ID = "CART_ID";
-    private static final String STRING_CART_ID_FOR_API = "cartId";
     private static final String STRING_PRODUCT_NO = "productNo";
     private static final String STRING_PRODUCT_NO_LIST = "productNoList";
     private static final String REDIRECT_CART_LIST = "redirect:/cart/list";
+    private static final String STRING_CART_ID_FOR_API = "cartId";
 
     @ModelAttribute(STRING_CART_ID)
     public String getCookieValue(@CookieValue(name = STRING_CART_ID, required = false)
@@ -50,19 +51,17 @@ public class CartController {
         String sessionId = getRandomUUID();
         Cookie cookie = new Cookie(STRING_CART_ID, sessionId);
         cookie.setHttpOnly(true);
+        cookie.setDomain("");
+        cookie.setHttpOnly(true);
         response.addCookie(cookie);
         return sessionId;
     }
 
     @GetMapping("list")
     public String cartListForm(@ModelAttribute(STRING_CART_ID)String cartId,
-                               Model model){
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.add(STRING_CART_ID_FOR_API, cartId);
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
-        ApiEntity<List<CartObject>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});
-        List<CartObject> cartObjectList = apiEntity.getBody();
-        model.addAttribute(ATTRIBUTE_NAME_CART_OBJECT_LIST, cartObjectList);
+                               Model model, MemberInfo memberInfo){
+        productRestApiModelSettingService.setProductObjectListToModelByCartId(
+                cartId, memberInfo.getMemberNo()==null?null: memberInfo.getMemberNo().toString(), model);
         return "cart/cartForm";
     }
 
