@@ -1,10 +1,10 @@
 <th:block th:fragment="search_box" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--[[${#request.getParameterValues('keywords')}]]-->
-    <form action="/search" method="post" class="row col-auto">
+    <form action="/search/products" method="post" class="row col-auto">
         <div class="col-auto p-1">
             <select type="text" name="classification" class="form-select" placeholder="검색 분류를 선택해주세요" id="select-tags-advanced" required>
-                <option value="keywords" th:selected="${#request.getParameter('classification') == 'keyword'} or ${#request.getParameter('classification') == null}">키워드</option>
-                <option value="category" th:selected="${#request.getParameter('classification') == 'category'}">카테고리</option>
+                <option value="keywords" th:selected="${#request.getParameter('classification') == 'keywords'} or ${#request.getParameter('classification') == null}">키워드</option>
+                <option value="categories" th:selected="${#request.getParameter('classification') == 'categories'}">카테고리</option>
                 <option value="tags" th:selected="${#request.getParameter('classification') == 'tags'}">태그</option>
                 <option value="authors" th:selected="${#request.getParameter('classification') == 'authors'}">작가</option>
             </select>
