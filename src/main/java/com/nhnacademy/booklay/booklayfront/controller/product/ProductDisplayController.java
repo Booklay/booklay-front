@@ -46,7 +46,6 @@ public class ProductDisplayController extends BaseController {
 
   private static final String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
-  private final RestTemplate restTemplate;
   private final RestService restService;
   private final ObjectMapper mapper = new ObjectMapper();
   private final CategoryService categoryService;

@@ -377,6 +377,37 @@
           </th:block>
           <!--          구독 상품 자식 상품 종료-->
         </div>
+
+        <!--        상품 문의 시작-->
+        <div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                  <th>답변 상태</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </tbody>
+              </table>
+              <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+            </div>
+          </div>
+          <button class="btn btn-outline-primary" style="float: right;">
+            <a style=" color: white;" th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의 작성</a>
+          </button>
+        </div>
+        <!--        상품 문의 종료-->
         <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
       </div>
     </div>
