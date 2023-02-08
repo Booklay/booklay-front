@@ -45,6 +45,7 @@ public class CouponZoneAdminController {
                                     Model model) {
         String query = "?page=" + page;
 
+        // TODO Coupon으로 가는거 말고, Shop으로 가게끔.
         URI getLimitedUri =
             URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/limited" + query);
         URI getGradedUri =
