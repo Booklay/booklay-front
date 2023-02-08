@@ -2,7 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service;
 
 
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import javax.validation.Valid;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +88,22 @@ public class RestService {
      * After the quick-fix is applied:
      *   List<String> list = new ArrayList<>();
      */
+
+    public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody,
+                                 MultiValueMap<String, String> params,
+                                 ParameterizedTypeReference<T> responseType) {
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url).queryParams(params);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody);
+
+        ApiEntity<T> apiEntity = new ApiEntity<>();
+        ResponseEntity<T> response =
+            restTemplate.exchange(builder.build().toUriString(), HttpMethod.POST, entity, responseType);
+        apiEntity.setSuccessResponse(response);
+
+        return apiEntity;
+    }
 
     public <T> ApiEntity<T> post(String url, Map<String, Object> requestBody,
                                  ParameterizedTypeReference<T> responseType) {
