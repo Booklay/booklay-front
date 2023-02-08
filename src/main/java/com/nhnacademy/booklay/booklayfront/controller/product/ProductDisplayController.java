@@ -1,5 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.product;
 
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -16,7 +18,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +49,14 @@ public class ProductDisplayController extends BaseController {
   private final RestTemplate restTemplate;
   private final RestService restService;
   private final ObjectMapper mapper = new ObjectMapper();
-
   private final CategoryService categoryService;
+  private final Integer SIZE = 20;
 
   //게시판형 전채 상품 호출
   @GetMapping("/display")
   public String retrieveProduct(Model model,
       @RequestParam(value = "CID", required = false) Long cid,
-      @RequestParam(value = "page", required = false) Optional<Integer> pageNum) {
+      @RequestParam(value = "page", defaultValue = "0") int page) {
 
     List<CategorySteps> categorySteps = (List<CategorySteps>) model.getAttribute("categories");
 
@@ -67,21 +68,11 @@ public class ProductDisplayController extends BaseController {
 
     log.error(" currentCategory : {}", currentCategory);
 
-    if (pageNum.isEmpty()) {
-      pageNum = Optional.of(0);
-    }
-    if (pageNum.get() < 0) {
-      pageNum = Optional.of(0);
-    }
-    Long size = 20L;
-
-    pageNum = Optional.of(pageNum.get() - 1);
-
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + "?page=" + pageNum.get() + "&size=" + size);
+        gatewayIp + SHOP_PRE_FIX );
 
     ApiEntity<PageResponse<ProductAllInOneResponse>> productResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
@@ -136,6 +127,7 @@ public class ProductDisplayController extends BaseController {
 
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
+    //위시리스트, 알림 등록 확인
     model.addAttribute("thisMember", memberInfo);
     if (memberInfo.getMemberNo() != null) {
       URI uriForMember = URI.create(
@@ -198,7 +190,8 @@ public class ProductDisplayController extends BaseController {
   public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    restService.post(uri.toString(), mapper.convertValue(request, Map.class), CreateDeleteWishlistAndAlarmRequest.class);
+    restService.post(uri.toString(), mapper.convertValue(request, Map.class),
+        CreateDeleteWishlistAndAlarmRequest.class);
 
     return "redirect:/product/view/" + request.getProductId();
   }

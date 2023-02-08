@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,7 @@ public class AdminTagController {
   private static final String MAINTENANCE_PRE_FIX = "redirect:/admin/product/tag/maintenance";
   private static final String CONNECTION_PRE_FIX = "redirect:/admin/product/tag/connection";
   private static final String SHOP_URI_PRE_FIX = "/shop/v1/admin/tag";
-  private static final Long SIZE = 20L;
+  private static final Integer SIZE = 20;
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final RestService restService;
@@ -55,10 +56,10 @@ public class AdminTagController {
       @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
 
     URI uri = URI.create(
-        gatewayIp + SHOP_URI_PRE_FIX + "?page=" + page + "&size=" + SIZE);
+        gatewayIp + SHOP_URI_PRE_FIX);
 
     ApiEntity<PageResponse<RetrieveTagResponse>> tagResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (tagResponse.isSuccess()) {
@@ -110,10 +111,10 @@ public class AdminTagController {
     Long size = 10L;
 
     URI uri = URI.create(
-        gatewayIp + "/shop/v1/admin/tag/product/" + productNo + "?page=" + page + "&size=" + size);
+        gatewayIp + "/shop/v1/admin/tag/product/" + productNo);
 
     ApiEntity<PageResponse<TagProductResponse>> tagResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     List<TagProductResponse> tagList = tagResponse.getBody().getData();

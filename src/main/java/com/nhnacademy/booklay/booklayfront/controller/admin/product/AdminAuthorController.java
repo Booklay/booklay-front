@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,7 @@ public class AdminAuthorController {
   private static final String POPUP = "redirect:/admin/product/author/popup";
   private static final String SHOP_PRE_FIX = "/shop/v1/";
   private static final String AUTHOR_PRE_FIX = "admin/author";
-  private static final Long SIZE = 20L;
+  private static final Integer SIZE = 20;
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final RestService restService;
@@ -198,10 +199,10 @@ public class AdminAuthorController {
   private PageResponse<RetrieveAuthorResponse> retrieveAuthors(
       int page) {
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX + "?page=" + page + "&size=" + SIZE);
+        gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX );
 
     ApiEntity<PageResponse<RetrieveAuthorResponse>> authorResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     return authorResponse.getBody();
