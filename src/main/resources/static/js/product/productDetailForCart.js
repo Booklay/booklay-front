@@ -23,18 +23,11 @@ window.onload = function () {
         httpRequest.send(JSON.stringify(body));
       });
 
-  document.getElementById(value.productId + "order").addEventListener('click',
-      function () {
-        let productCount = document.getElementById(
-            value.productId + "count").value;
-
-      });
-
   document.getElementById("toOrder").addEventListener("click",
       function () {
         let cartDtoArray = [];
 
-        const productNo = document.getElementById("productNo").getValue();
+        const productNo = document.getElementById("productNo").value;
 
         cartDtoArray.push({
           "productNo": parseInt(productNo),

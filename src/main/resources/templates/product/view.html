@@ -2,8 +2,8 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
   <title th:text="${product.info.title}"></title>
-<!--  <script src="/js/product/view.js" />-->
-<!--  <script src="/js/product/productDetailForCart.js" />-->
+
+  <script src="/js/product/productDetailForCart.js"></script>
 </head>
 <!---->
 <th:block layout:fragment="content">
@@ -13,6 +13,7 @@
       <div class="card-body">
         <div class="row">
 
+          <input id="productNo" name="productId" type="number" th:value="${product.info.id}" hidden>
           <div class="col-4">
             <!--   사진  -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
@@ -86,14 +87,14 @@
               <span th:text="${#numbers.formatCurrency(product.info.price)}"></span>
             </p>
 
-<!--            wishlist, alarm-->
+            <!--            wishlist, alarm-->
             <th:block th:if="${thisMember.memberNo != null}">
               <div style="display: flex;">
                 <!--              위시리스트 등록-->
                 <form style="margin-right: 10px;" th:if="${!memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/connect}">
                   <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                  <input id="productNo" name="productId" type="number" th:value="${product.info.id}"
+                  <input name="productId" type="number" th:value="${product.info.id}"
                          hidden>
                   <label class="btn btn-outline-primary">
                     <input type="submit" hidden>
@@ -179,7 +180,7 @@
                 </form>
               </div>
             </th:block>
-<!--            wishlist alarm end-->
+            <!--            wishlist alarm end-->
 
             <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4"
                style="margin-top: 10px;">품절</p>
@@ -187,9 +188,10 @@
             <!--            구매 부분 시작-->
             <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
 
-              <input id="count" style="margin-right: 10px;" type="number" step="1" min="1" th:max="${product.detail.storage}"
+              <input id="count" style="margin-right: 10px;" type="number" step="1" min="1"
+                     th:max="${product.detail.storage}"
                      value="1">
-<!--              th:max="${product.detail.storage}"-->
+              <!--              th:max="${product.detail.storage}"-->
 
               <button class="btn btn-primary" id="toOrder" style="margin-right: 10px;">바로 구매
               </button>
