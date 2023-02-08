@@ -86,7 +86,6 @@ public class CouponAdminFrontController {
 
     /**
      * 생성된 쿠폰 리스트 조회.
-     *
      */
     @GetMapping("/list")
     public String allCouponList(@RequestParam(value = "page", defaultValue = "0") int pageNum,

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneCreateRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneIsBlindRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneIsBlindResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.grade.Grade;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -11,6 +13,7 @@ import java.net.URI;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupon-zone")
+@Slf4j
 public class CouponZoneAdminController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
@@ -96,15 +100,30 @@ public class CouponZoneAdminController {
     }
 
     /**
-     * 쿠폰존에 등록된 정보를 변경합니다.
+     * 숨김 여부 수정 폼.
      */
-    @GetMapping("/update-form")
-    public String getCouponZoneUpdateForm(Model model) {
+    @GetMapping("/update-form/{couponZoneId}")
+    public String getCouponZoneUpdateForm(Model model, @PathVariable Long couponZoneId) {
+        URI detailUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/blind/" + couponZoneId);
+
+        ApiEntity<CouponZoneIsBlindResponse> isBlind = restService.get(detailUri.toString(), null, CouponZoneIsBlindResponse.class);
+
+        model.addAttribute("isBlind", isBlind.getBody().getIsBlind());
+
         return "admin/coupon/couponZone/couponZoneUpdateForm";
     }
 
-    @PostMapping("/update-form")
-    public String updateCouponZone() {
+    /**
+     * 숨김 여부 수정.
+     */
+    @PostMapping("/update-form/{couponZoneId}")
+    public String updateCouponZone(@Valid @ModelAttribute CouponZoneIsBlindRequest request,
+                                   @PathVariable Long couponZoneId) {
+        Map map = objectMapper.convertValue(request, Map.class);
+        URI updateUri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone/blind/" + couponZoneId);
+
+        restService.post(updateUri.toString(), map, String.class);
+
         return "redirect:/admin/coupon-zone";
     }
 

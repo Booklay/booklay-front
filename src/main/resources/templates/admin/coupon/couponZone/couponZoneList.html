@@ -104,7 +104,7 @@
                         <p th:if="${graded.isBlind}">O</p>
                         <p th:unless="${graded.isBlind}">X</p>
                     </td>
-                    <td><a href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${graded.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${graded.id})}">삭제</a>
                     </td>
