@@ -11,14 +11,14 @@
       <div class="card-body">
         <div class="row">
 
-<!--          사진 부분-->
+          <!--          사진 부분-->
           <div class="col-4">
             <!--            -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
 
             <!--          -->
           </div>
-<!--          안내 부분-->
+          <!--          안내 부분-->
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.info.title}"></p>
             <p class="h4" th:utext="${product.info.shortDescription}"></p>
@@ -88,20 +88,20 @@
               <span th:text="${#numbers.formatCurrency(product.info.price)}"></span>
             </p>
 
-            <!--        관리자 식별-->
-            <th:block>
-              </br>
+            <br>
 
-              <input class="btn btn-outline-primary btnAtVar" th:id="${productNo}" type="button"
+            <div style="display: flex;">
+              <input style="margin-right:10px;" class="btn btn-outline-primary btnAtVar"
+                     th:id="${productNo}" type="button"
                      value="태그 등록 팝업창 호출"
                      onclick="showTagRegisterPopup(id);"/>
 
-              <form th:if="${product.detail != null}" method="get"
+              <form style="margin-right:10px;" th:if="${product.detail != null}" method="get"
                     th:action="@{/admin/product/update/books/{productId} (productId = ${productNo})}">
                 <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
 
-              <form th:if="${product.subscribe != null}" method="get"
+              <form style="margin-right:10px;" th:if="${product.subscribe != null}" method="get"
                     th:action="@{/admin/product/update/subscribes/{productId} (productId = ${productNo})}">
                 <input class="btn btn-outline-primary" type="submit" value="수정"/>
               </form>
@@ -118,9 +118,9 @@
                 <input class="btn btn-outline-primary" type="submit" value="복구"/>
               </form>
 
-            </th:block>
+            </div>
           </div>
-          <!--카테고리-->
+
           <div class="col-12 my-4">
             <h1>관련 분류</h1>
 
