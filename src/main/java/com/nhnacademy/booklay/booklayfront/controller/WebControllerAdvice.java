@@ -40,6 +40,6 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BooklayServerException.class)
     public ResponseEntity<Object> handelBooklayServerException(BooklayServerException e) {
         HttpStatus httpStatus = HttpStatus.valueOf(e.getMessage());
-        return new ResponseEntity<>(httpStatus);
+        return ResponseEntity.status(httpStatus).body("{\"message\":\"잠시 뒤에 시도해주세요. 문제가 계속되면 사이트 소유자에게 문의하세요.\"}");
     }
 }

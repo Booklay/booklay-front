@@ -21,10 +21,15 @@ async function issueCoupon(couponId) {
 
             if (messageResponse.ok) {
                 const msgResponse = await messageResponse.json();
-                alert(msgResponse.message)
-                loadingDiv.style.display = 'none'
-                clearTimeout(timerId);
-                clearTimeout(timeoutId)
+                if(msgResponse.message !== "null") {
+                    alert(msgResponse.message)
+                    loadingDiv.style.display = 'none'
+                    clearTimeout(timerId);
+                    clearTimeout(timeoutId)
+                }
+
+            } else {
+                alert("조금 뒤에 다시 시도해주세요..")
             }
         }, 1500);
     } else {
