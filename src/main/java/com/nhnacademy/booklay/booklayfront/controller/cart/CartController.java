@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,7 +68,7 @@ public class CartController {
 
     @PostMapping
     public String addProductInCart(@ModelAttribute(STRING_CART_ID)String cartId,
-                                   @RequestBody CartDto cartDto){
+                                   @Valid @RequestBody CartDto cartDto){
         Map<String, Object> map = objectMapper.convertValue(cartDto, Map.class);
         map.put(STRING_CART_ID_FOR_API, cartId);
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
