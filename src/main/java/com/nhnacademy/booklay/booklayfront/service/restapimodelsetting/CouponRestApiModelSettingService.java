@@ -140,7 +140,6 @@ public class CouponRestApiModelSettingService {
 
     /**
      * 발급된 쿠폰 리스트 조회 요청을 보냅니다.
-     *
      */
     public void setCouponIssueToModelByPage(Integer pageNum, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "issue-history");

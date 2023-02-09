@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
+<head>
+    <title>[관리자] 쿠폰존 숨김 여부 수정</title>
+    <script src="/js/coupon/couponPopup.js"></script>
+</head>
+
+<th:block layout:fragment="content">
+    <div class="row-cards">
+        <div class="col-12">
+            <form method="post" enctype="multipart/form-data" id="couponzone-form">
+                <div class="card-header">
+                    <h4 class="card-title">쿠폰존 숨김 여부 수정</h4>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="mb-3">
+                                <label class="form-label">숨김 여부</label>
+                                <div>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isBlind" value="true"
+                                               th:checked="${isBlind}">
+                                        <span class="form-check-label">숨김</span>
+                                    </label>
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="isBlind" value="false"
+                                        th:checked="!${isBlind}">
+                                        <span class="form-check-label">보임</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <a class="btn btn-secondary" th:href="@{/admin/coupon-zone}">뒤로가기</a>
+                                <input class="btn btn-primary" type="submit" value="등록 하기" id="button">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+

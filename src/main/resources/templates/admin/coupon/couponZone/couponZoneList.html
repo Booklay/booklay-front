@@ -53,11 +53,12 @@
                     <td><p th:text="${limited.description}"></p></td>
                     <td><p th:text="${limited.openedAt}"></p></td>
                     <td><p th:text="${limited.issuanceDeadlineAt}"></p></td>
+                    <td><p th:text="${limited.expiredAt}"></p></td>
                     <td>
                         <p th:if="${limited.isBlind}">O</p>
                         <p th:unless="${limited.isBlind}">X</p>
                     </td>
-                    <td><a onclick="" href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${limited.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${limited.id})}">삭제</a>
                     </td>
@@ -85,6 +86,7 @@
                     <th>발급 등급</th>
                     <th>오픈시간</th>
                     <th>닫힘시간</th>
+                    <th>쿠폰만료기간</th>
                     <th>숨김여부</th>
                     <th>숨김수정</th>
                     <th>삭제</th>
@@ -97,14 +99,21 @@
                     <td><p th:text="${graded.couponId}"></p></td>
                     <td><p th:text="${graded.name}"></p></td>
                     <td><p th:text="${graded.description}"></p></td>
-                    <td><p th:text="${graded.grade}"></p></td>
+                    <td>
+                        <th:block th:each="grade:${grades}">
+                            <div th:if="${#strings.equals(graded.grade, grade.value)}">
+                                <p th:text="${grade.korGrade}"></p>
+                            </div>
+                        </th:block>
+                    </td>
                     <td><p th:text="${graded.openedAt}"></p></td>
                     <td><p th:text="${graded.issuanceDeadlineAt}"></p></td>
+                    <td><p th:text="${graded.expiredAt}"></p></td>
                     <td>
                         <p th:if="${graded.isBlind}">O</p>
                         <p th:unless="${graded.isBlind}">X</p>
                     </td>
-                    <td><a href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${graded.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${graded.id})}">삭제</a>
                     </td>
@@ -145,11 +154,12 @@
                     <td><p th:text="${unlimited.description}"></p></td>
                     <td><p th:text="${unlimited.openedAt}"></p></td>
                     <td><p th:text="${unlimited.issuanceDeadlineAt}"></p></td>
+                    <td><p th:text="${unlimited.expiredAt}"></p></td>
                     <td>
                         <p th:if="${unlimited.isBlind}">O</p>
                         <p th:unless="${unlimited.isBlind}">X</p>
                     </td>
-                    <td><a href="">수정</a></td>
+                    <td><a class="btn btn-primary" th:href="@{/admin/coupon-zone/update-form/{id} (id=${unlimited.id})}">숨김 수정</a></td>
                     <td>
                         <a class="btn btn-primary" th:href="@{/admin/coupon-zone/delete/{id} (id=${unlimited.id})}">삭제</a>
                     </td>

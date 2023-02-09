@@ -3,6 +3,7 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <title>Coupon Zone</title>
+    <script src="/js/coupon/couponIssue.js"></script>
 </head>
 <!--/* */-->
 <th:block layout:fragment="content">
@@ -21,9 +22,9 @@
                 </div>
             </div>
 
-            <th:block th:each="item : ${limitedList}">
-                <div class="text-uppercase text-muted h1">이달의 쿠폰</div>
 
+            <div class="text-uppercase text-muted h1">이달의 쿠폰</div>
+            <th:block th:each="item : ${limitedList}">
                 <div class="col-sm-6 col-lg-3" >
                     <div class="card card-md">
                         <div class="card-body text-center" >
@@ -48,7 +49,7 @@
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
-                                <a th:href="@{/coupon-zone/{id}(id=${item.getId()})}" class="btn btn-green w-100">발급 받기</a>
+                                <a th:name="${item.couponId}" class="issue-btn btn btn-green w-100">발급 받기</a>
                             </div>
                         </div>
                     </div>
@@ -56,9 +57,8 @@
 
             </th:block>
 
+            <div class="text-uppercase text-muted h1">등급별 쿠폰</div>
             <th:block th:each="item : ${gradedList}">
-                <div class="text-uppercase text-muted h1">등급별 쿠폰</div>
-
                 <div class="col-sm-6 col-lg-3" >
                     <div class="card card-md">
                         <div class="card-body text-center" >
@@ -80,7 +80,7 @@
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
-                                <a th:href="@{/coupon-zone/{id}(id=${item.getId()})}" class="btn btn-green w-100">발급 받기</a>
+                                <a th:name="${item.couponId}" class="issue-btn btn btn-green w-100">발급 받기</a>
                             </div>
                         </div>
                     </div>
@@ -88,8 +88,8 @@
 
             </th:block>
 
+            <div class="text-uppercase text-muted h1">무제한 쿠폰</div>
             <th:block th:each="item : ${unlimitedList}">
-                <div class="text-uppercase text-muted h1">무제한 쿠폰</div>
                 <div class="col-sm-6 col-lg-3" >
                     <div class="card card-md">
                         <div class="card-body text-center" >
@@ -114,7 +114,7 @@
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
-                                <a th:href="@{/coupon-zone/{id}(id=${item.getId()})}" class="btn btn-green w-100">발급 받기</a>
+                                <a th:name="${item.couponId}" class="issue-btn btn btn-green w-100">발급 받기</a>
                             </div>
                         </div>
                     </div>
@@ -122,5 +122,22 @@
             </th:block>
         </div>
     </div>
+    <div id="loading" class="justify-content-center align-items-center" style="height: 100%; width: 100%; position: absolute; background-color: #FFFFFF88; top: 0; left: 0; display: none">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <input type="hidden" id="url" th:value="${url}">
+    <script>
+        const issueBtn = document.querySelectorAll('.issue-btn');
+        const loading = document.querySelector('#loading');
+
+        issueBtn.forEach(btn => {
+            btn.addEventListener('click', function(event) {
+                issueCoupon(event.target.name);
+                loading.style.display = 'flex';
+            })
+        })
+    </script>
 </th:block>
 </html>

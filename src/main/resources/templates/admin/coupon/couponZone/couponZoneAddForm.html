@@ -70,7 +70,6 @@
                                     </div>
                                 </div>
                                 <select class="form-select" name="grade">
-                                    <option value="0">제한 없음</option>
                                     <th:block th:each="grade:${grades}">
                                         <option th:value="${grade.value}" th:text="${grade.korGrade}"></option>
                                     </th:block>
