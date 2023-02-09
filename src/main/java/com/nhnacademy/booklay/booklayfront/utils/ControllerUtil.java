@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
+import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -69,6 +70,11 @@ public class ControllerUtil {
     }
 
     public static void setCurrentPageAndMaxPageToModel(Model model, PageResponse<?> response){
+        model.addAttribute("currentPage", response.getPageNumber());
+        model.addAttribute("totalPage", response.getTotalPages());
+        model.addAttribute("pageSize", response.getPageSize());
+    }
+    public static void setCurrentPageAndMaxPageToModel(Model model, SearchPageResponse<?> response){
         model.addAttribute("currentPage", response.getPageNumber());
         model.addAttribute("totalPage", response.getTotalPages());
         model.addAttribute("pageSize", response.getPageSize());

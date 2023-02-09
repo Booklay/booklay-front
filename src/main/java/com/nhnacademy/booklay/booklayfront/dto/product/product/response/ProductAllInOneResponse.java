@@ -13,9 +13,9 @@ import lombok.ToString;
 @ToString
 public class ProductAllInOneResponse {
 
-    ProductResponse info;
-    ProductDetailResponse detail;
-    SubscribeResponse subscribe;
+    private ProductResponse info;
+    private ProductDetailResponse detail;
+    private SubscribeResponse subscribe;
 
     @Setter
     private List<RetrieveAuthorResponse> authors = new ArrayList<>();

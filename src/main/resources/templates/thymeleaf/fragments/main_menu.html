@@ -10,7 +10,11 @@
                                 <span class="nav-link-title">Home</span>
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/search/products/all}" >
+                                <span class="nav-link-title">전체 상품</span>
+                            </a>
+                        </li>
                         <li class="nav-item dropdown" th:each="item : ${categories}">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false" >
                                 <span class="nav-link-title" th:text="${item.name}"></span>
@@ -18,7 +22,7 @@
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns" th:each=" child : ${item.categories}">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" th:href="@{/product/display(CID=${child.id})}" th:text="${child.name}"></a>
+                                            <a class="dropdown-item" th:href="@{/search/products/category(id=${child.id})}" th:text="${child.name}"></a>
                                         </div>
                                     </div>
                                 </div>
