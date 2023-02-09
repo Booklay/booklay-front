@@ -188,7 +188,7 @@
             <!--            구매 부분 시작-->
             <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
 
-              <input id="count" style="margin-right: 10px;" type="number" step="1" min="1"
+              <input id="productCount" style="margin-right: 10px;" type="number" step="1" min="1"
                      th:max="${product.detail.storage}"
                      value="1">
               <!--              th:max="${product.detail.storage}"-->
@@ -379,37 +379,58 @@
         </div>
 
         <!--        상품 문의 시작-->
-        <div>
-          <div class="card">
-            <div class="table-responsive">
-              <table class="table table-vcenter card-table">
-                <thead>
-                <tr>
-                  <th>답변 상태</th>
-                  <th>제목</th>
-                  <th>작성자</th>
-                  <th>작성일</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-                </tbody>
-              </table>
-              <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
-            </div>
+        <div class="card">
+          <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+              <thead>
+              <tr>
+                <th>답변 상태</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <span th:text="${'ensp;'*post.depth}">
+                      <!--보임-->
+                     <th:block
+                         th:if="${post.viewPublic == true || post.memberNo == thisMember.memberNo }">
+                       <span th:text="${post.title}"/>
+                    </th:block>
+                    <!--안보임-->
+                    <th:block th:if="${post.viewPublic == false}">
+                      <span>비밀글입니다. <svg xmlns="http://www.w3.org/2000/svg"
+                                         class="icon icon-tabler icon-tabler-lock" width="24"
+                                         height="24" viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
+   <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+   <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
+</svg></span>
+                    </th:block>
+                  </span>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+              </tbody>
+            </table>
+            <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
           </div>
-          <button class="btn btn-outline-primary" style="float: right;">
-            <a style=" color: white;" th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의 작성</a>
-          </button>
         </div>
-        <!--        상품 문의 종료-->
-        <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
+        <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary"
+                style="float: right;">
+          <a id="btn" th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의
+            작성</a>
+        </button>
       </div>
+      <!--        상품 문의 종료-->
+      <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
     </div>
   </div>
 </th:block>
