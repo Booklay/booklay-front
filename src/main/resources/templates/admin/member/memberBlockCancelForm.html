@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
 <head>
     <meta charset="UTF-8">
     <title>회원 차단 해제하기</title>
 </head>
-<body>
-<div>
-    <h3>[회원 차단 해제하기]</h3>
-    <b>차단을 해제하시겠습니까?</b><br>
-    <button><a
-            th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>
-    </button>
-    <input type="button" value="취소" onclick="window.close()">
+
+<!--<th:block layout:fragment="content">-->
+<!--<div>-->
+<!--    <h3>[회원 차단 해제하기]</h3>-->
+<!--    <b>차단을 해제하시겠습니까?</b><br>-->
+<!--    <button class="btn btn-outline-primary"><a-->
+<!--            th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>-->
+<!--    </button>-->
+<!--    <input type="button" value="취소" onclick="window.close()">-->
+<!--</div>-->
+
+<div class="card container container-tight py-4">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <h2 class="card-title text-center mb-4">회원 차단 해제하기</h2>
+        <b>차단을 해제하시겠습니까?</b><br>
+        <button class="btn btn-outline-primary"><a
+                th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>
+        </button class="btn btn-outline-primary">
+        <input type="button" value="취소" onclick="window.close()">
+    </div>
 </div>
-</body>
+</th:block>
 </html>
