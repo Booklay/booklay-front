@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponZoneRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,8 @@ public class CouponZoneController {
      * isBlind = false 인 쿠폰을 보여줍니다.
      */
     @GetMapping
-    public String getCouponZone(Model model) {
+    public String getCouponZone(Model model, MemberInfo memberInfo) {
+        model.addAttribute("memberInfo", memberInfo);
         couponZoneService.getMemberCouponZoneList(model);
 
         return "coupon/couponZone";
