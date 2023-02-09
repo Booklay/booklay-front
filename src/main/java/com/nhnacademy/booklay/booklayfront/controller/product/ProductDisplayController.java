@@ -139,7 +139,7 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("memberProduct", wishlistAndAlarmResponse.getBody());
     }
 
-
+//상품 문의 게시판 조회
     URI qnaUri = URI.create(gatewayIp + "/shop/v1/board/product/" + productNo);
     ApiEntity<PageResponse<PostResponse>> postResponse = restService.get(qnaUri.toString(),
         getDefaultPageMap(page, 10), new ParameterizedTypeReference<>() {

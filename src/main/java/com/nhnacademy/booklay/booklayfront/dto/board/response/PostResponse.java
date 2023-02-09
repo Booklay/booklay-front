@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.dto.board.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,4 +18,7 @@ public class PostResponse {
   private String content;
   private Boolean viewPublic;
   private Boolean answered;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
+
 }
