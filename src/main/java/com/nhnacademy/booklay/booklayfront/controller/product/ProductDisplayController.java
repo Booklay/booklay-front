@@ -1,10 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.controller.product;
 
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -32,7 +34,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author 최규태
@@ -68,10 +69,10 @@ public class ProductDisplayController extends BaseController {
     log.error(" currentCategory : {}", currentCategory);
 
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX );
+        gatewayIp + SHOP_PRE_FIX);
 
     ApiEntity<PageResponse<ProductAllInOneResponse>> productResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
@@ -91,7 +92,7 @@ public class ProductDisplayController extends BaseController {
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model,
-      MemberInfo memberInfo) {
+      MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "0") int page) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -137,6 +138,16 @@ public class ProductDisplayController extends BaseController {
 
       model.addAttribute("memberProduct", wishlistAndAlarmResponse.getBody());
     }
+
+
+    URI qnaUri = URI.create(gatewayIp + "/shop/v1/board/product/" + productNo);
+    ApiEntity<PageResponse<PostResponse>> postResponse = restService.get(qnaUri.toString(),
+        getDefaultPageMap(page, 10), new ParameterizedTypeReference<>() {
+        });
+
+    model.addAttribute("postList", postResponse.getBody().getData());
+    setCurrentPageAndMaxPageToModel(model, postResponse.getBody());
+
     return "product/view";
   }
 
