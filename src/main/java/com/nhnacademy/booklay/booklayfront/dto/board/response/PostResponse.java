@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostResponse {
 
+  private Long postNo;
   private Integer postTypeNo;
   private Long memberNo;
   private Long productNo;
@@ -20,5 +21,7 @@ public class PostResponse {
   private Boolean answered;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
+
+  private String writer;
 
 }

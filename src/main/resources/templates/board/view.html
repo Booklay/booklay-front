@@ -1,0 +1,22 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
+<!--/* /thymeleaf/layout 폴더 아래에 있는 default.html을 레이아웃으로 사용 */-->
+
+<head>
+  <title>북레이 - 게시글 조회</title>
+  <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
+</head>
+
+<th:block layout:fragment="content">
+  <div id="header">
+    <h2 th:text="${post.title}"></h2>
+    <p>
+      <span th:text="${post.writer}" />
+      <span th:text="${post.createdAt}"/>
+      <span th:text="${post.updatedAt}"/>
+    </p>
+  </div>
+
+</th:block>
+
+</html>

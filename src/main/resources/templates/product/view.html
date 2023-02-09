@@ -305,6 +305,7 @@
           </div>
 
           <div class="card">
+<!--            탭 목록-->
             <ul class="nav nav-tabs" data-bs-toggle="tabs">
               <li class="nav-item">
                 <a href="#tabs-description-7" class="nav-link active" data-bs-toggle="tab">상세 설명</a>
@@ -317,6 +318,7 @@
               </li>
             </ul>
 
+<!--            탭 내용-->
             <div class="card-body">
               <div class="tab-content">
                 <div class="tab-pane active show" id="tabs-description-7">
@@ -338,18 +340,17 @@
                         <tbody>
                         <th:bloack th:each="post:${postList}">
                           <tr>
-                            <td>
-                              <span th:text="${post.answered}"></span>
-                            </td>
+                            <td><span th:text="${post.answered} ? '답변': '미답변'"></span></td>
                             <td>
                               <span th:text="${'ensp;'*post.depth}"/>
                               <!--보임-->
                               <th:block
                                   th:if="${post.viewPublic or post.memberNo == thisMember.memberNo}">
-                                <span th:text="${post.title}"/>
+                                <a th:href="@{/board/view/{postId} (postId = ${post.postId})}" th:text="${post.title}"/>
                               </th:block>
                               <!--안보임-->
-                              <th:block th:if="${!post.viewPublic and post.memberNo != thisMember.memberNo}">
+                              <th:block
+                                  th:if="${!post.viewPublic and post.memberNo != thisMember.memberNo}">
                                 <span>비밀글입니다. <svg xmlns="http://www.w3.org/2000/svg"
                                                    class="icon icon-tabler icon-tabler-lock"
                                                    width="24"
@@ -364,7 +365,7 @@
                                 </span>
                               </th:block>
                             </td>
-                            <td></td>
+                            <td><span th:text="${post.writer}"/></td>
                             <td><span th:text="${post.createdAt}"/></td>
                           </tr>
                         </th:bloack>
