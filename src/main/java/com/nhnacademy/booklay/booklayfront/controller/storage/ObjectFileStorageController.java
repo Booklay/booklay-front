@@ -28,7 +28,7 @@ public class ObjectFileStorageController {
   private final String gatewayIp;
 
   @GetMapping("/{objectFileId}")
-  public ResponseEntity<byte[]> downloadFile(@PathVariable Long objectFileId) {
+  public String downloadFile(@PathVariable Long objectFileId) {
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(List.of(MediaType.APPLICATION_OCTET_STREAM));
 
@@ -37,10 +37,9 @@ public class ObjectFileStorageController {
     RequestEntity<PageResponse<RetrieveProductResponse>> requestEntity = new RequestEntity<>(
         headers, HttpMethod.GET, uri);
 
-    ResponseEntity<byte[]> response = restTemplate.exchange(requestEntity,
-        new ParameterizedTypeReference<>() {
-        });
+    ResponseEntity<String> response = restTemplate.exchange(requestEntity, String.class);
 
-    return response;
+
+    return "redirect:" +response.getBody();
   }
 }
