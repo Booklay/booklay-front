@@ -22,6 +22,10 @@ window.onload = function() {
     });
 
     document.getElementById("usePoint").addEventListener("change", updatePoint);
+    let destinationRadioList = document.getElementsByClassName("destinationRadio")
+    for (let destinationRadio of destinationRadioList){
+        destinationRadio.addEventListener("click", destinationClickEvent);
+    }
     rewritePage();
 };
 const couponDataPrefix = {
@@ -331,3 +335,65 @@ function createDiv(size, data){
     }
     return parentDiv;
 }
+
+function sample6_execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function (data) {
+            let addr = '';
+            // let extraAddr = '';
+
+            if (data.userSelectedType === 'R') {
+                addr = data.roadAddress;
+            } else {
+                addr = data.jibunAddress;
+            }
+
+            // if(data.userSelectedType === 'R'){
+            //     if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+            //         extraAddr += data.bname;
+            //     }
+            //     if(data.buildingName !== '' && data.apartment === 'Y'){
+            //         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            //     }
+            //     if(extraAddr !== ''){
+            //         extraAddr = ' (' + extraAddr + ')';
+            //     }
+            //     document.getElementById("extraAddress").value = extraAddr;
+            //
+            // } else {
+            //     document.getElementById("extraAddress").value = '';
+            // }
+
+            document.getElementById("destination_zipCode").value = data.zonecode;
+            document.getElementById("destination_address").value = addr;
+            document.getElementById("detailAddress").focus();
+        }
+    }).open();
+}
+
+function destinationClickEvent(e) {
+    let targetId = e.target.id;
+    let targetNo = parseInt(targetId.toString().slice("destination".length));
+    let destinationData = destinationList[targetNo];
+    // document.getElementById("destination_name").innerText = destinationData.name;
+    document.getElementById("destination_zipCode").value = destinationData.zipCode;
+    document.getElementById("destination_address").value = destinationData.address;
+    document.getElementById("destination_receiver").value = destinationData.receiver;
+    let receiverPhoneNoList = destinationData.receiverPhoneNo.split("-");
+    let phoneNoOptions = document.getElementById("destination_receiverPhoneNo1");
+    // for(let i=0; i<phoneNoOptions.length; i++){
+    //     if (phoneNoOptions.options[i].value  === parseInt(receiverPhoneNoList[0])){
+    //         phoneNoOptions.options[i].selected = true;
+    //     }
+    // }
+    for (phoneNo of phoneNoOptions){
+        if (phoneNo.value === receiverPhoneNoList[0]){
+            phoneNo.selected = true;
+        }
+    }
+    document.getElementById("destination_receiverPhoneNo2").value = parseInt(receiverPhoneNoList[1]);
+    document.getElementById("destination_receiverPhoneNo3").value = parseInt(receiverPhoneNoList[2]);
+
+}
+
+
