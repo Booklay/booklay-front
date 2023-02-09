@@ -6,7 +6,6 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.response.Retrieve
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;

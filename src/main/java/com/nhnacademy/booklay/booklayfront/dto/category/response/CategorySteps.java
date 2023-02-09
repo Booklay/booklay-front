@@ -16,5 +16,6 @@ public class CategorySteps {
 
     private Long id;
     private String name;
+    private Long parentId;
     private List<CategorySteps> categories;
 }
