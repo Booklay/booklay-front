@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public enum Grade {
+    ANY(0, "제한 없음"),
     WHITE(1, "화이트"),
     SILVER(2, "실버"),
     GOLD(3, "골드"),
@@ -19,13 +20,13 @@ public enum Grade {
         this.korGrade = korGrade;
     }
 
-    public static final Map<Integer, Grade> map = new HashMap<>();
+    public static final Map<Integer, String> map = new HashMap<>();
     static {
         for (Grade grade : Grade.values()) {
-            map.put(grade.getValue(), grade);
+            map.put(grade.getValue(), grade.korGrade);
         }
     }
-    public static Grade getGradeByValue(int code) {
+    public static String getGradeByValue(int code) {
         return map.get(code);
     }
 }

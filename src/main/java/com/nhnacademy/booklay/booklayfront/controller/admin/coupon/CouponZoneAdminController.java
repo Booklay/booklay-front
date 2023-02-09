@@ -65,6 +65,7 @@ public class CouponZoneAdminController {
             restService.get(getUnlimitedUri.toString(), null, new ParameterizedTypeReference<>() {
             });
 
+        model.addAttribute("grades", Grade.values());
         model.addAttribute("limitedList", limitedList.getBody().getData());
         model.addAttribute("gradedList", gradedList.getBody().getData());
         model.addAttribute("unlimitedList", unlimitedList.getBody().getData());
