@@ -2,6 +2,8 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
   <title th:text="${product.info.title}"></title>
+
+  <script src="/js/product/productDetailForCart.js"></script>
 </head>
 <!---->
 <th:block layout:fragment="content">
@@ -11,18 +13,17 @@
       <div class="card-body">
         <div class="row">
 
+          <input id="productNo" name="productId" type="number" th:value="${product.info.id}" hidden>
           <div class="col-4">
-            <!--            -->
+            <!--   사진  -->
             <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
 
-            <!--          -->
+            <!--  사진   -->
           </div>
           <div class="col-8 text-left">
             <p class="h3" th:text="${product.info.title}"></p>
             <p class="h4" th:utext="${product.info.shortDescription}"></p>
 
-
-            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-2">품절</p>
             <p class="mt-4" style="line-height: 5px">
               <span class="badge bg-azure">저자</span>
               <span th:unless="${product.authors == null}"
@@ -86,95 +87,130 @@
               <span th:text="${#numbers.formatCurrency(product.info.price)}"></span>
             </p>
 
+            <!--            wishlist, alarm-->
             <th:block th:if="${thisMember.memberNo != null}">
-              <!--              위시리스트 등록-->
-              <form th:if="${!memberProduct.wishlist}" method="post"
-                    th:action="@{/product/wishlist/connect}">
-                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                <input name="productId" type="number" th:value="${product.info.id}" hidden>
-                <label class="btn btn-outline-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
-                    <path d="M14 19l2 2l4 -4"></path>
-                    <path d="M9 8h4"></path>
-                    <path d="M9 12h2"></path>
-                  </svg>
-                  찜 등록
-                  </input>
-                </label>
-              </form>
-              <!--              위시리스트 삭제-->
-              <form th:if="${memberProduct.wishlist}" method="post"
-                    th:action="@{/product/wishlist/disconnect}">
-                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                <input name="productId" type="number" th:value="${product.info.id}" hidden>
-                <label class="btn btn-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
-                    <path d="M14 19l2 2l4 -4"></path>
-                    <path d="M9 8h4"></path>
-                    <path d="M9 12h2"></path>
-                  </svg>
-                  찜 취소
-                  </input>
-                </label>
-              </form>
-              <!--              알람 등록-->
-              <form th:if="${!memberProduct.alarm}" method="post"
-                    th:action="@{/product/alarm/connect}">
-                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                <input name="productId" type="number" th:value="${product.info.id}" hidden>
-                <label class="btn btn-outline-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-bell-ringing" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
-                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                    <path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727"></path>
-                    <path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727"></path>
-                  </svg>
-                  재입고 알림
-                  </input>
-                </label>
-              </form>
-              <!--              알람 삭제-->
-              <form th:if="${memberProduct.alarm}" method="post"
-                    th:action="@{/product/alarm/disconnect}">
-                <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
-                <input name="productId" type="number" th:value="${product.info.id}" hidden>
-                <label class="btn btn-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-bell-off" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M3 3l18 18"></path>
-                    <path
-                        d="M17 17h-13a4 4 0 0 0 2 -3v-3a7 7 0 0 1 1.279 -3.716m2.072 -1.934c.209 -.127 .425 -.244 .649 -.35a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3"></path>
-                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                  </svg>
-                  </input>
-                  재입고 알림 중
-                </label>
-              </form>
+              <div style="display: flex;">
+                <!--              위시리스트 등록-->
+                <form style="margin-right: 10px;" th:if="${!memberProduct.wishlist}" method="post"
+                      th:action="@{/product/wishlist/connect}">
+                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="productId" type="number" th:value="${product.info.id}"
+                         hidden>
+                  <label class="btn btn-outline-primary">
+                    <input type="submit" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                          d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+                      <path d="M14 19l2 2l4 -4"></path>
+                      <path d="M9 8h4"></path>
+                      <path d="M9 12h2"></path>
+                    </svg>
+                    찜 등록
+                    </input>
+                  </label>
+                </form>
+                <!--              위시리스트 삭제-->
+                <form style="margin-right: 10px;" th:if="${memberProduct.wishlist}" method="post"
+                      th:action="@{/product/wishlist/disconnect}">
+                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                  <label class="btn btn-primary">
+                    <input type="submit" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                          d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+                      <path d="M14 19l2 2l4 -4"></path>
+                      <path d="M9 8h4"></path>
+                      <path d="M9 12h2"></path>
+                    </svg>
+                    찜 취소
+                    </input>
+                  </label>
+                </form>
+                <!--              알람 등록-->
+                <form th:if="${!memberProduct.alarm}" method="post"
+                      th:action="@{/product/alarm/connect}">
+                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                  <label class="btn btn-outline-primary">
+                    <input type="submit" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="icon icon-tabler icon-tabler-bell-ringing" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path
+                          d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
+                      <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                      <path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727"></path>
+                      <path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727"></path>
+                    </svg>
+                    재입고 알림
+                    </input>
+                  </label>
+                </form>
+                <!--              알람 삭제-->
+                <form th:if="${memberProduct.alarm}" method="post"
+                      th:action="@{/product/alarm/disconnect}">
+                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="productId" type="number" th:value="${product.info.id}" hidden>
+                  <label class="btn btn-primary">
+                    <input type="submit" hidden>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="icon icon-tabler icon-tabler-bell-off" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                      <path d="M3 3l18 18"></path>
+                      <path
+                          d="M17 17h-13a4 4 0 0 0 2 -3v-3a7 7 0 0 1 1.279 -3.716m2.072 -1.934c.209 -.127 .425 -.244 .649 -.35a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3"></path>
+                      <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
+                    </svg>
+                    </input>
+                    재입고 알림 중
+                  </label>
+                </form>
+              </div>
             </th:block>
+            <!--            wishlist alarm end-->
+
+            <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4"
+               style="margin-top: 10px;">품절</p>
+
+            <!--            구매 부분 시작-->
+            <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
+
+              <input id="count" style="margin-right: 10px;" type="number" step="1" min="1"
+                     th:max="${product.detail.storage}"
+                     value="1">
+              <!--              th:max="${product.detail.storage}"-->
+
+              <button class="btn btn-primary" id="toOrder" style="margin-right: 10px;">바로 구매
+              </button>
+
+              <button class="btn btn-outline-primary" id="addCart" style="margin-right: 10px;">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="icon icon-tabler icon-tabler-shopping-cart" width="24" height="24"
+                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                  <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                  <path d="M17 17h-11v-14h-2"></path>
+                  <path d="M6 5l14 1l-1 7h-13"></path>
+                </svg>
+                카트에 넣기
+              </button>
+
+            </div>
 
           </div>
 
@@ -341,6 +377,37 @@
           </th:block>
           <!--          구독 상품 자식 상품 종료-->
         </div>
+
+        <!--        상품 문의 시작-->
+        <div>
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                  <th>답변 상태</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                </tbody>
+              </table>
+              <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+            </div>
+          </div>
+          <button class="btn btn-outline-primary" style="float: right;">
+            <a style=" color: white;" th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의 작성</a>
+          </button>
+        </div>
+        <!--        상품 문의 종료-->
         <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
       </div>
     </div>

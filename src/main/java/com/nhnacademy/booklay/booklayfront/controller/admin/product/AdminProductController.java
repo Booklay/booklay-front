@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.product;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +61,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminProductController extends BaseController {
 
   private static final Long DEFAULT_POINT_RATE = 5L;
-  private static final Long SIZE = 20L;
+  private static final Integer SIZE = 20;
   private static final String SHOP_PRE_FIX = "/shop/v1/";
   private static final String PRE_FIX = "admin/product";
   private static final String REDIRECT_PRE_FIX = "redirect:/admin/product/view";
@@ -96,10 +97,10 @@ public class AdminProductController extends BaseController {
     log.error(" currentCategory : {}", currentCategory);
 
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "?page=" + page + "&size=" + SIZE);
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX);
 
     ApiEntity<PageResponse<RetrieveProductResponse>> productResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
@@ -487,12 +488,10 @@ public class AdminProductController extends BaseController {
       @PathVariable Long subscribeId) {
 
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId + "?page="
-            + page
-            + "&size=" + SIZE);
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
     ApiEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     List<RetrieveBookForSubscribeResponse> bookList = bookResponse.getBody().getData();
@@ -563,11 +562,10 @@ public class AdminProductController extends BaseController {
 
     //최초 상품 상세 정보 호출
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend/" + productNo + "?page=" + page + "&size="
-            + SIZE);
+        gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend/" + productNo);
 
     ApiEntity<PageResponse<RetrieveProductResponse>> recommendResponse = restService.get(
-        uri.toString(), null, new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
         });
 
     setCurrentPageAndMaxPageToModel(model, recommendResponse.getBody());

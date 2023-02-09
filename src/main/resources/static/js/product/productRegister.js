@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     height: '500px',
     initialEditType: 'markdown',
     previewStyle: 'vertical',
-    placeholder: '내용을 입력해주세요.',
     autofocus: false
   });
   editor1.getMarkdown();
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     height: '500px',
     initialEditType: 'markdown',
     previewStyle: 'vertical',
-    placeholder: '내용을 입력해주세요.',
     autofocus: false
   });
   editor2.getMarkdown();
