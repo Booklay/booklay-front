@@ -17,7 +17,7 @@
         <div class="col-sm-5 col-lg-3">
           <div class="card card-sm">
             <a th:href="@{/product/view/{productId} (productId = ${item.info.id})}" class="d-block">
-              <div class="text-center" style="width:auto; margin: auto;">
+              <div class="text-center" style="width:auto; min-height:400px; margin: auto; display:flex; align-items: center;">
                 <img class="product-img" style="max-height: 413px; width: 95%; margin-top:10px;" th:src="@{/storage/{objectFileId} (objectFileId = ${item.info.objectFileId})}"/>
               </div>
             </a>
