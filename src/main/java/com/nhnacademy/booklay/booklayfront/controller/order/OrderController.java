@@ -9,10 +9,7 @@ import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import java.util.List;
@@ -61,6 +58,21 @@ public class OrderController {
 
         model.addAttribute("memberInfo", memberInfo);
         return "order/orderPage";
+    }
+
+    @GetMapping
+    public String saveOrderRecipeAndRedirect(@RequestParam String paymentKey,
+                                             @RequestParam String orderId,
+                                             @RequestParam Integer amount){
+        //숫자 빼기
+        if (true) {
+
+            //주문 영수증
+            return "redirect:";
+        }else {
+            return "결제 실패";
+        }
+
     }
 
 }

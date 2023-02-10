@@ -1,5 +1,16 @@
 const couponSettingData = []
+const paymentData = {
+    amount: 0,
+    orderId: 't2Yqd0Mp-sADazDVCRoeh',
+    orderName: '',
+    customerName: '',
+    successUrl: 'http://localhost:8080/order/success',
+    failUrl: 'http://localhost:8080/order/fail',
+}
 window.onload = function() {
+    //초기화 셋팅
+    paymentData.orderName = cartData.length > 0? cartData[0].productName + (cartData.length>1?" 외 " + (cartData.length-1) + "건":""):"";
+
     cartData.forEach(function (value, index){
         couponSettingData.push({
             productNo:value.productNo,
@@ -27,6 +38,16 @@ window.onload = function() {
         destinationRadio.addEventListener("click", destinationClickEvent);
     }
     rewritePage();
+    const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+    const tossPayments = TossPayments(clientKey)
+
+    const paymentButton = document.getElementById('toPayment') // 결제하기 버튼
+
+    paymentButton.addEventListener('click', function () {
+        if (orderValidCheck){
+            tossPayments.requestPayment('카드', paymentData);
+        }
+    })
 };
 const couponDataPrefix = {
     id: "쿠폰번호 : ",
@@ -96,6 +117,14 @@ function rewritePage(){
     drawProductCouponData();
     drawOrderCouponData();
     drawOrderSummary();
+    updatePaymentData();
+}
+
+function updatePaymentData(){
+    let orderData = couponSettingData[couponSettingData.length-1];
+    paymentData.amount = parseInt(orderData.orderTotalProductAmount) + parseInt(orderData.orderTotalProductAmount>30000?0:3000)
+        - parseInt(orderData.orderTotalDiscount) - parseInt(document.getElementById("usePoint").value);
+    paymentData.customerName = "모름";
 }
 
 function drawOrderSummary(){

@@ -3,11 +3,11 @@
 <head>
     <title>Content page 1</title>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-
-    </script>
+    <script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
+<script>
 
+</script>
 <th:block layout:fragment="content">
     <span id="ordertotal" hidden>4294967295</span>
     <div class="container-xl">
@@ -244,7 +244,7 @@
                                         <h5 class="font-weight-bold" id="totalPay">0</h5>
                                     </div>
                                     <div style="text-align: end;">
-                                        <button id="toOrder" class="btn btn-block btn-primary py-3">주문하기</button>
+                                        <button id="toPayment" class="btn btn-block btn-primary py-3">결제하기</button>
                                     </div>
                                 </div>
                             </div>
@@ -281,7 +281,8 @@
         let cart = {
             productNo : value.productNo,
             productTotal : value.productPrice * value.productCount,
-            categoryNoList : value.categoryNoList
+            categoryNoList : value.categoryNoList,
+            productName : value.productName
         };
         cartData.push(cart);
     });
