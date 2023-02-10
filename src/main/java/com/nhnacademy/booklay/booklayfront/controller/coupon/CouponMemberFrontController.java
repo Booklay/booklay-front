@@ -1,6 +1,9 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCouponResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
@@ -8,6 +11,8 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.FrontURI;
+import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
+import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
@@ -20,88 +25,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("member/coupon")
+@RequestMapping("/mypage/coupon")
 public class CouponMemberFrontController extends BaseController {
-    private final RestService restService;
-    private static final String RETURN_PAGE = "mypage/myPage";
-    private static final String REST_PRE_FIX = "/shop/v1/member/coupon/";
+    private final String gatewayIp;
+    private final CouponRestApiModelSettingService modelSettingService;
 
-    @ModelAttribute("navHead")
-    public String addNavHead() {
-        return "coupon/couponFragments/couponNavHead";
+    private static final String MEMBER_COUPON_RESOURCE = "mypage/coupon/";
+    private static final String RETURN_PAGE_OWNED_LIST = "redirect:/member/coupon";
+
+    /**
+     * 사용자가 소유한 쿠폰을 조회하여 보여줍니다.
+     */
+    @GetMapping
+    public String memberCouponPage(Model model, MemberInfo memberInfo,
+                                   @RequestParam(value = "page", defaultValue = "0") int pageNum) {
+        Long memberNo = memberInfo.getMemberNo();
+        modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
+
+        return MEMBER_COUPON_RESOURCE + "ownedCouponListView";
     }
 
-    @GetMapping("")
-    public String memberCouponPage(Model model) {
-        model.addAttribute(TARGET_VIEW, "coupon/empty");
-        return RETURN_PAGE;
-    }
+//    /**
+//     * 쿠폰 상세 보기.
+//     * @param model
+//     * @param couponId
+//     * @return
+//     */
+//    @GetMapping("detail/{couponId}")
+//    public String couponDetail(Model model, @PathVariable String couponId) {
+//
+//    }
+//
+//    @GetMapping("history/{pageNum}")
+//    public String couponHistory(Model model, @PathVariable Integer pageNum) {
+//
+//    }
 
-    @GetMapping("list")
-    public String allCouponList0() {
-        return "redirect:list/0";
-    }
-
-    @GetMapping("list/{pageNum}")
-    public String allCouponList(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "list/", pageNum.toString());
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        ApiEntity<List<Coupon>> apiEntity =
-            restService.get(url, map, new ParameterizedTypeReference<>() {
-            });
-
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody());
-        model.addAttribute(ATTRIBUTE_NAME_MEMBER_NO, "");
-        model.addAttribute(PAGE_NUM, pageNum);
-        model.addAttribute(TARGET_VIEW, "coupon/listView");
-        return RETURN_PAGE;
-    }
-
-    @GetMapping("detail/{couponId}")
-    public String couponDetail(Model model, @PathVariable String couponId) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "detail/", couponId);
-        ApiEntity<CouponDetail> apiEntity = restService.get(url, null, CouponDetail.class);
-
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_DETAIL, apiEntity.getBody());
-        model.addAttribute(TARGET_VIEW, "coupon/detailView");
-        return RETURN_PAGE;
-    }
-
-    @GetMapping("history/{pageNum}")
-    public String couponHistory(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "history/", pageNum.toString());
-        ApiEntity<List<CouponHistory>> apiEntity =
-            restService.get(url, null, new ParameterizedTypeReference<>() {
-            });
-
-        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody());
-        model.addAttribute(TARGET_VIEW, "coupon/historyView");
-        return RETURN_PAGE;
-    }
-
-    @GetMapping("issue/{pageNum}")
-    public String couponIssuing(Model model, @PathVariable Integer pageNum) {
-        String url = buildString(FrontURI.SHOP_URI, REST_PRE_FIX, "issue/", pageNum.toString());
-        ApiEntity<List<CouponIssue>> apiEntity =
-            restService.get(url, null, new ParameterizedTypeReference<>() {
-            });
-
-        model.addAttribute(ATTRIBUTE_NAME_ISSUE_LIST, apiEntity.getBody());
-        model.addAttribute(TARGET_VIEW, "coupon/issueView");
-        return RETURN_PAGE;
-    }
-
-
-    private String buildString(String... strings) {
-        StringBuilder builder = new StringBuilder();
-        for (String s : strings) {
-            builder.append(s);
-        }
-        return builder.toString();
-    }
 }
