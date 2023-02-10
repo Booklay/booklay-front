@@ -8,15 +8,19 @@
 </head>
 
 <th:block layout:fragment="content">
-  <div id="header">
+  <div id="title-section">
     <h2 th:text="${post.title}"></h2>
     <p>
-      <span th:text="${post.writer}" />
+      <span th:text="${post.writer}"/>
       <span th:text="${post.createdAt}"/>
       <span th:text="${post.updatedAt}"/>
     </p>
   </div>
-
+  <div>
+    <div th:utext="${post.conent}">
+    </div>
+  </div>
+  <div id="comment-section"></div>
 </th:block>
 
 </html>
