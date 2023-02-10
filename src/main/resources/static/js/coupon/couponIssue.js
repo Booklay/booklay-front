@@ -10,17 +10,12 @@ async function issueCoupon(couponId) {
 
         const messageRequestUrl = '/coupon-zone/member/response/' + requestId;
 
-        let timeoutId = setTimeout(() => {
-            clearInterval(timerId);
-            alert('요청 시간이 초과되었습니다.');
-            loadingDiv.style.display = 'none';
-            }, 10000);
-
         let timerId = setInterval(async () => {
             const messageResponse = await fetch(messageRequestUrl);
 
             if (messageResponse.ok) {
                 const msgResponse = await messageResponse.json();
+                console.log(msgResponse.message);
                 if(msgResponse.message !== "null") {
                     alert(msgResponse.message)
                     loadingDiv.style.display = 'none'
@@ -32,6 +27,13 @@ async function issueCoupon(couponId) {
                 alert("조금 뒤에 다시 시도해주세요..")
             }
         }, 1500);
+
+        let timeoutId = setTimeout(() => {
+            clearInterval(timerId);
+            alert('요청 시간이 초과되었습니다.');
+            loadingDiv.style.display = 'none';
+        }, 10000);
+
     } else {
         const parsedResponse = await response.json();
         loadingDiv.style.display = 'none';
