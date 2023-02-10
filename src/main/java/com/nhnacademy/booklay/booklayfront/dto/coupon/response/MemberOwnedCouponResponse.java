@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class MemberOwnedCouponResponse {
-    private final
+    private String name;
 }

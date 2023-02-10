@@ -47,7 +47,7 @@ public class CouponMemberFrontController extends BaseController {
     public String memberCouponPage(Model model, MemberInfo memberInfo,
                                    @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Long memberNo = memberInfo.getMemberNo();
-        modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
+        //modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
 
         return MEMBER_COUPON_RESOURCE + "ownedCouponListView";
     }

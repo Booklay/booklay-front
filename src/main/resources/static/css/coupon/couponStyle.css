@@ -6,25 +6,12 @@
     box-sizing: border-box
 }
 
-body {
-    background-color: #dadde6;
-    font-family: arial
-}
-
 .fl-left {
     float: left
 }
 
 .fl-right {
     float: right
-}
-
-h1 {
-    text-transform: uppercase;
-    font-weight: 900;
-    border-left: 10px solid #fec500;
-    padding-left: 10px;
-    margin-bottom: 30px
 }
 
 .row {
@@ -35,7 +22,6 @@ h1 {
     display: table-row;
     width: 49%;
     background-color: #fff;
-    color: #989898;
     margin-bottom: 10px;
     font-family: 'Oswald', sans-serif;
     text-transform: uppercase;
@@ -61,7 +47,7 @@ h1 {
     display: block;
     width: 30px;
     height: 30px;
-    background-color: #DADDE6;
+    background-color: var(--tblr-body-bg);
     position: absolute;
     top: -15px;
     right: -15px;

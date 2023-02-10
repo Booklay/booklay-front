@@ -178,6 +178,9 @@ public class CouponRestApiModelSettingService {
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
+    /**
+     * 사용자가 소유한 쿠폰 목록을 조회합니다.
+     */
     public void setOwnedCouponToModelByMember(Integer pageNum, Long memberNo, Model model) {
         String url = ControllerUtil.buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/members/" + memberNo + "/coupons");
 
