@@ -1,205 +1,56 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
-    <title>BOOKLAY MAIN</title>
+  <title>BOOKLAY MAIN</title>
 </head>
 
 <th:block layout:fragment="content">
-    <div class="container-xl">
+  <div class="container-xl">
 
-        <div class="row row-cards">
-            <div class="card-header">
-                <h1>추천 상품</h1>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row row-cards">
+      <!--분류 제목 h1-->
+      <div class="card-header">
+        <h1>신간</h1>
+      </div>
+      <!--분류 제목 h1-->
+      <th:block th:each="item : ${productList}">
+        <div class="col-sm-5 col-lg-3">
+          <div class="card card-sm">
+            <a th:href="@{/product/view/{productId} (productId = ${item.info.id})}" class="d-block">
+              <div class="text-center" style="width:auto; min-height:400px; margin: auto; display:flex; align-items: center;">
+                <img class="product-img" style="max-height: 413px; width: 95%; margin-top:10px;" th:src="@{/storage/{objectFileId} (objectFileId = ${item.info.objectFileId})}"/>
+              </div>
+            </a>
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div>
+                  <div><a th:text="${item.info.title}" th:href="@{/product/view/{productId} (productId = ${item.info.id})}" ></a></div>
+                  <div class="text-muted" th:unless="${item.authors == null}" th:text="${#strings.arrayJoin(item.getAuthorNameList(), ', ')}"></div>
+                  <div class="text-muted" th:text="${#numbers.formatCurrency(item.info.price)}"></div>
+                  <div class="text-muted" th:unless="${item.detail} == null" th:text="${item.detail.publisher}"></div>
+                  <div class="text-muted" th:unless="${item.subscribe} == null" th:text="${item.subscribe.publisher}"></div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-lg-4">
-                <div class="card card-sm">
-                    <a href="#" class="d-block">
-                        <div class="text-center">
-                            <img src="http://image.yes24.com/goods/115306377/xL" style="width: 280px;" class="card-img ">
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <div> 제목 : MSA로 배우는 스프링 부트</div>
-                                <div class="text-muted">저자 : 김병부</div>
-                                <div class="text-muted">가격 : 30,000 원 </div>
-                                <div class="text-muted">출판사 : 길벗 </div>
-                            </div>
-                            <div class="ms-auto">
-                                <a href="#" class="text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                                    467
-                                </a>
-                                <a href="#" class="ms-3 text-muted">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                                    67
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              </div>
+              <div class="ms-auto">
+                <a href="#" class="text-muted">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
+                  467
+                </a>
+                <a href="#" class="ms-3 text-muted">
+                  <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
+                  67
+                </a>
+                <span th:if="${!item.info.selling}" class="btn btn-danger w-5 h-2">품절</span>
+              </div>
 
+            </div>
+          </div>
         </div>
+      </th:block>
     </div>
+  </div>
 
 </th:block>
 
