@@ -8,19 +8,35 @@
 </head>
 
 <th:block layout:fragment="content">
-  <div id="title-section">
-    <h2 th:text="${post.title}"></h2>
-    <p>
-      <span th:text="${post.writer}"/>
-      <span th:text="${post.createdAt}"/>
-      <span th:text="${post.updatedAt}"/>
-    </p>
-  </div>
-  <div>
-    <div th:utext="${post.conent}">
+  <div class="card card-sm">
+    <div class="article" style="margin: 20px;">
+      <div id="title-section">
+        <h2 th:text="${post.title}"></h2>
+        <p>
+          작성자 : <span th:text="${post.writer}"/>
+          작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd. HH:mm')}"/>
+          <th:block th:if="${post.createdAt != post.updatedAt}">
+          수정일시 : <span th:text="${#temporals.format(post.updatedAt, 'yyyy.MM.dd. HH:mm')}"/>
+          </th:block>
+        </p>
+      </div>
+      <hr>
+      <div class="content-section">
+        <div th:utext="${post.content}">
+        </div>
+      </div>
+      <div id="comment-section">
+        <th:block>
+
+        </th:block>
+        <form th:if="${member.member!=null}" method="post">
+          <input type="number" th:value="">
+          <input type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+          <input type="submit">
+        </form>
+      </div>
     </div>
   </div>
-  <div id="comment-section"></div>
 </th:block>
 
 </html>

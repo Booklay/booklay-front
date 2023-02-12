@@ -348,7 +348,7 @@
                               <!--보임-->
                               <th:block
                                   th:if="${post.viewPublic or post.memberNo == thisMember.memberNo}">
-                                <a th:href="@{/board/view/{postId} (postId = ${post.postId})}"
+                                <a th:href="@{/board/{postId} (postId = ${post.postId})}"
                                    th:text="${post.title}"/>
                               </th:block>
                               <!--안보임-->

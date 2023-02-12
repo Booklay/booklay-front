@@ -50,7 +50,7 @@ public class BoardController {
 
     //TODO : 권한 받아오는거 찾아서 관리자 권한도 넣어줄것
     if(post.getViewPublic() != false || post.getMemberNo().equals(memberInfo.getMemberNo())){
-      model.addAttribute(post);
+      model.addAttribute("post", post);
       return "board/view";
     }
 
