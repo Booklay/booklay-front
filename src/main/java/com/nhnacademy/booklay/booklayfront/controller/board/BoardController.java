@@ -48,12 +48,19 @@ public class BoardController {
 
     PostResponse post = response.getBody();
 
-    //TODO : 권한 받아오는거 찾아서 관리자 권한도 넣어줄것
-    if(post.getViewPublic() != false || post.getMemberNo().equals(memberInfo.getMemberNo())){
-      model.addAttribute("post", post);
-      return "board/view";
+    boolean commentAuth = false;
+    if (memberInfo.getMemberNo() != null) {
+      if (post.getMemberNo() == memberInfo.getMemberNo() || post.commentAuth(
+          memberInfo.getMemberNo())) {
+        commentAuth = true;
+      }
     }
 
-    return "redirect:/index";
+    model.addAttribute("post", post);
+    model.addAttribute("memberInfo", memberInfo);
+
+    model.addAttribute("commentAuth", commentAuth);
+    return "board/view";
   }
+
 }
