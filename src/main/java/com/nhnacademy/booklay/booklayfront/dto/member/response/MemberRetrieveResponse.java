@@ -25,4 +25,6 @@ public class MemberRetrieveResponse {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
     private Boolean isBlocked;
+    private String memberGrade;
+    private String authority;
 }
