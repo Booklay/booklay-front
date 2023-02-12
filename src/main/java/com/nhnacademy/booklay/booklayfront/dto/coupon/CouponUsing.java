@@ -17,4 +17,5 @@ public class CouponUsing {
     private Integer maximumDiscountAmount; //: 0   // 최대 할인 금액
     private Boolean isLimited;
     private Long categoryNo;
+    private Long productNo;
 }

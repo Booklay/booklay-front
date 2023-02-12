@@ -11,5 +11,6 @@ public class OrderCheckRequest {
     List<String> couponCodeList;
     List<CartDto> cartDtoList;
     Integer usingPoint;
+    Integer giftWrappingPrice;
     Integer paymentAmount;
 }
