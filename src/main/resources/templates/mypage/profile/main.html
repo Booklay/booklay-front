@@ -37,15 +37,15 @@
           <table class="table table-vcenter card-table">
             <tr>
               <td class="info-index">아이디</td>
-              <td>?</td>
+              <td><span th:text="${member.memberId}"/></td>
             </tr>
             <tr>
               <td class="info-index">이메일</td>
-              <td>booklay@gmail.com</td>
+              <td><span th:text="${member.email}"/></td>
             </tr>
             <tr>
               <td class="info-index">닉네임</td>
-              <td>북레이 관리자</td>
+              <td><span th:text="${member.nickname}"/></td>
             </tr>
           </table>
           <br>
@@ -54,25 +54,25 @@
             <table class="table table-vcenter card-table">
               <tr class="">
                 <td class="info-index">이름</td>
-                <td>북레이</td>
+                <td><span th:text="${member.name}"/></td>
               </tr>
               <tr>
                 <td class="info-index">성별</td>
-                <td>지구별</td>
+                <td><span th:text="${member.gender} == 'M' ? '남성' : '여성'"/></td>
               </tr>
               <tr>
                 <td class="info-index">생일</td>
-                <td>2000-02-09</td>
+                <td><span th:text="${member.birthday}"/></td>
               </tr>
               <tr>
                 <td class="info-index">전화번호</td>
-                <td>앞뒤가 똑같은 전화번호</td>
+                <td><span th:text="${member.phoneNo}"/></td>
               </tr>
             </table>
 
             <button class="btn btn-outline-primary"
                     style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
-              <a href="#">배송지 정보관리</a>
+              <a th:href="@{/member/profile/address}">배송지 정보관리</a>
             </button>
           </div>
         </div>

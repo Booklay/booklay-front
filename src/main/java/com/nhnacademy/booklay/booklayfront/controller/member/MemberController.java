@@ -68,10 +68,18 @@ public class MemberController extends BaseController {
     }
 
     @GetMapping(value = {"", "/", "/profile"})
-    private String profileMain(MemberInfo memberInfo, Model model) {
-        model.addAttribute("memberInfo", memberInfo);
+    public String mypageIndex(Model model, MemberInfo memberInfo) {
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
+
+        ApiEntity<MemberRetrieveResponse> response =
+            restService.get(uri.toString(), null, MemberRetrieveResponse.class);
+
+        model.addAttribute("member", response.getBody());
+
         return "mypage/profile/main";
     }
+
+
 
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
