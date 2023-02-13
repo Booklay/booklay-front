@@ -22,7 +22,7 @@
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns" th:each=" child : ${item.categories}">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" th:href="@{/search/products/category(id=${child.id})}" th:text="${child.name}"></a>
+                                            <a class="dropdown-item" th:href="@{/search/products(classification = 'categories',id=${child.id})}" th:text="${child.name}"></a>
                                         </div>
                                     </div>
                                 </div>

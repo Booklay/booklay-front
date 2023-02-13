@@ -5,6 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SearchCategoryRequest {
-    private Long categoryId;
+public class SearchIdRequest {
+
+    private String classification;
+    private Long id;
 }
