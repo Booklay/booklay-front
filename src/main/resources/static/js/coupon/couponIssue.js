@@ -1,5 +1,5 @@
 async function issueCoupon(couponId) {
-    const couponRequestUrl = `/coupon-zone/${couponId}`;
+    const couponRequestUrl = `http://localhost:6060/coupon-zone/${couponId}`;
     const loadingDiv = document.querySelector('#loading');
 
     const response = await fetch(couponRequestUrl);
@@ -9,12 +9,6 @@ async function issueCoupon(couponId) {
         const requestId = parsedResponse.requestId;
 
         const messageRequestUrl = '/coupon-zone/member/response/' + requestId;
-
-        let timeoutId = setTimeout(() => {
-            clearInterval(timerId);
-            alert('요청 시간이 초과되었습니다.');
-            loadingDiv.style.display = 'none';
-            }, 10000);
 
         let timerId = setInterval(async () => {
             const messageResponse = await fetch(messageRequestUrl);
@@ -32,6 +26,13 @@ async function issueCoupon(couponId) {
                 alert("조금 뒤에 다시 시도해주세요..")
             }
         }, 1500);
+
+        let timeoutId = setTimeout(() => {
+            clearInterval(timerId);
+            alert('요청 시간이 초과되었습니다.');
+            loadingDiv.style.display = 'none';
+        }, 10000);
+
     } else {
         const parsedResponse = await response.json();
         loadingDiv.style.display = 'none';

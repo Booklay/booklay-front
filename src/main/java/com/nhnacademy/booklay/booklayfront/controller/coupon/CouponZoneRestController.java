@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
 @RequiredArgsConstructor
 @RequestMapping("/coupon-zone")
 @Slf4j
@@ -64,7 +62,7 @@ public class CouponZoneRestController {
     @GetMapping("/member/response/{requestId}")
     public ResponseEntity<CouponMemberResponse> couponZoneIssue(@PathVariable String requestId) {
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone/" + requestId);
-
+        log.info(requestId + " + come!!");
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("requestId", requestId);
 

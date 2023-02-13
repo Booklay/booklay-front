@@ -42,7 +42,7 @@ public class CouponAdminFrontController {
     private final ObjectFileService fileService;
     private final CouponRestApiModelSettingService couponRestApiModelSettingService;
 
-    private static final String COUPON_RESOURCE_BASE = "admin/coupon/";
+    private static final String ADMIN_COUPON_RESOURCE = "admin/coupon/";
     private static final String RETURN_PAGE_COUPON_LIST = "redirect:/admin/coupons/list";
 
     /**
@@ -60,7 +60,7 @@ public class CouponAdminFrontController {
     public String createCouponForm(Model model) {
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
-        return COUPON_RESOURCE_BASE + "createCouponForm";
+        return ADMIN_COUPON_RESOURCE + "createCouponForm";
     }
 
     /**
@@ -92,7 +92,7 @@ public class CouponAdminFrontController {
                                 Model model) {
         couponRestApiModelSettingService.setCouponListToModelByPage(pageNum, model);
 
-        return COUPON_RESOURCE_BASE + "listView";
+        return ADMIN_COUPON_RESOURCE + "listView";
     }
 
     /**
@@ -115,7 +115,7 @@ public class CouponAdminFrontController {
     public String viewCoupon(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
 
-        return COUPON_RESOURCE_BASE + "detailView";
+        return ADMIN_COUPON_RESOURCE + "detailView";
     }
 
     /**
@@ -127,7 +127,7 @@ public class CouponAdminFrontController {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
         couponRestApiModelSettingService.setAllCouponTypeToModel(model);
 
-        return COUPON_RESOURCE_BASE + "couponUpdateForm";
+        return ADMIN_COUPON_RESOURCE + "couponUpdateForm";
     }
 
     /**
@@ -156,7 +156,7 @@ public class CouponAdminFrontController {
     public String updateCouponImageForm(Model model, @PathVariable String couponId) {
         couponRestApiModelSettingService.setCouponDetailToModelByCouponId(couponId, model);
 
-        return COUPON_RESOURCE_BASE + "couponImageUpdateForm";
+        return ADMIN_COUPON_RESOURCE + "couponImageUpdateForm";
     }
 
     /**
