@@ -280,6 +280,7 @@
     [[${cartObjectList}]].forEach(function (value){
         let cart = {
             productNo : value.productNo,
+            productCount : value.productCount,
             productTotal : value.productPrice * value.productCount,
             categoryNoList : value.categoryNoList,
             productName : value.productName

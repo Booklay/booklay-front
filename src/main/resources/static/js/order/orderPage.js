@@ -44,7 +44,7 @@ window.onload = function() {
     const paymentButton = document.getElementById('toPayment') // 결제하기 버튼
 
     paymentButton.addEventListener('click', function () {
-        if (orderValidCheck){
+        if (orderValidCheck()){
             tossPayments.requestPayment('카드', paymentData);
         }
     })
@@ -90,9 +90,33 @@ function setCouponData(couponCode, productNo, duplicable){
             }
         }
     };
+    /*
+    List<String> couponCodeList;
+    List<CartDto> cartDtoList;
+    Integer usingPoint;
+    Integer giftWrappingPrice;
+    Integer paymentAmount;
+     */
+    let couponCodeList = [];
+    couponSettingData.forEach(function (value){
+        if (value.coupon != null){
+            couponCodeList.push(value.coupon.couponCode);
+        }
+        if (value.doupon != null){
+            couponCodeList.push(value.doupon.couponCode);
+        }
+    });
+
+    let body = {
+        "couponCodeList": couponCodeList,
+        "cartDtoList":,
+        "usingPoint":,
+        "giftWrappingPrice":,
+        "paymentAmount":
+    };
     httpRequest.open('GET', '/rest/coupons/code/?couponCode='+couponCode);
     httpRequest.responseType = "json";
-    httpRequest.send();
+    httpRequest.send(JSON.stringify(body));
 }
 
 function updatePoint(){
@@ -426,3 +450,24 @@ function destinationClickEvent(e) {
 }
 
 
+function orderValidCheck(){
+    let httpResult = null;
+    let httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = () => {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                httpResult = httpRequest.response;
+            } else {
+                alert('Request Error!');
+            }
+        }
+    };
+    httpRequest.open('POST', '/rest/order/check/');
+    httpRequest.responseType = "json";
+    httpRequest.send();
+    while (true){
+        if (httpResult != null){
+            return httpResult
+        }
+    }
+}
