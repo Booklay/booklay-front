@@ -30,7 +30,7 @@
                 <div>
                   <div><a th:text="${item.title}" th:href="@{/product/view/{productId} (productId = ${item.id})}" ></a></div>
                   <div th:each=" author : ${item.authors}">
-                    <a th:href="@{/search/author(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
+                    <a th:href="@{/search/products(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
                   </div>
                   <div class="text-muted" th:text="${#numbers.formatCurrency(item.price)}"></div>
                   <div class="text-muted" th:text="${item.publisher}"></div>

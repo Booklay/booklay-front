@@ -2,8 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service.search.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
-import com.nhnacademy.booklay.booklayfront.dto.search.request.SearchCategoryRequest;
+import com.nhnacademy.booklay.booklayfront.dto.search.request.SearchIdRequest;
 import com.nhnacademy.booklay.booklayfront.dto.search.request.SearchKeywordsRequest;
 import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchProductResponse;
@@ -30,8 +29,8 @@ public class SearchServiceImpl implements SearchService {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
-    private static final String REQUEST_SEARCH_PRODUCT_URI = "/shop/v1/search/products";
-    private static final String REQUEST_SEARCH_PRODUCT_CATEGORY_URI = "/shop/v1/search/products/category";
+    private static final String REQUEST_SEARCH_PRODUCT_URI = "/shop/v1/search/products/keywords";
+    private static final String REQUEST_SEARCH_BY_PRODUCT_NESTED_URI = "/shop/v1/search/products";
 
     /**
      * 전체 상품 노출.
@@ -39,9 +38,12 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Optional<SearchPageResponse<SearchProductResponse>> getSearchResponse(int page) {
 
-        URI uri = URI.create(gatewayIp + REQUEST_SEARCH_PRODUCT_URI);
+        URI uri = URI.create(gatewayIp + REQUEST_SEARCH_BY_PRODUCT_NESTED_URI);
 
         // 리팩토링 시 인자에 작성된 제네릭 타입 지우지 말 것, 요청에 대한 response 타입이 제대로 적용되지 않음.
+
+        log.info(" Search All Products");
+
 
         ApiEntity<SearchPageResponse<SearchProductResponse>> response =
             restService.get(uri.toString(), ControllerUtil.getDefaultPageMap(page),
@@ -67,6 +69,10 @@ public class SearchServiceImpl implements SearchService {
 
         URI uri = URI.create(gatewayIp + REQUEST_SEARCH_PRODUCT_URI);
 
+        log.info(" \n Search Classification :  {} \n Keywords : {}",
+            searchKeywordsRequest.getClassification(), searchKeywordsRequest.getKeywords());
+
+
         // 리팩토링 시 인자에 작성된 제네릭 타입 지우지 말 것, 요청에 대한 response 타입이 제대로 적용되지 않음.
 
         ApiEntity<SearchPageResponse<SearchProductResponse>> response =
@@ -83,19 +89,18 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Optional<SearchPageResponse<SearchProductResponse>> getSearchResponseByCategory(
-        Long categoryId, int page) {
+    public Optional<SearchPageResponse<SearchProductResponse>> getSearchResponseByNestedId(
+        SearchIdRequest searchIdRequest, int page) {
 
-        log.info(" Search Category ID : {}", categoryId);
+        log.info(" \n Search Classification :  {} \n ID : {}",
+            searchIdRequest.getClassification(), searchIdRequest.getId());
 
-        SearchCategoryRequest request = new SearchCategoryRequest(categoryId);
-
-        URI uri = URI.create(gatewayIp + REQUEST_SEARCH_PRODUCT_CATEGORY_URI);
+        URI uri = URI.create(gatewayIp + REQUEST_SEARCH_BY_PRODUCT_NESTED_URI);
 
         // 리팩토링 시 인자에 작성된 제네릭 타입 지우지 말 것, 요청에 대한 response 타입이 제대로 적용되지 않음.
         ApiEntity<SearchPageResponse<SearchProductResponse>> response =
             restService.post(
-                uri.toString(), objectMapper.convertValue(request, Map.class),
+                uri.toString(), objectMapper.convertValue(searchIdRequest, Map.class),
                 ControllerUtil.getDefaultPageMap(page),
                 new ParameterizedTypeReference<SearchPageResponse<SearchProductResponse>>(){});
 
@@ -105,5 +110,6 @@ public class SearchServiceImpl implements SearchService {
 
         return Optional.empty();
     }
+
 }
 
