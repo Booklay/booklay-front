@@ -3,6 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +64,8 @@ public class CouponIssueAdminFrontController {
      * @param couponRequest 발급하려는 couponId, 특정 발급 대상 사용자 memberId
      */
     @PostMapping("/member/issue")
-    public String issueCouponToMember(@Valid @ModelAttribute CouponMemberIssueRequest couponRequest) {
+    public String issueCouponToMember(@Valid @ModelAttribute
+                                      CouponMemberIssueRequest couponRequest) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "members/issue");
         Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
         restService.post(url, map, String.class);

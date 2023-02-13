@@ -2,7 +2,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/admin}">
 <head>
-    <title>쿠폰존 목록</title>
+    <title>[관리자] 쿠폰존 목록</title>
     <script src="/js/coupon/couponPopup.js"></script>
 </head>
 
@@ -51,9 +51,9 @@
                     <td><p th:text="${limited.couponId}"></p></td>
                     <td><p th:text="${limited.name}"></p></td>
                     <td><p th:text="${limited.description}"></p></td>
-                    <td><p th:text="${limited.openedAt}"></p></td>
-                    <td><p th:text="${limited.issuanceDeadlineAt}"></p></td>
-                    <td><p th:text="${limited.expiredAt}"></p></td>
+                    <td><p th:text="${#temporals.format(limited.openedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(limited.issuanceDeadlineAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(limited.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                     <td>
                         <p th:if="${limited.isBlind}">O</p>
                         <p th:unless="${limited.isBlind}">X</p>
@@ -106,9 +106,9 @@
                             </div>
                         </th:block>
                     </td>
-                    <td><p th:text="${graded.openedAt}"></p></td>
-                    <td><p th:text="${graded.issuanceDeadlineAt}"></p></td>
-                    <td><p th:text="${graded.expiredAt}"></p></td>
+                    <td><p th:text="${#temporals.format(graded.openedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(graded.issuanceDeadlineAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(graded.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                     <td>
                         <p th:if="${graded.isBlind}">O</p>
                         <p th:unless="${graded.isBlind}">X</p>
@@ -152,9 +152,9 @@
                     <td><p th:text="${unlimited.couponId}"></p></td>
                     <td><p th:text="${unlimited.name}"></p></td>
                     <td><p th:text="${unlimited.description}"></p></td>
-                    <td><p th:text="${unlimited.openedAt}"></p></td>
-                    <td><p th:text="${unlimited.issuanceDeadlineAt}"></p></td>
-                    <td><p th:text="${unlimited.expiredAt}"></p></td>
+                    <td><p th:text="${#temporals.format(unlimited.openedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(unlimited.issuanceDeadlineAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${#temporals.format(unlimited.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                     <td>
                         <p th:if="${unlimited.isBlind}">O</p>
                         <p th:unless="${unlimited.isBlind}">X</p>
