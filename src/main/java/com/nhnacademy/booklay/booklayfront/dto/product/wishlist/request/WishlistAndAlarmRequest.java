@@ -3,11 +3,10 @@ package com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class CreateDeleteWishlistAndAlarmRequest {
+public class WishlistAndAlarmRequest {
   @NotNull
   private Long memberNo;
   @NotNull

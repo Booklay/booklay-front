@@ -8,7 +8,7 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.WishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.Map;
@@ -59,7 +59,6 @@ public class ProductController {
         getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
     if (response.isSuccess()) {
-      log.info("진입 확인");
       setCurrentPageAndMaxPageToModel(model, response.getBody());
       model.addAttribute("productList", response.getBody().getData());
       model.addAttribute("memberId", memberId);
@@ -74,7 +73,7 @@ public class ProductController {
    * @return
    */
   @PostMapping("/wishlist/disconnect")
-  public String deleteWishlistFromMyPage(CreateDeleteWishlistAndAlarmRequest request) {
+  public String deleteWishlistFromMyPage(WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
@@ -89,11 +88,11 @@ public class ProductController {
    * @return
    */
   @PostMapping("/wishlist/alarm/connect")
-  public String alarmConnectFromWish(CreateDeleteWishlistAndAlarmRequest request) {
+  public String alarmConnectFromWish(WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-        CreateDeleteWishlistAndAlarmRequest.class);
+        WishlistAndAlarmRequest.class);
 
     return REDIRECT_WISH;
   }
@@ -104,7 +103,7 @@ public class ProductController {
    * @return
    */
   @PostMapping("/wishlist/alarm/disconnect")
-  public String alarmDisconnectFromWish(CreateDeleteWishlistAndAlarmRequest request) {
+  public String alarmDisconnectFromWish(WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
@@ -130,7 +129,6 @@ public class ProductController {
         getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
     if (response.isSuccess()) {
-      log.info("진입 확인");
       setCurrentPageAndMaxPageToModel(model, response.getBody());
       model.addAttribute("productList", response.getBody().getData());
       model.addAttribute("memberId", memberId);
@@ -145,7 +143,7 @@ public class ProductController {
    * @return
    */
   @PostMapping("/alarm/disconnect")
-  public String alarmDisconnect(CreateDeleteWishlistAndAlarmRequest request) {
+  public String alarmDisconnect(WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
