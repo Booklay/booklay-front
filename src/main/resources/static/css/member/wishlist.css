@@ -1,31 +1,39 @@
 .wishlist-block{
+  border: lightgrey solid 1px;
+  border-radius: 1rem;
+
 }
 
 .common-table{
-  background-color: white;
   box-sizing: border-box;
-  float: left;
 }
 
 .ww-2{
-  width: 20%;
-  text-align: center;
+  flex: 1;
 }
-
-.ww-3{
-  width: 30%;
-}
-
 .ww-6{
-  width: 60%;
+  flex: 2;
+  padding: 1rem;
 }
 
-.ww-8{
-  width: 80%;
-  padding-left: 1rem;
+.right-btns{
+  margin-bottom: 5px;
+}
+.product-strong{
+  font-size: 16px;
+  font-weight: bold;
 }
 
-.wh-7{
-  height:70px;
-  line-height: 70px;
+.product-weak{
+  font-size: 12px;
+  font-weight: lighter;
+}
+
+.product-title{
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
