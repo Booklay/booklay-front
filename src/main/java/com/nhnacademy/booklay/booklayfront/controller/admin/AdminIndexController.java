@@ -12,9 +12,6 @@ public class AdminIndexController extends BaseController {
 
     @GetMapping(value = {"","/", "/profile"})
     public String getAdminPage(Model model) {
-        model.addAttribute("navHead", "emptyPage");
-        model.addAttribute("targetUrl", "emptyPage");
-
         return "admin/main";
     }
 }

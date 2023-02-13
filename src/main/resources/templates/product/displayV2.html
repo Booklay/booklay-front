@@ -18,11 +18,11 @@
 
       <!--     반복 -->
       <th:block th:each="item : ${productList}">
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-5 col-lg-3">
           <div class="card card-sm">
             <a th:href="@{/product/view/{productId} (productId = ${item.id})}" class="d-block">
-              <div class="text-center" style="width:313px; height:413px; margin: auto;">
-                <img class="product-img" style="max-height: 413px; width: 95%; margin-top:10px;" th:src="@{/storage/{thumbnail} (thumbnail = ${item.thumbnail})}"/>
+              <div class="text-center" style="width:auto; min-height:400px; margin: auto; display:flex; align-items: center;">
+                <img class="product-img" style="max-height: 413px; width: 95%; margin:auto;" th:src="@{/storage/{thumbnail} (thumbnail = ${item.thumbnail})}"/>
               </div>
             </a>
             <div class="card-body">
@@ -30,7 +30,7 @@
                 <div>
                   <div><a th:text="${item.title}" th:href="@{/product/view/{productId} (productId = ${item.id})}" ></a></div>
                   <div th:each=" author : ${item.authors}">
-                    <a th:href="@{/search/author(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
+                    <a th:href="@{/search/products(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
                   </div>
                   <div class="text-muted" th:text="${#numbers.formatCurrency(item.price)}"></div>
                   <div class="text-muted" th:text="${item.publisher}"></div>

@@ -1,10 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.controller.product;
 
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.controller.BaseController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -14,16 +16,9 @@ import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDe
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +27,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 
 /**
  * @author 최규태
@@ -50,6 +51,7 @@ public class ProductDisplayController extends BaseController {
   private final ObjectMapper mapper = new ObjectMapper();
   private final CategoryService categoryService;
   private final Integer SIZE = 20;
+  private static final String REDIRECT_HTML_PREFIX = "redirect:/product/view/";
 
   //게시판형 전채 상품 호출
   @GetMapping("/display")
@@ -68,10 +70,10 @@ public class ProductDisplayController extends BaseController {
     log.error(" currentCategory : {}", currentCategory);
 
     URI uri = URI.create(
-        gatewayIp + SHOP_PRE_FIX );
+        gatewayIp + SHOP_PRE_FIX);
 
     ApiEntity<PageResponse<ProductAllInOneResponse>> productResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
@@ -91,10 +93,7 @@ public class ProductDisplayController extends BaseController {
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model,
-      MemberInfo memberInfo) {
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+      MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "0") int page) {
 
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
@@ -137,14 +136,24 @@ public class ProductDisplayController extends BaseController {
 
       model.addAttribute("memberProduct", wishlistAndAlarmResponse.getBody());
     }
+
+//상품 문의 게시판 조회
+    URI qnaUri = URI.create(gatewayIp + "/shop/v1/board/product/" + productNo);
+    ApiEntity<PageResponse<PostResponse>> postResponse = restService.get(qnaUri.toString(),
+        getDefaultPageMap(page, 10), new ParameterizedTypeReference<>() {
+        });
+
+    model.addAttribute("postList", postResponse.getBody().getData());
+    setCurrentPageAndMaxPageToModel(model, postResponse.getBody());
+
     return "product/view";
   }
 
   //  @GetMapping("/display")
-  public String categoryViewer(
-      @RequestParam(name = "CID", defaultValue = "1") List<Long> categoryId,
-      @RequestParam(name = "page", defaultValue = "0") Long pageNum,
-      Model model) {
+//  public String categoryViewer(
+//      @RequestParam(name = "CID", defaultValue = "1") List<Long> categoryId,
+//      @RequestParam(name = "page", defaultValue = "0") Long pageNum,
+//      Model model) {
 
 //        TODO SHOP 컨트롤러 매핑 후 주석 해제
 
@@ -159,8 +168,8 @@ public class ProductDisplayController extends BaseController {
                   model.addAttribute("productList", responseBody.getData());
          */
 
-    return "redirect:/product/board";
-  }
+//    return "redirect:/product/board";
+//  }
 
   //찜(위시리스트) 등록
   @PostMapping("/wishlist/connect")
@@ -170,7 +179,7 @@ public class ProductDisplayController extends BaseController {
 
     restService.post(uri.toString(), mapper.convertValue(request, Map.class), Void.class);
 
-    return "redirect:/product/view/" + request.getProductId();
+    return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
   //찜 위시리스트 삭제
@@ -181,7 +190,7 @@ public class ProductDisplayController extends BaseController {
 
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
-    return "redirect:/product/view/" + request.getProductId();
+    return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
   //재입고 알람 등록
@@ -192,7 +201,7 @@ public class ProductDisplayController extends BaseController {
     restService.post(uri.toString(), mapper.convertValue(request, Map.class),
         CreateDeleteWishlistAndAlarmRequest.class);
 
-    return "redirect:/product/view/" + request.getProductId();
+    return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
   //재입고 알람 등록 해제
@@ -203,7 +212,7 @@ public class ProductDisplayController extends BaseController {
 
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
-    return "redirect:/product/view/" + request.getProductId();
+    return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
 }

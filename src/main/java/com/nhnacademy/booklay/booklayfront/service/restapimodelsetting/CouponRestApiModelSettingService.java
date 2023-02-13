@@ -7,8 +7,10 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCouponResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -174,5 +176,17 @@ public class CouponRestApiModelSettingService {
         ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
+    }
+
+    /**
+     * 사용자가 소유한 쿠폰 목록을 조회합니다.
+     */
+    public void setOwnedCouponToModelByMember(Integer pageNum, Long memberNo, Model model) {
+        String url = ControllerUtil.buildString(gatewayIp, DOMAIN_PREFIX_COUPON, "/members/" + memberNo + "/coupons");
+
+        ApiEntity<PageResponse<MemberOwnedCouponResponse>> apiEntity =
+            restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
+            });
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
     }
 }

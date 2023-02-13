@@ -32,7 +32,7 @@ window.onload = function () {
         cartDtoArray.push({
           "productNo": parseInt(productNo),
           "count": parseInt(
-              document.getElementById("count").value)
+              document.getElementById("productCount").value)
         });
 
         let formElement = document.createElement('form');
