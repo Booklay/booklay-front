@@ -54,7 +54,7 @@
       </div>
 
       <th:block th:replace="thymeleaf/fragments/pagination :: pagination"/>
-      <button>
+      <button class="btn btn-outline-primary">
         <a th:href="@{/admin/product/save/{pageNum} (pageNum = ${currentPage})}">
           refresh document
         </a>
