@@ -1,0 +1,46 @@
+.mypage-var {
+  display: flex;
+  border: lightgrey solid 1px;
+  border-radius: 1rem;
+}
+
+.mypage-var-head {
+  text-align: center;
+  padding: 1rem;
+  border-bottom: lightgrey solid 1px;
+}
+
+.divide-1 {
+  flex:1;
+  text-align: center;
+}
+.divide-4{
+  flex:4;
+  text-align: center;
+}
+
+.info-block{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#mypage-var-center {
+  width: 33%;
+  border-left: lightgrey solid 1px;
+  border-right: lightgrey solid 1px;
+}
+
+.mypage-var-text{
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.mypage-member-info{
+  border: lightgrey solid 1px;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.info-index{
+  width:20%;
+}
