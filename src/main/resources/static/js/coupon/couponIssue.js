@@ -2,7 +2,6 @@ async function issueCoupon(couponId) {
     const couponRequestUrl = `http://localhost:6060/coupon-zone/${couponId}`;
     const loadingDiv = document.querySelector('#loading');
 
-    console.log(couponRequestUrl);
     const response = await fetch(couponRequestUrl);
 
     if (response.ok) { // 응답 코드 200~299 일 때
@@ -13,11 +12,9 @@ async function issueCoupon(couponId) {
 
         let timerId = setInterval(async () => {
             const messageResponse = await fetch(messageRequestUrl);
-            console.log(messageResponse);
 
             if (messageResponse.ok) {
                 const msgResponse = await messageResponse.json();
-                console.log(msgResponse.message);
                 if(msgResponse.message !== "null") {
                     alert(msgResponse.message)
                     loadingDiv.style.display = 'none'
