@@ -36,20 +36,4 @@ public class CouponMemberFrontController {
         return MEMBER_COUPON_RESOURCE + "ownedCouponListView";
     }
 
-//    /**
-//     * 쿠폰 상세 보기.
-//     * @param model
-//     * @param couponId
-//     * @return
-//     */
-//    @GetMapping("detail/{couponId}")
-//    public String couponDetail(Model model, @PathVariable String couponId) {
-//
-//    }
-//
-//    @GetMapping("history/{pageNum}")
-//    public String couponHistory(Model model, @PathVariable Integer pageNum) {
-//
-//    }
-
 }

@@ -23,11 +23,16 @@
                 </section>
                 <section class="card-cont">
                     <h3 th:text="${item.name}"></h3>
-                    <div class="even-date">
+                    <div class="even-info">
                         <i class="fa fa-calendar"></i>
                         <time>
-                            <span>wednesday 28 december 2014</span>
-                            <span>08:55pm to 12:00 am</span>
+                            <span>
+                                <span>최대 </span>
+                                <span th:text="${item.amount}"></span>
+                                <span>원 할인</span>
+                            </span><br/>
+                            <span th:text="${item.expiredAt}"></span>
+                            <span>까지 사용 가능</span>
                         </time>
                     </div>
                     <div class="even-info">

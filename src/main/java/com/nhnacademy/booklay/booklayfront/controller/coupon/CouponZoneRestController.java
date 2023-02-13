@@ -43,7 +43,6 @@ public class CouponZoneRestController {
         Long memberNo = memberInfo.getMemberNo();
         if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
 
-
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
 
         CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);

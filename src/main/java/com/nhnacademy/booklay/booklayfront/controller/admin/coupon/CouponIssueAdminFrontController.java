@@ -52,10 +52,9 @@ public class CouponIssueAdminFrontController {
 
     /**
      * 특정 사용자에게 쿠폰을 발급하기 위한 폼.
-     *
      */
     @GetMapping("/member/issue")
-    public String issueCouponToMemberForm(Model model) {
+    public String issueCouponToMemberForm() {
         return "admin/coupon/issue/issueCouponToMemberForm";
     }
 
