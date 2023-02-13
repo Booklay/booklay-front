@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -104,12 +105,9 @@ public class AdminProductController extends BaseController {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
-      int totalPage = productResponse.getBody().getTotalPages();
-      int currentPage = productResponse.getBody().getPageNumber();
       List<RetrieveProductResponse> productList = productResponse.getBody().getData();
 
-      model.addAttribute("currentPage", currentPage);
-      model.addAttribute("totalPage", totalPage);
+      setCurrentPageAndMaxPageToModel(model, productResponse.getBody());
       model.addAttribute("productList", productList);
       model.addAttribute("currentCategory", currentCategory);
     }
@@ -614,5 +612,12 @@ public class AdminProductController extends BaseController {
     restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
 
     return "redirect:/admin/product/recommend/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
+  }
+
+  @GetMapping("save/{pageNum}")
+  public String saveDocument(@PathVariable Long pageNum){
+    restService.get(gatewayIp + SHOP_PRE_FIX+ "search/save/all", null, Void.class);
+
+    return "redirect:/admin/product?page=" + pageNum;
   }
 }

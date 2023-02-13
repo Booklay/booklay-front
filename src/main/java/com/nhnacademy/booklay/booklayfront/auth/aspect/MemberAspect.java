@@ -6,8 +6,6 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import java.util.Arrays;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,6 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 로그인한 멤버의 정보를 받아오기 위한 AOP.
@@ -33,8 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Component
 @RequiredArgsConstructor
 public class MemberAspect {
-
-    private final RedisTemplate<String, Object> redisTemplate;
     private final TokenUtils tokenUtils;
     private final RestService restService;
 
@@ -49,7 +48,6 @@ public class MemberAspect {
     public Object injectMember(ProceedingJoinPoint pjp, Controller controller) throws Throwable {
         log.info("Method: {}", pjp.getSignature().getName());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (Objects.isNull(authentication) || isAnonymous(authentication)) {
             return pjp.proceed();
         }
@@ -76,6 +74,9 @@ public class MemberAspect {
         Object[] args = Arrays.stream(pjp.getArgs()).map(arg -> {
             if (arg instanceof MemberInfo) {
                 arg = memberInfo;
+            }
+            if (arg instanceof Model){
+                ((Model) arg).addAttribute("memberInfo", memberInfo);
             }
             return arg;
         }).toArray();

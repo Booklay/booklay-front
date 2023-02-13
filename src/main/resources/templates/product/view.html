@@ -305,7 +305,7 @@
           </div>
 
           <div class="card">
-<!--            탭 목록-->
+            <!--탭 목록-->
             <ul class="nav nav-tabs" data-bs-toggle="tabs">
               <li class="nav-item">
                 <a href="#tabs-description-7" class="nav-link active" data-bs-toggle="tab">상세 설명</a>
@@ -318,13 +318,15 @@
               </li>
             </ul>
 
-<!--            탭 내용-->
+            <!--탭 내용-->
             <div class="card-body">
               <div class="tab-content">
+                <!--설명-->
                 <div class="tab-pane active show" id="tabs-description-7">
                   <div th:utext="${product.info.longDescription}">
                   </div>
                 </div>
+                <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
                   <div>
                     <div class="table-responsive">
@@ -346,7 +348,8 @@
                               <!--보임-->
                               <th:block
                                   th:if="${post.viewPublic or post.memberNo == thisMember.memberNo}">
-                                <a th:href="@{/board/view/{postId} (postId = ${post.postId})}" th:text="${post.title}"/>
+                                <a th:href="@{/board/{postId} (postId = ${post.postId})}"
+                                   th:text="${post.title}"/>
                               </th:block>
                               <!--안보임-->
                               <th:block
@@ -381,6 +384,7 @@
                     </button>
                   </div>
                 </div>
+                <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
                   <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet,
                     facilisi sit mauris accumsan nibh habitant senectus
@@ -388,6 +392,7 @@
                 </div>
               </div>
             </div>
+            <!--탭 내용 종료-->
           </div>
         </div>
         <!--/* 책 소개 */-->
@@ -466,57 +471,6 @@
 
         <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
       </div>
-
-      <!--        상품 문의 시작-->
-      <!--      <div class="table-responsive">-->
-      <!--        <table class="table table-vcenter card-table">-->
-      <!--          <thead>-->
-      <!--          <tr>-->
-      <!--            <th>답변 상태</th>-->
-      <!--            <th>제목</th>-->
-      <!--            <th>작성자</th>-->
-      <!--            <th>작성일</th>-->
-      <!--          </tr>-->
-      <!--          </thead>-->
-      <!--          <tbody>-->
-      <!--          <tr>-->
-      <!--            <td></td>-->
-      <!--            <td>-->
-      <!--                  <span th:text="${'ensp;'*post.depth}">-->
-      <!--                      &lt;!&ndash;보임&ndash;&gt;-->
-      <!--                     <th:block-->
-      <!--                         th:if="${post.viewPublic == true || post.memberNo == thisMember.memberNo }">-->
-      <!--                       <span th:text="${post.title}"/>-->
-      <!--                    </th:block>-->
-      <!--                    &lt;!&ndash;안보임&ndash;&gt;-->
-      <!--                    <th:block th:if="${post.viewPublic == false}">-->
-      <!--                      <span>비밀글입니다. <svg xmlns="http://www.w3.org/2000/svg"-->
-      <!--                                         class="icon icon-tabler icon-tabler-lock" width="24"-->
-      <!--                                         height="24" viewBox="0 0 24 24" stroke-width="2"-->
-      <!--                                         stroke="currentColor" fill="none"-->
-      <!--                                         stroke-linecap="round" stroke-linejoin="round">-->
-      <!--   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>-->
-      <!--   <path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>-->
-      <!--   <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>-->
-      <!--   <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>-->
-      <!--</svg></span>-->
-      <!--                    </th:block>-->
-      <!--                  </span>-->
-      <!--            </td>-->
-      <!--            <td></td>-->
-      <!--            <td></td>-->
-      <!--          </tr>-->
-      <!--          </tbody>-->
-      <!--        </table>-->
-      <!--        <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>-->
-      <!--      </div>-->
-      <!--      <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary"-->
-      <!--              style="float: right;">-->
-      <!--        <a id="btn" th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의-->
-      <!--          작성</a>-->
-      <!--      </button>-->
-      <!--        상품 문의 종료-->
-
     </div>
   </div>
   </div>

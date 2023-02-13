@@ -1,5 +1,6 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{thymeleaf/layout/default}">
+      layout:decorate="~{thymeleaf/layout/default}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!--/* /thymeleaf/layout 폴더 아래에 있는 default.html을 레이아웃으로 사용 */-->
 
 <head>
@@ -8,15 +9,88 @@
 </head>
 
 <th:block layout:fragment="content">
-  <div id="header">
-    <h2 th:text="${post.title}"></h2>
-    <p>
-      <span th:text="${post.writer}" />
-      <span th:text="${post.createdAt}"/>
-      <span th:text="${post.updatedAt}"/>
-    </p>
-  </div>
+  <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+    <div class="card card-sm">
+      <div class="article" style="margin: 20px;">
+        <div id="title-section">
+          <h2 th:text="${post.title}"></h2>
+          <p>
+            작성자 : <span th:text="${post.writer}"/>
+            작성일시 : <span th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd. HH:mm')}"/>
+            <th:block th:if="${post.createdAt != post.updatedAt}">
+              수정일시 : <span th:text="${#temporals.format(post.updatedAt, 'yyyy.MM.dd. HH:mm')}"/>
+            </th:block>
+          </p>
+        </div>
+        <hr>
+        <div class="content-section">
+          <div th:utext="${post.content}">
+          </div>
+        </div>
+        <hr>
+        <div id="comment-section">
+          <!--        <th:block th:each="comment : ${commentList}">-->
+          <div></div>
+          <!--답댓글-->
+          <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
+          <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
+          <!--            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">-->
+          <!--            <input name="groupCommentNo" type="number" th:value="${comment.commentId}">-->
+          <!--            <input name="groupOrder" type="number" th:value="${comment.size}">-->
+          <!--            <input name="depth" type="number" th:value="${comment.depth}">-->
+          <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
+          <!--            <input type="submit" value="등록">-->
+          <!--          </form>-->
+          <!--        </th:block>-->
 
+          <!--새 댓글-->
+
+          <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}" method="post">
+            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
+                   hidden="hidden">
+            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">
+            <input name="groupCommentNo" type="number" th:value="0" hidden="hidden">
+            <input name="groupOrder" type="number" th:value="0" hidden="hidden">
+            <input name="depth" type="number" th:value="0" hidden="hidden">
+            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+            <input type="submit" value="등록">
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+<!--  권한 없는 사용자 화면-->
+  <th:block th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+    <div>
+      <div class="container-tight py-4">
+        <div class="empty">
+          <div class="empty-img"><img src="./static/illustrations/undraw_quitting_time_dm8t.svg"
+                                      height="128" alt="">
+          </div>
+          <p class="empty-title">게시글 조회 권한 오류</p>
+          <p class="empty-subtitle text-muted">
+            해당 게시글의 조회 권한이 없습니다.
+          </p>
+          <div class="empty-action">
+            <a href="./." class="btn btn-primary">
+              <!-- Download SVG icon from http://tabler-icons.io/i/arrow-left -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <line x1="5" y1="12" x2="11" y2="18"/>
+                <line x1="5" y1="12" x2="11" y2="6"/>
+              </svg>
+              Take me home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
 </th:block>
 
 </html>
