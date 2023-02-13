@@ -34,7 +34,7 @@
                                         <span class="text-muted"> 저자가 등록되지 않은 상품 </span>
                                     </div>
                                     <div th:each=" author : ${item.authors}">
-                                        <a th:href="@{/search/author(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
+                                        <a th:href="@{/search/products(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
                                     </div>
                                     <div class="text-muted" th:text="${#numbers.formatCurrency(item.price)}"></div>
                                     <div class="text-muted" th:text="${item.publisher}"></div>

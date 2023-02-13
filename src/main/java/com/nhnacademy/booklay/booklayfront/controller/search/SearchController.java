@@ -72,7 +72,8 @@ public class SearchController extends BaseController {
 
         SearchIdRequest request = new SearchIdRequest(classification, id);
 
-        Optional<SearchPageResponse<SearchProductResponse>> response = searchService.getSearchResponseByNestedId(request, page);
+        Optional<SearchPageResponse<SearchProductResponse>> response =
+            searchService.getSearchResponseByNestedId(request, page);
 
         if (response.isPresent()) {
             model.addAttribute(PRODUCT_LIST, response.get().getData());
@@ -102,8 +103,8 @@ public class SearchController extends BaseController {
                                 @RequestParam(value = "page", defaultValue = "0") int page,
                                 Model model) {
 
-        Optional<SearchPageResponse<SearchProductResponse>> response = searchService.getSearchResponse(
-            searchKeywordsRequest, page);
+        Optional<SearchPageResponse<SearchProductResponse>> response =
+            searchService.getSearchResponse(searchKeywordsRequest, page);
 
         if (response.isPresent()) {
             model.addAttribute(PRODUCT_LIST, response.get().getData());
