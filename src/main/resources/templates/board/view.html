@@ -55,8 +55,10 @@
             <input name="groupOrder" type="number" th:value="0" hidden="hidden">
             <input name="depth" type="number" th:value="0" hidden="hidden">
             <p style="display: flex">
-            <input class="form-control" name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
-            <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit" value="등록">
+              <input class="form-control" name="content" type="text"
+                     placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+              <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
+                     value="등록">
             </p>
           </form>
 
@@ -66,7 +68,8 @@
   </th:block>
 
   <!--  권한 없는 사용자 화면-->
-  <th:block th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+  <th:block
+      th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
     <div>
       <div class="container-tight py-4">
         <div class="empty">

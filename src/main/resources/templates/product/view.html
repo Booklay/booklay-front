@@ -339,7 +339,7 @@
                               <span th:text="${'ensp;'*post.depth}"/>
                               <!--보임-->
                               <th:block
-                                  th:if="${post.viewPublic or post.memberNo == thisMember.memberNo}">
+                                  th:if="${post.viewPublic or post.memberNo == thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                 <a th:href="@{/board/{postId} (postId = ${post.postId})}"
                                    th:text="${post.title}"/>
                               </th:block>
