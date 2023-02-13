@@ -37,4 +37,6 @@ public class ProductBoardController {
 
     return "product/board/write";
   }
+
+
 }

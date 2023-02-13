@@ -305,7 +305,7 @@
           </div>
 
           <div class="card">
-<!--            탭 목록-->
+            <!--탭 목록-->
             <ul class="nav nav-tabs" data-bs-toggle="tabs">
               <li class="nav-item">
                 <a href="#tabs-description-7" class="nav-link active" data-bs-toggle="tab">상세 설명</a>
@@ -318,13 +318,15 @@
               </li>
             </ul>
 
-<!--            탭 내용-->
+            <!--탭 내용-->
             <div class="card-body">
               <div class="tab-content">
+                <!--설명-->
                 <div class="tab-pane active show" id="tabs-description-7">
                   <div th:utext="${product.info.longDescription}">
                   </div>
                 </div>
+                <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
                   <div>
                     <div class="table-responsive">
@@ -346,7 +348,8 @@
                               <!--보임-->
                               <th:block
                                   th:if="${post.viewPublic or post.memberNo == thisMember.memberNo}">
-                                <a th:href="@{/board/view/{postId} (postId = ${post.postId})}" th:text="${post.title}"/>
+                                <a th:href="@{/board/{postId} (postId = ${post.postId})}"
+                                   th:text="${post.title}"/>
                               </th:block>
                               <!--안보임-->
                               <th:block
@@ -381,6 +384,7 @@
                     </button>
                   </div>
                 </div>
+                <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
                   <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet,
                     facilisi sit mauris accumsan nibh habitant senectus
@@ -388,6 +392,7 @@
                 </div>
               </div>
             </div>
+            <!--탭 내용 종료-->
           </div>
         </div>
         <!--/* 책 소개 */-->
