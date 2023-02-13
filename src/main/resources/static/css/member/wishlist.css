@@ -1,0 +1,31 @@
+.wishlist-block{
+}
+
+.common-table{
+  background-color: white;
+  box-sizing: border-box;
+  float: left;
+}
+
+.ww-2{
+  width: 20%;
+  text-align: center;
+}
+
+.ww-3{
+  width: 30%;
+}
+
+.ww-6{
+  width: 60%;
+}
+
+.ww-8{
+  width: 80%;
+  padding-left: 1rem;
+}
+
+.wh-7{
+  height:70px;
+  line-height: 70px;
+}

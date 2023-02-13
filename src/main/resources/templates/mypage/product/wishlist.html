@@ -4,6 +4,7 @@
 
 <head>
   <title>북레이 - 위시리스트 조회</title>
+  <link href="/css/member/wishlist.css" rel="stylesheet">
   <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
 </head>
 
@@ -113,6 +114,64 @@
       <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
     </div>
   </div>
+
+
+  <hr>
+  <h1>신형버전</h1>
+  <th:block th:each="product : ${productList}">
+    <div class="wishlist-block">
+      <div class="ww-2 image common-table" style="height: 210px;">
+        <img class="product-img"
+             style="max-height: 210px; width: 95%;"
+             th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
+      </div>
+      <div class="ww-6 common-table wh-7">
+        <span th:text="${product.title}"/>
+      </div>
+      <div class="ww-2 common-table wh-7">넘버인풋</div>
+      <div class="ww-3 common-table wh-7">작가명 :
+      </div>
+      <div class="ww-3 common-table wh-7">출판사 :
+        <span th:text="${product.publisher}"/>
+      </div>
+      <div class="ww-2 common-table wh-7">
+        <button class="btn btn-outline-primary">즉시구매</button>
+      </div>
+      <div class="ww-3 common-table wh-7">판매가 :
+        <span th:text="${product.price}"/>
+      </div>
+      <div class="ww-3 common-table wh-7">할인가 :</div>
+      <div class="ww-2 common-table wh-7">
+        <button class="btn btn-outline-primary">카트에 담기</button>
+      </div>
+      <div class="ww-8 common-table" style="border: lightgrey solid 1px;">관심상품 등록일
+      </div>
+      <!--      위시리스트 취소-->
+      <div class="ww-2 common-table">
+        <form method="post" th:action="@{/member/product/wishlist/disconnect}">
+          <input name="memberNo" type="number" th:value="${memberId}" hidden>
+          <input name="productId" type="number" th:value="${product.productId}" hidden>
+          <label class="btn btn-primary">
+            <input type="submit" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path
+                  d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+              <path d="M14 19l2 2l4 -4"></path>
+              <path d="M9 8h4"></path>
+              <path d="M9 12h2"></path>
+            </svg>
+            찜 취소
+            </input>
+          </label>
+        </form>
+      </div>
+    </div>
+  </th:block>
+
 </th:block>
 
 
