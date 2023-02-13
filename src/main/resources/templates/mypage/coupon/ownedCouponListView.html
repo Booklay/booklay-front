@@ -9,30 +9,36 @@
 </head>
 
 <th:block layout:fragment="content">
-    <article class="card fl-left">
-        <section class="date">
-            <time datetime="23th feb">
-                <span>23</span><span>feb</span>
-            </time>
-        </section>
-        <section class="card-cont">
-            <small>dj khaled</small>
-            <h3>live in sydney</h3>
-            <div class="even-date">
-                <i class="fa fa-calendar"></i>
-                <time>
-                    <span>wednesday 28 december 2014</span>
-                    <span>08:55pm to 12:00 am</span>
-                </time>
-            </div>
-            <div class="even-info">
-                <i class="fa fa-map-marker"></i>
-                <p>
-                    nexen square for people australia, sydney
-                </p>
-            </div>
-            <a href="#">tickets</a>
-        </section>
-    </article>
-
+    <div th:if="${#lists.isEmpty(list)}">
+        <div>소유한 쿠폰이 없습니다.</div>
+        <a href="/coupon-zone">쿠폰 받으러 가기</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(list)}">
+        <th:block th:each="item : ${list}">
+            <article class="card fl-left">
+                <section class="date">
+                    <time datetime="23th feb">
+                        <span>23</span><span>feb</span>
+                    </time>
+                </section>
+                <section class="card-cont">
+                    <h3 th:text="${item.name}"></h3>
+                    <div class="even-date">
+                        <i class="fa fa-calendar"></i>
+                        <time>
+                            <span>wednesday 28 december 2014</span>
+                            <span>08:55pm to 12:00 am</span>
+                        </time>
+                    </div>
+                    <div class="even-info">
+                        <i class="fa fa-map-marker"></i>
+                        <p>
+                            nexen square for people australia, sydney
+                        </p>
+                    </div>
+                    <a href="#">tickets</a>
+                </section>
+            </article>
+        </th:block>
+    </div>
 </th:block>

@@ -1,40 +1,20 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
-import com.nhnacademy.booklay.booklayfront.controller.BaseController;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCouponResponse;
-import com.nhnacademy.booklay.booklayfront.service.RestService;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.Coupon;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponDetail;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.FrontURI;
+import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
-import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/mypage/coupon")
-public class CouponMemberFrontController extends BaseController {
-    private final String gatewayIp;
+public class CouponMemberFrontController {
     private final CouponRestApiModelSettingService modelSettingService;
 
     private static final String MEMBER_COUPON_RESOURCE = "mypage/coupon/";
@@ -47,7 +27,11 @@ public class CouponMemberFrontController extends BaseController {
     public String memberCouponPage(Model model, MemberInfo memberInfo,
                                    @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Long memberNo = memberInfo.getMemberNo();
-        //modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
+        if(Objects.isNull(memberNo)) {
+            throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
+        }
+
+        modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
 
         return MEMBER_COUPON_RESOURCE + "ownedCouponListView";
     }
