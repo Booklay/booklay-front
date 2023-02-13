@@ -69,7 +69,7 @@ public class MemberController extends BaseController {
 
     @GetMapping(value = {"", "/", "/profile"})
     private String profileMain(MemberInfo memberInfo, Model model) {
-        model.addAttribute("memberNo", memberInfo.getMemberNo());
+        model.addAttribute("memberInfo", memberInfo);
         return "mypage/profile/main";
     }
 
