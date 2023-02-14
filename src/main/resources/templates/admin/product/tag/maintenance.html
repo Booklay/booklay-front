@@ -35,7 +35,7 @@
               <td><span th:text="${tag.id}"/></td>
               <td>
                 <form method="post"
-                      th:action="@{/admin/tag/maintenance/update/{pageNum} (pageNum =${currentPage})}">
+                      th:action="@{/admin/product/tag/maintenance/update/{pageNum} (pageNum =${currentPage})}">
                   <input name="id" type="number" th:value="${tag.id}" hidden/>
                   <input name="name" class="name-input" type="text" th:value="${tag.name}" maxlength=20
                          disabled="disabled"/>
@@ -45,7 +45,7 @@
               </td>
               <td>
                 <form method="post"
-                      th:action="@{/admin/tag/maintenance/delete/{pageNum} (pageNum = ${currentPage})}">
+                      th:action="@{/admin/product/tag/maintenance/delete/{pageNum} (pageNum = ${currentPage})}">
                   <input name="id" type="number" th:value="${tag.id}" hidden/>
                   <input class="btn btn-outline-primary delete-btn" type="submit" value="삭제"/>
                 </form>
@@ -76,10 +76,10 @@
   <hr>
 
   <h3>테그 등록</h3>
-  <form method="post" th:action="@{/admin/tag/maintenance/{pageNum} (pageNum = ${pageNum})}">
+  <form method="post" th:action="@{/admin/product/tag/maintenance/{pageNum} (pageNum = ${pageNum})}">
     <p>테그명 : <input type="text" name="name">
       <input type="submit" value="등록"/></p>
   </form>
-</th:block>
+
 <!---->
 </html>

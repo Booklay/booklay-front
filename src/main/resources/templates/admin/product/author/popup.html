@@ -36,7 +36,7 @@
 
         <tbody>
         <th:block th:each="author : ${authorList}">
-          <form method="post" action="/admin/author/popup/update">
+          <form method="post" th:action="@{/admin/product/author/popup/update}">
             <tr>
               <td>
                 <input name="id" class="authorNo-info" type="number" th:value="${author.authorNo}"
