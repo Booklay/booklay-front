@@ -12,6 +12,7 @@ import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRes
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,7 +46,9 @@ public class OrderController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private static final String STRING_CART_ID = "CART_ID";
+    @Qualifier("gatewayIp")
     private final String gatewayIp ;
+    @Qualifier("domainIp")
     private final String domainIp ;
     @ModelAttribute(STRING_CART_ID)
     public String getCookieValue(@CookieValue(name = STRING_CART_ID, required = false)
