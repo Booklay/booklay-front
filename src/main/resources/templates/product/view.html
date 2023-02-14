@@ -314,7 +314,7 @@
                               </th:block>
                               <!--안보임-->
                               <th:block
-                                  th:if="${!post.viewPublic and post.memberNo != thisMember.memberNo}">
+                                  th:if="${!post.viewPublic and post.memberNo != thisMember.memberNo or !#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                                 <span>비밀글입니다. <svg xmlns="http://www.w3.org/2000/svg"
                                                    class="icon icon-tabler icon-tabler-lock"
                                                    width="24"
