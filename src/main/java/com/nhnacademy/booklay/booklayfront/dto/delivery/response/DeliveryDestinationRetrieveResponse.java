@@ -15,7 +15,9 @@ public class DeliveryDestinationRetrieveResponse {
     private String name;
     private String zipCode;
     private String address;
-    private Boolean isDefaultDestination;
+    private String addressDetail;
+    private String addressSubDetail;
     private String receiver;
     private String receiverPhoneNo;
+    private Boolean isDefaultDestination;
 }
