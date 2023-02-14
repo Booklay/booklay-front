@@ -3,7 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.coupon;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponMemberResponse;
 import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
@@ -43,10 +43,9 @@ public class CouponZoneRestController {
         Long memberNo = memberInfo.getMemberNo();
         if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
 
-
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
 
-        CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);
+        CouponZoneMemberIssueRequest request = new CouponZoneMemberIssueRequest(couponId, memberNo);
         Map<String, Object> map = objectMapper.convertValue(request, Map.class);
 
         ApiEntity<CouponIssueResponse>
