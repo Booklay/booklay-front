@@ -2,7 +2,15 @@ async function issueCoupon(couponId) {
     const couponRequestUrl = `http://localhost:6060/coupon-zone/${couponId}`;
     const loadingDiv = document.querySelector('#loading');
 
-    const response = await fetch(couponRequestUrl);
+    const response = await fetch(couponRequestUrl, {
+        method: 'POST',
+        mode: 'same-origin',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
 
     if (response.ok) { // 응답 코드 200~299 일 때
         const parsedResponse = await response.json();
