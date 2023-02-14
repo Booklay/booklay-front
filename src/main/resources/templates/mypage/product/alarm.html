@@ -20,7 +20,9 @@
         <tbody>
         <th:block th:each="product : ${productList}">
           <tr>
-            <td><span th:text="${product.title}"/></td>
+            <td>
+              <a th:href="@{/product/view/{productId} (productId = ${product.productId})}" th:text="${product.title}"/>
+            </td>
             <td>
               <th:block th:each="author : ${product.authors}">
                 <span th:text="${author.name}"/>
