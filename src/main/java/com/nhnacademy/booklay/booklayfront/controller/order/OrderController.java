@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponUseRequest;
 import com.nhnacademy.booklay.booklayfront.dto.order.*;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -17,6 +19,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +34,7 @@ import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.O
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 
+@Slf4j
 @SuppressWarnings("unchecked")
 @Controller
 @RequiredArgsConstructor
@@ -79,7 +87,7 @@ public class OrderController {
 
     @RequestMapping("/success")
     public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto){
-        //상품 재고 빼기
+        //상품 주문서 받아오기
         String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
         ApiEntity<OrderSheet> orderSheetApiEntity = restService.get(orderSheetUrl, null, OrderSheet.class);
         if (!orderSheetApiEntity.isSuccess() || orderSheetApiEntity.getBody() == null){
@@ -92,8 +100,21 @@ public class OrderController {
         storageObjectMap.put("cartDtoList", orderSheet.getCartDtoList());
         ApiEntity<Boolean> storageDownApiEntity = restService.post(storageDownUrl, storageObjectMap, Boolean.class);
         //재고 숫자 감소  todo 미구현
-        if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
+
+         if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
             //결제 승인
+
+            try {
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
+                        .header("Authorization", "Basic dGVzdF9za19MZXg2QkpHUU9WRGpqcUVHUmVuOFc0dzJ6TmJnOg==")
+                        .header("Content-Type", "application/json")
+                        .method("POST", HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(tossPaymentConfirmDto)))
+                        .build();
+                HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                log.info(response.body());
+            }catch (IOException | InterruptedException ignored){}
+
             MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
             header.add("Authorization", "Basic dGVzdF9za19MZXg2QkpHUU9WRGpqcUVHUmVuOFc0dzJ6TmJnOg==");
 //            String secretKey = new String(Base64.getEncoder().encode("test_sk_Lex6BJGQOVDjjqEGRen8W4w2zNbg:".getBytes(StandardCharsets.UTF_8)));
@@ -102,8 +123,7 @@ public class OrderController {
             ApiEntity<TossPaymentResponse> apiEntity = null;
             try{
                 apiEntity = restService.post("https://api.tosspayments.com/v1/payments/confirm",header, map, TossPaymentResponse.class);
-            }catch (Exception ignored){
-            }
+            }catch (Exception ignored){}
 
 //            //승인 실패
 //            if (apiEntity==null || !apiEntity.isSuccess()){
