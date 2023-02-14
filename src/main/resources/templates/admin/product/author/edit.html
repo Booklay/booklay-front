@@ -6,7 +6,7 @@
 </head>
 <!---->
 <th:block layout:fragment="content">
-  <form method="post" th:action="@{/admin/product/author}">
+  <form method="post" action="/admin/product/author">
     <div class="mb-3">
       <input type="number" name="id" th:value="${author.authorNo}" hidden="hidden"/>
     </div>

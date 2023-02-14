@@ -187,8 +187,8 @@ public class AdminAuthorController {
   public void updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
-    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-        CreateDeleteProductRecommendRequest.class);
+    restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
+        Void.class);
   }
 
   /**
