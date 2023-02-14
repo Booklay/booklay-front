@@ -27,9 +27,6 @@ public class CouponMemberFrontController {
     public String memberCouponPage(Model model, MemberInfo memberInfo,
                                    @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Long memberNo = memberInfo.getMemberNo();
-        if(Objects.isNull(memberNo)) {
-            throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
-        }
 
         modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
 
