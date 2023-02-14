@@ -216,20 +216,12 @@
           <div class="col-12 my-4">
             <h1>관련 분류</h1>
 
+            <th:block th:each="category : ${product.categories}">
             <ul class="list-inline list-inline-dots mb-0">
               <li class="list-inline-item"><span>국내도서</span></li>
-              <li class="list-inline-item"><span class="text-blue">소설</span></li>
+              <li class="list-inline-item"><a th:href="@{/search/products(classification = 'categories',id=${category.id})}" class="text-blue" th:text="${category.name}"/></li>
             </ul>
-
-            <ul class="list-inline list-inline-dots mb-0">
-              <li class="list-inline-item"><span>국내도서</span></li>
-              <li class="list-inline-item"><span class="text-blue">소설</span></li>
-            </ul>
-
-            <ul class="list-inline list-inline-dots mb-0">
-              <li class="list-inline-item"><span>국내도서</span></li>
-              <li class="list-inline-item"><span class="text-blue">소설</span></li>
-            </ul>
+            </th:block>
           </div>
 
           <!--          연관상품 시작-->
