@@ -136,7 +136,7 @@
                   </label>
                 </form>
                 <!--              알람 등록-->
-                <form th:if="${!memberProduct.alarm}" method="post"
+                <form th:if="${!memberProduct.alarm and !product.info.selling}" method="post"
                       th:action="@{/product/alarm/connect}">
                   <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
@@ -156,7 +156,7 @@
                     재입고 알림
                     </input>
                   </label>
-                </form>
+                </form>림
                 <!--              알람 삭제-->
                 <form th:if="${memberProduct.alarm}" method="post"
                       th:action="@{/product/alarm/disconnect}">
@@ -183,7 +183,7 @@
             <!--            wishlist alarm end-->
 
             <p th:if="${!product.info.selling}" class="btn btn-danger w-5 h-4"
-               style="margin-top: 10px;">품절</p>
+               style="margin-top: 10px;">품절</p>절
 
             <!--            구매 부분 시작-->
             <div th:if="${product.info.selling}" style="display:flex; margin-top:10px;">
