@@ -37,21 +37,13 @@
   <!--  <h2><span th:text="${product.title}"/> 문의</h2>-->
   <form method="post" th:action="@{/board}">
     <!--    숨겨진 정보 목록-->
-    게시글 형식 번호
     <input name="postTypeNo" type="number" hidden="hidden" th:value="${postTypeNo}">
-    회원번호
     <input name="memberNo" type="number" hidden="hidden" th:value="${memberNo}">
-    상품번호
     <input name="productNo" type="number" hidden="hidden" th:value="${productId}">
-    그룹번호
     <input name="groupNo" type="number" hidden="hidden" th:value="${groupNo}">
-    그룹 내 정렬 번호
     <input name="groupOrder" type="number" hidden="hidden" th:value="${groupOrder}">
-    깊이
     <input name="depth" type="number" hidden="hidden" th:value="${depth}">
-    답변 여부
     <input name="answered" type="number" hidden="hidden" th:value="${answer}">
-    수정일시
     <input th:if="${updatedAt != null}" name="updatedAt" type="number" hidden="hidden"
            th:value="${updatedAt}">
     <!--숨겨진 정보 종료-->

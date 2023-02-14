@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Slf4j
 @Controller
-@RequestMapping("/member/product")
+@RequestMapping("/mypage/product")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -35,10 +35,10 @@ public class ProductController {
   private final String gatewayIp;
   private final ObjectMapper objectMapper;
   private final String SHOP_PRE_FIX = "/shop/v1";
-  private static final String PAGE_PRE_FIX = "member/product";
+  private static final String PAGE_PRE_FIX = "mypage/product";
 
-  private static final String REDIRECT_WISH = "redirect:/member/product/wishlist";
-  private static final String REDIRECT_ALARM = "redirect:/member/product/alarm";
+  private static final String REDIRECT_WISH = "redirect:/mypage/product/wishlist";
+  private static final String REDIRECT_ALARM = "redirect:/mypage/product/alarm";
   private static final Integer SIZE = 20;
 
   /**
