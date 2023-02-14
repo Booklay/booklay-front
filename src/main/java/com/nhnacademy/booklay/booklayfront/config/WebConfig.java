@@ -34,7 +34,6 @@ public class WebConfig {
     @Primary
     public String gatewayIp(@Value("${booklay.gateway-origin}") String ip) {
         return ip;
-
     }
     @Bean
     public String domainIp(@Value("${booklay.domain-origin}") String ip) {
