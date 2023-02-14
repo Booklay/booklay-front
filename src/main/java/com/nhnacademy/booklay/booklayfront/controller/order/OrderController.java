@@ -1,38 +1,31 @@
 package com.nhnacademy.booklay.booklayfront.controller.order;
 
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ORDER_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.order.CartToOrderPageRequest;
-import com.nhnacademy.booklay.booklayfront.dto.order.OrderReceipt;
-import com.nhnacademy.booklay.booklayfront.dto.order.OrderSheet;
-import com.nhnacademy.booklay.booklayfront.dto.order.TossPaymentConfirmDto;
-import com.nhnacademy.booklay.booklayfront.dto.order.TossPaymentResponse;
+import com.nhnacademy.booklay.booklayfront.dto.order.*;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ORDER_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 
 @SuppressWarnings("unchecked")
 @Controller
@@ -79,16 +72,17 @@ public class OrderController {
         memberRestApiModelSettingService.setMemberDeliveryDestinationToModelByMemberNo(
                 memberInfo.getMemberNo()==null?0L:memberInfo.getMemberNo(), model);
 
+        model.addAttribute("domainIp", "http://localhost:6060");
         model.addAttribute("memberInfo", memberInfo);
         return "order/orderPage";
     }
 
-    @GetMapping("success")
+    @RequestMapping("/success")
     public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto){
         //상품 재고 빼기
         String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
         ApiEntity<OrderSheet> orderSheetApiEntity = restService.get(orderSheetUrl, null, OrderSheet.class);
-        if (!orderSheetApiEntity.isSuccess()){
+        if (!orderSheetApiEntity.isSuccess() || orderSheetApiEntity.getBody() == null){
             return "만료된 요청"; //todo
         }
 
@@ -101,17 +95,21 @@ public class OrderController {
         if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
             //결제 승인
             MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-            header.add("Authorization", "Basic");
-            header.add("Authorization", "dGVzdF9za196WExrS0V5cE5BcldtbzUwblgzbG1lYXhZRzVSOg==");
-            header.add("Content-Type", "application/json");
+            header.add("Authorization", "Basic dGVzdF9za19MZXg2QkpHUU9WRGpqcUVHUmVuOFc0dzJ6TmJnOg==");
+//            String secretKey = new String(Base64.getEncoder().encode("test_sk_Lex6BJGQOVDjjqEGRen8W4w2zNbg:".getBytes(StandardCharsets.UTF_8)));
+//            header.add("Authorization", secretKey);
             Map<String, Object> map = objectMapper.convertValue(tossPaymentConfirmDto, Map.class);
-            ApiEntity<TossPaymentResponse> apiEntity = restService.post("https://api.tosspayments.com/v1/payments/confirm",header, map, TossPaymentResponse.class);
-
-            //승인 실패
-            if (!apiEntity.isSuccess()){
-                // 롤백 todo
-                return "결제 실패";
+            ApiEntity<TossPaymentResponse> apiEntity = null;
+            try{
+                apiEntity = restService.post("https://api.tosspayments.com/v1/payments/confirm",header, map, TossPaymentResponse.class);
+            }catch (Exception ignored){
             }
+
+//            //승인 실패
+//            if (apiEntity==null || !apiEntity.isSuccess()){
+//                // 롤백 todo
+//                return "결제 실패";
+//            }
 
             //주문 영수증 저장
             String receiptSaveUrl = buildString( gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/", tossPaymentConfirmDto.getOrderId());
@@ -135,7 +133,9 @@ public class OrderController {
     @GetMapping("receipt/{orderNo}")
     public String orderReceiptPage(@PathVariable String orderNo, MemberInfo memberInfo, Model model){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/", orderNo);
-        ApiEntity<OrderReceipt> apiEntity = restService.get(url, objectMapper.convertValue(memberInfo, MultiValueMap.class), OrderReceipt.class);
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.setAll(getMemberInfoMap(memberInfo));
+        ApiEntity<OrderReceipt> apiEntity = restService.get(url, multiValueMap, OrderReceipt.class);
         model.addAttribute("orderReceipt", apiEntity.getBody());
         return "order/receipt";
     }

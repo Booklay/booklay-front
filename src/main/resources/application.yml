@@ -15,4 +15,10 @@ spring:
 
   thymeleaf:
     cache: false
+logging:
+  level:
+    root: debug
 
+server:
+  tomcat:
+    use-relative-redirects: true

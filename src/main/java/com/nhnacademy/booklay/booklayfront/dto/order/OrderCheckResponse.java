@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class OrderCheckResponse {
-    Boolean valid;
-    Integer paymentAmount;
+    private String orderId;
+    private Boolean valid;
+    private Integer paymentAmount;
 }

@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class OrderCheckRequest {
     List<String> couponCodeList;
     List<CartDto> cartDtoList;

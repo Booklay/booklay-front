@@ -1,16 +1,17 @@
 const couponSettingData = []
 const paymentData = {
     amount: 0,
-    orderId: 't2Yqd0Mp-sADazDVCRoeh',
+    orderId: null,
     orderName: '',
     customerName: '',
-    successUrl: 'http://localhost:8080/order/success',
-    failUrl: 'http://localhost:8080/order/fail',
+    successUrl: null,
+    failUrl: null,
 }
 window.onload = function() {
     //초기화 셋팅
     paymentData.orderName = cartData.length > 0? cartData[0].productName + (cartData.length>1?" 외 " + (cartData.length-1) + "건":""):"";
-
+    paymentData.successUrl = shopDomain + '/order/success';
+    paymentData.failUrl = shopDomain + '/order/fail';
     cartData.forEach(function (value, index){
         couponSettingData.push({
             productNo:value.productNo,
@@ -38,15 +39,13 @@ window.onload = function() {
         destinationRadio.addEventListener("click", destinationClickEvent);
     }
     rewritePage();
-    const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq'
+    const clientKey = 'test_ck_ODnyRpQWGrNOORG1g0B8Kwv1M9EN'
     const tossPayments = TossPayments(clientKey)
 
     const paymentButton = document.getElementById('toPayment') // 결제하기 버튼
 
     paymentButton.addEventListener('click', function () {
-        if (orderValidCheck()){
-            tossPayments.requestPayment('카드', paymentData);
-        }
+        orderValidCheckAndToss()
     })
 };
 const couponDataPrefix = {
@@ -97,26 +96,9 @@ function setCouponData(couponCode, productNo, duplicable){
     Integer giftWrappingPrice;
     Integer paymentAmount;
      */
-    let couponCodeList = [];
-    couponSettingData.forEach(function (value){
-        if (value.coupon != null){
-            couponCodeList.push(value.coupon.couponCode);
-        }
-        if (value.doupon != null){
-            couponCodeList.push(value.doupon.couponCode);
-        }
-    });
-
-    let body = {
-        "couponCodeList": couponCodeList,
-        "cartDtoList":,
-        "usingPoint":,
-        "giftWrappingPrice":,
-        "paymentAmount":
-    };
     httpRequest.open('GET', '/rest/coupons/code/?couponCode='+couponCode);
     httpRequest.responseType = "json";
-    httpRequest.send(JSON.stringify(body));
+    httpRequest.send();
 }
 
 function updatePoint(){
@@ -450,24 +432,69 @@ function destinationClickEvent(e) {
 }
 
 
-function orderValidCheck(){
+function orderValidCheckAndToss(){
     let httpResult = null;
     let httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
                 httpResult = httpRequest.response;
+                if (httpResult.valid === true){
+                    paymentData.orderId = httpResult.orderId;
+                    paymentData.amount = httpResult.paymentAmount;
+                    let clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
+                    let tossPayments = TossPayments(clientKey);
+                    tossPayments.requestPayment('카드', paymentData);
+                }
+
             } else {
                 alert('Request Error!');
             }
         }
     };
-    httpRequest.open('POST', '/rest/order/check/');
-    httpRequest.responseType = "json";
-    httpRequest.send();
-    while (true){
-        if (httpResult != null){
-            return httpResult
+
+    let couponCodeList = [];
+    couponSettingData.forEach(function (value){
+        if (value.coupon != null){
+            couponCodeList.push(value.coupon.couponCode);
         }
-    }
+        if (value.doupon != null){
+            couponCodeList.push(value.doupon.couponCode);
+        }
+    });
+    let cartDtoList = [];
+    cartData.forEach(function (value) {
+        cartDtoList.push({
+            "productNo": value.productNo,
+            "count": value.productCount
+        });
+    });
+    let orderData = couponSettingData[couponSettingData.length-1];
+    let totalPay = parseInt(orderData.orderTotalProductAmount) + parseInt(orderData.orderTotalProductAmount>30000?0:3000)
+        - parseInt(orderData.orderTotalDiscount) - parseInt(document.getElementById("usePoint").value);
+
+    let body = {
+        "couponCodeList": couponCodeList.length>0?couponCodeList:null,
+        "cartDtoList": cartDtoList,
+        "usingPoint": document.getElementById("usePoint").value,
+        "giftWrappingPrice": 0,
+        "paymentAmount": totalPay<0?0:totalPay,
+        "productPriceSum" : orderData.orderTotalProductAmount,
+        "deliveryPrice" : parseInt(orderData.orderTotalProductAmount>30000?0:3000),
+        "discountPrice" : orderData.orderTotalDiscount,
+        "paymentMethod" : 1,
+        "sender" : document.getElementById("destination_sender").value,
+        "senderPhoneNo" : document.getElementById("destination_senderPhoneNo1").value,
+        "name" : document.getElementById("destination_receiver").value,
+        "zipCode" : document.getElementById("destination_zipCode").value,
+        "address" : document.getElementById("destination_address").value + document.getElementById("detailAddress").value,
+        "isDefaultDestination" : false,
+        "receiver" : document.getElementById("destination_receiver").value,
+        "receiverPhoneNo" : document.getElementById("destination_receiverPhoneNo1").value,
+        "memo" : document.getElementById("deliveryMemo").value,
+    };
+    httpRequest.open('POST', '/rest/order/check');
+    httpRequest.responseType = "json";
+    httpRequest.setRequestHeader("Content-Type", "application/json");
+    httpRequest.send(JSON.stringify(body));
 }

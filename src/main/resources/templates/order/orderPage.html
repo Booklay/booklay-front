@@ -55,6 +55,62 @@
                                     <br/>
                                     <div class="_allAddressArea" style="display: block;">
                                         <div class="deliver_option_wrap new_delivery">
+                                            <label class="form-label">보낸이</label>
+                                            <div class="deliver_option">
+                                                <input id="destination_sender" type="text" title="보낸이" placeholder="50자 이내로 입력하세요" maxlength="50" name="deliveryAddress.senderName">
+                                            </div>
+                                        </div>
+                                        <label class="form-label">연락처</label>
+                                        <div class="deliver_option">
+                                            <div class="cellphone_group">
+                                                <!-- select box -->
+                                                <select id="destination_senderPhoneNo1" name="deliveryAddress.telNo" class="d-inline-block">
+                                                    <option value="010" selected="">010</option>
+                                                    <option value="011">011</option>
+                                                    <option value="016">016</option>
+                                                    <option value="017">017</option>
+                                                    <option value="018">018</option>
+                                                    <option value="019">019</option>
+                                                    <option value="02">02</option>
+                                                    <option value="031">031</option>
+                                                    <option value="032">032</option>
+                                                    <option value="033">033</option>
+                                                    <option value="041">041</option>
+                                                    <option value="042">042</option>
+                                                    <option value="043">043</option>
+                                                    <option value="044">044</option>
+                                                    <option value="051">051</option>
+                                                    <option value="052">052</option>
+                                                    <option value="053">053</option>
+                                                    <option value="054">054</option>
+                                                    <option value="055">055</option>
+                                                    <option value="061">061</option>
+                                                    <option value="062">062</option>
+                                                    <option value="063">063</option>
+                                                    <option value="064">064</option>
+                                                    <option value="070">070</option>
+                                                    <option value="080">080</option>
+                                                    <option value="0130">0130</option>
+                                                    <option value="0303">0303</option>
+                                                    <option value="0502">0502</option>
+                                                    <option value="0503">0503</option>
+                                                    <option value="0504">0504</option>
+                                                    <option value="0505">0505</option>
+                                                    <option value="0506">0506</option>
+                                                    <option value="0507">0507</option>
+                                                    <option value="0508">0508</option>
+                                                    <option value="050">050</option>
+                                                    <option value="012">012</option>
+                                                    <option value="059">059</option>
+                                                </select>
+                                                -
+                                                <input type="text" title="핸드폰번호 중간" id="destination_senderPhoneNo2" name="deliveryAddress.telNo1___2" maxlength="4">
+                                                -
+                                                <input type="text" title="핸드폰번호 뒷자리" id="destination_senderPhoneNo3" name="deliveryAddress.telNo1___3" maxlength="4">
+                                            </div>
+
+                                        </div>
+                                        <div class="deliver_option_wrap new_delivery">
                                             <label class="form-label">수령인</label>
                                             <div class="deliver_option">
                                                 <input id="destination_receiver" type="text" title="수령인" placeholder="50자 이내로 입력하세요" maxlength="50" name="deliveryAddress.receiverName">
@@ -140,7 +196,7 @@
                                         <label class="form-label">배송메모</label>
                                         <div class=" ">
                                             <p class="" style="display:none;"></p>
-                                            <input type="text" placeholder="요청사항을 직접 입력합니다" title="배송 메세지" name="deliveryMemo" class="form-control">
+                                            <input id="deliveryMemo" type="text" placeholder="요청사항을 직접 입력합니다" title="배송 메세지" name="deliveryMemo" class="form-control">
                                         </div>
                                     </div>
                                     <p class="extra_info">
@@ -289,6 +345,7 @@
     });
     const userPointAmount = [[${point}]];
     const destinationList = [[${destinationList}]];
+    const shopDomain = [[${domainIp}]];
 </script>
 <script src="/js/order/orderPage.js"></script>
 </body>
