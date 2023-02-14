@@ -2,6 +2,8 @@ package com.nhnacademy.booklay.booklayfront.dto.order;
 
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import java.util.List;
+
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponUseRequest;
 import lombok.Getter;
 
 @Getter
@@ -11,6 +13,7 @@ public class OrderSheet {
     private List<CartDto> cartDtoList;
     private List<OrderProductDto> orderProductDtoList;
     private List<SubscribeDto> subscribeProductList;
+    private CouponUseRequest couponUseRequest;
     private Long productPriceSum;
     private Long usingPoint;
     private Long deliveryPrice;
