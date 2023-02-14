@@ -18,7 +18,13 @@
             <article class="card fl-left">
                 <section class="date">
                     <time datetime="23th feb">
-                        <span>5%</span>
+                        <span th:text="${item.amount}"></span>
+                        <span th:if="${#strings.contains(item.couponType, '정율')}">
+                            <span>%</span>
+                        </span>
+                        <span th:unless="${#strings.contains(item.couponType, '정율')}">
+                            <span>원</span>
+                        </span>
                     </time>
                 </section>
                 <section class="card-cont">
@@ -46,7 +52,12 @@
                             nexen square for people australia, sydney
                         </p>
                     </div>
-                    <a href="#">tickets</a>
+                    <span th:else="${item.isUsed}">
+                        <a class="able">사용가능</a>
+                    </span>
+                    <span th:if="${item.isUsed}">
+                        <a class="disable">사용됨</a>
+                    </span>
                 </section>
             </article>
         </th:block>

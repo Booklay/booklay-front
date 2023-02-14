@@ -141,11 +141,41 @@
     bottom: 10px
 }
 
+.card-cont a.able {
+    display: block;
+    text-decoration: none;
+    width: 80px;
+    height: 30px;
+    background-color: #0a66c2;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px
+}
+
+.card-cont a .disable {
+    display: block;
+    text-decoration: none;
+    width: 80px;
+    height: 30px;
+    background-color: #aa0000;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px
+}
+
 .row:last-child .card:first-child .card-cont a {
     background-color: #037FDD
 }
 
-.row:last-child .card:last-child .card-cont a {
+.row:last-child .card:last-child .card-cont a .disable{
     background-color: #F8504C
 }
 

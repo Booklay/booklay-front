@@ -8,7 +8,10 @@ import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandle
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.event.MemberEventPublisher;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +35,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  *
  * @author 조현진, 양승아
  */
+
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -40,8 +45,17 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final AuthenticationServerProxy proxy;
 
+    @Value("${booklay.oauth2.github-client-id}")
+    private String clientId;
+
+    @Value("${booklay.oauth2.github-client-secret}")
+    private String clientSecret;
+
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
+        log.error("clientId : {} ", clientId );
 
         http.formLogin()
             .loginPage("/member/login")
@@ -99,8 +113,8 @@ public class SecurityConfig {
     private ClientRegistration clientRegistration() {
         return CommonOAuth2Provider.GITHUB
                    .getBuilder("github")
-                   .clientId("11750a6c662e8dd0135c")
-                   .clientSecret("4066e502af0568041afa744a0205d803be24842f")
+                   .clientId(clientId)
+                   .clientSecret(clientSecret)
                    .build();
     }
 

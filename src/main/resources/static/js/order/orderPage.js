@@ -39,8 +39,6 @@ window.onload = function() {
         destinationRadio.addEventListener("click", destinationClickEvent);
     }
     rewritePage();
-    const clientKey = 'test_ck_ODnyRpQWGrNOORG1g0B8Kwv1M9EN'
-    const tossPayments = TossPayments(clientKey)
 
     const paymentButton = document.getElementById('toPayment') // 결제하기 버튼
 
@@ -435,6 +433,8 @@ function destinationClickEvent(e) {
 function orderValidCheckAndToss(){
     let httpResult = null;
     let httpRequest = new XMLHttpRequest();
+    // const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
+    const clientKey = 'test_ck_ODnyRpQWGrNOORG1g0B8Kwv1M9EN';
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
             if (httpRequest.status === 200) {
@@ -442,7 +442,6 @@ function orderValidCheckAndToss(){
                 if (httpResult.valid === true){
                     paymentData.orderId = httpResult.orderId;
                     paymentData.amount = httpResult.paymentAmount;
-                    let clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
                     let tossPayments = TossPayments(clientKey);
                     tossPayments.requestPayment('카드', paymentData);
                 }

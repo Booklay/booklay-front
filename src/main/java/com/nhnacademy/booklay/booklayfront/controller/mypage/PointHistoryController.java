@@ -157,7 +157,7 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/point/" + memberInfo.getMemberNo();
+        return "redirect:/member/profile/point/" + memberInfo.getMemberNo();
     }
 
     @GetMapping("/coupon/{memberNo}/{couponId}")
@@ -174,6 +174,6 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/point/" + memberNo;
+        return "redirect:/member/profile/point/" + memberNo;
     }
 }
