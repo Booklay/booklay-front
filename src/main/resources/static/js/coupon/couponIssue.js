@@ -1,5 +1,5 @@
 async function issueCoupon(couponId) {
-    const couponRequestUrl = `http://localhost:6060/coupon-zone/${couponId}`;
+    const couponRequestUrl = `/coupon-zone/${couponId}`;
     const loadingDiv = document.querySelector('#loading');
 
     const response = await fetch(couponRequestUrl);
