@@ -5,13 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 주소 목록</title>
-    <script src="/js/member/addressCreatePopup.js"></script>
+    <script src="/js/member/addressCUPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
     <div>
         <h1 style="display: inline">[배송지 목록]</h1>
-        <button class="btn btn-outline-primary" onclick="showAddressPopup()">
+        <button class="btn btn-outline-primary" onclick="showAddressCreatePopup()">
             추가하기
         </button>
         <br>
@@ -48,9 +48,10 @@
                             <span th:unless="${address.getIsDefaultDestination()}">X</span>
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary">
-                                <a th:href="@{/member/profile/address/update/{addressNo}(addressNo=${address.getId()})}">수정하기</a>
+                            <button class="btn btn-outline-primary" th:id="${address.getId()}"
+                                    onclick="showAddressUpdatePopup(this.getAttribute('id'))">수정하기
                             </button>
+
                         </td>
                         <td>
                             <button class="btn btn-outline-primary">
