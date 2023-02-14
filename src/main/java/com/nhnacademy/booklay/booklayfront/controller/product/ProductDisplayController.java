@@ -12,10 +12,15 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
-import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.CreateDeleteWishlistAndAlarmRequest;
+import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.WishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,12 +32,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -48,7 +47,7 @@ public class ProductDisplayController extends BaseController {
   private static final String SHOP_PRE_FIX = "/shop/v1/product";
   private final String gatewayIp;
   private final RestService restService;
-  private final ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper objectMapper;
   private final CategoryService categoryService;
   private final Integer SIZE = 20;
   private static final String REDIRECT_HTML_PREFIX = "redirect:/product/view/";
@@ -129,11 +128,17 @@ public class ProductDisplayController extends BaseController {
     model.addAttribute("thisMember", memberInfo);
     if (memberInfo.getMemberNo() != null) {
       URI uriForMember = URI.create(
-          gatewayIp + "/shop/v1/mypage/product/boolean/" + memberInfo.getMemberNo());
+          gatewayIp + "/shop/v1/mypage/product/boolean");
 
-      ApiEntity<WishlistAndAlarmBooleanResponse> wishlistAndAlarmResponse = restService.get(
-          uriForMember.toString(), null, WishlistAndAlarmBooleanResponse.class);
+      WishlistAndAlarmRequest booleanRequest = new WishlistAndAlarmRequest(memberInfo.getMemberNo(),
+          productNo);
 
+      ApiEntity<WishlistAndAlarmBooleanResponse> wishlistAndAlarmResponse = restService.post(
+          uriForMember.toString(), objectMapper.convertValue(booleanRequest, Map.class),
+          WishlistAndAlarmBooleanResponse.class);
+
+      log.info("알람 출력 " + wishlistAndAlarmResponse.getBody().getAlarm() + "위시리스트 출력"
+          + wishlistAndAlarmResponse.getBody().getWishlist());
       model.addAttribute("memberProduct", wishlistAndAlarmResponse.getBody());
     }
 
@@ -149,35 +154,13 @@ public class ProductDisplayController extends BaseController {
     return "product/view";
   }
 
-  //  @GetMapping("/display")
-//  public String categoryViewer(
-//      @RequestParam(name = "CID", defaultValue = "1") List<Long> categoryId,
-//      @RequestParam(name = "page", defaultValue = "0") Long pageNum,
-//      Model model) {
-
-//        TODO SHOP 컨트롤러 매핑 후 주석 해제
-
-        /*
-                  ApiEntity<PageResponse<RetrieveProductResponse>> response =
-                      restService.get(gatewayIp + SHOP_PRE_FIX + "/categories?CID=" + categoryId.toString() + "&page=" + pageNum, null, new ParameterizedTypeReference<>() {});
-          <p>
-                  PageResponse<RetrieveProductResponse> responseBody = response.getBody();
-          <p>
-                  model.addAttribute("currentPage", responseBody.getPageNumber());
-                  model.addAttribute("totalPage", responseBody.getTotalPages());
-                  model.addAttribute("productList", responseBody.getData());
-         */
-
-//    return "redirect:/product/board";
-//  }
-
   //찜(위시리스트) 등록
   @PostMapping("/wishlist/connect")
   public String wishlistConnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
+      @Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
-    restService.post(uri.toString(), mapper.convertValue(request, Map.class), Void.class);
+    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class), Void.class);
 
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
@@ -185,21 +168,21 @@ public class ProductDisplayController extends BaseController {
   //찜 위시리스트 삭제
   @PostMapping("/wishlist/disconnect")
   public String wishlistDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
+      @Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/wishlist/");
 
-    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
+    restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
 
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
   //재입고 알람 등록
   @PostMapping("/alarm/connect")
-  public String alarmConnect(@Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
+  public String alarmConnect(@Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    restService.post(uri.toString(), mapper.convertValue(request, Map.class),
-        CreateDeleteWishlistAndAlarmRequest.class);
+    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
+        WishlistAndAlarmRequest.class);
 
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
@@ -207,10 +190,10 @@ public class ProductDisplayController extends BaseController {
   //재입고 알람 등록 해제
   @PostMapping("/alarm/disconnect")
   public String alarmDisconnect(
-      @Valid @ModelAttribute CreateDeleteWishlistAndAlarmRequest request) {
+      @Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
 
-    restService.delete(uri.toString(), mapper.convertValue(request, Map.class));
+    restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
 
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
