@@ -1,5 +1,5 @@
 function showMemberUpdatePopup() {
-    let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
+    let option = "width = 700, height = 750, top = 100, left = 200, scrollbars = yes, location = no"
     let ret = window.open("/member/update", "memberUpdatePopup", option);
 }
 
