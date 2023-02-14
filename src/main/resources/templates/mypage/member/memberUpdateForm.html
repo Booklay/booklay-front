@@ -7,25 +7,78 @@
     <title>회원 수정하기</title>
 </head>
 
-<th:block layout:fragment="content">
-    <div>
-        <h3>[회원 수정하기]</h3>
-        <form href="/member/update" method="post" name="MemberUpdateRequest">
-            <b>닉네임</b> : <input type="text" name="nickname" th:value="${member.getNickname()}"><br>
-            <b>이름</b> : <input type="text" name="name" th:value="${member.getName()}"><br>
-            <b>성별</b> :
-            여 <input type="radio" value="F" name="gender"
-                     th:checked="${member.getGender().equals('F')}">
-            남 <input type="radio" value="M" name="gender"
-                     th:checked="${member.getGender().equals('M')}"><br>
+<!--<th:block layout:fragment="content">-->
+<!--    <div>-->
+<!--        <h3>[회원 수정하기]</h3>-->
+<!--        <form href="/member/update" method="post" name="MemberUpdateRequest">-->
+<!--            <b>닉네임</b> : <input type="text" name="nickname" th:value="${member.getNickname()}"><br>-->
+<!--            <b>이름</b> : <input type="text" name="name" th:value="${member.getName()}"><br>-->
+<!--            <b>성별</b> :-->
+<!--            여 <input type="radio" value="F" name="gender"-->
+<!--                     th:checked="${member.getGender().equals('F')}">-->
+<!--            남 <input type="radio" value="M" name="gender"-->
+<!--                     th:checked="${member.getGender().equals('M')}"><br>-->
 
-            <b>비밀번호</b> : <input type="password" name="password"><br>
-            <b>전화번호</b> : <input type="text" name="phoneNo" th:value="${member.getPhoneNo()}"><br>
-            <b>이메일 주소</b> : <input type="text" name="email" th:value="${member.getEmail()}"><br>
-            <b>생년월일</b> : <input type="date" name="birthday" th:value="${member.getBirthday()}"><br>
-            <input type="submit" value="수정하기"/>
-            <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
-        </form>
+<!--            <b>비밀번호</b> : <input type="password" name="password"><br>-->
+<!--            <b>전화번호</b> : <input type="text" name="phoneNo" th:value="${member.getPhoneNo()}"><br>-->
+<!--            <b>이메일 주소</b> : <input type="text" name="email" th:value="${member.getEmail()}"><br>-->
+<!--            <b>생년월일</b> : <input type="date" name="birthday" th:value="${member.getBirthday()}"><br>-->
+<!--            <input type="submit" value="수정하기"/>-->
+<!--            <button class="btn btn-outline-primary" onclick="window.close()">취소</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</th:block>-->
+
+<th:block layout:fragment="content">
+
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">개인정보 수정</h2>
+            <form th:href="@{/member/update}" method="post" name="MemberUpdateRequest">
+
+                <div class="mb-3">
+                    <label class="form-label">닉네임</label>
+                    <input type="text" name="nickname" class="form-control" th:value="${member.getNickname()}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">이름</label>
+                    <input type="text" name="name" class="form-control" th:value="${member.getName()}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">성별</label>
+                    여 <input type="radio" value="F" name="gender" th:checked="${member.getGender().equals('F')}">
+                    남 <input type="radio" value="M" name="gender" th:checked="${member.getGender().equals('M')}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">비밀번호</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">전화번호</label>
+                    <input type="text" name="phoneNo" class="form-control" th:value="${member.getPhoneNo()}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">이메일 주소</label>
+                    <input type="text" name="email" class="form-control" th:value="${member.getEmail()}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">생년월일</label>
+                    <input type="date" name="birthday" class="form-control" th:value="${member.getBirthday()}">
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">수정하기</button>
+                </div>
+            </form>
+        </div>
     </div>
 </th:block>
 </html>
