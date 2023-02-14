@@ -112,24 +112,12 @@ public class OrderController {
                         .method("POST", HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(tossPaymentConfirmDto)))
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-                log.info(response.body());
-            }catch (IOException | InterruptedException ignored){}
-
-            MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-            header.add("Authorization", "Basic dGVzdF9za19MZXg2QkpHUU9WRGpqcUVHUmVuOFc0dzJ6TmJnOg==");
-//            String secretKey = new String(Base64.getEncoder().encode("test_sk_Lex6BJGQOVDjjqEGRen8W4w2zNbg:".getBytes(StandardCharsets.UTF_8)));
-//            header.add("Authorization", secretKey);
-            Map<String, Object> map = objectMapper.convertValue(tossPaymentConfirmDto, Map.class);
-            ApiEntity<TossPaymentResponse> apiEntity = null;
-            try{
-                apiEntity = restService.post("https://api.tosspayments.com/v1/payments/confirm",header, map, TossPaymentResponse.class);
-            }catch (Exception ignored){}
-
-//            //승인 실패
-//            if (apiEntity==null || !apiEntity.isSuccess()){
-//                // 롤백 todo
+                log.info("toss response => {}",response.body());
+            }catch (IOException | InterruptedException e){
 //                return "결제 실패";
-//            }
+            }
+
+
 
             //주문 영수증 저장
             String receiptSaveUrl = buildString( gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/", tossPaymentConfirmDto.getOrderId());
