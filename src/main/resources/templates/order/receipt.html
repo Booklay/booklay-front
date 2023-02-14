@@ -77,10 +77,11 @@
                     <td>총 가격</td>
                     <td th:text="${orderProductDto.price * orderProductDto.count}"></td>
                 </tr>
+                    <tr></tr>
+                </th:block>
                 <tr>
                     <td>배송정보</td>
                 </tr>
-                </th:block>
                 <th:block th:each="deliveryDetailDto : ${orderReceipt.deliveryDetailDtoList}">
                 <tr>
                     <td></td>
