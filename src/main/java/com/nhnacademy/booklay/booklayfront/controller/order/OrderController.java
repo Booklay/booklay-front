@@ -46,6 +46,7 @@ public class OrderController {
     private final ObjectMapper objectMapper;
     private static final String STRING_CART_ID = "CART_ID";
     private final String gatewayIp ;
+    private final String domainIp ;
     @ModelAttribute(STRING_CART_ID)
     public String getCookieValue(@CookieValue(name = STRING_CART_ID, required = false)
                                  Optional<Cookie> optionalCookie){
@@ -80,7 +81,7 @@ public class OrderController {
         memberRestApiModelSettingService.setMemberDeliveryDestinationToModelByMemberNo(
                 memberInfo.getMemberNo()==null?0L:memberInfo.getMemberNo(), model);
 
-        model.addAttribute("domainIp", "http://localhost:6060");
+        model.addAttribute("domainIp", domainIp);
         model.addAttribute("memberInfo", memberInfo);
         return "order/orderPage";
     }
@@ -103,7 +104,6 @@ public class OrderController {
 
          if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
             //결제 승인
-
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))

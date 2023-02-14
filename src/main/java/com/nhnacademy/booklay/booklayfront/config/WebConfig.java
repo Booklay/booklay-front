@@ -37,7 +37,10 @@ public class WebConfig {
         return ip;
 
     }
-
+    @Bean
+    public String domainIp(@Value("${booklay.domain-origin}") String ip) {
+        return ip;
+    }
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
 
