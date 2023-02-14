@@ -217,10 +217,12 @@
             <h1>관련 분류</h1>
 
             <th:block th:each="category : ${product.categories}">
-            <ul class="list-inline list-inline-dots mb-0">
-              <li class="list-inline-item"><span>국내도서</span></li>
-              <li class="list-inline-item"><a th:href="@{/search/products(classification = 'categories',id=${category.id})}" class="text-blue" th:text="${category.name}"/></li>
-            </ul>
+              <ul class="list-inline list-inline-dots mb-0">
+                <li class="list-inline-item"><span>국내도서</span></li>
+                <li class="list-inline-item"><a
+                    th:href="@{/search/products(classification = 'categories',id=${category.id})}"
+                    class="text-blue" th:text="${category.name}"/></li>
+              </ul>
             </th:block>
           </div>
 
@@ -248,9 +250,9 @@
                         </div>
                         <div class="text-muted">
                           <p class="ellipsis-text-1">
-                          <th:block th:each="author : ${item.authors}">
-                            <span th:text="${author.name}"/>
-                          </th:block>
+                            <th:block th:each="author : ${item.authors}">
+                              <span th:text="${author.name}"/>
+                            </th:block>
                           </p>
                         </div>
                         <div class="text-muted"
@@ -314,13 +316,15 @@
                               </th:block>
                               <!--안보임-->
                               <th:block
-                                  th:if="${!post.viewPublic and post.memberNo != thisMember.memberNo}">
-                                <span>비밀글입니다. <svg xmlns="http://www.w3.org/2000/svg"
-                                                   class="icon icon-tabler icon-tabler-lock"
-                                                   width="24"
-                                                   height="24" viewBox="0 0 24 24" stroke-width="2"
-                                                   stroke="currentColor" fill="none"
-                                                   stroke-linecap="round" stroke-linejoin="round">
+                                  th:if="${!post.viewPublic}">
+                                <span th:if="${post.memberNo != thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
+                                  비밀글입니다. <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="icon icon-tabler icon-tabler-lock"
+                                    width="24"
+                                    height="24" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
    <path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
    <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
@@ -329,7 +333,7 @@
                                 </span>
                               </th:block>
                             </td>
-                            <td><span th:text="${post.writer}"/></td>
+                            <td><span th:text="${post.writer}"/></td>성
                             <td><span th:text="${post.createdAt}"/></td>
                           </tr>
                         </th:bloack>
