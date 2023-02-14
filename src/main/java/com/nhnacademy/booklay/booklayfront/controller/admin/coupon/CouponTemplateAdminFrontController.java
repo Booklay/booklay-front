@@ -2,7 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponTemplateAddRequest;
-import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.ObjectFileService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildStri
 @SuppressWarnings("unchecked")
 public class CouponTemplateAdminFrontController {
     private final RestService restService;
-    private final ImageUploader imageUploader;
+    private final ObjectFileService objectFileService;
     private final CouponRestApiModelSettingService restApiService;
     private final String gatewayIp;
     private final ObjectMapper objectMapper;
@@ -48,7 +48,7 @@ public class CouponTemplateAdminFrontController {
         @Valid @ModelAttribute("CouponTemplateAddRequest") CouponTemplateAddRequest couponTemplateAddRequest,
         @RequestParam(name = "couponImage", required = false) MultipartFile image) throws IOException {
         Map<String, Object> map = objectMapper.convertValue(couponTemplateAddRequest, Map.class);
-        imageUploader.uploadImage(image, map);
+        map.put("imageId",objectFileService.uploadImage(image));
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON,
             ADMIN_COUPON_TEMPLATE_REST_PREFIX);
         restService.post(url, map, String.class);

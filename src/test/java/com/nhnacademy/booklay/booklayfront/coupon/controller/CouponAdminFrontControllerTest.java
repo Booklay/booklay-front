@@ -24,7 +24,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponHistory;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssue;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
-import com.nhnacademy.booklay.booklayfront.service.ImageUploader;
+import com.nhnacademy.booklay.booklayfront.service.ObjectFileService;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,7 +75,7 @@ class CouponAdminFrontControllerTest {
     RestTemplate restTemplate;
 
     @MockBean
-    ImageUploader imageUploader;
+    ObjectFileService objectFileService;
 
     @MockBean
     TokenUtils tokenUtils;

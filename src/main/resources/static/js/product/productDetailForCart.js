@@ -21,6 +21,7 @@ window.onload = function () {
         httpRequest.responseType = "json";
         httpRequest.setRequestHeader("Content-Type", "application/json");
         httpRequest.send(JSON.stringify(body));
+
       });
 
   document.getElementById("toOrder").addEventListener("click",
