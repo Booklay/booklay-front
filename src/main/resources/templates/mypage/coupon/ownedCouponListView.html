@@ -18,7 +18,7 @@
             <article class="card fl-left">
                 <section class="date">
                     <time datetime="23th feb">
-                        <span>23</span><span>feb</span>
+                        <span>5%</span>
                     </time>
                 </section>
                 <section class="card-cont">
@@ -31,8 +31,13 @@
                                 <span th:text="${item.amount}"></span>
                                 <span>원 할인</span>
                             </span><br/>
-                            <span th:text="${item.expiredAt}"></span>
-                            <span>까지 사용 가능</span>
+                            <span th:if="${item.expiredAt == null}">
+                                기간 무제한
+                            </span>
+                            <span th:if="${item.expiredAt != null}">
+                                <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
+                                <span>까지 사용 가능</span>
+                            </span>
                         </time>
                     </div>
                     <div class="even-info">
