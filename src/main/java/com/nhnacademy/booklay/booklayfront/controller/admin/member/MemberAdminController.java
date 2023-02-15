@@ -15,6 +15,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeChartR
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.member.MemberService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +36,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/admin/members")
 public class MemberAdminController {
+    private final MemberService memberService;
     private final String adminRedirectGatewayPrefix;
     private final String memberRedirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
 
-    public MemberAdminController(String gateway, RestService restService,
+    public MemberAdminController(MemberService memberService, String gateway,
+                                 RestService restService,
                                  ObjectMapper objectMapper) {
+        this.memberService = memberService;
         this.adminRedirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + ADMIN_MEMBER_REST_PREFIX;
         this.memberRedirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/members";
         this.restService = restService;
@@ -96,11 +100,8 @@ public class MemberAdminController {
     @GetMapping("/authority/{memberNo}")
     public String retrieveMemberAuthority(@PathVariable Long memberNo,
                                           Model model) {
-        URI uri = URI.create(memberRedirectGatewayPrefix + "/authority/" + memberNo);
-
         ApiEntity<List<MemberAuthorityRetrieveResponse>> response =
-            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
-            });
+            memberService.retrieveMemberAuthority(memberNo);
 
         model.addAttribute("authorities", response.getBody());
         model.addAttribute("memberNo", memberNo);

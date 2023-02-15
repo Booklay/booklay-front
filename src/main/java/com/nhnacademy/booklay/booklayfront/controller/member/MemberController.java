@@ -144,11 +144,9 @@ public class MemberController extends BaseController {
 
     @GetMapping("/authority")
     public String retrieveMemberAuthority(MemberInfo memberInfo, Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/authority/" + memberInfo.getMemberNo());
 
         ApiEntity<List<MemberAuthorityRetrieveResponse>> response =
-            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
-            });
+            memberService.retrieveMemberAuthority(memberInfo.getMemberNo());
 
         model.addAttribute("authorities", response.getBody());
         model.addAttribute("memberNo", memberInfo.getMemberNo());

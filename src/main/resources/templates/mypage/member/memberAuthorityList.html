@@ -22,7 +22,11 @@
                 <tbody th:each="authority :${authorities}">
                 <tr>
                     <td th:text="${authorityStat.count}"></td>
-                    <td th:text="${authority.getName()}"></td>
+                    <td>
+                        <span th:if="${authority.getName()} == ROLE_USER">회원</span>
+                        <span th:if="${authority.getName()} == ROLE_AUTHOR">작가</span>
+                        <span th:if="${authority.getName()} == ROLE_ADMIN">관리자</span>
+                    </td>
                 </tr>
                 </tbody>
             </table>
