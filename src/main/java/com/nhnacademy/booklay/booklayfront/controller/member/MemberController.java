@@ -12,6 +12,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateReques
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberMainRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -80,6 +81,13 @@ public class MemberController extends BaseController {
     @GetMapping(value = {"", "/", "/profile"})
     public String mypageIndex(Model model, MemberInfo memberInfo) {
         URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
+
+        ApiEntity<MemberMainRetrieveResponse> memberMainResponse =
+            memberService.retrieveMemberMain(memberInfo.getMemberNo());
+
+        if (memberMainResponse.isSuccess()) {
+            model.addAttribute("memberMain", memberMainResponse.getBody());
+        }
 
         ApiEntity<MemberRetrieveResponse> memberResponse =
             restService.get(memberUri.toString(), null, MemberRetrieveResponse.class);

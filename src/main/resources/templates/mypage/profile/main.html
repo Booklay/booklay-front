@@ -1,208 +1,218 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
-  <title>북레이 - 마이페이지</title>
-  <link href="/css/mypage-main.css" rel="stylesheet">
+    <title>북레이 - 마이페이지</title>
+    <link href="/css/mypage-main.css" rel="stylesheet">
 </head>
 <th:block layout:fragment="content">
-  <div class="card card-sm">
-    <div class="article" style="margin: 1rem;">
-      <h1 style="padding-bottom:1rem;">마이페이지</h1>
-      <!--      마이페이지 3분할 핵심 정보-->
-      <div class="mypage-var">
-        <div class="divide-1">
-          <h3 class="mypage-var-head">포인트</h3>
-          <label class="mypage-var-text">
-            <a th:href="@{/member/profile/point}">1</a><span> 포인트</span>
-          </label>
-        </div>
-        <div class="divide-1" id="mypage-var-center">
-          <h3 class="mypage-var-head">쿠폰</h3>
-          <label class="mypage-var-text">
-            <a th:href="@{/mypage/coupon}">1</a><span> 개</span>
-          </label>
-        </div>
-        <div class="divide-1">
-          <h3 class="mypage-var-head">등급</h3>
-          <label class="mypage-var-text">
-            <a th:href="@{/member/profile/grade}">화이트</a>
-          </label>
-        </div>
-      </div>
-      <!--      마이페이지 3분할 핵심 정보 종료-->
-      <!--      개인정보-->
-      <div class="mypage-member-info" style="margin-top: 1rem;">
-        <!--        사이트 회원 정보-->
-        <div class="table-responsive">
-          <table class="table table-vcenter card-table">
-            <tr>
-              <td class="info-index">아이디</td>
-              <td><span th:text="${member.memberId}"/></td>
-            </tr>
-            <tr>
-              <td class="info-index">이메일</td>
-              <td><span th:text="${member.email}"/></td>
-            </tr>
-            <tr>
-              <td class="info-index">닉네임</td>
-              <td><span th:text="${member.nickname}"/></td>
-            </tr>
-          </table>
-          <br>
-          <!--        진짜 개인적 정보-->
-          <div class="table-responsive">
-            <table class="table table-vcenter card-table">
-              <tr class="">
-                <td class="info-index">이름</td>
-                <td><span th:text="${member.name}"/></td>
-              </tr>
-              <tr>
-                <td class="info-index">성별</td>
-                <td><span th:text="${member.gender} == 'M' ? '남성' : '여성'"/></td>
-              </tr>
-              <tr>
-                <td class="info-index">생일</td>
-                <td><span th:text="${member.birthday}"/></td>
-              </tr>
-              <tr>
-                <td class="info-index">전화번호</td>
-                <td><span th:text="${member.phoneNo}"/></td>
-              </tr>
-            </table>
-
-            <button class="btn btn-outline-primary"
-                    style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
-              <a th:href="@{/member/profile/address}">배송지 정보관리</a>
-            </button>
-          </div>
-        </div>
-      </div>
-      <!--      개인정보 종료-->
-
-      <!--      1대1 문의-->
-      <h3 style="margin-top: 1rem;">1대1문의 조회</h3>
-      <button class="btn btn-outline-primary">
-        <a href="#">1대1문의 관리</a>
-      </button>
-      <div class="card">
-        <div class="table-responsive">
-          <table class="table table-vcenter card-table">
-            <thead>
-            <tr>
-              <th>답변 여부</th>
-              <th>제목</th>
-              <th>작성일</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>N</td>
-              <td>임시 하드코딩</td>
-              <td>2023-02-13</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--      1대1 문의-->
-      <!--      위시리스트, 재입고 알림 탭-->
-      <div class="card" style="margin-top: 1rem;">
-        <ul class="nav nav-tabs" data-bs-toggle="tabs">
-          <li class="nav-item">
-            <a href="#tabs-wishlist-7" class="nav-link active" data-bs-toggle="tab">위시리스트</a>
-          </li>
-          <li class="nav-item">
-            <a href="#tabs-alarm-7" class="nav-link" data-bs-toggle="tab">재입고 알림</a>
-          </li>
-        </ul>
-        <div class="card-body">
-          <div class="tab-content">
-            <div class="tab-pane active show" id="tabs-wishlist-7">
-              <div>
-                <div class="row row-cards">
-                <th:block th:each="item : ${wishlist}">
-                  <div class="col-sm-4" style="flex: 1">
-                    <div class="card card-sm">
-                      <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
-                         class="d-block">
-                        <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
-                          <img class="product-img"
-                               style="max-height: 413px; width: 95%; margin-top:10px;"
-                               th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
-                        </div>
-                      </a>
-                      <div class="card-body">
-                        <div class="d-flex align-items-center">
-                          <div>
-                            <div>
-                              <a th:text="${item.title}"
-                                 th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
-                            </div>
-                            <div class="text-muted">
-                              <th:block th:each="author : ${item.authors}">
-                                <span th:text="${author.name}"/>
-                              </th:block>
-                            </div>
-                            <div class="text-muted"
-                                 th:text="${#numbers.formatCurrency(item.price)}"></div>
-                            <div class="text-muted" th:text="${item.publisher}"></div>
-                          </div>
-                        </div>
-                        <div class="ms-auto">
-                          <a href="#" class="text-muted">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                 height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                              <path
-                                  d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                            </svg>
-                            467
-                          </a>
-                          <a href="#" class="ms-3 text-muted">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                                 height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path
-                                  d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                            </svg>
-                            67
-                          </a>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </th:block>
+    <div class="card card-sm">
+        <div class="article" style="margin: 1rem;">
+            <h1 style="padding-bottom:1rem;">마이페이지</h1>
+            <!--      마이페이지 3분할 핵심 정보-->
+            <div class="mypage-var">
+                <div class="divide-1">
+                    <h3 class="mypage-var-head">포인트</h3>
+                    <label class="mypage-var-text">
+                        <a th:href="@{/member/profile/point}"
+                           th:text="${memberMain.currentTotalPoint}"></a><span> p</span>
+                    </label>
                 </div>
-                <button class="btn btn-outline-primary"
-                        style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
-                  <a th:href="@{/mypage/product/wishlist}">위시리스트 관리</a>
-                </button>
-              </div>
+                <div class="divide-1" id="mypage-var-center">
+                    <h3 class="mypage-var-head">쿠폰</h3>
+                    <label class="mypage-var-text">
+                        <a th:href="@{/mypage/coupon}">1</a><span> 개</span>
+                    </label>
+                </div>
+                <div class="divide-1">
+                    <h3 class="mypage-var-head">등급</h3>
+                    <label class="mypage-var-text">
+                        <a th:href="@{/member/profile/grade}" th:text="${memberMain.memberGrade}"></a>
+                    </label>
+                </div>
             </div>
-            <div class="tab-pane" id="tabs-alarm-7">
-              <div>개발중 임시 분할입니다
-                <button class="btn btn-outline-primary"
-                        style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
-                  <a th:href="@{/mypage/product/alarm}">재입고 알림 관리</a>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--      위시리스트, 재입고 알림 탭 종료-->
-    </div>
 
-  </div>
+            <!--      마이페이지 3분할 핵심 정보 종료-->
+            <!--      개인정보-->
+            <div class="mypage-member-info" style="margin-top: 1rem;">
+                <!--        사이트 회원 정보-->
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <tr>
+                            <td class="info-index">아이디</td>
+                            <td><span th:text="${memberMain.memberId}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="info-index">이메일</td>
+                            <td><span th:text="${memberMain.email}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="info-index">닉네임</td>
+                            <td><span th:text="${memberMain.nickname}"/></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <!--        진짜 개인적 정보-->
+                    <div class="table-responsive">
+                        <table class="table table-vcenter card-table">
+                            <tr class="">
+                                <td class="info-index">이름</td>
+                                <td><span th:text="${memberMain.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td class="info-index">성별</td>
+                                <td><span th:text="${memberMain.gender} == 'M' ? '남성' : '여성'"/></td>
+                            </tr>
+                            <tr>
+                                <td class="info-index">생일</td>
+                                <td><span th:text="${memberMain.birthday}"/></td>
+                            </tr>
+                            <tr>
+                                <td class="info-index">전화번호</td>
+                                <td><span th:text="${memberMain.phoneNo}"/></td>
+                            </tr>
+                        </table>
+
+                        <button class="btn btn-outline-primary"
+                                style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
+                            <a th:href="@{/member/profile/address}">배송지 정보관리</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!--      개인정보 종료-->
+
+            <!--      1대1 문의-->
+            <h3 style="margin-top: 1rem;">1대1문의 조회</h3>
+            <button class="btn btn-outline-primary">
+                <a href="#">1대1문의 관리</a>
+            </button>
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                        <tr>
+                            <th>답변 여부</th>
+                            <th>제목</th>
+                            <th>작성일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>N</td>
+                            <td>임시 하드코딩</td>
+                            <td>2023-02-13</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--      1대1 문의-->
+            <!--      위시리스트, 재입고 알림 탭-->
+            <div class="card" style="margin-top: 1rem;">
+                <ul class="nav nav-tabs" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                        <a href="#tabs-wishlist-7" class="nav-link active" data-bs-toggle="tab">위시리스트</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tabs-alarm-7" class="nav-link" data-bs-toggle="tab">재입고 알림</a>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active show" id="tabs-wishlist-7">
+                            <div>
+                                <div class="row row-cards">
+                                    <th:block th:each="item : ${wishlist}">
+                                        <div class="col-sm-4" style="flex: 1">
+                                            <div class="card card-sm">
+                                                <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
+                                                   class="d-block">
+                                                    <div class="text-center"
+                                                         style="width:auto; min-height:200px; margin: auto;">
+                                                        <img class="product-img"
+                                                             style="max-height: 413px; width: 95%; margin-top:10px;"
+                                                             th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
+                                                    </div>
+                                                </a>
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center">
+                                                        <div>
+                                                            <div>
+                                                                <a th:text="${item.title}"
+                                                                   th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
+                                                            </div>
+                                                            <div class="text-muted">
+                                                                <th:block th:each="author : ${item.authors}">
+                                                                    <span th:text="${author.name}"/>
+                                                                </th:block>
+                                                            </div>
+                                                            <div class="text-muted"
+                                                                 th:text="${#numbers.formatCurrency(item.price)}"></div>
+                                                            <div class="text-muted" th:text="${item.publisher}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <a href="#" class="text-muted">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon"
+                                                                 width="24"
+                                                                 height="24"
+                                                                 viewBox="0 0 24 24" stroke-width="2"
+                                                                 stroke="currentColor"
+                                                                 fill="none"
+                                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                      fill="none"></path>
+                                                                <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                                <path
+                                                                        d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                            </svg>
+                                                            467
+                                                        </a>
+                                                        <a href="#" class="ms-3 text-muted">
+                                                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon"
+                                                                 width="24"
+                                                                 height="24"
+                                                                 viewBox="0 0 24 24" stroke-width="2"
+                                                                 stroke="currentColor"
+                                                                 fill="none"
+                                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z"
+                                                                      fill="none"></path>
+                                                                <path
+                                                                        d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
+                                                            </svg>
+                                                            67
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                </div>
+                                <button class="btn btn-outline-primary"
+                                        style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
+                                    <a th:href="@{/mypage/product/wishlist}">위시리스트 관리</a>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-alarm-7">
+                            <div>개발중 임시 분할입니다
+                                <button class="btn btn-outline-primary"
+                                        style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
+                                    <a th:href="@{/mypage/product/alarm}">재입고 알림 관리</a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--      위시리스트, 재입고 알림 탭 종료-->
+        </div>
+
+    </div>
 </th:block>
 </html>
