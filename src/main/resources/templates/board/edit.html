@@ -1,0 +1,111 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
+<!--/* /thymeleaf/layout 폴더 아래에 있는 default.html을 레이아웃으로 사용 */-->
+
+<head>
+  <title>북레이 - 게시글 수정</title>
+  <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+
+  <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+</head>
+
+<th:block layout:fragment="content">
+
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+      const Editor = toastui.Editor;
+
+      const editor1 = new Editor({
+        el: document.querySelector('#contentEditor'),
+        height: '500px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical',
+        initialValue: [[${editPost.content}]],
+        autofocus: false
+      });
+      editor1.getMarkdown();
+
+      const submitButton = document.getElementById('btn-submit');
+
+      submitButton.addEventListener('click', (event) => {
+        const content = editor1.getHTML();
+
+        document.getElementById('content').setAttribute('value', content)
+      });
+    });
+  </script>
+
+  <th:block
+      th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+
+    <form method="post" th:action="@{/board/edit/{postId} (postId = ${postId})}">
+      <!--    숨겨진 정보 목록-->
+      <input name="memberNo" type="number" hidden="hidden" th:value="${memberInfo.memberNo}">
+      <input name="postId" type="number" hidden="hidden" th:value="${editPost.postId}">
+
+      <div class="mb-3">
+        <input type="text" class="form-control" name="title" th:value="${editPost.title}" required>
+      </div>
+
+      <label class="form-label"></label>
+      <div id="contentEditor"></div>
+      <input id="content" name="content" type="text" hidden="hidden"/>
+
+
+      <div class="mb-3">
+        <div style="margin-top: 1rem;">
+          <label class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="viewPublic" value="true"
+                   th:checked="${editPost.viewPublic}">
+            <span class="form-check-label">공개</span>
+          </label>
+          <label class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="viewPublic" value="false"
+                   th:checked="${!editPost.viewPublic}">
+            <span class="form-check-label">비공개</span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <input class="btn btn-outline-primary" id="btn-submit" type="submit" style="float: right"
+               value="등록">
+      </div>
+
+    </form>
+  </th:block>
+
+<!--  권한 없는 사용자의 화면-->
+  <th:block
+      th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+    <div>
+      <div class="container-tight py-4">
+        <div class="empty">
+          <div class="empty-img"><img src="./static/illustrations/undraw_quitting_time_dm8t.svg"
+                                      height="128" alt="">
+          </div>
+          <p class="empty-title">게시글 조회 권한 오류</p>
+          <p class="empty-subtitle text-muted">
+            해당 게시글의 조회 권한이 없습니다.
+          </p>
+          <div class="empty-action">
+            <a href="./." class="btn btn-primary">
+              <!-- Download SVG icon from http://tabler-icons.io/i/arrow-left -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <line x1="5" y1="12" x2="11" y2="18"/>
+                <line x1="5" y1="12" x2="11" y2="6"/>
+              </svg>
+              Take me home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+</th:block>
+
+</html>

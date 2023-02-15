@@ -320,7 +320,8 @@
                               <!--안보임-->
                               <th:block
                                   th:if="${!post.viewPublic}">
-                                <span th:if="${post.memberNo != thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
+                                <span
+                                    th:if="${post.memberNo != thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
                                   비밀글입니다. <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-lock"
@@ -345,11 +346,12 @@
                       <th:block
                           th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
                     </div>
-                    <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary"
-                            style="float: right;">
-                      <a th:href="@{/product/board/{productNo} (productNo = ${productNo})}">상품 문의
-                        작성</a>
-                    </button>
+
+                    <a th:href="@{/board/productQNA/{productNo} (productNo = ${productNo})}" style="float: right;">
+                      <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary">
+                        상품 문의 작성
+                      </button>
+                    </a>
                   </div>
                 </div>
                 <!--상품 리뷰-->
