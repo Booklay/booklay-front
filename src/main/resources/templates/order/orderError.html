@@ -1,0 +1,11 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
+<head>
+    <title>결제 에러</title>
+
+</head>
+<th:block layout:fragment="content">
+    <div th:text="${errorMessage}"></div>
+    <a th:href="@{/}">홈으로 가기</a>
+</th:block>
+</html>
