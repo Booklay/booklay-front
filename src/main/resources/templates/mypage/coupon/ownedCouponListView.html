@@ -3,35 +3,53 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
-    <title>쿠폰함</title>
+    <title>북레이 - 쿠폰함</title>
     <script src="/js/member/addressCreatePopup.js"></script>
     <link href="/css/coupon/couponStyle.css" rel="stylesheet">
 </head>
 
 <th:block layout:fragment="content">
-
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a href="#tabs-home-7" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab">사용 가능</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="#tabs-profile-7" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">사용 불가능</a>
-                </li>
-            </ul>
+                    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">쿠폰함</h2>
+            </div>
+            <div class="col align-items-center">
+                <div class="text-end">
+                    <a th:href="@{/member/profile}">Home</a>
+                    <span> > </span>
+                    <a th:href="@{/mypage/coupon}">쿠폰함</a>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="tab-content">
-                <div class="tab-pane active show" id="tabs-home-7" role="tabpanel">
-                    <div th:if="${#lists.isEmpty(unusedList)}">
-                        <div>
-                            <div>소유한 쿠폰이 없습니다.</div>
-                            <a href="/coupon-zone">쿠폰 받으러 가기</a>
-                        </div>
-                    </div>
+    </div>
 
-                    <div th:unless="${#lists.isEmpty(unusedList)}">
-                        <th:block th:each="item, itemStat : ${unusedList}">
+                    <!-- Page Body -->
+    <div class="page-body">
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-home-7" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab">사용 가능</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-profile-7" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">사용 불가능</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="tab-pane active show" id="tabs-home-7" role="tabpanel">
+                        <div th:if="${#lists.isEmpty(unusedList)}">
+                            <div>
+                                <div>소유한 쿠폰이 없습니다.</div>
+                                <a href="/coupon-zone">쿠폰 받으러 가기</a>
+                            </div>
+                        </div>
+
+                        <div th:unless="${#lists.isEmpty(unusedList)}">
+                            <th:block th:each="item, itemStat : ${unusedList}">
                                 <div class="coupon-card fl-left mb-3">
                                     <div class="date">
                                         <time>
@@ -76,25 +94,25 @@
                                             </p>
                                         </div>
                                         <span>
-                                            <a class="able" th:text="${item.reason}"></a>
+                                            <strong><a class="able" th:text="${item.reason}"></a></strong>
                                         </span>
                                     </section>
                                 </div>
                                 <span th:if="${itemStat.count%2==0}"><br/></span>
-                        </th:block>
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="tabs-profile-7" role="tabpanel">
-                    <div th:if="${#lists.isEmpty(usedList)}">
-                        <div>
-                            <div>사용 불가능한 쿠폰은 없습니다.</div>
-                            <a href="/coupon-zone">쿠폰 받으러 가기</a>
+                            </th:block>
                         </div>
                     </div>
 
-                    <div th:unless="${#lists.isEmpty(usedList)}">
-                        <th:block th:each="item, itemStat : ${usedList}">
+                    <div class="tab-pane" id="tabs-profile-7" role="tabpanel">
+                        <div th:if="${#lists.isEmpty(usedList)}">
+                            <div>
+                                <div>사용 불가능한 쿠폰은 없습니다.</div>
+                                <a href="/coupon-zone">쿠폰 받으러 가기</a>
+                            </div>
+                        </div>
+
+                        <div th:unless="${#lists.isEmpty(usedList)}">
+                            <th:block th:each="item, itemStat : ${usedList}">
                                 <div class="coupon-card fl-left mb-3">
                                     <div class="date">
                                         <time>
@@ -140,12 +158,14 @@
                                             </p>
                                         </div>
                                         <span>
-                                            <a class="disable" th:text="${item.reason}"></a>
+                                            <strong><a class="disable" th:text="${item.reason}"></a></strong>
                                         </span>
                                     </section>
                                 </div>
                                 <span th:if="${itemStat.count%2==0}"><br/></span>
-                        </th:block>
+                            </th:block>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

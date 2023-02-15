@@ -48,7 +48,7 @@
     display: block;
     width: 30px;
     height: 30px;
-    background-color: var(--tblr-body-bg);
+    background-color: var(--tblr-card-bg);
     position: absolute;
     top: -15px;
     right: -15px;
