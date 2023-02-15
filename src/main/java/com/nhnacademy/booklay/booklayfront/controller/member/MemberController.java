@@ -80,7 +80,6 @@ public class MemberController extends BaseController {
 
     @GetMapping(value = {"", "/", "/profile"})
     public String mypageIndex(Model model, MemberInfo memberInfo) {
-        URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         ApiEntity<MemberMainRetrieveResponse> memberMainResponse =
             memberService.retrieveMemberMain(memberInfo.getMemberNo());
@@ -89,12 +88,7 @@ public class MemberController extends BaseController {
             model.addAttribute("memberMain", memberMainResponse.getBody());
         }
 
-        ApiEntity<MemberRetrieveResponse> memberResponse =
-            restService.get(memberUri.toString(), null, MemberRetrieveResponse.class);
-
-        if (memberResponse.isSuccess()) {
-            model.addAttribute("member", memberResponse.getBody());
-        }
+        //TODO : 쿠폰 갯수 가져오는 로직 작성
 
         URI wishlistUri =
             URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/mypage/product/index/wishlist/"
