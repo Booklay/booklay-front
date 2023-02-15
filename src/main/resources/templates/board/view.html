@@ -57,7 +57,12 @@
         <hr style="margin-top: 1rem; margin-bottom: 1rem;">
         <div id="comment-section">
           <!--        <th:block th:each="comment : ${commentList}">-->
-          <div></div>
+          <!--          <div>-->
+          <!--            <div><span th:text="${comment.name}"></span></div>-->
+          <!--            <div th:text="${comment.content}"></div>-->
+          <!--            <div><span th:text="${comment.createdAt}"></span></div>-->
+          <!--            <div><button class="btn-outline-primary btn">답 댓글</button></div>-->
+          <!--          </div>-->
           <!--답댓글-->
           <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
           <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
@@ -73,11 +78,10 @@
           <!--새 댓글-->
 
           <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
-            <form method="post">
+            <form method="post" th:action="@{/comment}">
               <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
                      hidden="hidden">
-              <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">
-              <input name="groupCommentNo" type="number" th:value="0" hidden="hidden">
+              <input name="postId" type="number" th:value="${post.postId}" hidden="hidden">
               <input name="groupOrder" type="number" th:value="0" hidden="hidden">
               <input name="depth" type="number" th:value="0" hidden="hidden">
               <p style="display: flex">
