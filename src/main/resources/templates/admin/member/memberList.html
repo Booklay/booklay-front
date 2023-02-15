@@ -63,9 +63,10 @@
 
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary"><a
-                                    th:href="@{/members/authority/{memberNo}(memberNo=${member.getMemberNo()})}">보기</a>
+                            <button class="btn btn-outline-primary" th:id="${member.getMemberNo()}"
+                                    onclick="showMemberAuthorityPopup(this.getAttribute('id'))">보기
                             </button>
+
                         </td>
                         <td>
                             <button class="btn btn-outline-primary">
