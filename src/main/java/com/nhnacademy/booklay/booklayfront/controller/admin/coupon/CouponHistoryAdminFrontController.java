@@ -1,9 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.PAGE_NUM;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.RETURN_ADMIN_PAGE;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.TARGET_VIEW;
 
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,13 +26,6 @@ public class CouponHistoryAdminFrontController {
 
     @GetMapping("/history")
     public String historyCoupon(@RequestParam(value = "page", defaultValue = "0") int pageNum) {
-        return RETURN_ADMIN_PAGE;
-    }
-
-    @GetMapping("/history")
-    public String memberHistoryCoupon(@RequestParam(value = "page", defaultValue = "0") int pageNum,
-                                      Model model) {
-        couponRestApiModelSettingService.setCouponHistoryToModelByPageAndMemberNo(pageNum, model);
         return RETURN_ADMIN_PAGE;
     }
 }

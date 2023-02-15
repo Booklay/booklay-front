@@ -372,30 +372,6 @@ class CouponAdminFrontControllerTest {
     }
 
     @Test
-    void memberHistoryCoupon() throws Exception {
-        List<CouponHistory> historyList = new ArrayList<>();
-        historyList.add(couponHistory);
-        PageResponse<CouponHistory> couponHistoryPageResponse = new PageResponse<>();
-        ReflectionTestUtils.setField(couponHistoryPageResponse, "data", historyList);
-        ResponseEntity<PageResponse<CouponHistory>> responseEntity =
-            new ResponseEntity<>(couponHistoryPageResponse, HttpStatus.OK);
-        //mocking
-        ApiEntity<Object> object = new ApiEntity<>();
-        ReflectionTestUtils.setField(object, "successResponse", responseEntity);
-        when(restService.get(anyString(), any(),
-            (ParameterizedTypeReference<Object>) any())).thenReturn(object);
-
-
-        //then
-        mockMvc.perform(get(URI_PREFIX + "/history/0/0").accept(MediaType.TEXT_HTML))
-            .andExpect(status().isOk())
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getViewName().equals(RETURN_PAGE))
-            .andExpect(result -> Objects.requireNonNull(result.getModelAndView()).getModel().get("targetUrl")
-                .equals("coupon/historyView"))
-            .andReturn();
-    }
-
-    @Test
     void issueCoupon() throws Exception {
         CouponIssue couponIssue = CouponIssue.builder()
             .userId(0L)
