@@ -1,0 +1,47 @@
+<th:block th:unless="${memberInfo.memberNo == null}"  th:fragment="review_form" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <form th:action="@{/review}" th:method="post" enctype="multipart/form-data">
+
+        <input type="number" name="memberNo" th:value="${memberInfo.memberNo}" hidden>
+        <input type="number" name="productId" th:value="${productNo}" hidden>
+
+        <div class="card-body">
+            <div class="col-md-12">
+                <label class="form-label">
+                    별점 &nbsp
+                    <input type="number" name="score" th:value= 5 min="0" max="5" required>
+                    <!--                <span class="form-label-description">56/100</span>-->
+                </label>
+                <textarea class="form-control h-25 overflow-scroll" name="content" rows="3" placeholder="Content.." required></textarea>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="col-12">
+                <div class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <label class="form-label">리뷰 이미지 등록</label>
+                        </div>
+                        <div class="col-auto">
+                            <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="<p class='mb-0'>이미지를 등록해주세요." data-bs-html="true" data-bs-original-title="" title="">?
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col">
+                                <input class="form-control" type="file" accept="image/*" name="file" id="image-input">
+                            </div>
+                            <div class="col-auto">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary" id="submit_review">리뷰 등록</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</th:block>

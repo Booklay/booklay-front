@@ -130,4 +130,17 @@ public class RestService {
 
         return apiEntity;
     }
+
+    public <T> ApiEntity<T> get(String url, Class<T> responseType) {
+
+        ApiEntity<T> apiEntity = new ApiEntity<>();
+        ResponseEntity<T> response =
+            restTemplate.exchange(url, HttpMethod.GET, null,
+                responseType);
+        apiEntity.setSuccessResponse(response);
+
+        return apiEntity;
+    }
+
+
 }

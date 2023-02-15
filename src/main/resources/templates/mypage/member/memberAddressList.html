@@ -4,17 +4,47 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
-    <title>회원 주소 목록</title>
-    <script src="/js/member/addressCUPopup.js"></script>
+
+    <title>북레이 - 배송지 목록</title>
+    <script src="/js/member/addressCreatePopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
-    <div>
-        <h1 style="display: inline">[배송지 목록]</h1>
-        <button class="btn btn-outline-primary" onclick="showAddressCreatePopup()">
-            추가하기
-        </button>
-        <br>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">배송지 목록</h2>
+            </div>
+            <div class="col">
+                <div class="text-end">
+                    <a th:href="@{/member/profile}">Home</a>
+                    <span> > </span>
+                    <a th:href="@{/member/profile/address}">배송지 목록</a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="text-end">
+                <div class="card-actions">
+                    <button class="btn btn-primary" onclick="showAddressPopup()">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                        배송지 추가하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Body -->
+    <div class="page-body">
+<!--        <h1 style="display: inline">[배송지 목록]</h1>-->
+<!--        <button class="btn btn-outline-primary" onclick="showAddressPopup()">-->
+<!--            추가하기-->
+<!--        </button>-->
+<!--        <br>-->
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-vcenter card-table">

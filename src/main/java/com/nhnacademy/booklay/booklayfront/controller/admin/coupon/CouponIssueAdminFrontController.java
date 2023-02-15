@@ -1,22 +1,33 @@
 package com.nhnacademy.booklay.booklayfront.controller.admin.coupon;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ADMIN_COUPON_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ATTRIBUTE_NAME_MEMBER_NO;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.PAGE_NUM;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.RETURN_ADMIN_PAGE;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.CouponIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.CouponRestApiModelSettingService;
+import java.util.Map;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
-import java.util.Map;
-
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
-
+/**
+ * 쿠폰 발급 및 발급 기록 조회에 대한 요청을 받습니다.
+ * @author 김승혜
+ */
 @SuppressWarnings("unchecked")
 @Controller
 @RequiredArgsConstructor
@@ -64,8 +75,7 @@ public class CouponIssueAdminFrontController {
      * @param couponRequest 발급하려는 couponId, 특정 발급 대상 사용자 memberId
      */
     @PostMapping("/member/issue")
-    public String issueCouponToMember(@Valid @ModelAttribute
-                                      CouponMemberIssueRequest couponRequest) {
+    public String issueCouponToMember(@Valid @ModelAttribute CouponMemberIssueRequest couponRequest) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "members/issue");
         Map<String, Object> map = objectMapper.convertValue(couponRequest, Map.class);
         restService.post(url, map, String.class);

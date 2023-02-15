@@ -3,7 +3,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
-    <title>회원가입</title>
+    <title>북레이 - 회원가입</title>
 
     <script>
         // @formatter:off
@@ -30,17 +30,17 @@
             <form th:action="@{/member/register}" method="post">
 
                 <div class="mb-3">
-                    <label class="form-label">Name</label>
+                    <label class="form-label required">Name</label>
                     <input type="text" name="name" class="form-control" placeholder="Enter name" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">ID</label>
+                    <label class="form-label required">ID</label>
                     <input type="text" name="memberId" class="form-control" placeholder="Enter ID" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
+                    <label class="form-label required">Password</label>
                     <div class="input-group input-group-flat">
                         <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="off" required>
                         <span class="input-group-text">
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">별명</label>
+                    <label class="form-label required">별명</label>
                     <input type="text" name="nickname" class="form-control" placeholder="Enter NickName" required>
                 </div>
 
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">생일</label>
+                    <label class="form-label required">생일</label>
                     <div class="input-icon mb-2">
                         <input class="form-control" name="birthday" placeholder="Select a date" id="datepicker-icon" required>
                         <span class="input-icon-addon"><!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
@@ -78,12 +78,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">전화번호</label>
+                    <label class="form-label required">전화번호</label>
                     <input type="number" name="phoneNo" class="form-control" placeholder="01012345678" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">이메일</label>
+                    <label class="form-label required">이메일</label>
                     <input type="email" name="email" class="form-control" placeholder="Enter email" required>
                 </div>
 

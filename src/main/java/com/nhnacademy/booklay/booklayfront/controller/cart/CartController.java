@@ -11,7 +11,6 @@ import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.CART_REST_PREFIX;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
 @SuppressWarnings("unchecked")
 @Controller
@@ -62,14 +61,15 @@ public class CartController {
     public String cartListForm(@ModelAttribute(STRING_CART_ID)String cartId,
                                Model model, MemberInfo memberInfo){
         productRestApiModelSettingService.setProductObjectListToModelByCartId(
-                cartId, memberInfo.getMemberNo()==null?null: memberInfo.getMemberNo().toString(), model);
+                cartId, memberInfo, model);
         return "cart/cartForm";
     }
 
     @PostMapping
     public String addProductInCart(@ModelAttribute(STRING_CART_ID)String cartId,
-                                   @Valid @RequestBody CartDto cartDto){
+                                   @Valid @RequestBody CartDto cartDto, MemberInfo memberInfo){
         Map<String, Object> map = objectMapper.convertValue(cartDto, Map.class);
+        map.putAll(getMemberInfoMap(memberInfo));
         map.put(STRING_CART_ID_FOR_API, cartId);
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
         restService.post(url, map, String.class);
@@ -78,8 +78,8 @@ public class CartController {
 
     @GetMapping("delete/{productNo}")
     public String deleteProductInCart(@ModelAttribute(STRING_CART_ID)String cartId,
-                                      @PathVariable Long productNo){
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+                                      @PathVariable Long productNo, MemberInfo memberInfo){
+        MultiValueMap<String, String> map = getMemberInfoMultiValueMap(memberInfo);
         map.add(STRING_CART_ID_FOR_API, cartId);
         map.add(STRING_PRODUCT_NO, productNo.toString());
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
@@ -88,8 +88,9 @@ public class CartController {
     }
 
     @GetMapping("delete")
-    public String deleteAllProductInCart(@ModelAttribute(STRING_CART_ID)String cartId){
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+    public String deleteAllProductInCart(@ModelAttribute(STRING_CART_ID)String cartId,
+                                         MemberInfo memberInfo){
+        MultiValueMap<String, String> map = getMemberInfoMultiValueMap(memberInfo);
         map.add(STRING_CART_ID_FOR_API, cartId);
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "all");
         restService.delete(url, map);
@@ -98,8 +99,9 @@ public class CartController {
 
     @PostMapping("buy")
     public String deleteProductsInCartByBuy(@ModelAttribute(STRING_CART_ID)String cartId,
-                                            @RequestBody CartProductNoListRequest cartProductNoListRequest){
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+                                            @RequestBody CartProductNoListRequest cartProductNoListRequest,
+                                            MemberInfo memberInfo){
+        MultiValueMap<String, String> map = getMemberInfoMultiValueMap(memberInfo);
         map.add(STRING_CART_ID_FOR_API, cartId);
         map.put(STRING_PRODUCT_NO_LIST, cartProductNoListRequest.getProductNoList().stream().map(Object::toString).collect(Collectors.toList()));
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
@@ -108,9 +110,9 @@ public class CartController {
     }
 
     @GetMapping("login")
-    public String loginAndMoveCartRedisToRDB(@ModelAttribute(STRING_CART_ID)String cartId){
+    public String loginAndMoveCartRedisToRDB(@ModelAttribute(STRING_CART_ID)String cartId, MemberInfo memberInfo){
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "login/", cartId);
-        restService.get(url, null, String.class);
+        restService.get(url, getMemberInfoMultiValueMap(memberInfo), String.class);
         return REDIRECT_CART_LIST;
     }
 

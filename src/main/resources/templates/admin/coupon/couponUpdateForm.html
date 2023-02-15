@@ -28,7 +28,7 @@
                             <div class="mb-3">
                                 <label class="form-label">쿠폰 종류</label>
                                 <select class="form-select" type="number" name="typeCode" id="coupon-type"
-                                        onchange="changeByType()">
+                                        onchange="changeByType()" required>
                                     <th:block th:each="couponType:${couponTypeList}">
                                         <option th:value="${couponType.id}" th:text="${couponType.name}"
                                                 th:selected="${#strings.equals(couponType.name, couponDetail.typeName)}">
@@ -39,8 +39,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label">할인량</label>
-                                <input class="form-control" type="number" name="amount"
-                                       th:value="${couponDetail.amount}">
+                                <input class="form-control" type="number" name="amount" th:value="${couponDetail.amount}" required>
                             </div>
 
                             <div id="select-item"
@@ -113,12 +112,12 @@
                             <div class="mb-3">
                                 <label class="form-label">최소 사용 금액</label>
                                 <input class="form-control" type="number" name="minimumUseAmount"
-                                       th:value="${couponDetail.minimumUseAmount}">
+                                       th:value="${couponDetail.minimumUseAmount}" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">최대 할인 금액</label>
                                 <input class="form-control" type="number" name="maximumDiscountAmount"
-                                       th:value="${couponDetail.maximumDiscountAmount}">
+                                       th:value="${couponDetail.maximumDiscountAmount}" required>
                             </div>
 
                             <div class="mb-4">
@@ -160,7 +159,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>

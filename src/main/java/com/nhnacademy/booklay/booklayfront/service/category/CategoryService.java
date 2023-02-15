@@ -1,11 +1,18 @@
 package com.nhnacademy.booklay.booklayfront.service.category;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryCreateRequest;
+import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -13,11 +20,15 @@ import org.springframework.stereotype.Service;
 public class CategoryService {
 
     private final RestService restService;
+    private final ObjectMapper objectMapper;
+
+    private static final String CATEGORY_ADMIN_API_URI = "/shop/v1/admin/categories";
 
     private final String gatewayIp;
 
+    @Cacheable(value = "categoryStep")
     public List<CategorySteps> categorySteps() {
-        String redirectGatewayPrefix = gatewayIp + "/shop/v1" + "/admin/categories";
+        String redirectGatewayPrefix = gatewayIp + CATEGORY_ADMIN_API_URI;
         ApiEntity<CategorySteps> categoryStepsApiEntity =
             restService.get(redirectGatewayPrefix + "/steps/1", null,
                 CategorySteps.class);
@@ -43,5 +54,19 @@ public class CategoryService {
 
     public Long getDefaultCategoryId(List<CategorySteps> categories){
         return  categories.get(0).getCategories().get(0).getId();
+    }
+
+    public Optional<CategoryResponse> createCategory(CategoryCreateRequest createRequest) {
+        URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI);
+
+        ApiEntity<CategoryResponse> response =
+            restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
+                CategoryResponse.class);
+
+        if (response.isSuccess()){
+            return Optional.of(response.getBody());
+        }
+
+        return Optional.empty();
     }
 }
