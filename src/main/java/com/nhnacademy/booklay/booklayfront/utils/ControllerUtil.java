@@ -55,18 +55,24 @@ public class ControllerUtil {
         if (memberInfo.getMemberNo() == null) {
             Map<String, String> map = new HashMap<>();
             String nullChangeText = "\u0000";
-            map.put("memberNo", nullChangeText);
-            map.put("gender", nullChangeText);
-            map.put("memberId", nullChangeText);
-            map.put("nickname", nullChangeText);
-            map.put("name", nullChangeText);
-            map.put("birthday", nullChangeText);
-            map.put("phoneNo", nullChangeText);
-            map.put("email", nullChangeText);
+            map.put("member_info_memberNo", nullChangeText);
+            map.put("member_info_gender", nullChangeText);
+            map.put("member_info_memberId", nullChangeText);
+            map.put("member_info_nickname", nullChangeText);
+            map.put("member_info_name", nullChangeText);
+            map.put("member_info_birthday", nullChangeText);
+            map.put("member_info_phoneNo", nullChangeText);
+            map.put("member_info_email", nullChangeText);
             return map;
         }else {
             return objectMapper.convertValue(memberInfo, Map.class);
         }
+    }
+
+    public static MultiValueMap<String, String> getMemberInfoMultiValueMap(MemberInfo memberInfo){
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.setAll(getMemberInfoMap(memberInfo));
+        return multiValueMap;
     }
 
     public static void setCurrentPageAndMaxPageToModel(Model model, PageResponse<?> response){

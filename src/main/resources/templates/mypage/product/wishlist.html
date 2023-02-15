@@ -41,7 +41,7 @@
             <td>
               <!--              알람 등록-->
               <form th:if="${!product.alarm}" method="post"
-                    th:action="@{/member/product/wishlist/alarm/connect}">
+                    th:action="@{/mypage/product/wishlist/alarm/connect}">
                 <input name="memberNo" type="number" th:value="${memberId}" hidden>
                 <input name="productId" type="number" th:value="${product.productId}" hidden>
                 <label class="btn btn-outline-primary">
@@ -63,7 +63,7 @@
               </form>
               <!--              알람 삭제-->
               <form th:if="${product.alarm}" method="post"
-                    th:action="@{/member/product/wishlist/alarm/disconnect}">
+                    th:action="@{/mypage/product/wishlist/alarm/disconnect}">
                 <input name="memberNo" type="number" th:value="${memberId}" hidden>
                 <input name="productId" type="number" th:value="${product.productId}" hidden>
                 <label class="btn btn-primary">
@@ -85,7 +85,7 @@
             </td>
             <td>
               <!--              위시리스트 삭제-->
-              <form method="post" th:action="@{/member/product/wishlist/disconnect}">
+              <form method="post" th:action="@{/mypage/product/wishlist/disconnect}">
                 <input name="memberNo" type="number" th:value="${memberId}" hidden>
                 <input name="productId" type="number" th:value="${product.productId}" hidden>
                 <label class="btn btn-primary">
