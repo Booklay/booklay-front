@@ -1,19 +1,27 @@
 package com.nhnacademy.booklay.booklayfront.controller.board;
 
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.PostDeleteRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,21 +43,8 @@ public class BoardController {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   /**
-   * 게시글 생성
-   * @param request
-   * @return
-   */
-  @PostMapping
-  public String postCreate(@Valid @ModelAttribute BoardPostCreateRequest request) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board");
-
-    ApiEntity<Long> result = restService.post(uri.toString(), objectMapper.convertValue(request, Map.class), Long.class);
-
-    return "redirect:/board/" + result.getBody();
-  }
-
-  /**
    * 게시글 조회
+   *
    * @param postId
    * @param memberInfo
    * @param model
@@ -73,7 +68,24 @@ public class BoardController {
   }
 
   /**
+   * 게시글 생성
+   *
+   * @param request
+   * @return
+   */
+  @PostMapping
+  public String postCreate(@Valid @ModelAttribute BoardPostCreateRequest request) {
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board");
+
+    ApiEntity<Long> result = restService.post(uri.toString(),
+        objectMapper.convertValue(request, Map.class), Long.class);
+
+    return "redirect:/board/" + result.getBody();
+  }
+
+  /**
    * 상품 QNA 게시글 등록 화면 호출
+   *
    * @param productId
    * @param memberInfo
    * @param model
@@ -97,6 +109,7 @@ public class BoardController {
 
   /**
    * 답글 등록 화면 호출
+   *
    * @param model
    * @param postId
    * @param memberInfo
@@ -118,6 +131,7 @@ public class BoardController {
 
   /**
    * 게시글 수정 화면 호출
+   *
    * @param model
    * @param postId
    * @param memberInfo
@@ -141,13 +155,14 @@ public class BoardController {
 
   /**
    * 게시글 수정 요청
+   *
    * @param postId
    * @param request
    * @return
    */
-
   @PostMapping("/edit/{postId}")
-  public String editPost(@PathVariable Long postId, @Valid @ModelAttribute BoardPostUpdateRequest request) {
+  public String editPost(@PathVariable Long postId,
+      @Valid @ModelAttribute BoardPostUpdateRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board");
 
     restService.put(uri.toString(), objectMapper.convertValue(request, Map.class), Void.class);
@@ -156,12 +171,40 @@ public class BoardController {
   }
 
   /**
+   * 게시글 삭제 요청
+   * @param memberInfo
+   * @param request
+   * @return
+   */
+  @DeleteMapping()
+  public String deletePost(MemberInfo memberInfo,
+      @Valid @ModelAttribute PostDeleteRequest request) {
+    //삭제 권한 확인
+    if (memberInfo.getMemberNo() == request.getMemberNo()) {
+      URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + request.getPostId());
+
+      MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+      map.setAll(getMemberInfoMap(memberInfo));
+
+      restService.delete(uri.toString(), map);
+
+      //상품 문의는 상품 상세로
+      if(Objects.nonNull(request.getProductId())){
+        return "redirect:/product/view/" + request.getProductId();
+      }
+    }
+
+    //TODO : 에러페이지 가도록 수정
+    return "redirect:/";
+  }
+
+  /**
    * 게시글 조회 권한 확인
+   *
    * @param memberInfo
    * @param post
    * @return
    */
-
   private boolean commentAuthCheck(MemberInfo memberInfo, PostResponse post) {
     boolean commentAuth = false;
     if (memberInfo.getMemberNo() != null) {

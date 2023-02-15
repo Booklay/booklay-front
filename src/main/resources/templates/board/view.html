@@ -31,7 +31,7 @@
         <hr style="margin-bottom: 1rem;">
 
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
-        style="text-align: right;">
+             style="text-align: right;">
           <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
             <button class="btn btn-outline-primary" style="margin-right: 1rem;">답글</button>
           </a>
@@ -43,9 +43,15 @@
                style="margin-right: 1rem;">
               <button class="btn btn-outline-primary">수정</button>
             </a>
-            <a th:href="@{/board/delete/{postId} (postId = ${post.postId})}">
-              <button class="btn btn-outline-danger">삭제</button>
-            </a>
+            <form method="post" th:action="@{/board}" style="display: inline;">
+              <input type="hidden" name="_method" value="DELETE"/>
+              <input name="postId" type="number" hidden="hidden" th:value="${post.postId}">
+              <input name="memberNo" type="number" hidden="hidden" th:value="${post.memberNo}">
+              <input th:if="${post.productId != null}" name="productId" type="number"
+                     hidden="hidden" th:value="${post.productId}">
+              <input name="postTypeNo" type="number" hidden="hidden" th:value="${post.postTypeNo}">
+              <input class="btn btn-outline-danger" type="submit" value="삭제">
+            </form>
           </span>
         </div>
         <hr style="margin-top: 1rem; margin-bottom: 1rem;">
@@ -84,10 +90,10 @@
           </th:block>
         </div>
         <div id="foot-btn-var" style="text-align: right">
-        <a th:if="${post.productId!=null}"
-           th:href="@{/product/view/{productId} (productId= ${post.productId})}">
-          <button class="btn btn-outline-primary">상품 상세보기</button>
-        </a>
+          <a th:if="${post.productId!=null}"
+             th:href="@{/product/view/{productId} (productId= ${post.productId})}">
+            <button class="btn btn-outline-primary">상품 상세보기</button>
+          </a>
         </div>
       </div>
     </div>
