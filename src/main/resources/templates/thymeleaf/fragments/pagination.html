@@ -22,15 +22,15 @@
       <a class="page-link" th:href="@{__${currentUrl}__(page=${currentPage})}" th:text="${currentPage} + 1">
       </a>
     </li>
-    <li class="page-item" th:classappend="${currentPage + 1 > totalPage}? invisible">
+    <li class="page-item" th:classappend="${currentPage + 1 >= totalPage}? invisible">
       <a class="page-link" th:href="@{__${currentUrl}__(page=${currentPage} + 1)}" th:text="${currentPage} + 2">
       </a>
     </li>
-    <li class="page-item" th:classappend="${currentPage + 2 > totalPage}? invisible" >
+    <li class="page-item" th:classappend="${currentPage + 2 >= totalPage}? invisible" >
       <a class="page-link" th:href="@{__${currentUrl}__(page=${currentPage} + 2)}" th:text="${currentPage} + 3">
       </a>
     </li>
-    <li class="page-item" th:classappend="${currentPage + 3> totalPage}? disabled" >
+    <li class="page-item" th:classappend="${currentPage + 3 >= totalPage}? disabled" >
       <a class="page-link" th:href="@{__${currentUrl}__(page=${currentPage} + 3)}">
         <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M9 6l6 6l-6 6"></path></svg>
