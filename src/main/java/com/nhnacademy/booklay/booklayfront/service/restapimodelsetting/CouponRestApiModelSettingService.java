@@ -173,8 +173,8 @@ public class CouponRestApiModelSettingService {
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
-    public void setCouponHistoryToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/", memberNo);
+    public void setCouponHistoryToModelByPageAndMemberNo(Integer pageNum, Model model) {
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history");
         ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
         model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
