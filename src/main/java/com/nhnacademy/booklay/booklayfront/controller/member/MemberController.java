@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,10 +59,15 @@ public class MemberController extends BaseController {
                                BindingResult bindingResult) {
         URI uri = URI.create(redirectGatewayPrefix);
 
-        restService.post(uri.toString(),
-            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
-            Void.class);
         //TODO 2: 에러처리
+        ApiEntity<Map<String, Integer>> response = restService.post(uri.toString(),
+            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+            new ParameterizedTypeReference<>() {});
+
+        Integer memberNo = response.getBody().get("memberNo");
+
+        URI welcomeCouponUrl = URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/welcome/" + memberNo);
+        restService.post(welcomeCouponUrl.toString(), null , String.class);
 
         return "redirect:/";
     }

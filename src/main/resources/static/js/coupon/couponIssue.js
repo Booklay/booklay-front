@@ -37,13 +37,22 @@ async function issueCoupon(couponId) {
 
         let timeoutId = setTimeout(() => {
             clearInterval(timerId);
-            alert('요청 시간이 초과되었습니다.');
+            Swal.fire({
+                title: '요청 시간이 초과되었습니다!',
+                text: '다시 시도해주세요.',
+                icon: 'warning',
+                confirmButtonText: '닫기'
+            })
             loadingDiv.style.display = 'none';
         }, 10000);
 
     } else {
         const parsedResponse = await response.json();
         loadingDiv.style.display = 'none';
-        alert(parsedResponse.message);
+        Swal.fire({
+            title: parsedResponse.message,
+            icon: 'warning',
+            confirmButtonText: '닫기'
+        })
     }
 }
