@@ -11,6 +11,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetr
 import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberChartRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeChartRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -60,6 +61,29 @@ public class MemberAdminController {
             model.addAttribute("currentPage", response.getBody().getPageNumber());
 
             return "admin/member/memberList";
+        } else {
+            return "/";
+        }
+    }
+
+    @GetMapping("/profile/grade/{memberNo}")
+    public String retrieveMemberGrade(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @PathVariable Long memberNo,
+                                      Model model) {
+        String query = "?page=" + page;
+
+        URI uri = URI.create(redirectGatewayPrefix + "/grade/" + memberNo + query);
+
+        ApiEntity<PageResponse<MemberGradeRetrieveResponse>> response =
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+
+            return "admin/member/adminMemberGradeList";
         } else {
             return "/";
         }
