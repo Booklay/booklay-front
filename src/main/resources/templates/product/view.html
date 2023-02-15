@@ -5,6 +5,12 @@
 
   <script src="/js/product/productDetailForCart.js"></script>
   <link href="/css/product/elipse-style.css" rel="stylesheet">
+
+  <script th:if="${reviewError} != null">
+    var error = '[[${reviewError}]]';
+    alert( error )
+  </script>
+
 </head>
 <!---->
 <th:block layout:fragment="content">
@@ -351,11 +357,13 @@
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
-                  <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet,
-                    facilisi sit mauris accumsan nibh habitant senectus
+                  <div class="card-body-scrollable">
+                    <th:block th:replace="product/fragment/reviewList :: review_list">
+                    </th:block>
                   </div>
-                </div>
-              </div>
+                  <div class="card-body">
+                    <th:block th:replace="product/fragment/reviewRegister :: review_form">
+                    </th:block>              </div>
             </div>
             <!--탭 내용 종료-->
           </div>
