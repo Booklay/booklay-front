@@ -30,11 +30,12 @@
         </div>
         <hr style="margin-bottom: 1rem;">
 
-        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
+        style="text-align: right;">
           <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
             <button class="btn btn-outline-primary" style="margin-right: 1rem;">답글</button>
           </a>
-          <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
+          <a th:href="@{/board/answer/{postId} (postId= ${post.postId})}">
             <button class="btn btn-outline-lime" style="margin-right: 1rem;">답변 완료</button>
           </a>
           <span th:if="${post.memberNo == memberInfo.memberNo}" id="btn-var">
@@ -82,10 +83,12 @@
             </form>
           </th:block>
         </div>
+        <div id="foot-btn-var" style="text-align: right">
         <a th:if="${post.productId!=null}"
            th:href="@{/product/view/{productId} (productId= ${post.productId})}">
           <button class="btn btn-outline-primary">상품 상세보기</button>
         </a>
+        </div>
       </div>
     </div>
   </th:block>
