@@ -20,7 +20,9 @@
         <tbody>
         <th:block th:each="product : ${productList}">
           <tr>
-            <td><span th:text="${product.title}"/></td>
+            <td>
+              <a th:href="@{/product/view/{productId} (productId = ${product.productId})}" th:text="${product.title}"/>
+            </td>
             <td>
               <th:block th:each="author : ${product.authors}">
                 <span th:text="${author.name}"/>
@@ -29,7 +31,7 @@
             <td><span th:text="${product.publisher}"/></td>
             <td><span th:text="${product.price}"/></td>
             <td>
-              <form method="post" th:action="@{/member/product/alarm/disconnect}">
+              <form method="post" th:action="@{/mypage/product/alarm/disconnect}">
                 <input name="memberNo" type="number" th:value="${memberId}" hidden>
                 <input name="productId" type="number" th:value="${product.productId}" hidden>
                 <label class="btn btn-primary">

@@ -27,29 +27,10 @@ public class CouponMemberFrontController {
     public String memberCouponPage(Model model, MemberInfo memberInfo,
                                    @RequestParam(value = "page", defaultValue = "0") int pageNum) {
         Long memberNo = memberInfo.getMemberNo();
-        if(Objects.isNull(memberNo)) {
-            throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
-        }
 
         modelSettingService.setOwnedCouponToModelByMember(pageNum, memberNo, model);
 
         return MEMBER_COUPON_RESOURCE + "ownedCouponListView";
     }
-
-//    /**
-//     * 쿠폰 상세 보기.
-//     * @param model
-//     * @param couponId
-//     * @return
-//     */
-//    @GetMapping("detail/{couponId}")
-//    public String couponDetail(Model model, @PathVariable String couponId) {
-//
-//    }
-//
-//    @GetMapping("history/{pageNum}")
-//    public String couponHistory(Model model, @PathVariable Integer pageNum) {
-//
-//    }
 
 }

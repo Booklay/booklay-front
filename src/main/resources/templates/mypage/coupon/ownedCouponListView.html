@@ -18,16 +18,32 @@
             <article class="card fl-left">
                 <section class="date">
                     <time datetime="23th feb">
-                        <span>23</span><span>feb</span>
+                        <span th:text="${item.amount}"></span>
+                        <span th:if="${#strings.contains(item.couponType, '정율')}">
+                            <span>%</span>
+                        </span>
+                        <span th:unless="${#strings.contains(item.couponType, '정율')}">
+                            <span>원</span>
+                        </span>
                     </time>
                 </section>
                 <section class="card-cont">
                     <h3 th:text="${item.name}"></h3>
-                    <div class="even-date">
+                    <div class="even-info">
                         <i class="fa fa-calendar"></i>
                         <time>
-                            <span>wednesday 28 december 2014</span>
-                            <span>08:55pm to 12:00 am</span>
+                            <span>
+                                <span>최대 </span>
+                                <span th:text="${item.amount}"></span>
+                                <span>원 할인</span>
+                            </span><br/>
+                            <span th:if="${item.expiredAt == null}">
+                                기간 무제한
+                            </span>
+                            <span th:if="${item.expiredAt != null}">
+                                <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
+                                <span>까지 사용 가능</span>
+                            </span>
                         </time>
                     </div>
                     <div class="even-info">
@@ -36,7 +52,12 @@
                             nexen square for people australia, sydney
                         </p>
                     </div>
-                    <a href="#">tickets</a>
+                    <span th:else="${item.isUsed}">
+                        <a class="able">사용가능</a>
+                    </span>
+                    <span th:if="${item.isUsed}">
+                        <a class="disable">사용됨</a>
+                    </span>
                 </section>
             </article>
         </th:block>

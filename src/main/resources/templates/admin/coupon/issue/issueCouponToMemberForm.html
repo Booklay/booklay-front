@@ -67,6 +67,21 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label class="form-label">만료 일자</label>
+                                </div>
+                                <div class="col-auto ">
+                                    <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                                          data-bs-content="<p class='mb-0'>이 시간까지 쿠폰을 사용할 수 있습니다.</p>현재 달의 마지막 날로 설정됩니다." data-bs-html="true">?
+                                    </span>
+                                </div>
+                            </div>
+
+                            <input class="form-control" type="datetime-local" name="expiredAt" id="expiredAt" onload="setDefaultDate()" value="2020-12-02T11:11:11">
+                        </div>
+
                         <div class="text-end">
                             <input class="btn btn-primary" type="submit" value="발급 하기">
                         </div>
@@ -75,4 +90,5 @@
             </form>
         </div>
     </div>
+    <script src="/js/coupon/couponDateSetting.js"></script>
 </th:block>

@@ -1,0 +1,147 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/default}">
+<head>
+    <title>영수증페이지</title>
+
+    <script th:inline="javascript">
+        const dd = [[${orderReceipt}]]
+    </script>
+</head>
+<th:block layout:fragment="content">
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <tbody>
+                <tr>
+                    <td>주문 번호</td>
+                    <td th:text="${orderReceipt.orderNo}"></td>
+                </tr>
+                <tr>
+                    <td>주문 상태</td>
+                    <td th:text="${orderReceipt.orderStatus}"></td>
+                </tr>
+                <tr>
+                    <td>주문 시간</td>
+                    <td th:text="${orderReceipt.orderedAt}"></td>
+                </tr>
+                <tr>
+                    <td>상품 금액 합계</td>
+                    <td th:text="${orderReceipt.productPriceSum}"></td>
+                </tr>
+                <tr>
+                    <td>배송비</td>
+                    <td th:text="${orderReceipt.deliveryPrice}"></td>
+                </tr>
+                <tr>
+                    <td>할인 금액</td>
+                    <td th:text="${orderReceipt.discountPrice}"></td>
+                </tr>
+                <tr>
+                    <td>사용 포인트</td>
+                    <td th:text="${orderReceipt.pointUsePrice}"></td>
+                </tr>
+                <tr>
+                    <td>결제 금액</td>
+                    <td th:text="${orderReceipt.paymentPrice}"></td>
+                </tr>
+<!--                <tr>-->
+<!--                    <td>결제 방법</td>-->
+<!--                    <td th:if="${orderReceipt.paymentMethod == 1}">카드</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>포장비</td>-->
+<!--                    <td th:text="${orderReceipt.giftWrappingPrice}"></td>-->
+<!--                </tr>-->
+                <tr>
+                    <td>상품 목록</td>
+                </tr>
+                <th:block th:each="orderProductDto : ${orderReceipt.orderProductDtoList}">
+                <tr>
+                    <td></td>
+                    <td>제품명</td>
+                    <td ><a th:href="@{'/product/view/' + ${orderProductDto.productNo}}" th:text="${orderProductDto.productName}"></a></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>가격</td>
+                    <td th:text="${orderProductDto.price}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>수량</td>
+                    <td th:text="${orderProductDto.count}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>총 가격</td>
+                    <td th:text="${orderProductDto.price * orderProductDto.count}"></td>
+                </tr>
+                <tr>
+                    <td>배송정보</td>
+                </tr>
+                </th:block>
+                <th:block th:each="deliveryDetailDto : ${orderReceipt.deliveryDetailDtoList}">
+                <tr>
+                    <td></td>
+                    <td>배송상태</td>
+                    <td th:text="${deliveryDetailDto.deliveryStatus}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>우편번호</td>
+                    <td th:text="${deliveryDetailDto.zipCode}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>주소</td>
+                    <td th:text="${deliveryDetailDto.address}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>발송인</td>
+                    <td th:text="${deliveryDetailDto.sender}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>발송인 번호</td>
+                    <td th:text="${deliveryDetailDto.senderPhoneNumber}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>수신자</td>
+                    <td th:text="${deliveryDetailDto.receiver}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>수신자 번호</td>
+                    <td th:text="${deliveryDetailDto.receiverPhoneNumber}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>배송 메모</td>
+                    <td th:text="${deliveryDetailDto.memo}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>송장 번호</td>
+                    <td th:text="${deliveryDetailDto.invoiceNo}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>배송 시작일</td>
+                    <td th:text="${deliveryDetailDto.deliveryStartAt}"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>배송 완료일</td>
+                    <td th:text="${deliveryDetailDto.completedAt}"></td>
+                </tr>
+                    <tr></tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+</html>

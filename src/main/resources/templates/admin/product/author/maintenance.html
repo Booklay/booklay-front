@@ -70,7 +70,7 @@
             </td>
             <td>
               <form method="post"
-                    th:action="@{/admin/author/maintenance/delete/{pageNum} (pageNum=${currentPage})}">
+                    th:action="@{/admin/product/author/maintenance/delete/{pageNum} (pageNum=${currentPage})}">
                 <input name="id" type="number" th:value="${author.authorNo}"
                        hidden="hidden"/>
                 <input class="btn btn-outline-danger" type="submit" value="삭제"/>

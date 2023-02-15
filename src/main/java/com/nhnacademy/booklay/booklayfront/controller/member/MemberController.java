@@ -12,6 +12,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberUpdateReques
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.member.MemberService;
 import java.net.URI;
@@ -35,13 +36,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @RequestMapping("/member")
 public class MemberController extends BaseController {
+
     private final String redirectGatewayPrefix;
+    private final String gatewayIp;
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private final MemberService memberService;
 
     public MemberController(RestService restService, String gateway,
                             MemberService memberService, ObjectMapper objectMapper) {
+        this.gatewayIp = gateway;
         this.restService = restService;
         this.objectMapper = objectMapper;
         this.memberService = memberService;
@@ -68,10 +72,32 @@ public class MemberController extends BaseController {
     }
 
     @GetMapping(value = {"", "/", "/profile"})
-    private String profileMain(MemberInfo memberInfo, Model model) {
-        model.addAttribute("memberNo", memberInfo.getMemberNo());
+    public String mypageIndex(Model model, MemberInfo memberInfo) {
+        URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
+
+        ApiEntity<MemberRetrieveResponse> memberResponse =
+            restService.get(memberUri.toString(), null, MemberRetrieveResponse.class);
+
+        if (memberResponse.isSuccess()) {
+            model.addAttribute("member", memberResponse.getBody());
+        }
+
+        URI wishlistUri =
+            URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/mypage/product/index/wishlist/"
+                + memberInfo.getMemberNo());
+
+        ApiEntity<List<RetrieveProductResponse>> wishlistResponse =
+            restService.get(wishlistUri.toString(),
+                null, new ParameterizedTypeReference<List<RetrieveProductResponse>>() {
+                });
+
+        if (wishlistResponse.isSuccess()) {
+            model.addAttribute("wishlist", wishlistResponse.getBody());
+        }
+
         return "mypage/profile/main";
     }
+
 
     @GetMapping("/register")
     @ResponseStatus(HttpStatus.OK)
@@ -174,7 +200,7 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         restService.delete(uri.toString());
-
+        
         return "redirect:/";
     }
 }

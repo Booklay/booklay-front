@@ -3,7 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.coupon;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponMemberIssueRequest;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponMemberResponse;
 import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
@@ -19,6 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,15 +39,14 @@ public class CouponZoneRestController {
     /**
      * 사용자의 쿠폰 발급 요청을 shop 서버로 보냅니다.
      */
-    @GetMapping("/{couponId}")
+    @PostMapping("/{couponId}")
     public ResponseEntity<CouponIssueResponse> couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
         Long memberNo = memberInfo.getMemberNo();
         if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
 
-
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
 
-        CouponMemberIssueRequest request = new CouponMemberIssueRequest(couponId, memberNo);
+        CouponZoneMemberIssueRequest request = new CouponZoneMemberIssueRequest(couponId, memberNo);
         Map<String, Object> map = objectMapper.convertValue(request, Map.class);
 
         ApiEntity<CouponIssueResponse>

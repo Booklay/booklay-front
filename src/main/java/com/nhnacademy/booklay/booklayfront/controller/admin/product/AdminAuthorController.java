@@ -128,7 +128,7 @@ public class AdminAuthorController {
   }
 
   /**
-   * 작가 생성
+   * 팝업창에서 작가 생성
    * @param request
    * @param pageNum
    * @return
