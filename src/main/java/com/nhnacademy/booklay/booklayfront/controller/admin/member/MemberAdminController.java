@@ -9,11 +9,15 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberBlockRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.BlockedMemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.DroppedMemberRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberChartRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeChartRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.member.MemberService;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +36,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/admin/members")
 public class MemberAdminController {
-    private final String redirectGatewayPrefix;
+    private final MemberService memberService;
+    private final String adminRedirectGatewayPrefix;
+    private final String memberRedirectGatewayPrefix;
     private final RestService restService;
     private final ObjectMapper objectMapper;
 
-    public MemberAdminController(String gateway, RestService restService,
+    public MemberAdminController(MemberService memberService, String gateway,
+                                 RestService restService,
                                  ObjectMapper objectMapper) {
-        this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + ADMIN_MEMBER_REST_PREFIX;
+        this.memberService = memberService;
+        this.adminRedirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + ADMIN_MEMBER_REST_PREFIX;
+        this.memberRedirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/members";
         this.restService = restService;
         this.objectMapper = objectMapper;
     }
@@ -48,7 +57,7 @@ public class MemberAdminController {
                                      Model model) {
         String query = "?page=" + page;
 
-        URI uri = URI.create(redirectGatewayPrefix + query);
+        URI uri = URI.create(adminRedirectGatewayPrefix + query);
 
         ApiEntity<PageResponse<MemberRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -65,13 +74,48 @@ public class MemberAdminController {
         }
     }
 
+    @GetMapping("/grade/{memberNo}")
+    public String retrieveMemberGrade(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @PathVariable Long memberNo,
+                                      Model model) {
+        String query = "?page=" + page;
+
+        URI uri = URI.create(adminRedirectGatewayPrefix + "/grade/" + memberNo + query);
+
+        ApiEntity<PageResponse<MemberGradeRetrieveResponse>> response =
+            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+            });
+
+        if (response.isSuccess()) {
+            model.addAttribute("list", response.getBody().getData());
+            model.addAttribute("totalPage", response.getBody().getTotalPages());
+            model.addAttribute("currentPage", response.getBody().getPageNumber());
+
+            return "admin/member/adminMemberGradeList";
+        } else {
+            return "/";
+        }
+    }
+
+    @GetMapping("/authority/{memberNo}")
+    public String retrieveMemberAuthority(@PathVariable Long memberNo,
+                                          Model model) {
+        ApiEntity<List<MemberAuthorityRetrieveResponse>> response =
+            memberService.retrieveMemberAuthority(memberNo);
+
+        model.addAttribute("authorities", response.getBody());
+        model.addAttribute("memberNo", memberNo);
+
+        return "mypage/member/memberAuthorityList";
+    }
+
     @GetMapping("/block")
     public String retrieveBlockedMemberList(
         @RequestParam(value = "page", defaultValue = "0") int page,
         Model model) {
         String query = "/block?page=" + page;
 
-        URI uri = URI.create(redirectGatewayPrefix + query);
+        URI uri = URI.create(adminRedirectGatewayPrefix + query);
 
         ApiEntity<PageResponse<BlockedMemberRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -96,7 +140,7 @@ public class MemberAdminController {
 
         String query = "/block/detail/" + memberNo +"?page=" + page;
 
-        URI uri = URI.create(redirectGatewayPrefix + query);
+        URI uri = URI.create(adminRedirectGatewayPrefix + query);
 
         ApiEntity<PageResponse<BlockedMemberRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -119,7 +163,7 @@ public class MemberAdminController {
         Model model) {
         String query = "/dropped?page=" + page;
 
-        URI uri = URI.create(redirectGatewayPrefix + query);
+        URI uri = URI.create(adminRedirectGatewayPrefix + query);
 
         ApiEntity<PageResponse<DroppedMemberRetrieveResponse>> response =
             restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
@@ -138,7 +182,7 @@ public class MemberAdminController {
 
     @GetMapping("/block/{memberNo}")
     public String retrieveMemberBlockForm(@PathVariable Long memberNo, Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo);
+        URI uri = URI.create(adminRedirectGatewayPrefix + "/" + memberNo);
 
         ApiEntity<MemberRetrieveResponse> response =
             restService.get(uri.toString(), null, MemberRetrieveResponse.class);
@@ -158,8 +202,8 @@ public class MemberAdminController {
 
     @GetMapping("/chart")
     public String retrieveMemberChart(Model model) {
-        URI memberUri = URI.create(redirectGatewayPrefix + "/chart");
-        URI gradeUri = URI.create(redirectGatewayPrefix + "/grade/chart");
+        URI memberUri = URI.create(adminRedirectGatewayPrefix + "/chart");
+        URI gradeUri = URI.create(adminRedirectGatewayPrefix + "/grade/chart");
 
         ApiEntity<MemberChartRetrieveResponse> memberResponse =
             restService.get(memberUri.toString(), null, MemberChartRetrieveResponse.class);
@@ -177,7 +221,7 @@ public class MemberAdminController {
     public String memberBlock(@Valid @ModelAttribute MemberBlockRequest request,
                               BindingResult bindingResult,
                               @PathVariable Long memberNo) {
-        URI uri = URI.create(redirectGatewayPrefix + "/block/" + memberNo);
+        URI uri = URI.create(adminRedirectGatewayPrefix + "/block/" + memberNo);
 
         restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
             Void.class);
@@ -188,7 +232,7 @@ public class MemberAdminController {
     @GetMapping("/block/cancel/process/{blockedMemberDetailId}")
     public String memberBlockCancel(@PathVariable Long blockedMemberDetailId,
                                     Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
+        URI uri = URI.create(adminRedirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
 
         restService.get(uri.toString(), null, Void.class);
 

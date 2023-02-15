@@ -4,6 +4,7 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
+
     <title>북레이 - 배송지 목록</title>
     <script src="/js/member/addressCreatePopup.js"></script>
 </head>
@@ -52,7 +53,11 @@
                         <th scope="col">번호</th>
                         <th scope="col">이름</th>
                         <th scope="col">우편번호</th>
-                        <th scope="col">상세 주소</th>
+                        <th scope="col">주소</th>
+                        <th scope="col">상세주소</th>
+                        <th scope="col">참고항목</th>
+                        <th scope="col">수령인</th>
+                        <th scope="col">수령인 전화번호</th>
                         <th scope="col">기본 배송지 여부</th>
                         <th scope="col">수정하기</th>
                         <th scope="col">삭제하기</th>
@@ -64,14 +69,19 @@
                         <td th:text="${address.getName()}"></td>
                         <td th:text="${address.getZipCode()}"></td>
                         <td th:text="${address.getAddress()}"></td>
+                        <td th:text="${address.getAddressDetail()}"></td>
+                        <td th:text="${address.getAddressSubDetail()}"></td>
+                        <td th:text="${address.getReceiver()}"></td>
+                        <td th:text="${address.getReceiverPhoneNo()}"></td>
                         <td>
                             <span th:if="${address.getIsDefaultDestination()}">O</span>
                             <span th:unless="${address.getIsDefaultDestination()}">X</span>
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary">
-                                <a th:href="@{/member/profile/address/update/{addressNo}(addressNo=${address.getId()})}">수정하기</a>
+                            <button class="btn btn-outline-primary" th:id="${address.getId()}"
+                                    onclick="showAddressUpdatePopup(this.getAttribute('id'))">수정하기
                             </button>
+
                         </td>
                         <td>
                             <button class="btn btn-outline-primary">

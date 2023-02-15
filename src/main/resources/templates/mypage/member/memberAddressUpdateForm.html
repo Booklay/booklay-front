@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
             <h2 class="card-title text-center mb-4">배송지 수정</h2>
-            <form action="/member/profile/address/register" method="post">
+            <form th:action="@{/member/profile/address/update/{addressNo}(addressNo=${address.getId()})}" method="post">
 
                 <div class="mb-3">
                     <label class="form-label">배송지 이름</label>
@@ -29,19 +29,34 @@
 
                 <div class="mb-3">
                     <label class="form-label">주소</label>
-                    <input type="text" id="sample6_address" name="addressDetail" placeholder="주소" class="form-control"
+                    <input type="text" id="sample6_address" name="address" th:value="${address.getAddress()}"
+                           class="form-control"
                            required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">상세주소</label>
-                    <input type="text" id="sample6_detailAddress" name="address" placeholder="상세주소" class="form-control"
+                    <input type="text" id="sample6_detailAddress" name="addressDetail"
+                           th:value="${address.getAddressDetail()}" class="form-control"
                            required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">참고항목</label>
-                    <input type="text" id="sample6_extraAddress" name="addDetail" placeholder="참고항목"
+                    <input type="text" id="sample6_extraAddress" name="addressSubDetail"
+                           th:value="${address.getAddressSubDetail()}"
+                           class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">수령인</label>
+                    <input type="text" name="receiver" th:value="${address.getReceiver()}" class="form-control"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">수령인 전화번호</label>
+                    <input type="text" name="receiverPhoneNo" th:value="${address.getReceiverPhoneNo()}"
                            class="form-control" required>
                 </div>
 
