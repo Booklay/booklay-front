@@ -307,7 +307,10 @@
                           <tr>
                             <td><span th:text="${post.answered} ? '답변': '미답변'"></span></td>
                             <td>
-                              <span th:text="${'ensp;'*post.depth}"/>
+                              <th:block th:each="num : ${#numbers.sequence(0,post.depth)}">
+                                &ensp;&ensp;
+                              </th:block>
+                              <span th:if="${post.depth!=0}">┗</span>
                               <!--보임-->
                               <th:block
                                   th:if="${post.viewPublic or post.memberNo == thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
@@ -333,7 +336,7 @@
                                 </span>
                               </th:block>
                             </td>
-                            <td><span th:text="${post.writer}"/></td>성
+                            <td><span th:text="${post.writer}"/></td>
                             <td><span th:text="${post.createdAt}"/></td>
                           </tr>
                         </th:bloack>

@@ -63,4 +63,17 @@ public class BoardController {
     return "board/view";
   }
 
+  @GetMapping("/reply/{postId}")
+  public String replyPost(Model model, @PathVariable Long postId, MemberInfo memberInfo){
+
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + postId);
+
+    ApiEntity<PostResponse> response = restService.get(uri.toString(), null, PostResponse.class);
+
+    PostResponse post = response.getBody();
+
+    model.addAttribute("memberInfo", memberInfo);
+    model.addAttribute("upperPost", post);
+    return "product/board/write";
+  }
 }

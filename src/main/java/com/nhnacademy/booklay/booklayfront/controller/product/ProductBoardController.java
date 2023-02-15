@@ -1,6 +1,7 @@
 package com.nhnacademy.booklay.booklayfront.controller.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +26,22 @@ public class ProductBoardController {
   private final RestService restService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+
   @GetMapping("/{productId}")
   public String productAsk(@PathVariable Long productId, MemberInfo memberInfo, Model model) {
-    model.addAttribute("postTypeNo", 2);
-    model.addAttribute("memberNo", memberInfo.getMemberNo());
-    model.addAttribute("productId", productId);
-    model.addAttribute("groupNo", 0);
-    model.addAttribute("groupOrder", 0);
-    model.addAttribute("depth", 0);
-    model.addAttribute("answer", false);
+    Integer postAskTypeNo = 2;
+
+    PostResponse post = PostResponse.builder()
+        .postTypeNo(postAskTypeNo)
+        .productId(productId)
+        .viewPublic(true)
+        .answered(false)
+        .build();
+
+
+    model.addAttribute("upperPost", post);
 
     return "product/board/write";
   }
-
 
 }

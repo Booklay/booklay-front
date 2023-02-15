@@ -46,22 +46,29 @@
 
           <!--새 댓글-->
 
-          <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
-                method="post">
-            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
-                   hidden="hidden">
-            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">
-            <input name="groupCommentNo" type="number" th:value="0" hidden="hidden">
-            <input name="groupOrder" type="number" th:value="0" hidden="hidden">
-            <input name="depth" type="number" th:value="0" hidden="hidden">
-            <p style="display: flex">
-              <input class="form-control" name="content" type="text"
-                     placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
-              <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
-                     value="등록">
-            </p>
-          </form>
+          <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
+            <form method="post">
+              <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
+                     hidden="hidden">
+              <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">
+              <input name="groupCommentNo" type="number" th:value="0" hidden="hidden">
+              <input name="groupOrder" type="number" th:value="0" hidden="hidden">
+              <input name="depth" type="number" th:value="0" hidden="hidden">
+              <p style="display: flex">
+                <input class="form-control" name="content" type="text"
+                       placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+                <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
+                       value="등록">
+              </p>
+            </form>
 
+            <div>
+              <button class="btn btn-outline-primary"><a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">답글</a></button>
+              <button th:if="${memberInfo.memberNo == post.memberNo}"
+                      class="btn btn-outline-danger">삭제
+              </button>
+            </div>
+          </th:block>
         </div>
       </div>
     </div>
