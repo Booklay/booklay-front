@@ -3,17 +3,21 @@ package com.nhnacademy.booklay.booklayfront.dto.board.response;
 import com.nhnacademy.booklay.booklayfront.dto.product.author.response.RetrieveAuthorResponse;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 public class PostResponse {
 
+  @Setter
   private Long postId;
   private Integer postTypeNo;
   private Long memberNo;
-  private Long productNo;
+  private Long productId;
   private Long groupPostNo;
   private Integer groupOrder;
   private Integer depth;
@@ -39,4 +43,24 @@ public class PostResponse {
     return false;
   }
 
+  @Builder
+  public PostResponse(Integer postTypeNo, Long memberNo, Long productId,
+      Long groupPostNo, Integer groupOrder, Integer depth, String title, String content,
+      Boolean viewPublic, Boolean answered, LocalDateTime createdAt, LocalDateTime updatedAt,
+      String writer, List<RetrieveAuthorResponse> authorList) {
+    this.postTypeNo = postTypeNo;
+    this.memberNo = memberNo;
+    this.productId = productId;
+    this.groupPostNo = groupPostNo;
+    this.groupOrder = groupOrder;
+    this.depth = depth;
+    this.title = title;
+    this.content = content;
+    this.viewPublic = viewPublic;
+    this.answered = answered;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.writer = writer;
+    this.authorList = authorList;
+  }
 }

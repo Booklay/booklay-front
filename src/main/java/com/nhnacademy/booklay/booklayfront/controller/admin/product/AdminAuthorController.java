@@ -184,11 +184,13 @@ public class AdminAuthorController {
    * @return
    */
   @PostMapping()
-  public void updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
+  public String updateAuthor(@Valid @ModelAttribute UpdateAuthorRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
-    restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
-        CreateDeleteProductRecommendRequest.class);
+    restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
+        Void.class);
+
+    return "redirect:/admin/product/author/edit/"+request.getId();
   }
 
   /**

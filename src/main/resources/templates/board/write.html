@@ -3,7 +3,7 @@
 <!--/* /thymeleaf/layout 폴더 아래에 있는 default.html을 레이아웃으로 사용 */-->
 
 <head>
-  <title>북레이 - 상품문의 작성</title>
+  <title>북레이 - 게시글 작성</title>
   <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
 
   <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
@@ -37,15 +37,21 @@
   <!--  <h2><span th:text="${product.title}"/> 문의</h2>-->
   <form method="post" th:action="@{/board}">
     <!--    숨겨진 정보 목록-->
-    <input name="postTypeNo" type="number" hidden="hidden" th:value="${postTypeNo}">
-    <input name="memberNo" type="number" hidden="hidden" th:value="${memberNo}">
-    <input name="productNo" type="number" hidden="hidden" th:value="${productId}">
-    <input name="groupNo" type="number" hidden="hidden" th:value="${groupNo}">
-    <input name="groupOrder" type="number" hidden="hidden" th:value="${groupOrder}">
-    <input name="depth" type="number" hidden="hidden" th:value="${depth}">
-    <input name="answered" type="number" hidden="hidden" th:value="${answer}">
-    <input th:if="${updatedAt != null}" name="updatedAt" type="number" hidden="hidden"
-           th:value="${updatedAt}">
+    <input name="memberNo" type="number" hidden="hidden" th:value="${memberInfo.memberNo}">
+
+    <!--    형식-->
+    <input name="postTypeNo" type="number" hidden="hidden" th:value="${upperPost.postTypeNo}">
+    <!--    위치 찾아가기-->
+<!--    TODO : 3항연산자 해보기-->
+    <input th:if="${upperPost.depth != null}" name="depth" type="number" hidden="hidden" th:value="${upperPost.depth} + 1">
+    <input th:if="${upperPost.depth == null}" name="depth" type="number" hidden="hidden" value=0>
+
+    <input th:if="${upperPost.groupPostNo != null}" name="groupNo" type="number" hidden="hidden" th:value="${upperPost.groupPostNo}">
+    <input th:if="${upperPost.groupOrder != null}" name="groupOrderNo" type="number" hidden="hidden" th:value="${upperPost.groupOrder+1}">
+    <!--    부가정보-->
+    <input th:if="${upperPost.productId !=null}" name="productNo" type="number" hidden="hidden" th:value="${upperPost.productId}">
+    <input th:if="${upperPost.answered !=null}" name="answered" type="number" hidden="hidden" th:value="${upperPost.answered}">
+    <input th:if="${upperPost.updatedAt != null}" name="updatedAt" type="number" hidden="hidden" th:value="${upperPost.updatedAt}">
     <!--숨겨진 정보 종료-->
 
     <div class="mb-3">
@@ -60,17 +66,20 @@
     <div class="mb-3">
       <div style="margin-top: 1rem;">
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="viewPublic" value="true" checked>
+          <input class="form-check-input" type="radio" name="viewPublic" value="true"
+                 th:checked="${upperPost.viewPublic}">
           <span class="form-check-label">공개</span>
         </label>
         <label class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="viewPublic" value="false">
+          <input class="form-check-input" type="radio" name="viewPublic" value="false"
+                 th:checked="${!upperPost.viewPublic}">
           <span class="form-check-label">비공개</span>
         </label>
       </div>
     </div>
     <div>
-      <input class="btn btn-outline-primary" id="btn-submit" type="submit" style="float: right" value="등록">
+      <input class="btn btn-outline-primary" id="btn-submit" type="submit" style="float: right"
+             value="등록">
     </div>
 
   </form>

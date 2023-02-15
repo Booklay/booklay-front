@@ -6,20 +6,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoardPostCreateRequest {
+public class BoardPostUpdateRequest {
 
   @NotNull
-  private Integer postTypeNo;
-  @NotNull
-  private Long memberNo;
-  private Long productNo;
-  private Long groupNo;
-  private Integer groupOrderNo;
-  private Integer depth;
+  private Long postId;
   @NotNull
   private String title;
   @NotNull
   private String content;
   private Boolean viewPublic;
-  private Boolean answered;
 }
