@@ -16,4 +16,5 @@ public class MemberOwnedCouponResponse {
     private LocalDateTime expiredAt;
     private Boolean isDuplicatable;
     private Boolean isUsed;
+    private String reason;
 }

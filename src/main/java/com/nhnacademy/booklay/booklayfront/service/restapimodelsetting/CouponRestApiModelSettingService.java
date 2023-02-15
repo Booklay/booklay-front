@@ -11,6 +11,8 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCoupon
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -187,6 +189,15 @@ public class CouponRestApiModelSettingService {
         ApiEntity<PageResponse<MemberOwnedCouponResponse>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+
+        List<MemberOwnedCouponResponse> data = apiEntity.getBody().getData();
+        List<MemberOwnedCouponResponse> unused = data.stream().filter(c -> !c.getIsUsed()).collect(
+            Collectors.toList());
+        List<MemberOwnedCouponResponse> used = data.stream().filter(c -> c.getIsUsed()).collect(
+            Collectors.toList());
+
+        model.addAttribute("unusedList", unused);
+        model.addAttribute("usedList", used);
+
     }
 }
