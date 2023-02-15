@@ -14,12 +14,15 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductA
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.WishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
+import com.nhnacademy.booklay.booklayfront.dto.review.response.RetrieveReviewResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.ReviewService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 
 /**
@@ -49,7 +53,8 @@ public class ProductDisplayController extends BaseController {
   private final RestService restService;
   private final ObjectMapper objectMapper;
   private final CategoryService categoryService;
-  private final Integer SIZE = 20;
+  private final ReviewService reviewService;
+  private static final Integer SIZE = 20;
   private static final String REDIRECT_HTML_PREFIX = "redirect:/product/view/";
 
   //게시판형 전채 상품 호출
@@ -92,7 +97,10 @@ public class ProductDisplayController extends BaseController {
   //상품 상세 보기
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model,
-      MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "0") int page) {
+                              @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "reviewPage", defaultValue = "0") int reviewPage,
+                              MemberInfo memberInfo,
+                              HttpServletRequest request) {
 
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
@@ -150,6 +158,11 @@ public class ProductDisplayController extends BaseController {
 
     model.addAttribute("postList", postResponse.getBody().getData());
     setCurrentPageAndMaxPageToModel(model, postResponse.getBody());
+
+//   상품 리뷰
+    List<RetrieveReviewResponse> reviews = reviewService.retrieveReview(productNo, reviewPage);
+    model.addAttribute("reviewPage", reviewPage);
+    model.addAttribute("reviews", reviews);
 
     return "product/view";
   }
