@@ -291,68 +291,7 @@
                 </div>
                 <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
-                  <div>
-                    <div class="table-responsive">
-                      <table class="table table-vcenter card-table">
-                        <thead>
-                        <tr>
-                          <th>답변 상태</th>
-                          <th>제목</th>
-                          <th>작성자</th>
-                          <th>작성일</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <th:bloack th:each="post:${postList}">
-                          <tr>
-                            <td><span th:text="${post.answered} ? '답변': '미답변'"></span></td>
-                            <td>
-                              <th:block th:each="num : ${#numbers.sequence(0,post.depth)}">
-                                &ensp;&ensp;
-                              </th:block>
-                              <span th:if="${post.depth!=0}">┗</span>
-                              <!--보임-->
-                              <th:block
-                                  th:if="${post.viewPublic or post.memberNo == thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                                <a th:href="@{/board/{postId} (postId = ${post.postId})}"
-                                   th:text="${post.title}"/>
-                              </th:block>
-                              <!--안보임-->
-                              <th:block
-                                  th:if="${!post.viewPublic}">
-                                <span
-                                    th:if="${post.memberNo != thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
-                                  비밀글입니다. <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="icon icon-tabler icon-tabler-lock"
-                                    width="24"
-                                    height="24" viewBox="0 0 24 24" stroke-width="2"
-                                    stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <path d="M5 11m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
-   <path d="M12 16m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
-   <path d="M8 11v-4a4 4 0 0 1 8 0v4"></path>
-</svg>
-                                </span>
-                              </th:block>
-                            </td>
-                            <td><span th:text="${post.writer}"/></td>
-                            <td><span th:text="${post.createdAt}"/></td>
-                          </tr>
-                        </th:bloack>
-                        </tbody>
-                      </table>
-                      <th:block
-                          th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
-                    </div>
-
-                    <a th:href="@{/board/productQNA/{productNo} (productNo = ${productNo})}" style="float: right;">
-                      <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary">
-                        상품 문의 작성
-                      </button>
-                    </a>
-                  </div>
+                  <th:block th:replace="product/fragments/board::product_board"></th:block>
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">

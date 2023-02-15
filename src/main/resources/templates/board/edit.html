@@ -36,7 +36,7 @@
   </script>
 
   <th:block
-      th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+      th:if="${editPost.memberNo == memberInfo.memberNo}">
 
     <form method="post" th:action="@{/board/edit/{postId} (postId = ${postId})}">
       <!--    숨겨진 정보 목록-->
@@ -76,7 +76,7 @@
 
 <!--  권한 없는 사용자의 화면-->
   <th:block
-      th:unless="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth or post.viewPublic}">
+      th:unless="${editPost.memberNo == memberInfo.memberNo}">
     <div>
       <div class="container-tight py-4">
         <div class="empty">
@@ -88,7 +88,7 @@
             해당 게시글의 조회 권한이 없습니다.
           </p>
           <div class="empty-action">
-            <a href="./." class="btn btn-primary">
+            <a th:href="@{/}" class="btn btn-primary">
               <!-- Download SVG icon from http://tabler-icons.io/i/arrow-left -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
