@@ -60,11 +60,11 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix);
 
         //TODO 2: 에러처리
-        ApiEntity<Map<String, Long>> response = restService.post(uri.toString(),
+        ApiEntity<Map<String, Integer>> response = restService.post(uri.toString(),
             objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
             new ParameterizedTypeReference<>() {});
 
-        Long memberNo = response.getBody().get("memberNo");
+        Integer memberNo = response.getBody().get("memberNo");
 
         URI welcomeCouponUrl = URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/welcome/" + memberNo);
         restService.post(welcomeCouponUrl.toString(), null , String.class);
