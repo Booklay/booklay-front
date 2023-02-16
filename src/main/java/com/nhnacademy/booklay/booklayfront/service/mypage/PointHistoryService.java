@@ -7,4 +7,6 @@ import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetri
 public interface PointHistoryService {
     ApiEntity<PageResponse<PointHistoryRetrieveResponse>> retrievePointHistory(Long memberNo,
                                                                                int page);
+
+    void convertPointCoupon(Long memberNo, Long couponId, Long orderCouponId);
 }

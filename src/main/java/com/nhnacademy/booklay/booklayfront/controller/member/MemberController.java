@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_COUPON;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateReques
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberGradeRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberMainRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -58,10 +60,17 @@ public class MemberController extends BaseController {
                                BindingResult bindingResult) {
         URI uri = URI.create(redirectGatewayPrefix);
 
-        restService.post(uri.toString(),
-            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
-            Void.class);
         //TODO 2: 에러처리
+        ApiEntity<Map<String, Integer>> response = restService.post(uri.toString(),
+            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+            new ParameterizedTypeReference<>() {
+            });
+
+        Integer memberNo = response.getBody().get("memberNo");
+
+        URI welcomeCouponUrl =
+            URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/welcome/" + memberNo);
+        restService.post(welcomeCouponUrl.toString(), null, String.class);
 
         return "redirect:/";
     }
@@ -73,18 +82,20 @@ public class MemberController extends BaseController {
 
     @GetMapping(value = {"", "/", "/profile"})
     public String mypageIndex(Model model, MemberInfo memberInfo) {
-        URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
+        Long memberNo = memberInfo.getMemberNo();
+        URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberNo);
 
-        ApiEntity<MemberRetrieveResponse> memberResponse =
-            restService.get(memberUri.toString(), null, MemberRetrieveResponse.class);
 
-        if (memberResponse.isSuccess()) {
-            model.addAttribute("member", memberResponse.getBody());
+        ApiEntity<MemberMainRetrieveResponse> memberMainResponse =
+            memberService.retrieveMemberMain(memberInfo.getMemberNo());
+
+        if (memberMainResponse.isSuccess()) {
+            model.addAttribute("memberMain", memberMainResponse.getBody());
         }
 
         URI wishlistUri =
             URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/mypage/product/index/wishlist/"
-                + memberInfo.getMemberNo());
+                + memberNo);
 
         ApiEntity<List<RetrieveProductResponse>> wishlistResponse =
             restService.get(wishlistUri.toString(),
@@ -94,6 +105,15 @@ public class MemberController extends BaseController {
         if (wishlistResponse.isSuccess()) {
             model.addAttribute("wishlist", wishlistResponse.getBody());
         }
+
+        URI couponCountUri = URI.create(
+            gatewayIp + DOMAIN_PREFIX_COUPON + "/members/" + memberNo + "/coupons/count");
+        ApiEntity<Map<String, Integer>> couponCountResponse = restService.get(
+            couponCountUri.toString(), null,
+            new ParameterizedTypeReference<>() {
+            });
+
+        model.addAttribute("couponCount", couponCountResponse.getBody().get("couponCount"));
 
         return "mypage/profile/main";
     }
@@ -144,11 +164,9 @@ public class MemberController extends BaseController {
 
     @GetMapping("/authority")
     public String retrieveMemberAuthority(MemberInfo memberInfo, Model model) {
-        URI uri = URI.create(redirectGatewayPrefix + "/authority/" + memberInfo.getMemberNo());
 
         ApiEntity<List<MemberAuthorityRetrieveResponse>> response =
-            restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
-            });
+            memberService.retrieveMemberAuthority(memberInfo.getMemberNo());
 
         model.addAttribute("authorities", response.getBody());
         model.addAttribute("memberNo", memberInfo.getMemberNo());
@@ -201,6 +219,6 @@ public class MemberController extends BaseController {
 
         restService.delete(uri.toString());
         
-        return "redirect:/";
+        return "complete";
     }
 }

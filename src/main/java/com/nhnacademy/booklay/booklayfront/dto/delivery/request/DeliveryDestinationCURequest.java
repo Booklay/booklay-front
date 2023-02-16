@@ -15,7 +15,11 @@ public class DeliveryDestinationCURequest {
     @NotBlank
     private final String address;
     private final String addressDetail;
-    private final String addDetail;
+    private final String addressSubDetail;
+    @NotBlank
+    private final String receiver;
+    @NotBlank
+    private final String receiverPhoneNo;
     @NotNull
     private final Boolean isDefaultDestination;
 }

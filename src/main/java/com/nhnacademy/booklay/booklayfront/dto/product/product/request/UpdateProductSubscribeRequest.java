@@ -15,6 +15,7 @@ public class UpdateProductSubscribeRequest {
   Long productId;
   @NotNull
   String title;
+  Long originalImage;
   @NotNull
   Long price;
   @NotNull

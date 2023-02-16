@@ -25,6 +25,13 @@
     </div>
 
     <div class="mb-3">
+      <label class="form-label">기존 이미지 </label>
+      <img th:src="@{/storage/{objectFileId} (objectFileId = ${product.info.objectFileId})}"/>
+      <input type="number" class="form-control" name="originalImage"
+             th:value="${product.info.objectFileId}" hidden="hidden">
+    </div>
+
+    <div class="mb-3">
       <label class="form-label">이미지 </label>
       <input type="file" class="form-control" name="image"
              accept="image/jpeg, image/jpg, image/svg+xml, image/png">

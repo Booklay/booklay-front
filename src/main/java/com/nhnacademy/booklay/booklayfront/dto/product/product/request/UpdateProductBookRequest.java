@@ -17,6 +17,7 @@ public class UpdateProductBookRequest {
   private Long productId;
   @NotNull
   private String title;
+  private Long originalImage;
   @NotNull
   private Long price;
   @NotNull

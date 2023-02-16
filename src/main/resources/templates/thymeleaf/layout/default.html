@@ -12,7 +12,6 @@
   <link href="/plugins/tabler/dist/css/tabler-payments.min.css" rel="stylesheet"/>
   <link href="/plugins/tabler/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
   <link href="/plugins/tabler/dist/css/demo.min.css" rel="stylesheet"/>
-
 </head>
 
 <body>
@@ -154,6 +153,13 @@
 <!-- Tabler Core -->
 <script src="/plugins/tabler/dist/js/tabler.min.js"></script>
 <script src="/plugins/tabler/dist/js/demo.min.js"></script>
+
+<script  src="/js/errorHandler/alertMessage.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+<script th:inline="javascript">
+  catchErrorMessage([[${alertMessage}]]);
+</script>
 
 </body>
 </html>

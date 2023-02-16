@@ -1,5 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.dto.common;
 
+import com.nhnacademy.booklay.booklayfront.auth.constant.Roles;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -20,6 +21,8 @@ public class MemberInfo {
     private LocalDate birthday;
     private String phoneNo;
     private String email;
+    private String memberGrade;
+    private Roles authority;
 
     public MemberInfo (MemberRetrieveResponse memberRetrieveResponse) {
         this.memberNo = memberRetrieveResponse.getMemberNo();
@@ -30,6 +33,8 @@ public class MemberInfo {
         this.birthday = memberRetrieveResponse.getBirthday();
         this.phoneNo = memberRetrieveResponse.getPhoneNo();
         this.email = memberRetrieveResponse.getEmail();
+        this.memberGrade = memberRetrieveResponse.getMemberGrade();
+        this.authority = Roles.valueOf(memberRetrieveResponse.getAuthority());
     }
 
 }

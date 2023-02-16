@@ -28,40 +28,132 @@
           <div th:utext="${post.content}">
           </div>
         </div>
-        <hr>
-        <div id="comment-section">
-          <!--        <th:block th:each="comment : ${commentList}">-->
-          <div></div>
-          <!--답댓글-->
-          <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
-          <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
-          <!--            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">-->
-          <!--            <input name="groupCommentNo" type="number" th:value="${comment.commentId}">-->
-          <!--            <input name="groupOrder" type="number" th:value="${comment.size}">-->
-          <!--            <input name="depth" type="number" th:value="${comment.depth}">-->
-          <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
-          <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
-          <!--          </form>-->
-          <!--        </th:block>-->
+        <hr style="margin-bottom: 1rem;">
+
+        <!--        버튼 div 시작-->
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
+             style="text-align: right;">
+          <a th:if="${post.postTypeNo != 5}"
+             th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
+            <button class="btn btn-outline-primary" style="margin-right: 0.5rem;">답글</button>
+          </a>
+          <form th:if="${post.depth == 0 and post.postTypeNo == 2 and !post.answered}" method="post"
+                th:action="@{/board/confirm}"
+                style="display: inline">
+            <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
+            <input type="radio" name="commentAuth" value="true" th:checked="${commentAuth}"
+                   hidden="hidden">
+            <input type="radio" name="commentAuth" value="false" th:checked="${!commentAuth}"
+                   hidden="hidden">
+            <input class="btn btn-outline-lime" style="margin-right: 0.5rem;" type="submit"
+                   value="답변 완료">
+          </form>
+          <span th:if="${post.memberNo == memberInfo.memberNo}" id="btn-var">
+            <a th:href="@{/board/edit/{postId} (postId = ${post.postId})}"
+               style="margin-right: 0.5rem;">
+              <button class="btn btn-outline-primary">수정</button>
+            </a>
+            <!--            삭제 요청 시작-->
+            <form method="post" th:action="@{/board}" style="display: inline;">
+              <input type="hidden" name="_method" value="DELETE"/>
+              <input name="postId" type="number" hidden="hidden" th:value="${post.postId}">
+              <input name="memberNo" type="number" hidden="hidden" th:value="${post.memberNo}">
+              <input th:if="${post.productId != null}" name="productId" type="number"
+                     hidden="hidden" th:value="${post.productId}">
+              <input name="postTypeNo" type="number" hidden="hidden" th:value="${post.postTypeNo}">
+              <input class="btn btn-outline-danger" type="submit" value="삭제">
+            </form>
+            <!--            삭제 요청 시작-->
+          </span>
+        </div>
+        <!--        버튼 div 종료-->
+
+        <hr style="margin-top: 1rem; margin-bottom: 1rem;">
+
+        <!--        댓글 부분 시작-->
+        <div th:if="${post.postTypeNo != 5}" id="comment-section">
+
+          <th:block th:each="comment : ${commentList}">
+            <div
+                style="display: flex; border: lightgrey solid 1px; border-radius: 5px; padding: 5px; margin-bottom: 5px;">
+              <div style="flex: 4;">
+                <div th:if="${!comment.deleted}">
+                  <div><span th:text="${comment.name}"></span></div>
+                  <div th:text="${comment.content}"></div>
+                  <div><span th:text="${comment.createdAt}"></span></div>
+                </div>
+                <div th:if="${comment.deleted}">
+                  삭제된 댓글 입니다.
+                </div>
+              </div>
+              <div style="flex:1;">
+                <!--                <div>-->
+                <!--                  <form th:if="${comment.memberNo == memberInfo.memberNo}"-->
+                <!--                        method="post" th:action="@{/comment}">-->
+                <!--                    <input type="hidden" name="_method" value="PUT"/>-->
+                <!--                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">-->
+                <!--                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">-->
+                <!--                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">-->
+                <!--                    <input class="btn-outline-primary btn h-3" type="submit" value="수정">-->
+                <!--                  </form>-->
+                <!--                </div>-->
+                <!--                삭제버튼 시작 -->
+                <div th:if="${!comment.deleted}">
+                  <form th:if="${comment.memberNo == memberInfo.memberNo}"
+                        method="post" th:action="@{/comment}">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
+                    <input type="number" name="commentId" th:value="${comment.commentId}"
+                           hidden="hidden">
+                    <input type="number" name="memberNo" th:value="${comment.memberNo}"
+                           hidden="hidden">
+                    <input class="btn-outline-danger btn h-4" type="submit" value="삭제">
+                  </form>
+                </div>
+                <!--                삭제버튼 종료 -->
+                <!--                <div>-->
+                <!--                  <button class="btn btn-outline-primary h-3">답 댓글</button>-->
+                <!--                </div>-->
+              </div>
+            </div>
+            <!--답댓글-->
+            <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
+            <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
+            <!--            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">-->
+            <!--            <input name="groupCommentNo" type="number" th:value="${comment.commentId}">-->
+            <!--            <input name="groupOrder" type="number" th:value="${comment.size}">-->
+            <!--            <input name="depth" type="number" th:value="${comment.depth}">-->
+            <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
+            <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
+            <!--          </form>-->
+            <!--            <hr style="margin-top:5px; margin-bottom: 5px;">-->
+          </th:block>
+          <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
 
           <!--새 댓글-->
-
-          <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
-                method="post">
-            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
-                   hidden="hidden">
-            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">
-            <input name="groupCommentNo" type="number" th:value="0" hidden="hidden">
-            <input name="groupOrder" type="number" th:value="0" hidden="hidden">
-            <input name="depth" type="number" th:value="0" hidden="hidden">
-            <p style="display: flex">
-              <input class="form-control" name="content" type="text"
-                     placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
-              <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
-                     value="등록">
-            </p>
-          </form>
-
+          <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
+            <form method="post" th:action="@{/comment}">
+              <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
+                     hidden="hidden">
+              <input name="postId" type="number" th:value="${post.postId}" hidden="hidden">
+              <input name="groupOrder" type="number" th:value="0" hidden="hidden">
+              <input name="depth" type="number" th:value="0" hidden="hidden">
+              <p style="display: flex">
+                <input class="form-control" name="content" type="text"
+                       placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+                <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
+                       value="등록">
+              </p>
+            </form>
+          </th:block>
+          <!--          새 댓글 종료-->
+        </div>
+        <!--        댓글 부분 종료-->
+        <div id="foot-btn-var" style="text-align: right">
+          <a th:if="${post.productId!=null}"
+             th:href="@{/product/view/{productId} (productId= ${post.productId})}">
+            <button class="btn btn-outline-primary">상품 상세보기</button>
+          </a>
         </div>
       </div>
     </div>
@@ -81,7 +173,7 @@
             해당 게시글의 조회 권한이 없습니다.
           </p>
           <div class="empty-action">
-            <a href="./." class="btn btn-primary">
+            <a th:href="@{/}" class="btn btn-primary">
               <!-- Download SVG icon from http://tabler-icons.io/i/arrow-left -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -91,7 +183,7 @@
                 <line x1="5" y1="12" x2="11" y2="18"/>
                 <line x1="5" y1="12" x2="11" y2="6"/>
               </svg>
-              Take me home
+              메인 화면으로 돌아가기
             </a>
           </div>
         </div>

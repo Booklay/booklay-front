@@ -52,21 +52,34 @@ public class ControllerUtil {
     }
 
     public static Map<String, String> getMemberInfoMap(MemberInfo memberInfo){
+        Map<String, String> map = new HashMap<>();
         if (memberInfo.getMemberNo() == null) {
-            Map<String, String> map = new HashMap<>();
             String nullChangeText = "\u0000";
-            map.put("memberNo", nullChangeText);
-            map.put("gender", nullChangeText);
-            map.put("memberId", nullChangeText);
-            map.put("nickname", nullChangeText);
-            map.put("name", nullChangeText);
-            map.put("birthday", nullChangeText);
-            map.put("phoneNo", nullChangeText);
-            map.put("email", nullChangeText);
-            return map;
+            map.put("member_info_memberNo", nullChangeText);
+            map.put("member_info_gender", nullChangeText);
+            map.put("member_info_memberId", nullChangeText);
+            map.put("member_info_nickname", nullChangeText);
+            map.put("member_info_name", nullChangeText);
+            map.put("member_info_birthday", nullChangeText);
+            map.put("member_info_phoneNo", nullChangeText);
+            map.put("member_info_email", nullChangeText);
         }else {
-            return objectMapper.convertValue(memberInfo, Map.class);
+            map.put("member_info_memberNo", memberInfo.getMemberNo().toString());
+            map.put("member_info_gender", memberInfo.getGender());
+            map.put("member_info_memberId", memberInfo.getMemberId());
+            map.put("member_info_nickname", memberInfo.getNickname());
+            map.put("member_info_name", memberInfo.getName());
+            map.put("member_info_birthday", memberInfo.getBirthday().toString());
+            map.put("member_info_phoneNo", memberInfo.getPhoneNo());
+            map.put("member_info_email", memberInfo.getEmail());
         }
+        return map;
+    }
+
+    public static MultiValueMap<String, String> getMemberInfoMultiValueMap(MemberInfo memberInfo){
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.setAll(getMemberInfoMap(memberInfo));
+        return multiValueMap;
     }
 
     public static void setCurrentPageAndMaxPageToModel(Model model, PageResponse<?> response){

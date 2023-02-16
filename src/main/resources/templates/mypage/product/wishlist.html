@@ -4,116 +4,97 @@
 
 <head>
   <title>북레이 - 위시리스트 조회</title>
+  <link href="/css/member/wishlist.css" rel="stylesheet">
+  <link href="/css/product/elipse-style.css" rel="stylesheet">
   <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
 </head>
 
 <th:block layout:fragment="content">
-  <div class="card">
-    <div class="table-responsive">
-      <table class="table table-vcenter card-table">
-        <thead>
-        <tr>
-          <th>제목</th>
-          <th>작가</th>
-          <th>출판사</th>
-          <th>가격</th>
-          <th>재입고 알림</th>
-          <th>취소</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="product : ${productList}">
-          <tr>
-            <td>
-              <span th:text="${product.title}"/>
-            </td>
-            <td>
-              <th:block th:each="author: ${product.authors}">
-                <span th:text="${author.name}"/>
-              </th:block>
-            </td>
-            <td>
-              <span th:text="${product.publisher}"/>
-            </td>
-            <td>
-              <span th:text="${product.price}"/>
-            </td>
-            <td>
-              <!--              알람 등록-->
-              <form th:if="${!product.alarm}" method="post"
-                    th:action="@{/mypage/product/wishlist/alarm/connect}">
-                <input name="memberNo" type="number" th:value="${memberId}" hidden>
-                <input name="productId" type="number" th:value="${product.productId}" hidden>
-                <label class="btn btn-outline-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-bell-ringing" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"></path>
-                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                    <path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727"></path>
-                    <path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727"></path>
-                  </svg>
-                  재입고 알림
-                  </input>
-                </label>
-              </form>
-              <!--              알람 삭제-->
-              <form th:if="${product.alarm}" method="post"
-                    th:action="@{/mypage/product/wishlist/alarm/disconnect}">
-                <input name="memberNo" type="number" th:value="${memberId}" hidden>
-                <input name="productId" type="number" th:value="${product.productId}" hidden>
-                <label class="btn btn-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-bell-off" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M3 3l18 18"></path>
-                    <path
-                        d="M17 17h-13a4 4 0 0 0 2 -3v-3a7 7 0 0 1 1.279 -3.716m2.072 -1.934c.209 -.127 .425 -.244 .649 -.35a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3"></path>
-                    <path d="M9 17v1a3 3 0 0 0 6 0v-1"></path>
-                  </svg>
-                  </input>
-                  재입고 알림 중
-                </label>
-              </form>
-            </td>
-            <td>
-              <!--              위시리스트 삭제-->
-              <form method="post" th:action="@{/mypage/product/wishlist/disconnect}">
-                <input name="memberNo" type="number" th:value="${memberId}" hidden>
-                <input name="productId" type="number" th:value="${product.productId}" hidden>
-                <label class="btn btn-primary">
-                  <input type="submit" hidden>
-                  <svg xmlns="http://www.w3.org/2000/svg"
-                       class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
-                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                       stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path
-                        d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
-                    <path d="M14 19l2 2l4 -4"></path>
-                    <path d="M9 8h4"></path>
-                    <path d="M9 12h2"></path>
-                  </svg>
-                  찜 취소
-                  </input>
-                </label>
-              </form>
-            </td>
-          </tr>
-        </th:block>
-        </tbody>
-      </table>
-      <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+  <hr>
+
+  <h1>위시리스트</h1>
+
+  <th:block th:each="product : ${productList}">
+    <div class="product-div" style="display: flex; margin-bottom: 1rem;">
+      <div class="ww-2 image common-table" style="text-align: center;">
+        <img class="product-img"
+             style="max-height: 210px; width: auto;"
+             th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
+      </div>
+      <div class="ww-6 common-table">
+        <div class="product-title">
+          <a th:href="@{/product/view/{productId} (productId=${product.productId})}" class="product-strong" th:text="${product.title}"/></div>
+        <div>
+          <th:block th:if="${product.authors!=null}">
+            <th:block th:each="author: ${product.authors}">
+              <span th:text="${author.name}"/>
+            </th:block>
+            저 <em>|</em>
+          </th:block>
+          <span class="product-weak" th:text="${product.publisher}"/>
+        </div>
+        <div><span class="product-weak" th:text="${product.price}"/>원</div>
+        <div><span class="product-strong">할인가 자리</span> 원</div>
+        <div><span class="ellipsis-text-5" th:utext="${product.shortDescription}"/></div>
+      </div>
+      <div class="ww-2 common-table">
+        <div class="right-btns">
+<!--          수량 버튼-->
+          <div class="input-group quantity mx-auto" style="width: 100px;">
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary btn-minus" style="height:1.8rem;">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+            <input th:id="${product.productId+'count'}" type="text" class="form-control form-control-sm text-center" th:value=1>
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary btn-plus" style="height:1.8rem;">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+<!--          수량 버튼 끝-->
+        </div>
+        <div class="right-btns">
+          <button class="btn btn-outline-primary" style="width: 7rem">바로 구매</button>
+        </div>
+        <div class="right-btns">
+          <button class="btn btn-outline-primary" style="width: 7rem">카트에 담기</button>
+        </div>
+        <div class="right-btns">
+          <form method="post" th:action="@{/mypage/product/wishlist/disconnect}">
+            <input name="memberNo" type="number" th:value="${memberId}" hidden>
+            <input name="productId" type="number" th:value="${product.productId}" hidden>
+            <label class="btn btn-primary" style="width: 7rem">
+              <input type="submit" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
+                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path
+                    d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8"></path>
+                <path d="M14 19l2 2l4 -4"></path>
+                <path d="M9 8h4"></path>
+                <path d="M9 12h2"></path>
+              </svg>
+              찜 취소
+              </input>
+            </label>
+          </form>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </th:block>
+
+  <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+
 </th:block>
+
+<script>
+
+</script>
 
 
 </html>

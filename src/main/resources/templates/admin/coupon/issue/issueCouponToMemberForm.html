@@ -19,7 +19,7 @@
                         <div class="mb-3">
                             <div class="row g-2">
                                 <div class="col-auto">
-                                    <label class="form-label">쿠폰 종류</label>
+                                    <label class="form-label required">쿠폰 종류</label>
                                 </div>
                                 <div class="col-auto ">
                                     <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
@@ -45,7 +45,7 @@
                         <div class="mb-3">
                             <div class="row g-2">
                                 <div class="col-auto">
-                                    <label class="form-label">발급 대상 회원</label>
+                                    <label class="form-label required">발급 대상 회원</label>
                                 </div>
                                 <div class="col-auto ">
                                     <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
@@ -55,7 +55,7 @@
                             </div>
                             <div class="row g-2">
                                 <div class="col">
-                                    <input type="text" class="form-control" id="memberName" disabled="disabled">
+                                    <input type="text" class="form-control" id="memberName" disabled="disabled" required>
                                     <input hidden="hidden" type="number" name="memberId" id="memberId">
                                 </div>
                                 <div class="col-auto">
@@ -70,7 +70,7 @@
                         <div class="mb-3">
                             <div class="row g-2">
                                 <div class="col-auto">
-                                    <label class="form-label">만료 일자</label>
+                                    <label class="form-label required">만료 일자</label>
                                 </div>
                                 <div class="col-auto ">
                                     <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
 
-                            <input class="form-control" type="datetime-local" name="expiredAt" id="expiredAt" onload="setDefaultDate()" value="2020-12-02T11:11:11">
+                            <input class="form-control" type="datetime-local" name="expiredAt" id="expiredAt">
                         </div>
 
                         <div class="text-end">

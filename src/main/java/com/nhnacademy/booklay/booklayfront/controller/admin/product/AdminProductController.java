@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -39,6 +38,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -101,7 +101,7 @@ public class AdminProductController extends BaseController {
         gatewayIp + SHOP_PRE_FIX + PRE_FIX);
 
     ApiEntity<PageResponse<RetrieveProductResponse>> productResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (Objects.nonNull(productResponse.getBody())) {
@@ -172,11 +172,11 @@ public class AdminProductController extends BaseController {
    */
   @PostMapping("/delete/{productId}")
   public String getProductSoftDelete(@PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + productId);
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/" + productId);
 
     restService.delete(uri.toString());
 
-    return "redirect:/product/display";
+    return "redirect:/admin/product";
 
   }
 
@@ -327,9 +327,8 @@ public class AdminProductController extends BaseController {
    */
   @PostMapping("/update/books")
   public String updateProductBook(@Valid @ModelAttribute UpdateProductBookRequest request,
-      MultipartFile image)
+      @Nullable MultipartFile image)
       throws IOException {
-    log.info("진입 확인");
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/books");
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
@@ -378,7 +377,7 @@ public class AdminProductController extends BaseController {
    */
   @PostMapping("/create/subscribes")
   public String createProductSubscribe(@Valid @ModelAttribute CreateProductSubscribeRequest request,
-      MultipartFile image) throws IOException {
+      @Nullable MultipartFile image) throws IOException {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/subscribes");
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
@@ -489,7 +488,7 @@ public class AdminProductController extends BaseController {
         gatewayIp + SHOP_PRE_FIX + PRE_FIX + SUBSCRIBE_CONNECT_PRE_FIX + subscribeId);
 
     ApiEntity<PageResponse<RetrieveBookForSubscribeResponse>> bookResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     List<RetrieveBookForSubscribeResponse> bookList = bookResponse.getBody().getData();
@@ -563,7 +562,7 @@ public class AdminProductController extends BaseController {
         gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend/" + productNo);
 
     ApiEntity<PageResponse<RetrieveProductResponse>> recommendResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     setCurrentPageAndMaxPageToModel(model, recommendResponse.getBody());
@@ -584,8 +583,6 @@ public class AdminProductController extends BaseController {
   public String createRecommend(@Valid @ModelAttribute CreateDeleteProductRecommendRequest request,
       @PathVariable Long pageNum) {
     Long productNo = request.getBaseId();
-
-    log.info("진입 확인");
 
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/recommend");
 
@@ -614,9 +611,14 @@ public class AdminProductController extends BaseController {
     return "redirect:/admin/product/recommend/" + productNo + "?page=" + pageNum + "&size=" + SIZE;
   }
 
+  /**
+   * 엘라스틱 서치 적용
+   * @param pageNum
+   * @return
+   */
   @GetMapping("save/{pageNum}")
-  public String saveDocument(@PathVariable Long pageNum){
-    restService.get(gatewayIp + SHOP_PRE_FIX+ "search/save/all", null, Void.class);
+  public String saveDocument(@PathVariable Long pageNum) {
+    restService.get(gatewayIp + SHOP_PRE_FIX + "search/save/all", null, Void.class);
 
     return "redirect:/admin/product?page=" + pageNum;
   }

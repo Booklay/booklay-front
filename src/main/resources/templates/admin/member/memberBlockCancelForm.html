@@ -6,28 +6,21 @@
     <meta charset="UTF-8">
     <title>회원 차단 해제하기</title>
 </head>
-
-<!--<th:block layout:fragment="content">-->
-<!--<div>-->
-<!--    <h3>[회원 차단 해제하기]</h3>-->
-<!--    <b>차단을 해제하시겠습니까?</b><br>-->
-<!--    <button class="btn btn-outline-primary"><a-->
-<!--            th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>-->
-<!--    </button>-->
-<!--    <input type="button" value="취소" onclick="window.close()">-->
-<!--</div>-->
-
-<div class="card container container-tight py-4">
-    <div class="card-header">
+<th:block layout:fragment="content">
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body" style="text-align: center;">
+            <h2 class="card-title text-center mb-4">회원 차단 해제하기</h2>
+            <b style="font-size: 20px;">차단을 해제하시겠습니까?</b><br>
+            <div style="margin-top: 1rem;">
+                <a id="release-btn"
+                   th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">
+                    <button class="btn btn-outline-danger">해제</button>
+                </a>
+                <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <h2 class="card-title text-center mb-4">회원 차단 해제하기</h2>
-        <b>차단을 해제하시겠습니까?</b><br>
-        <button class="btn btn-outline-primary"><a
-                th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">해제</a>
-        </button class="btn btn-outline-primary">
-        <input type="button" value="취소" onclick="window.close()">
-    </div>
-</div>
 </th:block>
 </html>

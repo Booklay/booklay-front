@@ -2,16 +2,15 @@ package com.nhnacademy.booklay.booklayfront.controller.order;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.order.CartToOrderPageRequest;
-import com.nhnacademy.booklay.booklayfront.dto.order.OrderReceipt;
-import com.nhnacademy.booklay.booklayfront.dto.order.OrderSheet;
-import com.nhnacademy.booklay.booklayfront.dto.order.TossPaymentConfirmDto;
+import com.nhnacademy.booklay.booklayfront.dto.order.*;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
+import io.micrometer.core.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,9 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ORDER_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 
@@ -48,6 +47,8 @@ public class OrderController {
     private final RestService restService;
     private final ObjectMapper objectMapper;
     private static final String STRING_CART_ID = "CART_ID";
+    private static final String ATTRIBUTE_NAME_ERROR_MESSAGE = "errorMessage";
+    private static final String RETURN_PAGE_ORDER_ERROR = "order/orderError";
     @Qualifier("gatewayIp")
     private final String gatewayIp ;
     @Qualifier("domainIp")
@@ -57,9 +58,13 @@ public class OrderController {
                                  Optional<Cookie> optionalCookie){
         return optionalCookie.map(Cookie::getValue).orElse(null);
     }
+    @GetMapping("/page")
+    public String orderPageGetMapping(){
+        return "redirect:/cart/list";
+    }
     @PostMapping("/page")
     public String orderPage(@ModelAttribute(STRING_CART_ID)String cartId
-            ,@ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
+            , @Nullable @ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
             , Model model){
 
         List<CartObject> cartObjectList = productRestApiModelSettingService.setProductObjectListToModelByProductNoList(
@@ -92,12 +97,14 @@ public class OrderController {
     }
 
     @RequestMapping("/success")
-    public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto){
+    public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto
+            , Model model, MemberInfo memberInfo, @CookieValue(name = STRING_CART_ID, required = false) String cookie){
         //상품 주문서 받아오기
         String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
         ApiEntity<OrderSheet> orderSheetApiEntity = restService.get(orderSheetUrl, null, OrderSheet.class);
         if (!orderSheetApiEntity.isSuccess() || orderSheetApiEntity.getBody() == null){
-            return "만료된 요청"; //todo
+            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "만료된 요청입니다.");
+            return RETURN_PAGE_ORDER_ERROR;
         }
 
         String storageDownUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "storage/down");
@@ -107,8 +114,8 @@ public class OrderController {
         ApiEntity<Boolean> storageDownApiEntity = restService.post(storageDownUrl, storageObjectMap, Boolean.class);
         //재고 숫자 감소  todo 미구현
 
-         if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
-            //결제 승인
+        if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
+        //결제 승인
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
@@ -119,27 +126,36 @@ public class OrderController {
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
                 log.info("toss response => {}",response.body());
             }catch (IOException | InterruptedException e){
-//                return "결제 실패";
+                //todo 감소한 재고 복구
+                model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "결제 인증에 실패했습니다.");
+                return RETURN_PAGE_ORDER_ERROR;
             }
-
-
 
             //주문 영수증 저장
             String receiptSaveUrl = buildString( gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/", tossPaymentConfirmDto.getOrderId());
             ApiEntity<Long> orderNoApiEntity = restService.post(receiptSaveUrl, null, Long.class);
 
+            //장바구니에서 물건 삭제
+            MultiValueMap<String, String> cartDeleteMap = new LinkedMultiValueMap<>();
+            cartDeleteMap.setAll(getMemberInfoMap(memberInfo));
+            cartDeleteMap.add("cartId", cookie);
+            cartDeleteMap.put("productNoList",orderSheet.getCartDtoList().stream().map(cartDto -> cartDto.getProductNo().toString()).collect(Collectors.toList()));
+            String cartBuyUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
+            restService.delete(cartBuyUrl, cartDeleteMap);
 
             return "redirect:/order/receipt/"+orderNoApiEntity.getBody();
         }else {
             //재고 부족
-            return "재고 부족"; //todo
+             model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "재고가 부족하여 결제에 실패했습니다.");
+             return RETURN_PAGE_ORDER_ERROR;
         }
 
     }
 
     @GetMapping("fail")
-    public String failedOrder(){
-        return "결제 실패";
+    public String failedOrder(Model model){
+        model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "토스 페이먼츠 결제 요청에 실패했습니다.");
+        return RETURN_PAGE_ORDER_ERROR;
     }
 
 

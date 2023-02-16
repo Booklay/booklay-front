@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service.restapimodelsetting;
 
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductAllInOneResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -33,10 +34,9 @@ public class ProductRestApiModelSettingService {
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
-    public void setProductObjectListToModelByCartId(String cartId, String memberNo, Model model){
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+    public void setProductObjectListToModelByCartId(String cartId, MemberInfo memberInfo, Model model){
+        MultiValueMap<String, String> multiValueMap = getMemberInfoMultiValueMap(memberInfo);
         multiValueMap.add(STRING_CART_ID_FOR_API, cartId);
-        multiValueMap.add("memberNo", memberNo);
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
         ApiEntity<List<CartObject>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});
         List<CartObject> cartObjectList = apiEntity.getBody();

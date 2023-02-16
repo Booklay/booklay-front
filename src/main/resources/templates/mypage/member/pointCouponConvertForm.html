@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
+<head>
+    <meta charset="UTF-8">
+    <title>포인트 쿠폰 전환하기</title>
+</head>
+<th:block layout:fragment="content">
+
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body" style="text-align: center;">
+            <h2 class="card-title text-center mb-4" style="font-size: 20px;">포인트 쿠폰 전환하기</h2>
+
+            <div class="mb-3">
+                <label class="form-label" style="font-size: 15px;">포인트로 전환하시겠습니까?</label>
+                <button class="btn btn-outline-blue" style="margin-top: 1rem;">
+                    <a th:href="@{/member/profile/point/coupon/{couponId}/{orderCouponId}(couponId=${couponId}, orderCouponId=${orderCouponId})}">전환</a>
+                </button>
+                <button class="btn btn-outline-danger" style="margin-top: 1rem;" onclick="window.close()">취소</button>
+            </div>
+
+            </form>
+
+        </div>
+    </div>
+</th:block>
+</html>

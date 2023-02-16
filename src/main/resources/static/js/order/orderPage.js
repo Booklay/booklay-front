@@ -447,7 +447,7 @@ function orderValidCheckAndToss(){
                 }
 
             } else {
-                alert('Request Error!');
+                alert('결제 정보중 유효하지 않은 정보가 포함되어 있습니다.');
             }
         }
     };

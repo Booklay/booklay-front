@@ -6,7 +6,7 @@
 </head>
 <!---->
 <th:block layout:fragment="content">
-  <form method="post" th:action="@{/admin/product/author}">
+  <form id="authorForm" method="post" action="/admin/product/author">
     <div class="mb-3">
       <input type="number" name="id" th:value="${author.authorNo}" hidden="hidden"/>
     </div>
@@ -14,6 +14,7 @@
       <label class="form-label">작가 이름</label>
       <input type="text" name="name" th:value="${author.name}"/>
     </div>
+
     <th:block th:if="${author.member !=null}">
       <div class="mb-3">
         <label class="form-label">회원 번호</label>
@@ -21,7 +22,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label">회원 닉네임</label>
-        <span th:text="${author.getMember().memberId}" />
+        <span th:text="${author.getMember().memberId}"/>
       </div>
     </th:block>
 
@@ -41,4 +42,21 @@
   </form>
 </th:block>
 <!---->
+
+<script>
+  const form = document.querySelector('#authorForm')
+
+  form.addEventListener('submit', function (e) {
+
+    console.log("들어왔는데요")
+
+    e.preventDefault()
+
+    // submit data
+    e.target.submit()
+
+    // close popup
+    // window.close()
+  })
+</script>
 </html>

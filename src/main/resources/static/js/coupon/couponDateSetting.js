@@ -1,6 +1,4 @@
 let expiredAt = document.getElementById("expiredAt");
-let openAt = document.getElementById("opened-at");
-let closedAt = document.getElementById("closed-at");
 
 let now = new Date();
 let year = now.getFullYear();
@@ -18,7 +16,4 @@ if(day < 10) {
     day = "0" + day;
 }
 
-
-expiredAt.value = year + "-" + month + "-" + day + "T11:59:59";
-openAt.value = year + "-" + month + "-01" + "T12:00:01";
-closedAt.value = year + "-" + month + "-" + day + "T11:59:59";
+expiredAt.value = year + "-" + month + "-" + day + "T11:59";

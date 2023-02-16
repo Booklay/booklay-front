@@ -3,7 +3,7 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
-    <title>회원가입</title>
+    <title>북레이 - 회원가입</title>
 
     <script>
         // @formatter:off
@@ -14,12 +14,11 @@
                     previousMonth: '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>',
                     nextMonth: '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>'
                 },
-        }));
+            }));
         });
         // @formatter:on
     </script>
 </head>
-<!---->
 <th:block layout:fragment="content">
     <div class="card container container-tight py-4">
         <div class="card-header">
@@ -30,30 +29,36 @@
             <form th:action="@{/member/register}" method="post">
 
                 <div class="mb-3">
-                    <label class="form-label">Name</label>
+                    <label class="form-label required">Name</label>
                     <input type="text" name="name" class="form-control" placeholder="Enter name" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">ID</label>
-                    <input type="text" name="memberId" class="form-control" placeholder="Enter ID" required>
+                    <label class="form-label required">ID</label>
+                    <input type="text" id="member-id" name="memberId" class="form-control" placeholder="Enter ID" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Password</label>
+                    <label class="form-label required">Password</label>
                     <div class="input-group input-group-flat">
-                        <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="off" required>
+                        <input type="password" name="password" class="form-control" placeholder="Password"
+                               autocomplete="off" required>
                         <span class="input-group-text">
-                      <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Show password" data-bs-original-title="Show password"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
+                      <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Show password"
+                         data-bs-original-title="Show password"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                             stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+                                d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path
+                                d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
                       </a>
                     </span>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">별명</label>
-                    <input type="text" name="nickname" class="form-control" placeholder="Enter NickName" required>
+                    <label class="form-label required">NickName</label>
+                    <input type="text" id="nick-name" name="nickname" class="form-control" placeholder="Enter NickName" required>
                 </div>
 
                 <div class="mb-3">
@@ -68,23 +73,31 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">생일</label>
+                    <label class="form-label required">생일</label>
                     <div class="input-icon mb-2">
-                        <input class="form-control" name="birthday" placeholder="Select a date" id="datepicker-icon" required>
+                        <input class="form-control" name="birthday" placeholder="Select a date" id="datepicker-icon"
+                               required>
                         <span class="input-icon-addon"><!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M16 3l0 4"></path><path d="M8 3l0 4"></path><path d="M4 11l16 0"></path><path d="M11 15l1 0"></path><path d="M12 15l0 3"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                         stroke-linecap="round" stroke-linejoin="round"><path stroke="none"
+                                                                                              d="M0 0h24v24H0z"
+                                                                                              fill="none"></path><path
+                                            d="M4 5m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path
+                                            d="M16 3l0 4"></path><path d="M8 3l0 4"></path><path d="M4 11l16 0"></path><path
+                                            d="M11 15l1 0"></path><path d="M12 15l0 3"></path></svg>
                                   </span>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">전화번호</label>
+                    <label class="form-label required">전화번호</label>
                     <input type="number" name="phoneNo" class="form-control" placeholder="01012345678" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">이메일</label>
-                    <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+                    <label class="form-label required">이메일</label>
+                    <input type="email" id="e-mail" name="email" class="form-control" placeholder="Enter email" required>
                 </div>
 
                 <div class="mb-3">
@@ -103,6 +116,68 @@
 
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#member-id").focusout(function(){
+                const memberId = document.querySelector('#member-id').value;
+                //중복검사
+                $.ajax({
+                    type: "POST",
+                    url: `/member/exist/${memberId}`, /// url
+                    success: function(data){
+                        if(data == true){
+                            alert("중복된 ID입니다.");
+                        }
+                    },
+                    error: function(){ alert("중복된 ID입니다."); }
+                });
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#nick-name").focusout(function(){
+                const nickName = document.querySelector('#nick-name').value;
+                //중복검사
+                $.ajax({
+                    type: "POST",
+                    url: `/member/exist/nickName/${nickName}`, /// url
+                    success: function(data){
+                        if(data == true){
+                            alert("중복된 닉네임입니다.");
+                        }
+                    },
+                    error: function(){ alert("중복된 닉네임입니다."); }
+                });
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#e-mail").focusout(function(){
+                const EMail = document.querySelector('#e-mail').value;
+                //중복검사
+                $.ajax({
+                    type: "POST",
+                    url: `/member/exist/eMail/${EMail}`, /// url
+                    success: function(data){
+                        if(data == true){
+                            alert("중복된 이메일입니다.");
+                        }
+                    },
+                    error: function(){ alert("중복된 이메일입니다."); }
+                });
+
+            });//focusout()
+        }); // ready()
+    </script>
 </th:block>
-<!---->
 </html>

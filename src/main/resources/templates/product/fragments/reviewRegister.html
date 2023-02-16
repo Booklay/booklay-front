@@ -1,0 +1,61 @@
+<th:block th:unless="${memberInfo.memberNo == null}" th:fragment="review_form" xmlns:th="http://www.thymeleaf.org">
+    <form th:action="@{/review}" th:method="post" enctype="multipart/form-data">
+
+        <input type="number" name="memberNo" th:value="${memberInfo.memberNo}" hidden>
+        <input type="number" name="productId" th:value="${productNo}" hidden>
+
+        <div class="card-header border-bottom-0">
+            <div class="row row-cols-12" >
+                <h3 class="col-auto m-auto"> 평점 &nbsp; :</h3>
+                <div class="col-auto m-auto" id="rateStart">
+                    <input type="radio" name="score" value="5" id="rate1">
+                    <label for="rate1">⭐</label>
+                    <input type="radio" name="score" value="4" id="rate2">
+                    <label for="rate2">⭐</label>
+                    <input type="radio" name="score" value="3" id="rate3">
+                    <label for="rate3">⭐</label>
+                    <input type="radio" name="score" value="2" id="rate4">
+                    <label for="rate4">⭐</label>
+                    <input type="radio" name="score" value="1" id="rate5" checked>
+                    <label for="rate5">⭐</label>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="col-12">
+                <textarea class="form-control h-25 overflow-scroll" name="content" rows="3" placeholder="Content.." required></textarea>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="col-12">
+                <div class="mb-3">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            <label class="form-label">리뷰 이미지 등록</label>
+                        </div>
+                        <div class="col-auto">
+                            <span class="form-help" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="<p class='mb-0'> 이미지를 등록해주시면 500 포인트가 적립됩니다. 미등록 시 100 포인트" data-bs-html="true" data-bs-original-title="" title="">?
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="row g-2">
+                            <div class="col">
+                                <input class="form-control" type="file" accept="image/*" name="file" id="image-input">
+                            </div>
+                            <div class="col-auto">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary" id="submit_review">리뷰 등록</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</th:block>

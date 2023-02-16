@@ -1,21 +1,25 @@
 package com.nhnacademy.booklay.booklayfront.dto.board.request;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
 public class BoardPostCreateRequest {
 
-  Integer postTypeNo;
-  Long memberNo;
-  Long productNo;
-  Long groupPostNo;
-  Integer groupOrder;
-  Integer depth;
-  String title;
-  String content;
-  Boolean viewPublic;
-  Boolean answered;
+  @NotNull
+  private Integer postTypeNo;
+  @NotNull
+  private Long memberNo;
+  private Long productNo;
+  private Long groupNo;
+  private Integer groupOrderNo;
+  private Integer depth;
+  @NotNull
+  private String title;
+  @NotNull
+  private String content;
+  private Boolean viewPublic;
+  private Boolean answered;
 }

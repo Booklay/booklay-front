@@ -1,15 +1,14 @@
 package com.nhnacademy.booklay.booklayfront.controller.coupon;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponMemberResponse;
+import com.nhnacademy.booklay.booklayfront.exception.CouponZoneException;
 import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.coupon.CouponZoneService;
 import java.net.URI;
-import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,27 +29,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponZoneRestController {
 
     private final RestService restService;
-    private final ObjectMapper objectMapper;
     private final String gatewayIp;
+    private final CouponZoneService couponZoneService;
 
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String SHOP_DOMAIN_PREFIX = "/shop/v1";
 
     /**
-     * 사용자의 쿠폰 발급 요청을 shop 서버로 보냅니다.
+     * 사용자의 이달의 쿠폰 요청을 오픈 시간과 발급 만료 기간을 확인 후, shop 서버로 보냅니다.
      */
     @PostMapping("/{couponId}")
     public ResponseEntity<CouponIssueResponse> couponZoneIssue(@PathVariable Long couponId, MemberInfo memberInfo) {
         Long memberNo = memberInfo.getMemberNo();
-        if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
 
-        URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone");
+        couponZoneService.checkTimeAndGrade(couponId, memberInfo.getMemberGrade());
 
-        CouponZoneMemberIssueRequest request = new CouponZoneMemberIssueRequest(couponId, memberNo);
-        Map<String, Object> map = objectMapper.convertValue(request, Map.class);
-
-        ApiEntity<CouponIssueResponse>
-            response = restService.post(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
+        ApiEntity<CouponIssueResponse> response = couponZoneService.issueCouponAtZone(couponId, memberNo);
 
         return response.getSuccessResponse();
     }
@@ -68,6 +62,21 @@ public class CouponZoneRestController {
 
         ApiEntity<CouponMemberResponse> response =
             restService.get(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
+
+        return response.getSuccessResponse();
+    }
+
+    /**
+     * 사용자의 등급 및 무제한 쿠폰 요청을 오픈 시간과 발급 만료 기간을 확인 후, coupon 서버로 보냅니다.
+     */
+    @PostMapping("/no-limit/{couponId}")
+    public ResponseEntity<CouponIssueResponse> couponZoneIssueNoLimit(@PathVariable Long couponId, MemberInfo memberInfo) {
+        Long memberNo = memberInfo.getMemberNo();
+
+        log.info(memberInfo.getMemberGrade());
+        couponZoneService.checkTimeAndGrade(couponId, memberInfo.getMemberGrade());
+
+        ApiEntity<CouponIssueResponse> response = couponZoneService.issueNoLimitCouponAtZone(couponId, memberNo);
 
         return response.getSuccessResponse();
     }

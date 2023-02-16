@@ -9,8 +9,10 @@ import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryUpdateRe
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 @Slf4j
 @Controller
@@ -33,15 +37,19 @@ public class CategoryAdminController {
   private final String redirectGatewayPrefix;
   private final RestService restService;
   private final ObjectMapper objectMapper;
+  private final CategoryService categoryService;
+  private static final String REDIRECT_PREFIX = "redirect:/admin/categories";
+
 
   public CategoryAdminController(RestService restService,
-      String gateway, ObjectMapper objectMapper) {
+                                 String gateway, ObjectMapper objectMapper,
+                                 CategoryService categoryService) {
     this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/categories";
     this.restService = restService;
     this.objectMapper = objectMapper;
+    this.categoryService = categoryService;
   }
 
-  private static final String REDIRECT_PREFIX = "redirect:/admin/categories";
 
   /**
    * 카테고리 등록.
@@ -54,13 +62,18 @@ public class CategoryAdminController {
   public String createCategory(@Valid @ModelAttribute CategoryCreateRequest createRequest,
       Model model) {
 
-    URI uri = URI.create(redirectGatewayPrefix);
 
-    ApiEntity<CategoryResponse> response =
-        restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
-            CategoryResponse.class);
+    Optional <CategoryResponse> response = categoryService.createCategory(createRequest);
 
-    model.addAttribute("category", response.getBody());
+    if (response.isPresent()){
+      model.addAttribute("category", response.get());
+
+      return REDIRECT_PREFIX;
+    }
+
+    RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
+
+    redirectAttributes.addAttribute("message", "카테고리 생성에 실패하였습니다.");
 
     return REDIRECT_PREFIX;
   }

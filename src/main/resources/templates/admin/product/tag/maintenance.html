@@ -18,56 +18,46 @@
   </form>
   <hr>
 
-    <div class="card">
-      <div class="table-responsive">
-        <table
-            class="table table-vcenter card-table">
-          <thead>
+  <div class="card">
+    <div class="table-responsive">
+      <table
+          class="table table-vcenter card-table">
+        <thead>
+        <tr>
+          <th>태그 번호</th>
+          <th>태그 이름</th>
+          <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="tag : ${tagList}">
           <tr>
-            <th>태그 번호</th>
-            <th>태그 이름</th>
-            <th>삭제</th>
+            <td><span th:text="${tag.id}"/></td>
+            <td>
+              <form method="post"
+                    th:action="@{/admin/product/tag/maintenance/update/{pageNum} (pageNum =${currentPage})}">
+                <input name="id" type="number" th:value="${tag.id}" hidden/>
+                <input name="name" class="name-input" type="text" th:value="${tag.name}"
+                       maxlength=20
+                       disabled="disabled"/>
+                <input class="btn btn-outline-lime submit-btn" type="submit" value="수정 제출"
+                       hidden="hidden"/>
+                <span class="btn btn-outline-primary update-button">수정</span>
+              </form>
+            </td>
+            <td>
+              <form method="post"
+                    th:action="@{/admin/product/tag/maintenance/delete/{pageNum} (pageNum = ${currentPage})}">
+                <input name="id" type="number" th:value="${tag.id}" hidden/>
+                <input class="btn btn-outline-danger delete-btn" type="submit" value="삭제"/>
+              </form>
+            </td>
           </tr>
-          </thead>
-          <tbody>
-          <th:block th:each="tag : ${tagList}">
-            <tr>
-              <td><span th:text="${tag.id}"/></td>
-              <td>
-                <form method="post"
-                      th:action="@{/admin/product/tag/maintenance/update/{pageNum} (pageNum =${currentPage})}">
-                  <input name="id" type="number" th:value="${tag.id}" hidden/>
-                  <input name="name" class="name-input" type="text" th:value="${tag.name}" maxlength=20
-                         disabled="disabled"/>
-                  <input class="btn btn-outline-primary submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
-                  <span class="btn btn-outline-primary update-button">수정</span>
-                </form>
-              </td>
-              <td>
-                <form method="post"
-                      th:action="@{/admin/product/tag/maintenance/delete/{pageNum} (pageNum = ${currentPage})}">
-                  <input name="id" type="number" th:value="${tag.id}" hidden/>
-                  <input class="btn btn-outline-primary delete-btn" type="submit" value="삭제"/>
-                </form>
-              </td>
-            </tr>
-          </th:block>
-          </tbody>
-        </table>
-      </div>
+        </th:block>
+        </tbody>
+      </table>
     </div>
-
-
-    <script>
-      const updateBtns = document.querySelectorAll('.update-button');
-      updateBtns.forEach(function (item) {
-        item.addEventListener('click', function () { // 클릭 이벤트 발생시,
-          var form1 = this.closest('form'); // 클릭 이벤트가 발생한 버튼에 제일 가까운 폼을 찾고,
-          form1.querySelector('.name-input').toggleAttribute('disabled')
-          form1.querySelector('.submit-btn').toggleAttribute('hidden')
-        });
-      });
-    </script>
+  </div>
 
   </table>
 
@@ -76,10 +66,51 @@
   <hr>
 
   <h3>테그 등록</h3>
-  <form method="post" th:action="@{/admin/product/tag/maintenance/{pageNum} (pageNum = ${pageNum})}">
-    <p>테그명 : <input type="text" name="name">
-      <input type="submit" value="등록"/></p>
+  <form method="post"
+        th:action="@{/admin/product/tag/maintenance/{pageNum} (pageNum = ${currentPage})}">
+    <p>테그명 : <input id="tag-content" type="text" name="name">
+      <input id="tag-btn" type="submit" value="등록"/></p>
   </form>
 
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#tag-content").focusout(function(){
+        const tag = document.querySelector('#tag-content').value;
+        //중복검사
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          data:`{"name":${tag}}`,
+          url: `/admin/product/tag/${tag}`, /// url
+          success: function(data){
+            if(data == true){
+              alert("증복된 테그입니다.");
+            }
+          },
+          error: function(){ alert("증복된 테그입니다."); }
+        });
+
+      });//focusout()
+    }); // ready()
+    const updateBtns = document.querySelectorAll('.update-button');
+    updateBtns.forEach(function (item) {
+      item.addEventListener('click', function () { // 클릭 이벤트 발생시,
+        var form1 = this.closest('form'); // 클릭 이벤트가 발생한 버튼에 제일 가까운 폼을 찾고,
+        form1.querySelector('.name-input').toggleAttribute('disabled')
+        form1.querySelector('.submit-btn').toggleAttribute('hidden')
+
+        const spanForChange = this.closest('span')
+        if(spanForChange.textContent === '수정') {
+          spanForChange.innerHTML = "취소";
+        }
+        else {
+          spanForChange.innerHTML = "수정";
+        }
+      });
+    });
+  </script>
+</th:block>
 <!---->
 </html>
