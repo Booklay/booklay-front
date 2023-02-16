@@ -105,8 +105,8 @@
         var form1 = this.closest('form'); // 클릭 이벤트가 발생한 버튼에 제일 가까운 폼을 찾고,
         form1.querySelector('.name-input').toggleAttribute('disabled')
         form1.querySelector('.submit-btn').toggleAttribute('hidden')
+
         const spanForChange = this.closest('span')
-        console.log(spanForChange.textContent);
         if(spanForChange.textContent === '수정') {
           spanForChange.innerHTML = "취소";
         }
