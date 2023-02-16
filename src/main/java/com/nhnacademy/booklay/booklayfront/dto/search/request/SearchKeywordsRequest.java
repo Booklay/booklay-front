@@ -9,9 +9,8 @@ import lombok.Getter;
 public class SearchKeywordsRequest {
 
     @NotBlank
-    String keywords;
-
-    @NotBlank
     String classification;
 
+    @NotBlank
+    String keywords;
 }
