@@ -80,9 +80,35 @@
   <h3>테그 등록</h3>
   <form method="post"
         th:action="@{/admin/product/tag/maintenance/{pageNum} (pageNum = ${currentPage})}">
-    <p>테그명 : <input type="text" name="name">
-      <input type="submit" value="등록"/></p>
+    <p>테그명 : <input id="tag-content" type="text" name="name">
+      <input id="tag-btn" type="submit" value="등록"/></p>
   </form>
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <script>
+    $(document).ready(function() {
+
+      $("#tag-btn").keyup(function(){
+        var tag = document.querySelector('#tag-content').value;
+        var tagCheck = 0;
+
+        //중복검사
+        var tagList;
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          data:'{"name":'+ tag+'}',
+          url: ".jsp", /// url
+          success: function(data){
+            tagList = data;
+          },
+          error: function(){ alert("증복된 테그입니다."); }
+        });
+
+      });//keyup()
+    }); // ready()
+  </script>
 </th:block>
 <!---->
 </html>
