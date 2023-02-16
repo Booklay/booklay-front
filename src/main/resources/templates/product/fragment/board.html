@@ -22,7 +22,7 @@
               <span th:if="${post.depth!=0}">┗</span>
               <!--보임-->
               <th:block
-                  th:if="${post.viewPublic or post.memberNo == thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                  th:if="${post.viewPublic or post.memberNo == memberInfo.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
                 <a th:href="@{/board/{postId} (postId = ${post.postId})}"
                    th:text="${post.title}"/>
               </th:block>
@@ -30,7 +30,7 @@
               <th:block
                   th:if="${!post.viewPublic}">
                                 <span
-                                    th:if="${post.memberNo != thisMember.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
+                                    th:if="${post.memberNo != memberInfo.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
                                   비밀글입니다. <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-lock"
@@ -57,7 +57,7 @@
     </div>
 
     <a th:href="@{/board/productQNA/{productNo} (productNo = ${productNo})}" style="float: right;">
-      <button th:if="${thisMember.memberNo != null}" class="btn btn-outline-primary">
+      <button th:if="${memberInfo.memberNo != null}" class="btn btn-outline-primary">
         상품 문의 작성
       </button>
     </a>

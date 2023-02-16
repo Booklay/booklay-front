@@ -6,16 +6,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CommentRequest {
-
+public class CommentChangeRequest {
   @NotNull
   private Long postId;
   @NotNull
+  private Long commentId;
+  @NotNull
   private Long memberNo;
-  @NotNull
-  private String content;
-  private Long groupCommentNo;
-  private Integer groupOrder;
-  @NotNull
-  private Integer depth;
+
 }

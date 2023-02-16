@@ -3,11 +3,10 @@ package com.nhnacademy.booklay.booklayfront.dto.board.request;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
-public class PostDeleteRequest {
+public class BoardPostDeleteRequest {
   @NotNull
   private Long postId;
   @NotNull

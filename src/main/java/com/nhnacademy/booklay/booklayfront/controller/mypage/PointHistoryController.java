@@ -9,9 +9,11 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentRequest;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointCouponRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.mypage.PointHistoryService;
 import java.net.URI;
 import java.util.List;
@@ -43,14 +45,17 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/member/profile/point")
 public class PointHistoryController {
     private final RestTemplate restTemplate;
-
+    private final RestService restService;
     private final String redirectGatewayPrefix;
     private final String redirectGatewayPrefixCoupon;
     private final PointHistoryService pointHistoryService;
 
     public PointHistoryController(RestTemplate restTemplate,
-                                  PointHistoryService pointHistoryService, String gateway) {
+                                  PointHistoryService pointHistoryService,
+                                  RestService restService,
+                                  String gateway) {
         this.restTemplate = restTemplate;
+        this.restService = restService;
         this.pointHistoryService = pointHistoryService;
         this.redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/point";
         this.redirectGatewayPrefixCoupon = gateway + DOMAIN_PREFIX_COUPON + "/members";
@@ -130,7 +135,8 @@ public class PointHistoryController {
                 new ParameterizedTypeReference<>() {
                 });
 
-        List<PointCouponRetrieveResponse> list = Objects.requireNonNull(response.getBody()).getData();
+        List<PointCouponRetrieveResponse> list =
+            Objects.requireNonNull(response.getBody()).getData();
 
         model.addAttribute("list", list);
         model.addAttribute("memberNo", memberInfo.getMemberNo());
@@ -160,20 +166,28 @@ public class PointHistoryController {
         return "redirect:/member/profile/point/" + memberInfo.getMemberNo();
     }
 
-    @GetMapping("/coupon/{memberNo}/{couponId}")
-    public String convertPointCoupon(@PathVariable Long memberNo,
+    @GetMapping("/coupon/view/{couponId}")
+    public String pointCouponConvertView(MemberInfo memberInfo,
+                                         @PathVariable Long couponId,
+                                         Model model) {
+
+        model.addAttribute("couponId", couponId);
+        model.addAttribute("memberNo", memberInfo.getMemberNo());
+
+        return "mypage/member/pointCouponConvertForm";
+    }
+
+    @GetMapping("/coupon/{couponId}")
+    public String convertPointCoupon(MemberInfo memberInfo,
                                      @PathVariable Long couponId,
                                      Model model) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+//        URI uri = URI.create(
+//            redirectGatewayPrefix + "/coupon/" + memberInfo.getMemberNo() + "/" + couponId);
+//
+//        restService.post(uri.toString(), null, Void.class);
 
-        URI uri = URI.create(redirectGatewayPrefix + "/" + memberNo + "/" + couponId);
+        pointHistoryService.convertPointCoupon(memberInfo.getMemberNo(), couponId);
 
-        RequestEntity<Void> requestEntity =
-            new RequestEntity<>(headers, HttpMethod.GET, uri);
-
-        restTemplate.exchange(requestEntity, Void.class);
-
-        return "redirect:/member/profile/point/" + memberNo;
+        return "complete";
     }
 }

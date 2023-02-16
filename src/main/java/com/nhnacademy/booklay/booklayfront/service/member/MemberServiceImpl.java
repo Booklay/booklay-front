@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberMainRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
@@ -41,6 +42,13 @@ public class MemberServiceImpl implements MemberService {
     public ApiEntity<List<MemberAuthorityRetrieveResponse>> retrieveMemberAuthority(Long memberNo) {
         URI uri = URI.create(memberRedirectGatewayPrefix + "/authority/" + memberNo);
 
+        return restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
+        });
+    }
+
+    @Override
+    public ApiEntity<MemberMainRetrieveResponse> retrieveMemberMain(Long memberNo) {
+        URI uri = URI.create(memberRedirectGatewayPrefix + "/main/" + memberNo);
         return restService.get(uri.toString(), null, new ParameterizedTypeReference<>() {
         });
     }

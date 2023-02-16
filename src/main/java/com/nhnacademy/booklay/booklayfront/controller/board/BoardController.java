@@ -1,22 +1,25 @@
 package com.nhnacademy.booklay.booklayfront.controller.board;
 
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
-import com.nhnacademy.booklay.booklayfront.dto.board.request.PostDeleteRequest;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostDeleteRequest;
+import com.nhnacademy.booklay.booklayfront.dto.board.response.CommentResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
-import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -52,18 +55,25 @@ public class BoardController {
    */
   @GetMapping("/{postId}")
   public String viewPost(@PathVariable Long postId, MemberInfo memberInfo, Model model) {
+    //게시글 호출
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + postId);
-
     ApiEntity<PostResponse> response = restService.get(uri.toString(), null, PostResponse.class);
-
     PostResponse post = response.getBody();
 
     boolean commentAuth = commentAuthCheck(memberInfo, post);
 
     model.addAttribute("post", post);
     model.addAttribute("memberInfo", memberInfo);
-
     model.addAttribute("commentAuth", commentAuth);
+
+    URI commentUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/"+ postId);
+    ApiEntity<PageResponse<CommentResponse>> commentResponse = restService.get(
+        commentUri.toString(), null,
+        new ParameterizedTypeReference<PageResponse<CommentResponse>>() {
+        });
+
+    model.addAttribute("commentList", commentResponse.getBody().getData());
+    setCurrentPageAndMaxPageToModel(model, commentResponse.getBody());
     return "board/view";
   }
 
@@ -178,7 +188,7 @@ public class BoardController {
    */
   @DeleteMapping()
   public String deletePost(MemberInfo memberInfo,
-      @Valid @ModelAttribute PostDeleteRequest request) {
+      @Valid @ModelAttribute BoardPostDeleteRequest request) {
     //삭제 권한 확인
     if (memberInfo.getMemberNo() == request.getMemberNo()) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + request.getPostId());
