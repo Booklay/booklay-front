@@ -91,8 +91,6 @@ public class MemberController extends BaseController {
             model.addAttribute("memberMain", memberMainResponse.getBody());
         }
 
-        //TODO : 쿠폰 갯수 가져오는 로직 작성
-
         URI wishlistUri =
             URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/mypage/product/index/wishlist/"
                 + memberNo);
