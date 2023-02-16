@@ -41,7 +41,6 @@ public class CouponIssueAdminFrontController {
 
     /**
      * 수량만큼의 쿠폰 발급 폼.
-     *
      */
     @GetMapping("/issue")
     public String issueCouponForm() {

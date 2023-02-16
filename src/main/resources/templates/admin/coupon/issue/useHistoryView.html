@@ -61,7 +61,7 @@
                     <td><p th:text="${item.memberId}"></p></td>
                     <td><p th:text="${item.couponName}"></p></td>
                     <td><p th:text="${#temporals.format(item.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
-                    <td><p th:text="${item.discountPrice}"></p></td>
+                    <td><p th:text="${item.discountPrice}"></p>원</td>
                     <td><p th:text="${#temporals.format(item.orderedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
                 </tr>
                 </tbody>
