@@ -13,7 +13,6 @@ import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.config.RedisConfig;
 import com.nhnacademy.booklay.booklayfront.config.WebConfig;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponAdminFrontController;
-import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponHistoryAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponIssueAdminFrontController;
 import com.nhnacademy.booklay.booklayfront.controller.admin.coupon.CouponTypeAdminController;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
@@ -55,7 +54,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @WebMvcTest(controllers = {CouponAdminFrontController.class
-        , CouponHistoryAdminFrontController.class
         , CouponTypeAdminController.class
         , CouponIssueAdminFrontController.class})
 @ActiveProfiles("test")

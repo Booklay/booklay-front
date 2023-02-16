@@ -107,12 +107,12 @@ public class CouponIssueAdminFrontController {
     }
 
     /**
-     * 사용된 쿠폰 리스트 조회
+     * 쿠폰 사용 기록에 대한 조회 요청을 받습니다.
      */
     @GetMapping("/use-history")
     public String getCouponUsedHistory(@RequestParam(value = "page", defaultValue = "0") int pageNum,
                                        Model model) {
-        couponRestApiModelSettingService.setCouponUseHistoryToModelByPage(pageNum, model);
+        couponRestApiModelSettingService.setCouponHistoryToModelByPage(pageNum, model);
 
         return "admin/coupon/issue/useHistoryView";
     }

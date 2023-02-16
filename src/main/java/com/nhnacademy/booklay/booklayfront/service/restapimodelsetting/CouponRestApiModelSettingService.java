@@ -7,6 +7,7 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponUsedHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCouponResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -166,17 +167,14 @@ public class CouponRestApiModelSettingService {
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
+    /**
+     * 관리자의 쿠폰 사용 내역을 조회합니다.
+     */
     public void setCouponHistoryToModelByPage(Integer pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/");
-        ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
-        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
-    }
-
-    public void setCouponHistoryToModelByPageAndMemberNo(Integer pageNum, Model model) {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history");
-        ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
+        ApiEntity<PageResponse<CouponUsedHistoryResponse>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
+
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 

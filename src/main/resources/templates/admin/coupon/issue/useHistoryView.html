@@ -1,30 +1,72 @@
 <!DOCTYPE html>
-<html lang="ko">
-<div id="header-carousel" class="carousel slide" data-ride="carousel">
-    <table>
-        <tr>
-            <td>쿠폰 ID</td>
-            <td>사용유저</td>
-            <td>쿠폰 코드</td>
-            <td>쿠폰 이름</td>
-            <td>사용일</td>
-        </tr>
-    <tbody th:each="issue:${issueList}">
-        <tr>
-            <td><p th:text="${issue.couponId}"></p></td>
-            <td><p th:text="${issue.userId}"></p></td>
-            <td><p th:text="${issue.code}"></p></td>
-            <td><p th:text="${issue.name}"></p></td>
-            <td><p th:text="${issue.issuedAt}"></p></td>
-        </tr>
-    </tbody>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/admin}">
+<head>
+    <title>[관리자] 쿠폰 사용 기록</title>
+</head>
 
-    </table>
-    <p th:if="${pageNum > 0}">
-        <a th:href="${'issue/' + memberNo + (pageNum - 1)}">이전</a>
-    </p>
-    <p th:if="${#lists.size(issueList) > 0}">
-        <a th:href="${'issue/' + memberNo + (pageNum + 1)}">다음</a>
-    </p>
-</div>
-</html>
+<th:block layout:fragment="content">
+
+    <div class="page-header d-print-none">
+        <div class="row">
+            <div class="col">
+                <h4 class="page-title">쿠폰 사용 기록</h4>
+            </div>
+            <div class="col">
+                <div class="align-content-end">
+                    <div class="input-group mb-3">
+                        <div class="col-3">
+                            <select class="form-select">
+                                <option>회원 ID</option>
+                                <option>쿠폰 이름</option>
+                                <option>쿠폰 ID</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" class="btn btn-icon" aria-label="Button">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/search -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path d="M21 21l-6 -6"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(list)}">
+        <div>등록된 쿠폰이 없습니다.</div>
+    </div>
+
+    <div class="card" th:unless="${#lists.isEmpty(list)}">
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>사용자 ID</th>
+                    <th>쿠폰 이름</th>
+                    <th>쿠폰 발급일</th>
+                    <th>할인 금액</th>
+                    <th>주문 날짜</th>
+                </tr>
+                </thead>
+
+                <tbody th:each="item, itemStat :${list}">
+                <tr>
+                    <td><p th:text="${itemStat.count}+${currentPage}*20"></p></td>
+                    <td><p th:text="${item.memberId}"></p></td>
+                    <td><p th:text="${item.couponName}"></p></td>
+                    <td><p th:text="${#temporals.format(item.issuedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                    <td><p th:text="${item.discountPrice}"></p></td>
+                    <td><p th:text="${#temporals.format(item.orderedAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></p></td>
+                </tr>
+                </tbody>
+            </table>
+            <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+        </div>
+    </div>
+</th:block>
