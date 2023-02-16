@@ -30,19 +30,24 @@
         </div>
         <hr style="margin-bottom: 1rem;">
 
+        <!--        버튼 div 시작-->
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
              style="text-align: right;">
           <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
             <button class="btn btn-outline-primary" style="margin-right: 1rem;">답글</button>
           </a>
-          <a th:href="@{/board/answer/{postId} (postId= ${post.postId})}">
-            <button class="btn btn-outline-lime" style="margin-right: 1rem;">답변 완료</button>
-          </a>
+          <form th:if="${post.depth == 0}" method="post" th:action="@{/board/confirm}">
+            <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
+            <input type="number" name="postId" th:value="${commentAuth}" hidden="hidden">
+            <input class="btn btn-outline-lime" style="margin-right: 1rem;" type="submit"
+                   value="답변 완료">
+          </form>
           <span th:if="${post.memberNo == memberInfo.memberNo}" id="btn-var">
             <a th:href="@{/board/edit/{postId} (postId = ${post.postId})}"
                style="margin-right: 1rem;">
               <button class="btn btn-outline-primary">수정</button>
             </a>
+            <!--            삭제 요청 시작-->
             <form method="post" th:action="@{/board}" style="display: inline;">
               <input type="hidden" name="_method" value="DELETE"/>
               <input name="postId" type="number" hidden="hidden" th:value="${post.postId}">
@@ -52,10 +57,16 @@
               <input name="postTypeNo" type="number" hidden="hidden" th:value="${post.postTypeNo}">
               <input class="btn btn-outline-danger" type="submit" value="삭제">
             </form>
+            <!--            삭제 요청 시작-->
           </span>
         </div>
+        <!--        버튼 div 종료-->
+
         <hr style="margin-top: 1rem; margin-bottom: 1rem;">
+
+        <!--        댓글 부분 시작-->
         <div id="comment-section">
+
           <th:block th:each="comment : ${commentList}">
             <div style="display: flex">
               <div style="flex: 4;">
@@ -64,29 +75,31 @@
                 <div><span th:text="${comment.createdAt}"></span></div>
               </div>
               <div style="flex:1;">
-<!--                <div>-->
-<!--                  <form th:if="${comment.memberNo == memberInfo.memberNo}"-->
-<!--                        method="post" th:action="@{/comment}">-->
-<!--                    <input type="hidden" name="_method" value="PUT"/>-->
-<!--                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">-->
-<!--                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">-->
-<!--                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">-->
-<!--                    <input class="btn-outline-primary btn h-3" type="submit" value="수정">-->
-<!--                  </form>-->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                  <form th:if="${comment.memberNo == memberInfo.memberNo}"-->
+                <!--                        method="post" th:action="@{/comment}">-->
+                <!--                    <input type="hidden" name="_method" value="PUT"/>-->
+                <!--                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">-->
+                <!--                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">-->
+                <!--                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">-->
+                <!--                    <input class="btn-outline-primary btn h-3" type="submit" value="수정">-->
+                <!--                  </form>-->
+                <!--                </div>-->
                 <div>
                   <form th:if="${comment.memberNo == memberInfo.memberNo}"
                         method="post" th:action="@{/comment}">
                     <input type="hidden" name="_method" value="DELETE"/>
                     <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
-                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">
-                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">
+                    <input type="number" name="commentId" th:value="${comment.commentId}"
+                           hidden="hidden">
+                    <input type="number" name="memberNo" th:value="${comment.memberNo}"
+                           hidden="hidden">
                     <input class="btn-outline-danger btn h-4" type="submit" value="삭제">
                   </form>
                 </div>
-<!--                <div>-->
-<!--                  <button class="btn btn-outline-primary h-3">답 댓글</button>-->
-<!--                </div>-->
+                <!--                <div>-->
+                <!--                  <button class="btn btn-outline-primary h-3">답 댓글</button>-->
+                <!--                </div>-->
               </div>
             </div>
             <!--답댓글-->
@@ -100,10 +113,9 @@
             <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
             <!--          </form>-->
           </th:block>
-
-          <!--새 댓글-->
           <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
 
+          <!--새 댓글-->
           <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
             <form method="post" th:action="@{/comment}">
               <input name="memberNo" type="number" th:value="${memberInfo.memberNo}"
@@ -119,7 +131,9 @@
               </p>
             </form>
           </th:block>
+          <!--          새 댓글 종료-->
         </div>
+        <!--        댓글 부분 종료-->
         <div id="foot-btn-var" style="text-align: right">
           <a th:if="${post.productId!=null}"
              th:href="@{/product/view/{productId} (productId= ${post.productId})}">
@@ -154,7 +168,7 @@
                 <line x1="5" y1="12" x2="11" y2="18"/>
                 <line x1="5" y1="12" x2="11" y2="6"/>
               </svg>
-              Take me home
+              메인 화면으로 돌아가기
             </a>
           </div>
         </div>
