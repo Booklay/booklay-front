@@ -101,11 +101,9 @@ public class SearchController extends BaseController {
                                 @RequestParam("keywords") String keywords,
                                 @RequestParam(value = "page", defaultValue = "0") int page) {
 
-
-
         return URI.create("redirect:/search/products/keywords"
             + "?classification=" + classification
-            + "&keywords=" + keywords
+            + "&keywords=" + keywords.replace(" ","+")
             + "&page=" + page).toASCIIString();
 
     }
