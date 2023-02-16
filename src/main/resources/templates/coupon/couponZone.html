@@ -9,27 +9,24 @@
 
     <ul class="nav nav-bordered mb-4">
         <li class="nav-item">
-            <a class="nav-link active" href="#">이달의 쿠폰</a>
+            <a class="nav-link active" href="#"><h2>이달의 쿠폰</h2></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">등급 · 무제한 쿠폰</a>
+            <a class="nav-link" href="#"><h2>등급 · 무제한 쿠폰</h2></a>
         </li>
     </ul>
 
     <div class="container-xl text-center">
         <div class="row row-cards">
-            <div class="text-uppercase text-muted h1">이달의 쿠폰</div>
-
             <th:block th:each="item : ${limitedList}">
-
-                <div class="col-sm-6 col-lg-3 m-auto">
+                <div class="col-sm-6 col-lg-3">
                     <div class="card card-md">
                         <div class="card-body text-center" >
                             <span th:if="${item.fileId != null}">
                                 <img class="product-img"
                                      style="height: 100%; width: 100%; margin-top:10px;"
                                      th:src="@{/storage/{objectFileId} (objectFileId = ${item.fileId})}"/>
-                                <p class="fw-bold my-3" th:text="${item.name}"></p>
+                                <h3 class="fw-bold my-3" th:text="${item.name}"></h3>
                              </span>
                             <span th:if="${item.fileId == null}">
                                 <p class="display-5 fw-bold my-3" th:text="${item.name}"></p>
@@ -39,10 +36,7 @@
                                     <span th:text="${item.description}"></span>
                                 </li>
                                 <li>
-                                    <span th:text="${#temporals.format(item.openedAt,'yyyy-MM-dd')}"></span>
-                                </li>
-                                <li>
-                                    <span th:text="${#temporals.format(item.issuanceDeadlineAt,'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    <strong class="text-muted" th:text="${#temporals.format(item.openedAt,'MM-dd HH:mm:ss')} + '부터 발급 가능'"></strong>
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
@@ -74,7 +68,7 @@
                                     <span th:text="${item.description}"></span>
                                 </li>
                                 <li>
-                                    <strong th:text="${#temporals.format(item.issuanceDeadlineAt,'yyyy-MM-dd HH:mm:ss')}+'까지 발급'"></strong>
+                                    <strong th:text="${#temporals.format(item.issuanceDeadlineAt,'MM-dd HH:mm:ss')}+'까지 발급'"></strong>
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
