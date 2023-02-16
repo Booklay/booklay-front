@@ -56,26 +56,53 @@
         </div>
         <hr style="margin-top: 1rem; margin-bottom: 1rem;">
         <div id="comment-section">
-          <!--        <th:block th:each="comment : ${commentList}">-->
-          <!--          <div>-->
-          <!--            <div><span th:text="${comment.name}"></span></div>-->
-          <!--            <div th:text="${comment.content}"></div>-->
-          <!--            <div><span th:text="${comment.createdAt}"></span></div>-->
-          <!--            <div><button class="btn-outline-primary btn">답 댓글</button></div>-->
-          <!--          </div>-->
-          <!--답댓글-->
-          <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
-          <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
-          <!--            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">-->
-          <!--            <input name="groupCommentNo" type="number" th:value="${comment.commentId}">-->
-          <!--            <input name="groupOrder" type="number" th:value="${comment.size}">-->
-          <!--            <input name="depth" type="number" th:value="${comment.depth}">-->
-          <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
-          <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
-          <!--          </form>-->
-          <!--        </th:block>-->
+          <th:block th:each="comment : ${commentList}">
+            <div style="display: flex">
+              <div style="flex: 4;">
+                <div><span th:text="${comment.name}"></span></div>
+                <div th:text="${comment.content}"></div>
+                <div><span th:text="${comment.createdAt}"></span></div>
+              </div>
+              <div style="flex:1;">
+<!--                <div>-->
+<!--                  <form th:if="${comment.memberNo == memberInfo.memberNo}"-->
+<!--                        method="post" th:action="@{/comment}">-->
+<!--                    <input type="hidden" name="_method" value="PUT"/>-->
+<!--                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">-->
+<!--                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">-->
+<!--                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">-->
+<!--                    <input class="btn-outline-primary btn h-3" type="submit" value="수정">-->
+<!--                  </form>-->
+<!--                </div>-->
+                <div>
+                  <form th:if="${comment.memberNo == memberInfo.memberNo}"
+                        method="post" th:action="@{/comment}">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
+                    <input type="number" name="commentId" th:value="${comment.commentId}" hidden="hidden">
+                    <input type="number" name="memberNo" th:value="${comment.memberNo}" hidden="hidden">
+                    <input class="btn-outline-danger btn h-3" type="submit" value="삭제">
+                  </form>
+                </div>
+<!--                <div>-->
+<!--                  <button class="btn btn-outline-primary h-3">답 댓글</button>-->
+<!--                </div>-->
+              </div>
+            </div>
+            <!--답댓글-->
+            <!--          <form th:if="${memberInfo.memberNo!=null}" method="post">-->
+            <!--            <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden="hidden">-->
+            <!--            <input name="postNo" type="number" th:value="${post.postId}" hidden="hidden">-->
+            <!--            <input name="groupCommentNo" type="number" th:value="${comment.commentId}">-->
+            <!--            <input name="groupOrder" type="number" th:value="${comment.size}">-->
+            <!--            <input name="depth" type="number" th:value="${comment.depth}">-->
+            <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
+            <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
+            <!--          </form>-->
+          </th:block>
 
           <!--새 댓글-->
+          <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
 
           <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
             <form method="post" th:action="@{/comment}">

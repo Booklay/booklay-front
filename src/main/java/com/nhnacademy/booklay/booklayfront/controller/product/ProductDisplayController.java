@@ -133,7 +133,7 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
     //위시리스트, 알림 등록 확인
-    model.addAttribute("thisMember", memberInfo);
+    model.addAttribute("memberInfo", memberInfo);
     if (memberInfo.getMemberNo() != null) {
       URI uriForMember = URI.create(
           gatewayIp + "/shop/v1/mypage/product/boolean");

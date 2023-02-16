@@ -1,17 +1,21 @@
 package com.nhnacademy.booklay.booklayfront.controller.board;
 
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.CommentChangeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.CommentRequest;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.Map;
 import javax.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,11 +50,17 @@ public class CommentController {
   }
 
   @DeleteMapping()
-  public String deleteComment(@Valid @ModelAttribute CommentRequest request) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment");
+  public String deleteComment(@Valid @ModelAttribute CommentChangeRequest request, MemberInfo memberInfo) {
+    if(request.getMemberNo().equals(memberInfo.getMemberNo())) {
+      URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/" + request.getCommentId());
 
-    restService.delete(uri.toString());
+      MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+      map.setAll(getMemberInfoMap(memberInfo));
 
-    return "redirect:/board/" + request.getPostId();
+      restService.delete(uri.toString(), map);
+
+      return "redirect:/board/" + request.getPostId();
+    }
+    return "/error";
   }
 }

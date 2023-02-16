@@ -39,6 +39,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -327,7 +328,7 @@ public class AdminProductController extends BaseController {
    */
   @PostMapping("/update/books")
   public String updateProductBook(@Valid @ModelAttribute UpdateProductBookRequest request,
-      MultipartFile image)
+      @Nullable MultipartFile image)
       throws IOException {
     log.info("진입 확인");
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/books");
