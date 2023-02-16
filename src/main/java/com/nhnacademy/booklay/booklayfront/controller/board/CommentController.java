@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @Author : 최규태
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +35,11 @@ public class CommentController {
   private final RestService restService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  /**
+   * 댓글 생성
+   * @param request
+   * @return
+   */
   @PostMapping()
   public String createComment(@Valid @ModelAttribute CommentRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment");
@@ -41,6 +49,11 @@ public class CommentController {
     return "redirect:/board/" + request.getPostId();
   }
 
+  /**
+   * 댓글 수정
+   * @param request
+   * @return
+   */
   @PutMapping()
   public String updateComment(@Valid @ModelAttribute CommentRequest request) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment");
@@ -49,6 +62,12 @@ public class CommentController {
     return "redirect:/board/" + request.getPostId();
   }
 
+  /**
+   * 댓글 소프트 딜리트
+   * @param request
+   * @param memberInfo
+   * @return
+   */
   @DeleteMapping()
   public String deleteComment(@Valid @ModelAttribute CommentChangeRequest request, MemberInfo memberInfo) {
     if(request.getMemberNo().equals(memberInfo.getMemberNo())) {
