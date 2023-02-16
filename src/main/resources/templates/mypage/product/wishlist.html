@@ -5,6 +5,7 @@
 <head>
   <title>북레이 - 위시리스트 조회</title>
   <link href="/css/member/wishlist.css" rel="stylesheet">
+  <link href="/css/product/elipse-style.css" rel="stylesheet">
   <!--/* 타이틀 작성시 자동으로 레이아웃에 적용 */-->
 </head>
 
@@ -15,13 +16,14 @@
 
   <th:block th:each="product : ${productList}">
     <div class="product-div" style="display: flex; margin-bottom: 1rem;">
-      <div class="ww-2 image common-table" style="height: 210px;">
+      <div class="ww-2 image common-table" style="text-align: center;">
         <img class="product-img"
-             style="max-height: 210px; width: 95%;"
+             style="max-height: 210px; width: auto;"
              th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
       </div>
       <div class="ww-6 common-table">
-        <div class="product-title"><span class="product-strong" th:text="${product.title}"/></div>
+        <div class="product-title">
+          <a th:href="@{/product/view/{productId} (productId=${product.productId})}" class="product-strong" th:text="${product.title}"/></div>
         <div>
           <th:block th:if="${product.authors!=null}">
             <th:block th:each="author: ${product.authors}">
@@ -33,21 +35,37 @@
         </div>
         <div><span class="product-weak" th:text="${product.price}"/>원</div>
         <div><span class="product-strong">할인가 자리</span> 원</div>
-        <div><span th:utext="${product.shortDescription}"/></div>
+        <div><span class="ellipsis-text-5" th:utext="${product.shortDescription}"/></div>
       </div>
       <div class="ww-2 common-table">
-        <div class="right-btns">인풋 자리</div>
         <div class="right-btns">
-          <button class="btn btn-outline-primary">바로 구매</button>
+<!--          수량 버튼-->
+          <div class="input-group quantity mx-auto" style="width: 100px;">
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary btn-minus" style="height:1.8rem;">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+            <input th:id="${product.productId+'count'}" type="text" class="form-control form-control-sm text-center" th:value=1>
+            <div class="input-group-btn">
+              <button class="btn btn-sm btn-primary btn-plus" style="height:1.8rem;">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+<!--          수량 버튼 끝-->
         </div>
         <div class="right-btns">
-          <button class="btn btn-outline-primary">카트에 담기</button>
+          <button class="btn btn-outline-primary" style="width: 7rem">바로 구매</button>
         </div>
         <div class="right-btns">
-          <form method="post" th:action="@{/member/product/wishlist/disconnect}">
+          <button class="btn btn-outline-primary" style="width: 7rem">카트에 담기</button>
+        </div>
+        <div class="right-btns">
+          <form method="post" th:action="@{/mypage/product/wishlist/disconnect}">
             <input name="memberNo" type="number" th:value="${memberId}" hidden>
             <input name="productId" type="number" th:value="${product.productId}" hidden>
-            <label class="btn btn-primary">
+            <label class="btn btn-primary" style="width: 7rem">
               <input type="submit" hidden>
               <svg xmlns="http://www.w3.org/2000/svg"
                    class="icon icon-tabler icon-tabler-checklist" width="24" height="24"
