@@ -3,7 +3,7 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <title>Coupon Zone</title>
-    <script src="/js/coupon/couponIssue.js"></script>
+    <script src="/js/coupon/couponIssueNoLimit.js"></script>
 </head>
 <th:block layout:fragment="content">
 
@@ -96,7 +96,7 @@
 
         issueBtn.forEach(btn => {
             btn.addEventListener('click', function(event) {
-                issueCoupon(event.target.name);
+                issueCouponNoLimit(event.target.name);
                 loading.style.display = 'flex';
             })
         })

@@ -5,6 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.booklay.booklayfront.auth.interceptor.JwtAddInterceptor;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
+import com.nhnacademy.booklay.booklayfront.exception.CouponZoneException;
+import io.micrometer.core.instrument.util.IOUtils;
+import java.util.Map;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -84,6 +88,14 @@ public class WebConfig {
                 if (response.getStatusCode().equals(HttpStatus.METHOD_NOT_ALLOWED)) {
                     throw new MethodNotAllowedException(
                         String.valueOf(HttpStatus.METHOD_NOT_ALLOWED), null);
+                }
+
+                if(response.getStatusCode().equals(HttpStatus.FORBIDDEN)) {
+                    String messageString = IOUtils.toString(response.getBody());
+                    Map<String, String> map = objectMapper().readValue(messageString, Map.class);
+
+                    String message = map.get("message");
+                    throw new CouponZoneException(message);
                 }
 
                 if (response.getStatusCode().is4xxClientError()) {

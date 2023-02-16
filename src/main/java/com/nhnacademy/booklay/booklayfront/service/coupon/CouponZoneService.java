@@ -61,4 +61,13 @@ public class CouponZoneService {
         return restService.post(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
     }
 
+    public ApiEntity<CouponIssueResponse> issueNoLimitCouponAtZone(Long couponId, Long memberNo) {
+        URI requestToCouponUrl = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/no-limit");
+
+        CouponZoneMemberIssueRequest request = new CouponZoneMemberIssueRequest(couponId, memberNo);
+        Map<String, Object> map = objectMapper.convertValue(request, Map.class);
+
+        return restService.post(requestToCouponUrl.toString(), map, new ParameterizedTypeReference<>() {});
+    }
+
 }
