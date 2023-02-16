@@ -79,7 +79,7 @@
               </th:block>
             </p>
 
-            <p style="line-height: 5px">
+            <p>
               <span class="text-info">태그</span>
               <span th:unless="${product.tags == null}"
                     th:text="${#strings.arrayJoin(product.getTagList(), ', ')}"></span>
