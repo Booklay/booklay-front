@@ -196,7 +196,7 @@ public class BoardController {
    * @return
    */
   @PostMapping("/confirm")
-  public String confirmAnswer(@ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo) {
+  public String confirmAnswer(@Valid @ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo) {
     if (request.getCommentAuth() || memberInfo.getAuthority().getValue().equals("ROLE_ADMIN")) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/confirm/" + request.getPostId());
 
