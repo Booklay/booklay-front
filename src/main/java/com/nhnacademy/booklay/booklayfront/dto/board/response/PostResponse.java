@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class PostResponse {
 
   @Setter
@@ -29,9 +30,10 @@ public class PostResponse {
   private LocalDateTime updatedAt;
 
   private String writer;
-
+  private Boolean deleted;
   private List<RetrieveAuthorResponse> authorList;
 
+  //권한 확인
   public boolean commentAuth(Long memberNo) {
     for (RetrieveAuthorResponse author : authorList) {
       if (author.getMember() != null) {
@@ -43,6 +45,7 @@ public class PostResponse {
     return false;
   }
 
+  //게시글 작성 시 요구조건 채워넣는거
   @Builder
   public PostResponse(Integer postTypeNo, Long memberNo, Long productId,
       Long groupPostNo, Integer groupOrder, Integer depth, String title, String content,

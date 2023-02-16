@@ -57,7 +57,13 @@ public class ProductDisplayController extends BaseController {
   private static final Integer SIZE = 20;
   private static final String REDIRECT_HTML_PREFIX = "redirect:/product/view/";
 
-  //게시판형 전채 상품 호출
+  /**
+   * 게시판 전채 상품 호출
+   * @param model
+   * @param cid
+   * @param page
+   * @return
+   */
   @GetMapping("/display")
   public String retrieveProduct(Model model,
       @RequestParam(value = "CID", required = false) Long cid,
@@ -94,7 +100,16 @@ public class ProductDisplayController extends BaseController {
     return "product/display";
   }
 
-  //상품 상세 보기
+  /**
+   * 상품 상세 보기
+   * @param productNo
+   * @param model
+   * @param page
+   * @param reviewPage
+   * @param memberInfo
+   * @param request
+   * @return
+   */
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model,
                               @RequestParam(value = "page", defaultValue = "0") int page,
@@ -133,7 +148,7 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
     //위시리스트, 알림 등록 확인
-    model.addAttribute("thisMember", memberInfo);
+    model.addAttribute("memberInfo", memberInfo);
     if (memberInfo.getMemberNo() != null) {
       URI uriForMember = URI.create(
           gatewayIp + "/shop/v1/mypage/product/boolean");
@@ -167,7 +182,12 @@ public class ProductDisplayController extends BaseController {
     return "product/view";
   }
 
-  //찜(위시리스트) 등록
+
+  /**
+   * 찜(위시리스트) 등록
+   * @param request
+   * @return
+   */
   @PostMapping("/wishlist/connect")
   public String wishlistConnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {
@@ -178,7 +198,11 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //찜 위시리스트 삭제
+  /**
+   * 찜(위시리스트) 삭제
+   * @param request
+   * @return
+   */
   @PostMapping("/wishlist/disconnect")
   public String wishlistDisconnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {
@@ -189,7 +213,11 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //재입고 알람 등록
+  /**
+   * 재입고 알림 등록
+   * @param request
+   * @return
+   */
   @PostMapping("/alarm/connect")
   public String alarmConnect(@Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
@@ -200,7 +228,12 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //재입고 알람 등록 해제
+
+  /**
+   * 재입고 알림 등록 취소
+   * @param request
+   * @return
+   */
   @PostMapping("/alarm/disconnect")
   public String alarmDisconnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {

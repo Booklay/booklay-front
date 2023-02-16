@@ -8,7 +8,7 @@
 
   <script th:if="${reviewError} != null">
     var error = '[[${reviewError}]]';
-    alert( error )
+    alert(error)
   </script>
 
 </head>
@@ -95,12 +95,12 @@
             </p>
 
             <!--            wishlist, alarm-->
-            <th:block th:if="${thisMember.memberNo != null}">
+            <th:block th:if="${memberInfo.memberNo != null}">
               <div style="display: flex;">
                 <!--              위시리스트 등록-->
                 <form style="margin-right: 10px;" th:if="${!memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/connect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}"
                          hidden>
                   <label class="btn btn-outline-primary">
@@ -123,7 +123,7 @@
                 <!--              위시리스트 삭제-->
                 <form style="margin-right: 10px;" th:if="${memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/disconnect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-primary">
                     <input type="submit" hidden>
@@ -145,7 +145,7 @@
                 <!--              알람 등록-->
                 <form th:if="${!memberProduct.alarm and !product.info.selling}" method="post"
                       th:action="@{/product/alarm/connect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-outline-primary">
                     <input type="submit" hidden>
@@ -167,7 +167,7 @@
                 <!--              알람 삭제-->
                 <form th:if="${memberProduct.alarm}" method="post"
                       th:action="@{/product/alarm/disconnect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-primary">
                     <input type="submit" hidden>
@@ -297,7 +297,7 @@
                 </div>
                 <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
-                  <th:block th:replace="product/fragments/board::product_board"></th:block>
+                  <th:block th:replace="product/fragment/board::product_board"></th:block>
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
@@ -307,90 +307,64 @@
                   </div>
                   <div class="card-body">
                     <th:block th:replace="product/fragment/reviewRegister :: review_form">
-                    </th:block>              </div>
-            </div>
-            <!--탭 내용 종료-->
-          </div>
-        </div>
-        <!--/* 책 소개 */-->
-
-        <!--          구독 상품 자식 상품 시작-->
-        <th:block th:if="${product.subscribe != null}">
-          <div class="row row-cards">
-            <div class="card-header">
-              <h1>구독 하위 상품</h1>
-            </div>
-            <th:block th:each="item : ${booksAtSubscribe}">
-              <div class="col-sm-4 col-lg-2">
-                <div class="card card-sm">
-                  <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
-                     class="d-block">
-                    <div class="text-center" style="width:auto; min-height:200px; margin: auto;">
-                      <img class="product-img"
-                           style="max-height: 413px; width: 95%; margin-top:10px;"
-                           th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
-                    </div>
-                  </a>
-                  <div class="card-body">
-                    <div class="d-flex align-items-center">
-                      <div>
-                        <div>
-                          <a th:text="${item.title}"
-                             th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
-                        </div>
-                        <div class="text-muted">
-                          <th:block th:each="author : ${item.authors}">
-                            <span th:text="${author.name}"/>
-                          </th:block>
-                        </div>
-                        <div class="text-muted"
-                             th:text="${#numbers.formatCurrency(item.price)}"></div>
-                        <div class="text-muted" th:text="${item.publisher}"></div>
-                      </div>
-                    </div>
-                    <div class="ms-auto">
-                      <a href="#" class="text-muted">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                             height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                             fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                          <path
-                              d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                        </svg>
-                        467
-                      </a>
-                      <a href="#" class="ms-3 text-muted">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
-                             height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                             fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                          <path
-                              d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path>
-                        </svg>
-                        67
-                      </a>
-                    </div>
-
+                    </th:block>
                   </div>
                 </div>
+                <!--탭 내용 종료-->
+              </div>
+            </div>
+            <!--/* 책 소개 */-->
+
+            <!--          구독 상품 자식 상품 시작-->
+            <th:block th:if="${product.subscribe != null}">
+              <div class="row row-cards">
+                <div class="card-header">
+                  <h1>구독 하위 상품</h1>
+                </div>
+                <th:block th:each="item : ${booksAtSubscribe}">
+                  <div class="col-sm-4 col-lg-2">
+                    <div class="card card-sm">
+                      <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
+                         class="d-block">
+                        <div class="text-center"
+                             style="width:auto; min-height:200px; margin: auto;">
+                          <img class="product-img"
+                               style="max-height: 413px; width: 95%; margin-top:10px;"
+                               th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
+                        </div>
+                      </a>
+                      <div class="card-body">
+                        <div class="d-flex align-items-center">
+                          <div>
+                            <div>
+                              <a class="ellipsis-text-2" th:text="${item.title}"
+                                 th:href="@{/product/view/{productId} (productId = ${item.productId})}"></a>
+                            </div>
+                            <div class="text-muted">
+                              <p class="ellipsis-text-1">
+                                <th:block th:each="author : ${item.authors}">
+                                  <span th:text="${author.name}"/>
+                                </th:block>
+                              </p>
+                            </div>
+                            <div class="text-muted"
+                                 th:text="${#numbers.formatCurrency(item.price)}"></div>
+                            <div  class="text-muted ellipsis-text-1" th:text="${item.publisher}"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </th:block>
               </div>
             </th:block>
-          </div>
-        </th:block>
-        <!--          구독 상품 자식 상품 종료-->
+            <!--          구독 상품 자식 상품 종료-->
 
-        <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
+            <button class="btn btn-outline-primary" style="margin-top: 1rem;" onclick="history.back()">뒤로가기</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  </div>
 </th:block>
 <!---->
 </html>
