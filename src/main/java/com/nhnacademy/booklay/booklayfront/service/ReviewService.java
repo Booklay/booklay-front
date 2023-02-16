@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.review.request.ReviewCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.review.response.RetrieveReviewResponse;
+import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
 import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -59,18 +59,18 @@ public class ReviewService {
         return responseEntity.getStatusCode();
     }
 
-    public List<RetrieveReviewResponse> retrieveReview(Long postId, int page) {
+    public SearchPageResponse<RetrieveReviewResponse> retrieveReview(Long postId, int page) {
 
-        ApiEntity<List<RetrieveReviewResponse>> response = restService.get(
+        ApiEntity<SearchPageResponse<RetrieveReviewResponse>> response = restService.get(
             gatewayIp + REVIEW_RETRIEVE_BY_PRODUCT_URI + postId,
             ControllerUtil.getDefaultPageMap(page, 5),
-            new ParameterizedTypeReference<List<RetrieveReviewResponse>>(){});
+            new ParameterizedTypeReference<SearchPageResponse<RetrieveReviewResponse>>(){});
 
         if (response.isSuccess()) {
             return response.getBody();
         }
 
-        return List.of();
+        return null;
 
     }
 

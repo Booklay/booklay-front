@@ -15,6 +15,7 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.response.Retrieve
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.WishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
 import com.nhnacademy.booklay.booklayfront.dto.review.response.RetrieveReviewResponse;
+import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.ReviewService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
@@ -35,7 +36,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 
 /**
@@ -160,9 +160,21 @@ public class ProductDisplayController extends BaseController {
     setCurrentPageAndMaxPageToModel(model, postResponse.getBody());
 
 //   상품 리뷰
-    List<RetrieveReviewResponse> reviews = reviewService.retrieveReview(productNo, reviewPage);
-    model.addAttribute("reviewPage", reviewPage);
-    model.addAttribute("reviews", reviews);
+    SearchPageResponse<RetrieveReviewResponse>
+        reviews = reviewService.retrieveReview(productNo, reviewPage);
+
+    if (Objects.nonNull(reviews)) {
+      model.addAttribute("reviewPage", reviewPage);
+      model.addAttribute("reviewTotalPage", reviews.getTotalPages());
+      model.addAttribute("reviewTotalHits", reviews.getTotalHits());
+      model.addAttribute("reviews", reviews.getData());
+
+      model.addAttribute("scoreAverage", reviews.getAverageScore());
+
+    } else {
+      model.addAttribute("reviewPage", reviewPage);
+      model.addAttribute("reviews", List.of());
+    }
 
     return "product/view";
   }
