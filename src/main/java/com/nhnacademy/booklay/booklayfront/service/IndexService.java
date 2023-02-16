@@ -16,10 +16,10 @@ public class IndexService {
 
     private final String gatewayIp;
     private final RestService restService;
-    private static final String SHOP_PRE_FIX = "/shop/v1";
+    private static final String LATEST_PRODUCTS = "/shop/v1/product/latest";
 
     public List<SearchProductResponse> getRecommendProducts() {
-        URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/search/products/latest");
+        URI uri = URI.create(gatewayIp + LATEST_PRODUCTS);
 
         ApiEntity<List<SearchProductResponse>> productResponse = restService.get(
             uri.toString(), null, new ParameterizedTypeReference<>() {});

@@ -31,6 +31,7 @@ public class SearchServiceImpl implements SearchService {
     private final String gatewayIp;
     private static final String REQUEST_SEARCH_PRODUCT_URI = "/shop/v1/search/products/keywords";
     private static final String REQUEST_SEARCH_BY_PRODUCT_NESTED_URI = "/shop/v1/search/products";
+    private static final String REQUEST_PRODUCT_ALL = "/shop/v1/product/all";
 
     /**
      * 전체 상품 노출.
@@ -38,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Optional<SearchPageResponse<SearchProductResponse>> getSearchResponse(int page) {
 
-        URI uri = URI.create(gatewayIp + REQUEST_SEARCH_BY_PRODUCT_NESTED_URI);
+        URI uri = URI.create(gatewayIp + REQUEST_PRODUCT_ALL);
 
         // 리팩토링 시 인자에 작성된 제네릭 타입 지우지 말 것, 요청에 대한 response 타입이 제대로 적용되지 않음.
 
