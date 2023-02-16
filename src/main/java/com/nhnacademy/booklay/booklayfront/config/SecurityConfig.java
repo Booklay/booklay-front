@@ -72,6 +72,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
             .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/coupon-zone/**").hasAnyRole("USER", "ADMIN")
             .anyRequest()
             .permitAll();
 

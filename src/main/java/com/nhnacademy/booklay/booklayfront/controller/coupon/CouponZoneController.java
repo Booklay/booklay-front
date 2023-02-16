@@ -18,15 +18,26 @@ public class CouponZoneController {
     private final CouponZoneRestApiModelSettingService couponZoneService;
 
     /**
-     * 사용자의 쿠폰존 페이지 조회.
+     * 사용자의 이달의 쿠폰 페이지를 조회합니다.
      * isBlind = false 인 쿠폰을 보여줍니다.
      */
     @GetMapping
     public String getCouponZone(Model model, MemberInfo memberInfo) {
         model.addAttribute("memberInfo", memberInfo);
-        couponZoneService.getMemberCouponZoneList(model);
+        couponZoneService.getMemberCouponZoneLimitedList(model);
 
         return "coupon/couponZone";
     }
 
+    /**
+     * 사용자의 등급 및 무제한 쿠폰 페이지를 조회합니다.
+     * isBlind = false 인 쿠폰을 보여줍니다.
+     */
+    @GetMapping("/no-limit")
+    public String getCouponZoneNoLimit(Model model, MemberInfo memberInfo) {
+        model.addAttribute("memberInfo", memberInfo);
+        couponZoneService.getMemberCouponZoneUnlimitedList(model);
+
+        return "coupon/couponZoneNoLimit";
+    }
 }

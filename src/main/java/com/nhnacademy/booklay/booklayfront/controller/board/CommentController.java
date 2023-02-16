@@ -35,6 +35,8 @@ public class CommentController {
   private final RestService restService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  private static final String REDIRECT_PAGE = "redirect:/board/";
+
   /**
    * 댓글 생성
    * @param request
@@ -46,7 +48,7 @@ public class CommentController {
 
     restService.post(uri.toString(), objectMapper.convertValue(request, Map.class), Long.class);
 
-    return "redirect:/board/" + request.getPostId();
+    return REDIRECT_PAGE + request.getPostId();
   }
 
   /**
@@ -59,7 +61,7 @@ public class CommentController {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment");
 
     restService.put(uri.toString(), objectMapper.convertValue(request, Map.class), Long.class);
-    return "redirect:/board/" + request.getPostId();
+    return REDIRECT_PAGE + request.getPostId();
   }
 
   /**
@@ -78,8 +80,8 @@ public class CommentController {
 
       restService.delete(uri.toString(), map);
 
-      return "redirect:/board/" + request.getPostId();
+      return REDIRECT_PAGE + request.getPostId();
     }
-    return "/error";
+    return REDIRECT_PAGE + request.getPostId();
   }
 }
