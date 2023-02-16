@@ -162,7 +162,7 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/member/profile/point/" + memberInfo.getMemberNo();
+        return "redirect:/member/profile/point/";
     }
 
     @GetMapping("/coupon/view/{couponId}")
