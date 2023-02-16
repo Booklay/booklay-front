@@ -73,6 +73,7 @@ public class CouponZoneRestController {
     public ResponseEntity<CouponIssueResponse> couponZoneIssueNoLimit(@PathVariable Long couponId, MemberInfo memberInfo) {
         Long memberNo = memberInfo.getMemberNo();
 
+        log.info(memberInfo.getMemberGrade());
         couponZoneService.checkTimeAndGrade(couponId, memberInfo.getMemberGrade());
 
         ApiEntity<CouponIssueResponse> response = couponZoneService.issueNoLimitCouponAtZone(couponId, memberNo);
