@@ -13,8 +13,8 @@
         </thead>
         <tbody>
         <th:bloack th:each="post:${postList}">
-          <tr>
-            <td><span th:text="${post.answered} ? '답변': '미답변'"></span></td>
+          <tr th:if="${!post.deleted}">
+            <td><span th:if="${post.depth == 0}" th:text="${post.answered} ? '답변': '미답변'"></span></td>
             <td>
               <th:block th:each="num : ${#numbers.sequence(0,post.depth)}">
                 &ensp;&ensp;
@@ -49,6 +49,14 @@
             <td><span th:text="${post.writer}"/></td>
             <td><span th:text="${post.createdAt}"/></td>
           </tr>
+<!--          삭제된 경우 시작-->
+          <tr th:if="${post.deleted}">
+            <th>-</th>
+            <th>삭제된 게시글 입니다.</th>
+            <th>-</th>
+            <th>-</th>
+          </tr>
+<!--          삭제된 경우 종료-->
         </th:bloack>
         </tbody>
       </table>
