@@ -215,6 +215,6 @@ public class MemberController extends BaseController {
 
         restService.delete(uri.toString());
         
-        return "redirect:/";
+        return "complete";
     }
 }

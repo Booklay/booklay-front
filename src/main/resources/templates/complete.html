@@ -9,17 +9,27 @@
 <th:block layout:fragment="content">
 
     <div class="card container container-tight py-4">
-        <div class="card-header">
-        </div>
-        <div class="card-body">
+        <div class="card-header"></div>
+        <div class="card-body" style="text-align: center;">
             <h2 class="card-title text-center mb-4">완료</h2>
 
-                <div class="mb-3">
-                    <label class="form-label">완료되었습니다</label>
-                    <button class="btn btn-outline-primary" onclick="window.close()">
-                        닫기
-                    </button>
-                </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-size: 20px;">완료되었습니다</label>
+                <button class="btn btn-outline-primary" onclick="window.close()">
+                    닫기
+                </button>
+            </div>
+            <!--            <div class="card-body" style="text-align: center;">-->
+            <!--                <h2 class="card-title text-center mb-4">회원 차단 해제하기</h2>-->
+            <!--                <b style="font-size: 20px;">차단을 해제하시겠습니까?</b><br>-->
+            <!--                <div style="margin-top: 1rem;">-->
+            <!--                    <a id="release-btn"-->
+            <!--                       th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">-->
+            <!--                        <button class="btn btn-outline-danger">해제</button>-->
+            <!--                    </a>-->
+            <!--                    <button class="btn btn-outline-primary" onclick="window.close()">취소</button>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             </form>
 

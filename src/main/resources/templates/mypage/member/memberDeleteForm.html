@@ -4,13 +4,31 @@
       layout:decorate="~{thymeleaf/layout/blank}">
 <head>
     <meta charset="UTF-8">
-    <title>회원 탈퇴하기</title>
+    <title>탈퇴하기</title>
 </head>
 
+<!--<th:block layout:fragment="content">-->
+<!--    <h3>[회원 탈퇴하기]</h3><br>-->
+<!--    <b>탈퇴하시겠습니까?</b><br>-->
+<!--    <button class="btn btn-outline-primary"><a href="/member/drop/process">탈퇴</a></button>-->
+<!--    <button class="btn btn-outline-primary" onclick="window.close()">취소</button>-->
+<!--</th:block>-->
+
 <th:block layout:fragment="content">
-    <h3>[회원 탈퇴하기]</h3><br>
-    <b>탈퇴하시겠습니까?</b><br>
-    <button class="btn btn-outline-primary"><a href="/member/drop/process">탈퇴</a></button>
-    <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body" style="text-align: center;">
+            <h2 class="card-title text-center mb-4">탈퇴하기</h2>
+            <b style="font-size: 20px;">탈퇴하시겠습니까?</b><br>
+            <div style="margin-top: 1rem;">
+                <a id="release-btn"
+                   th:href="@{/member/drop/process}">
+                    <button class="btn btn-outline-danger">탈퇴</button>
+                </a>
+                <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
+            </div>
+        </div>
+    </div>
 </th:block>
 </html>

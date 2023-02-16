@@ -144,11 +144,19 @@ public class PointHistoryController {
         return "mypage/member/memberPointCouponList";
     }
 
+    /**
+     * 회원 간 포인트 선물하는 메소드
+     *
+     * @param pointPresentRequest 포인트 선물 정보 dto
+     * @param bindingResult
+     * @param memberInfo
+     * @return
+     * @throws JsonProcessingException
+     */
     @PostMapping("/present")
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
-                               MemberInfo memberInfo,
-                               Model model) throws JsonProcessingException {
+                               MemberInfo memberInfo) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
@@ -162,7 +170,7 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/member/profile/point/" + memberInfo.getMemberNo();
+        return "redirect:/member/profile/point/";
     }
 
     @GetMapping("/coupon/view/{couponId}")

@@ -13,27 +13,14 @@
         <div class="card-body" style="text-align: center;">
             <h2 class="card-title text-center mb-4">회원 차단 해제하기</h2>
             <b style="font-size: 20px;">차단을 해제하시겠습니까?</b><br>
-            <div style="margin-top: 1rem;">
+            <div style="ma정rgin-top: 1rem;">
                 <a id="release-btn"
                    th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">
-                    <button class="btn btn-outline-danger">
-                        해제
-                    </button>
+                    <button class="btn btn-outline-danger">해제</button>
                 </a>
                 <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
             </div>
         </div>
     </div>
-
-    <!--    <script>-->
-
-    <!--        const releaseButton = document.getElementById('release-btn');-->
-
-    <!--        releaseButton.addEventListener('click', function(){-->
-    <!--            opener.location.reload();-->
-
-    <!--            window.close();-->
-    <!--        });-->
-    <!--    </script>-->
 </th:block>
 </html>
