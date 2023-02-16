@@ -7,16 +7,15 @@ import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageRespons
 import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchProductResponse;
 import com.nhnacademy.booklay.booklayfront.service.search.SearchService;
 import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,14 +93,30 @@ public class SearchController extends BaseController {
     /**
      * 검색창에서 키워드 검색 처리.
      *
-     * @param searchKeywordsRequest 검색 분류와 검색 키워드.
      * @param page 페이지네이션 정보.
      *
      */
     @PostMapping("/products/keywords")
-    public String searchResolve(@Valid @ModelAttribute SearchKeywordsRequest searchKeywordsRequest,
-                                @RequestParam(value = "page", defaultValue = "0") int page,
-                                Model model) {
+    public String searchResolve(@RequestParam("classification") String classification,
+                                @RequestParam("keywords") String keywords,
+                                @RequestParam(value = "page", defaultValue = "0") int page) {
+
+
+
+        return URI.create("redirect:/search/products/keywords"
+            + "?classification=" + classification
+            + "&keywords=" + keywords
+            + "&page=" + page).toASCIIString();
+
+    }
+
+    @GetMapping("/products/keywords")
+    public String getSearchResults(@RequestParam("classification") String classification,
+                                   @RequestParam("keywords") String keywords,
+                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                   Model model){
+
+        SearchKeywordsRequest searchKeywordsRequest = new SearchKeywordsRequest(classification, keywords);
 
         Optional<SearchPageResponse<SearchProductResponse>> response =
             searchService.getSearchResponse(searchKeywordsRequest, page);
