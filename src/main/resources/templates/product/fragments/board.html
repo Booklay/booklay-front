@@ -1,4 +1,4 @@
-<th:block th:fragment="product_board" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="product_board" xmlns:th="http://www.thymeleaf.org">
   <!--/* 프레그먼트 내용 작성 */-->
   <div>
     <div class="table-responsive">
@@ -8,13 +8,15 @@
           <th>답변 상태</th>
           <th>제목</th>
           <th>작성자</th>
-          <th>작성일</th>록
+          <th>작성일</th>
+          록
         </tr>
         </thead>
         <tbody>
         <th:bloack th:each="post:${postList}">
           <tr th:if="${!post.deleted}">
-            <td><span th:if="${post.depth == 0}" th:text="${post.answered} ? '답변': '미답변'"></span></td>
+            <td><span th:if="${post.depth == 0}" th:text="${post.answered} ? '답변': '미답변'"></span>
+            </td>
             <td>
               <th:block th:each="num : ${#numbers.sequence(0,post.depth)}">
                 &ensp;&ensp;
@@ -27,10 +29,8 @@
                    th:text="${post.title}"/>
               </th:block>
               <!--안보임-->
-              <th:block
-                  th:if="${!post.viewPublic}">
-                                <span
-                                    th:if="${post.memberNo != memberInfo.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
+              <th:block th:if="${!post.viewPublic}">
+                                <span th:if="${post.memberNo != memberInfo.memberNo or #authorization.expression('hasRole(''ROLE_ADMIN'')') == false}">
                                   비밀글입니다. <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="icon icon-tabler icon-tabler-lock"
@@ -49,19 +49,18 @@
             <td><span th:text="${post.writer}"/></td>
             <td><span th:text="${post.createdAt}"/></td>
           </tr>
-<!--          삭제된 경우 시작-->
+          <!--          삭제된 경우 시작-->
           <tr th:if="${post.deleted}">
             <th>-</th>
             <th>삭제된 게시글 입니다.</th>
             <th>-</th>
             <th>-</th>
           </tr>
-<!--          삭제된 경우 종료-->
+          <!--          삭제된 경우 종료-->
         </th:bloack>
         </tbody>
       </table>
-      <th:block
-          th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+      <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
     </div>
 
     <a th:href="@{/board/productQNA/{productNo} (productNo = ${productNo})}" style="float: right;">
