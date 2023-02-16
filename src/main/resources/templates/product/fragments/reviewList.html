@@ -1,13 +1,35 @@
-<th:block th:fragment="review_list" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="review_list" xmlns:th="http://www.thymeleaf.org">
   <div class="col-12">
     <div th:unless="${#arrays.isEmpty(reviews)}" class="card">
+      <div class="card-header">
+        <div class="row row-cols-12">
+          <h2 class="col-sm-auto m-auto" th:text="'작성된 리뷰 : ' + ${reviewTotalHits} + ' 개'"></h2>
+          <h2 class="col-sm-auto m-auto"> 리뷰 평점 : </h2>
+
+          <div class="col-auto m-auto" id="averageStar">
+            <input type="radio" id="scoreAverage1" th:checked="${#numbers.formatInteger(scoreAverage,1).equals('5')}" disabled>
+            <label for="scoreAverage1">⭐</label>
+            <input type="radio" id="scoreAverage2" th:checked="${#numbers.formatInteger(scoreAverage,1).equals('4')}" disabled>
+            <label for="scoreAverage2">⭐</label>
+            <input type="radio" id="scoreAverage3" th:checked="${#numbers.formatInteger(scoreAverage,1).equals('3')}" disabled>
+            <label for="scoreAverage3">⭐</label>
+            <input type="radio" id="scoreAverage4" th:checked="${#numbers.formatInteger(scoreAverage,1).equals('2')}" disabled>
+            <label for="scoreAverage4">⭐</label>
+            <input type="radio" id="scoreAverage5" th:checked="${#numbers.formatInteger(scoreAverage,1).equals('1')}" disabled>
+            <label for="scoreAverage5">⭐</label>
+          </div>
+
+          <h4 class="col-sm-auto m-auto" th:text="${scoreAverage}"></h4>
+        </div>
+      </div>
+
       <div class="table-responsive overflow-scroll" style="min-height: 300px">
         <table class="table table-vcenter table-mobile-md card-table">
           <thead>
           <tr>
             <th class="col-2">이미지</th>
             <th class="col-7">내용</th>
-            <th class="col-1">작성자</th>
+            <th class="col-2">작성자</th>
             <th class="col-1"></th>
           </tr>
           </thead>
@@ -33,11 +55,23 @@
 
             <td class="align-items-center">
               <div class="dropdown font-weight-medium" th:text="${item.writerName}"></div>
+              <div class="col-auto m-auto" id="scoredStar">
+                <input type="radio" id="scoredStar1" th:checked="${#numbers.formatInteger(item.score,1).equals('5')}" disabled>
+                <label for="scoredStar1">⭐</label>
+                <input type="radio" id="scoredStar2" th:checked="${#numbers.formatInteger(item.score,1).equals('4')}" disabled>
+                <label for="scoredStar2">⭐</label>
+                <input type="radio" id="scoredStar3" th:checked="${#numbers.formatInteger(item.score,1).equals('3')}" disabled>
+                <label for="scoredStar3">⭐</label>
+                <input type="radio" id="scoredStar4" th:checked="${#numbers.formatInteger(item.score,1).equals('2')}" disabled>
+                <label for="scoredStar4">⭐</label>
+                <input type="radio" id="scoredStar5" th:checked="${#numbers.formatInteger(item.score,1).equals('1')}" disabled>
+                <label for="scoredStar5">⭐</label>
+              </div>
             </td>
             <td>
               <div class="dropdown" th:classappend="${memberInfo.memberNo != item.writerNo} ? invisible" >
                 <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
-                  Actions
+                  메뉴
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                   <form th:action="@{/review/{productId}(productId = ${productNo})}" method="post">
@@ -53,6 +87,9 @@
           </tbody>
         </table>
       </div>
+
+      <th:block th:replace="product/fragments/reviewPagination :: pagination">
+      </th:block>
     </div>
     <div th:if="${#arrays.isEmpty(reviews)}" class="card">
       <div class="card-header text-muted overflow-scroll" style="min-height: 300px">
@@ -60,5 +97,6 @@
       </div>
     </div>
   </div>
+
 </th:block>
 

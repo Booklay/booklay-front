@@ -4,12 +4,8 @@
   <title th:text="${product.info.title}"></title>
 
   <script src="/js/product/productDetailForCart.js"></script>
+  <link href="/css/pointStar.css" rel="stylesheet">
   <link href="/css/product/elipse-style.css" rel="stylesheet">
-
-  <script th:if="${reviewError} != null">
-    var error = '[[${reviewError}]]';
-    alert(error)
-  </script>
 
 </head>
 <!---->
