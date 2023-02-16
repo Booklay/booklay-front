@@ -218,7 +218,7 @@ public class MemberController extends BaseController {
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         restService.delete(uri.toString());
-
-        return "redirect:/";
+        
+        return "complete";
     }
 }

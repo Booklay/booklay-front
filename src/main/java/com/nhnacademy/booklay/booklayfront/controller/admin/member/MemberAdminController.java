@@ -236,6 +236,6 @@ public class MemberAdminController {
 
         restService.get(uri.toString(), null, Void.class);
 
-        return "redirect:/admin/members/block";
+        return "complete";
     }
 }
