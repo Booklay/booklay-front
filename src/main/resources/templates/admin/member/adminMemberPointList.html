@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
+<head>
+    <meta charset="UTF-8">
+    <title>북레이 - 회원 포인트 내역</title>
+</head>
+
+<th:block layout:fragment="content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">포인트 내역</h2>
+            </div>
+            <div class="col align-items-center">
+                <div class="text-end">
+                    <a th:href="@{/member/profile}">Home</a>
+                    <span> > </span>
+                    <a th:href="@{/member/profile/point}">포인트 내역</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-body">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>적립 포인트</th>
+                        <th>사용 포인트</th>
+                        <th>누적 포인트</th>
+                        <th>적립 내용</th>
+                        <th>적립 일시</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="point, pointStat :${list}">
+                    <tr>
+                        <td th:text="${pointStat.count}"></td>
+                        <td>
+                            <span th:if="${point.getPoint()>0}" th:text="${point.getPoint()}"></span>
+                        </td>
+                        <td>
+                            <span th:if="${point.getPoint()<0}" th:text="${point.getPoint()}"></span>
+                        </td>
+                        <td th:text="${point.getTotalPoint()}"></td>
+                        <td th:text="${point.getUpdatedDetail()}"></td>
+                        <td th:text="${#temporals.format(point.getUpdatedAt(),'yyyy.MM.dd HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+

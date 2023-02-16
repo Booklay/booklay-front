@@ -192,10 +192,10 @@ public class MemberAdminController {
         return "admin/member/memberBlockForm";
     }
 
-    @GetMapping("/block/cancel/{blockedMemberDetailId}")
-    public String retrieveMemberBlockCancelForm(@PathVariable Long blockedMemberDetailId,
+    @GetMapping("/block/cancel/{memberNo}")
+    public String retrieveMemberBlockCancelForm(@PathVariable Long memberNo,
                                                 Model model) {
-        model.addAttribute("blockedMemberDetailId", blockedMemberDetailId);
+        model.addAttribute("blockedMemberDetailId", memberNo);
 
         return "admin/member/memberBlockCancelForm";
     }
