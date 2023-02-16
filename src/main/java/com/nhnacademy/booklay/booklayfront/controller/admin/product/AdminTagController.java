@@ -59,7 +59,7 @@ public class AdminTagController {
         gatewayIp + SHOP_URI_PRE_FIX);
 
     ApiEntity<PageResponse<RetrieveTagResponse>> tagResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     if (tagResponse.isSuccess()) {
@@ -114,7 +114,7 @@ public class AdminTagController {
         gatewayIp + "/shop/v1/admin/tag/product/" + productNo);
 
     ApiEntity<PageResponse<TagProductResponse>> tagResponse = restService.get(
-        uri.toString(), getDefaultPageMap(page,SIZE), new ParameterizedTypeReference<>() {
+        uri.toString(), getDefaultPageMap(page, SIZE), new ParameterizedTypeReference<>() {
         });
 
     List<TagProductResponse> tagList = tagResponse.getBody().getData();

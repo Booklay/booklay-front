@@ -36,12 +36,6 @@ function setApplyItemText(value, name){
     window.close();
 }
 
-function setDate() {
-    let origin = document.getElementById("opened-at");
-    let target = document.getElementById("closed-at");
-    target.value = origin.value;
-}
-
 function showCouponDetail(couponId) {
     let option = "width = 400, height = 700, top = 100, left = 200, scrollbars = yes, location = no"
     window.open("/admin/coupons/detail/" + couponId, "couponDetailPopup", option);

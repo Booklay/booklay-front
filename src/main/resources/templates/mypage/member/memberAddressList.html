@@ -4,17 +4,41 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
-    <title>회원 주소 목록</title>
-    <script src="/js/member/addressCreatePopup.js"></script>
+
+    <title>북레이 - 배송지 목록</title>
+    <script src="/js/member/addressCUPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
-    <div>
-        <h1 style="display: inline">[배송지 목록]</h1>
-        <button class="btn btn-outline-primary" onclick="showAddressPopup()">
-            추가하기
-        </button>
-        <br>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="col">
+            <a th:href="@{/member/profile}">Home</a>
+            <span> > </span>
+            <a th:href="@{/member/profile/address}">배송지 등록 · 관리</a>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">배송지 목록</h2>
+            </div>
+            <div class="col">
+                <div class="row align-items-center">
+                    <div class="text-end">
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="showAddressCreatePopup()">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                                배송지 추가하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Body -->
+    <div class="page-body">
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-vcenter card-table">
@@ -23,7 +47,11 @@
                         <th scope="col">번호</th>
                         <th scope="col">이름</th>
                         <th scope="col">우편번호</th>
-                        <th scope="col">상세 주소</th>
+                        <th scope="col">주소</th>
+                        <th scope="col">상세주소</th>
+                        <th scope="col">참고항목</th>
+                        <th scope="col">수령인</th>
+                        <th scope="col">수령인 전화번호</th>
                         <th scope="col">기본 배송지 여부</th>
                         <th scope="col">수정하기</th>
                         <th scope="col">삭제하기</th>
@@ -35,19 +63,23 @@
                         <td th:text="${address.getName()}"></td>
                         <td th:text="${address.getZipCode()}"></td>
                         <td th:text="${address.getAddress()}"></td>
+                        <td th:text="${address.getAddressDetail()}"></td>
+                        <td th:text="${address.getAddressSubDetail()}"></td>
+                        <td th:text="${address.getReceiver()}"></td>
+                        <td th:text="${address.getReceiverPhoneNo()}"></td>
                         <td>
                             <span th:if="${address.getIsDefaultDestination()}">O</span>
                             <span th:unless="${address.getIsDefaultDestination()}">X</span>
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary">
-                                <a th:href="@{/member/profile/address/update/{addressNo}(addressNo=${address.getId()})}">수정하기</a>
+                            <button class="btn btn-outline-primary" th:id="${address.getId()}"
+                                    onclick="showAddressUpdatePopup(this.getAttribute('id'))">수정하기
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary">
-                                <a th:href="@{/member/profile/address/delete/{addressNo}(addressNo=${address.getId()})}">삭제하기</a>
-                            </button>
+                            <a th:href="@{/member/profile/address/delete/{addressNo}(addressNo=${address.getId()})}">
+                                <button class="btn btn-outline-danger">삭제하기</button>
+                            </a>
                         </td>
                     </tr>
                     </tbody>

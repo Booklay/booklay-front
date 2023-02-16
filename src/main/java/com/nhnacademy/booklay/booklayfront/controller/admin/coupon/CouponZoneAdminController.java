@@ -92,10 +92,6 @@ public class CouponZoneAdminController {
         URI uri = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/admin/coupon-zone");
         Map map = objectMapper.convertValue(createRequest, Map.class);
 
-        if(createRequest.getGrade().equals("0")) {
-            map.replace("grade", null);
-        }
-
         restService.post(uri.toString(), map, String.class);
 
         return "redirect:/admin/coupon-zone";

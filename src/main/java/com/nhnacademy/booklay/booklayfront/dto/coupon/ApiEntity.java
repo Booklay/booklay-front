@@ -3,7 +3,6 @@ package com.nhnacademy.booklay.booklayfront.dto.coupon;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -22,8 +21,7 @@ ApiEntity<T> {
     public boolean isSuccess() {
         return successResponse != null &&
             (
-                successResponse.getStatusCode() == HttpStatus.OK
-                    || successResponse.getStatusCode() == HttpStatus.CREATED
+                successResponse.getStatusCode().is2xxSuccessful()
             );
     }
 

@@ -14,13 +14,11 @@ import lombok.Getter;
 public class SearchPageResponse<T>{
 
   private String searchKeywords;
-
+  private Long totalHits;
   private Integer pageNumber;
-
+  private String averageScore;
   private Integer pageSize;
-
   private Integer totalPages; // 총 페이지 수
-
   private List<T> data;
 
 }

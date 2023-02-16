@@ -14,12 +14,16 @@ import com.nhnacademy.booklay.booklayfront.dto.product.product.response.ProductA
 import com.nhnacademy.booklay.booklayfront.dto.product.product.response.RetrieveProductResponse;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.request.WishlistAndAlarmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.product.wishlist.response.WishlistAndAlarmBooleanResponse;
+import com.nhnacademy.booklay.booklayfront.dto.review.response.RetrieveReviewResponse;
+import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.ReviewService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,10 +53,17 @@ public class ProductDisplayController extends BaseController {
   private final RestService restService;
   private final ObjectMapper objectMapper;
   private final CategoryService categoryService;
-  private final Integer SIZE = 20;
+  private final ReviewService reviewService;
+  private static final Integer SIZE = 20;
   private static final String REDIRECT_HTML_PREFIX = "redirect:/product/view/";
 
-  //게시판형 전채 상품 호출
+  /**
+   * 게시판 전채 상품 호출
+   * @param model
+   * @param cid
+   * @param page
+   * @return
+   */
   @GetMapping("/display")
   public String retrieveProduct(Model model,
       @RequestParam(value = "CID", required = false) Long cid,
@@ -89,10 +100,22 @@ public class ProductDisplayController extends BaseController {
     return "product/display";
   }
 
-  //상품 상세 보기
+  /**
+   * 상품 상세 보기
+   * @param productNo
+   * @param model
+   * @param page
+   * @param reviewPage
+   * @param memberInfo
+   * @param request
+   * @return
+   */
   @GetMapping("/view/{productNo}")
   public String productViewer(@PathVariable("productNo") Long productNo, Model model,
-      MemberInfo memberInfo, @RequestParam(value = "page", defaultValue = "0") int page) {
+                              @RequestParam(value = "page", defaultValue = "0") int page,
+                              @RequestParam(value = "reviewPage", defaultValue = "0") int reviewPage,
+                              MemberInfo memberInfo,
+                              HttpServletRequest request) {
 
     //최초 상품 상세 정보 호출
     URI mainUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/view/" + productNo);
@@ -125,7 +148,7 @@ public class ProductDisplayController extends BaseController {
       model.addAttribute("booksAtSubscribe", subscribeResponse.getBody());
     }
     //위시리스트, 알림 등록 확인
-    model.addAttribute("thisMember", memberInfo);
+    model.addAttribute("memberInfo", memberInfo);
     if (memberInfo.getMemberNo() != null) {
       URI uriForMember = URI.create(
           gatewayIp + "/shop/v1/mypage/product/boolean");
@@ -151,10 +174,32 @@ public class ProductDisplayController extends BaseController {
     model.addAttribute("postList", postResponse.getBody().getData());
     setCurrentPageAndMaxPageToModel(model, postResponse.getBody());
 
+//   상품 리뷰
+    SearchPageResponse<RetrieveReviewResponse>
+        reviews = reviewService.retrieveReview(productNo, reviewPage);
+
+    if (Objects.nonNull(reviews)) {
+      model.addAttribute("reviewPage", reviewPage);
+      model.addAttribute("reviewTotalPage", reviews.getTotalPages());
+      model.addAttribute("reviewTotalHits", reviews.getTotalHits());
+      model.addAttribute("reviews", reviews.getData());
+
+      model.addAttribute("scoreAverage", reviews.getAverageScore());
+
+    } else {
+      model.addAttribute("reviewPage", reviewPage);
+      model.addAttribute("reviews", List.of());
+    }
+
     return "product/view";
   }
 
-  //찜(위시리스트) 등록
+
+  /**
+   * 찜(위시리스트) 등록
+   * @param request
+   * @return
+   */
   @PostMapping("/wishlist/connect")
   public String wishlistConnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {
@@ -165,7 +210,11 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //찜 위시리스트 삭제
+  /**
+   * 찜(위시리스트) 삭제
+   * @param request
+   * @return
+   */
   @PostMapping("/wishlist/disconnect")
   public String wishlistDisconnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {
@@ -176,7 +225,11 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //재입고 알람 등록
+  /**
+   * 재입고 알림 등록
+   * @param request
+   * @return
+   */
   @PostMapping("/alarm/connect")
   public String alarmConnect(@Valid @ModelAttribute WishlistAndAlarmRequest request) {
     URI uri = URI.create(gatewayIp + "/shop/v1/mypage/product/alarm/");
@@ -187,7 +240,12 @@ public class ProductDisplayController extends BaseController {
     return REDIRECT_HTML_PREFIX + request.getProductId();
   }
 
-  //재입고 알람 등록 해제
+
+  /**
+   * 재입고 알림 등록 취소
+   * @param request
+   * @return
+   */
   @PostMapping("/alarm/disconnect")
   public String alarmDisconnect(
       @Valid @ModelAttribute WishlistAndAlarmRequest request) {

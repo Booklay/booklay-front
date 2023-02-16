@@ -4,12 +4,32 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
-    <title>포인트 쿠폰 내역</title>
+    <title>북레이 - 포인트 충전소</title>
+    <script src="/js/member/pointCouponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
-    <div>
-        <h1>[포인트 쿠폰 내역 조회]</h1>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="col">
+            <a th:href="@{/member/profile}">Home</a>
+            <span> > </span>
+            <a th:href="@{/member/profile/point/coupon}">포인트 충전소</a>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <h2 class="page-title">포인트 충전소</h2>
+            </div>
+            <div class="col-auto">
+                <span class="form-help" data-bs-toggle="popover" data-bs-placement="top"
+                      data-bs-content="포인트 쿠폰으로 포인트를 충전할 수 있습니다." data-bs-html="true">?
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Body -->
+    <div class="page-body">
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-vcenter card-table">
@@ -25,10 +45,10 @@
                     <tr>
                         <td th:text="${couponStat.count}"></td>
                         <td th:text="${coupon.getName()}"></td>
-                        <td th:text="${coupon.getAmount()}">p</td>
+                        <td th:text="${coupon.getAmount()}"></td>
                         <td>
-                            <button><a
-                                    th:href="@{/point/{memberNo}/{couponId}(memberNo=${memberNo}, couponId=${coupon.getCouponId()})}">전환하기</a>
+                            <button class="btn btn-outline-primary" th:id="${coupon.getCouponId()}"
+                                    onclick="showPointCouponConvertPopup(this.getAttribute('id'))">전환하기
                             </button>
                         </td>
                     </tr>

@@ -7,10 +7,13 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.*;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponHistoryResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponUsedHistoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.MemberOwnedCouponResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.type.CouponType;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.utils.ControllerUtil;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -164,17 +167,14 @@ public class CouponRestApiModelSettingService {
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
+    /**
+     * 관리자의 쿠폰 사용 내역을 조회합니다.
+     */
     public void setCouponHistoryToModelByPage(Integer pageNum, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/");
-        ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
-        setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
-    }
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history");
+        ApiEntity<PageResponse<CouponUsedHistoryResponse>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
 
-    public void setCouponHistoryToModelByPageAndMemberNo(Integer pageNum, String memberNo, Model model) {
-        String url = buildString(gatewayIp, DOMAIN_PREFIX_COUPON, ADMIN_COUPON_REST_PREFIX, "history/", memberNo);
-        ApiEntity<PageResponse<CouponHistory>> apiEntity = restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {});
-        model.addAttribute(ATTRIBUTE_NAME_HISTORY_LIST, apiEntity.getBody().getData());
+        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
         setCurrentPageAndMaxPageToModel(model, apiEntity.getBody());
     }
 
@@ -187,6 +187,15 @@ public class CouponRestApiModelSettingService {
         ApiEntity<PageResponse<MemberOwnedCouponResponse>> apiEntity =
             restService.get(url, getDefaultPageMap(pageNum), new ParameterizedTypeReference<>() {
             });
-        model.addAttribute(ATTRIBUTE_NAME_COUPON_LIST, apiEntity.getBody().getData());
+
+        List<MemberOwnedCouponResponse> data = apiEntity.getBody().getData();
+        List<MemberOwnedCouponResponse> unused = data.stream().filter(c -> !c.getIsUsed()).collect(
+            Collectors.toList());
+        List<MemberOwnedCouponResponse> used = data.stream().filter(c -> c.getIsUsed()).collect(
+            Collectors.toList());
+
+        model.addAttribute("unusedList", unused);
+        model.addAttribute("usedList", used);
+
     }
 }

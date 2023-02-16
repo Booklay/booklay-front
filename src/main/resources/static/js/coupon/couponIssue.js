@@ -25,25 +25,45 @@ async function issueCoupon(couponId) {
                 const msgResponse = await messageResponse.json();
                 if(msgResponse.message !== "null") {
                     alert(msgResponse.message)
+                    Swal.fire({
+                        title: '발급 완료 되었습니다!',
+                        text: '마이페이지 쿠폰함에서 확인하세요!',
+                        icon: 'success',
+                        confirmButtonText: '닫기',
+                        footer: '<a href="/mypage/coupon">쿠폰함 바로가기</a>'
+                    })
                     loadingDiv.style.display = 'none'
                     clearTimeout(timerId);
                     clearTimeout(timeoutId)
                 }
 
             } else {
-                alert("조금 뒤에 다시 시도해주세요..")
+                Swal.fire({
+                    title: '조금 뒤에 다시 시도해주세요..',
+                    icon: 'warning',
+                    confirmButtonText: '닫기'
+                })
             }
         }, 1500);
 
         let timeoutId = setTimeout(() => {
             clearInterval(timerId);
-            alert('요청 시간이 초과되었습니다.');
+            Swal.fire({
+                title: '요청 시간이 초과되었습니다!',
+                text: '다시 시도해주세요.',
+                icon: 'warning',
+                confirmButtonText: '닫기'
+            })
             loadingDiv.style.display = 'none';
         }, 10000);
 
     } else {
         const parsedResponse = await response.json();
         loadingDiv.style.display = 'none';
-        alert(parsedResponse.message);
+        Swal.fire({
+            title: parsedResponse.message,
+            icon: 'warning',
+            confirmButtonText: '닫기'
+        })
     }
 }
