@@ -35,8 +35,7 @@ public class ProductRestApiModelSettingService {
     }
 
     public void setProductObjectListToModelByCartId(String cartId, MemberInfo memberInfo, Model model){
-        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
-        multiValueMap.setAll(getMemberInfoMap(memberInfo));
+        MultiValueMap<String, String> multiValueMap = getMemberInfoMultiValueMap(memberInfo);
         multiValueMap.add(STRING_CART_ID_FOR_API, cartId);
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX);
         ApiEntity<List<CartObject>> apiEntity = restService.get(url, multiValueMap, new ParameterizedTypeReference<>() {});

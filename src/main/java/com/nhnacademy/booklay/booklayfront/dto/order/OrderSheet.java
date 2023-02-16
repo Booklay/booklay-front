@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponUseRequest;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class OrderSheet {
@@ -33,5 +34,8 @@ public class OrderSheet {
     private String receiver;
     private String receiverPhoneNo;
     private String memo;
+
+    @Setter
+    private Long orderNo;
 
 }
