@@ -4,17 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.request.CouponZoneMemberIssueRequest;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
-import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneTimeResponse;
+import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponZoneCheckResponse;
+import com.nhnacademy.booklay.booklayfront.dto.grade.Grade;
+import com.nhnacademy.booklay.booklayfront.exception.CouponZoneException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CouponZoneService {
 
     private final RestService restService;
@@ -24,17 +28,30 @@ public class CouponZoneService {
     private static final String COUPON_DOMAIN_PREFIX = "/coupon/v1";
     private static final String SHOP_DOMAIN_PREFIX = "/shop/v1";
 
-    public boolean checkTimeAtZone(Long couponId) {
+    public void checkTimeAndGrade(Long couponId, String memberGrade) {
         URI checkTimeUrl = URI.create(gatewayIp + COUPON_DOMAIN_PREFIX + "/member/coupon-zone/" + couponId);
 
-        ApiEntity<CouponZoneTimeResponse>
-            timeResponse = restService.get(checkTimeUrl.toString(), null, new ParameterizedTypeReference<>() {});
+        ApiEntity<CouponZoneCheckResponse>
+            checkResponse = restService.get(checkTimeUrl.toString(), null, new ParameterizedTypeReference<>() {});
+
+        CouponZoneCheckResponse response = checkResponse.getBody();
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime issuanceDeadlineAt = timeResponse.getBody().getIssuanceDeadlineAt();
-        LocalDateTime openedAt = timeResponse.getBody().getOpenedAt();
+        LocalDateTime issuanceDeadlineAt = response.getIssuanceDeadlineAt();
+        LocalDateTime openedAt = response.getOpenedAt();
 
-        return !now.isBefore(openedAt) && !now.isAfter(issuanceDeadlineAt);
+        if(now.isBefore(openedAt) || now.isAfter(issuanceDeadlineAt)) {
+            throw new CouponZoneException("발급 가능한 시간이 아닙니다.");
+        }
+
+        String grade = response.getGrade();
+        log.info("target grade : {} , member grade : {}", grade, memberGrade);
+        if(!grade.equals(Grade.ANY.getKorGrade())) {
+            if(!grade.equals(memberGrade)) {
+                throw new CouponZoneException("발급 대상이 아닙니다.");
+            }
+        }
+
     }
 
     public ApiEntity<CouponIssueResponse> issueCouponAtZone(Long couponId, Long memberNo) {
@@ -45,4 +62,6 @@ public class CouponZoneService {
 
         return restService.post(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
     }
+
+
 }

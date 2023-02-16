@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CouponZoneTimeResponse {
+public class CouponZoneCheckResponse {
     private LocalDateTime openedAt;
     private LocalDateTime issuanceDeadlineAt;
+    private String grade;
 }
