@@ -30,7 +30,7 @@ public class SearchServiceImpl implements SearchService {
     private final ObjectMapper objectMapper;
     private final String gatewayIp;
     private static final String REQUEST_SEARCH_PRODUCT_URI = "/shop/v1/search/products/keywords";
-    private static final String REQUEST_SEARCH_BY_PRODUCT_NESTED_URI = "/shop/v1/search/products";
+    private static final String REQUEST_SEARCH_BY_PRODUCT_NESTED_URI = "/shop/v1/product/request";
     private static final String REQUEST_PRODUCT_ALL = "/shop/v1/product/all";
 
     /**
