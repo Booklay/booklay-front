@@ -117,6 +117,13 @@ public class PointHistoryController {
         return "mypage/member/memberPointPresent";
     }
 
+    /**
+     * 포인트 쿠폰 리스트 조회 메소드
+     *
+     * @param memberInfo
+     * @param model
+     * @return
+     */
     @GetMapping("/coupon")
     public String retrievePointCouponList(MemberInfo memberInfo,
                                           Model model) {
@@ -144,11 +151,19 @@ public class PointHistoryController {
         return "mypage/member/memberPointCouponList";
     }
 
+    /**
+     * 회원 간 포인트 선물하는 메소드
+     *
+     * @param pointPresentRequest 포인트 선물 정보 dto
+     * @param bindingResult
+     * @param memberInfo
+     * @return
+     * @throws JsonProcessingException
+     */
     @PostMapping("/present")
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
-                               MemberInfo memberInfo,
-                               Model model) throws JsonProcessingException {
+                               MemberInfo memberInfo) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
@@ -162,25 +177,35 @@ public class PointHistoryController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/member/profile/point/" + memberInfo.getMemberNo();
+        return "redirect:/member/profile/point/";
     }
 
-    @GetMapping("/coupon/view/{couponId}")
+    /**
+     * 포인트 쿠폰을 포인트로 조회할 건지 묻는 페이지 조회
+     *
+     * @param memberInfo
+     * @param couponId
+     * @return
+     */
+    @GetMapping("/coupon/view/{couponId}/{orderCouponId}")
     public String pointCouponConvertView(MemberInfo memberInfo,
                                          @PathVariable Long couponId,
+                                         @PathVariable Long orderCouponId,
                                          Model model) {
 
         model.addAttribute("couponId", couponId);
+        model.addAttribute("orderCouponId", orderCouponId);
         model.addAttribute("memberNo", memberInfo.getMemberNo());
 
         return "mypage/member/pointCouponConvertForm";
     }
 
-    @GetMapping("/coupon/{couponId}")
+    @GetMapping("/coupon/{couponId}/{orderCouponId}")
     public String convertPointCoupon(MemberInfo memberInfo,
                                      @PathVariable Long couponId,
+                                     @PathVariable Long orderCouponId,
                                      Model model) {
-        pointHistoryService.convertPointCoupon(memberInfo.getMemberNo(), couponId);
+        pointHistoryService.convertPointCoupon(memberInfo.getMemberNo(), couponId, orderCouponId);
 
         return "complete";
     }

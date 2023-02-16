@@ -63,12 +63,14 @@ public class MemberController extends BaseController {
         //TODO 2: 에러처리
         ApiEntity<Map<String, Integer>> response = restService.post(uri.toString(),
             objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
-            new ParameterizedTypeReference<>() {});
+            new ParameterizedTypeReference<>() {
+            });
 
         Integer memberNo = response.getBody().get("memberNo");
 
-        URI welcomeCouponUrl = URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/welcome/" + memberNo);
-        restService.post(welcomeCouponUrl.toString(), null , String.class);
+        URI welcomeCouponUrl =
+            URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/welcome/" + memberNo);
+        restService.post(welcomeCouponUrl.toString(), null, String.class);
 
         return "redirect:/";
     }
@@ -104,10 +106,12 @@ public class MemberController extends BaseController {
             model.addAttribute("wishlist", wishlistResponse.getBody());
         }
 
-        URI couponCountUri = URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/members/" + memberNo + "/coupons/count");
+        URI couponCountUri = URI.create(
+            gatewayIp + DOMAIN_PREFIX_COUPON + "/members/" + memberNo + "/coupons/count");
         ApiEntity<Map<String, Integer>> couponCountResponse = restService.get(
             couponCountUri.toString(), null,
-            new ParameterizedTypeReference<>() {});
+            new ParameterizedTypeReference<>() {
+            });
 
         model.addAttribute("couponCount", couponCountResponse.getBody().get("couponCount"));
 
@@ -215,6 +219,6 @@ public class MemberController extends BaseController {
 
         restService.delete(uri.toString());
         
-        return "redirect:/";
+        return "complete";
     }
 }

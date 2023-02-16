@@ -58,7 +58,7 @@ public class DeliveryDestinationController {
         ResponseEntity<Void> response =
             restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/member/profile/address";
+        return "complete";
     }
 
     @GetMapping("/register")
@@ -131,7 +131,7 @@ public class DeliveryDestinationController {
 
         restTemplate.exchange(requestEntity, Void.class);
 
-        return "redirect:/member/profile/address";
+        return "complete";
     }
 
     @GetMapping("/delete/{addressNo}")

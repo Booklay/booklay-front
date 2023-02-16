@@ -25,11 +25,13 @@
                     <label class="form-label">우편번호</label>
                     <div class="row g-2">
                         <div class="col">
-                            <input type="text" id="sample6_postcode" name="zipCode" class="form-control" placeholder="우편번호"
+                            <input type="text" id="sample6_postcode" name="zipCode" class="form-control"
+                                   placeholder="우편번호"
                                    required>
                         </div>
                         <div class="col-auto">
-                            <button class="btn btn-outline-primary" onclick="sample6_execDaumPostcode()"> 우편번호 찾기</button>
+                            <button class="btn btn-outline-primary" onclick="sample6_execDaumPostcode()"> 우편번호 찾기
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -60,7 +62,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">수령인 전화번호</label>
-                    <input type="text" name="receiverPhoneNo" placeholder="수령인 전화번호" class="form-control" required>
+                    <input type="text" name="receiverPhoneNo" placeholder="숫자만 입력" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
@@ -87,26 +89,26 @@
                     var extraAddr = '';
 
                     if (data.userSelectedType === 'R') {
-                    addr = data.roadAddress;
-                } else {
-                    addr = data.jibunAddress;
-                }
+                        addr = data.roadAddress;
+                    } else {
+                        addr = data.jibunAddress;
+                    }
 
-                if(data.userSelectedType === 'R'){
-                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                        extraAddr += data.bname;
-                    }
-                    if(data.buildingName !== '' && data.apartment === 'Y'){
-                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                    }
-                    if(extraAddr !== ''){
-                        extraAddr = ' (' + extraAddr + ')';
-                    }
-                    document.getElementById("sample6_extraAddress").value = extraAddr;
+                    if (data.userSelectedType === 'R') {
+                        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                            extraAddr += data.bname;
+                        }
+                        if (data.buildingName !== '' && data.apartment === 'Y') {
+                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        }
+                        if (extraAddr !== '') {
+                            extraAddr = ' (' + extraAddr + ')';
+                        }
+                        document.getElementById("sample6_extraAddress").value = extraAddr;
 
-                } else {
-                    document.getElementById("sample6_extraAddress").value = '';
-                }
+                    } else {
+                        document.getElementById("sample6_extraAddress").value = '';
+                    }
 
                     document.getElementById('sample6_postcode').value = data.zonecode;
                     document.getElementById("sample6_address").value = addr;

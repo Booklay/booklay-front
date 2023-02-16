@@ -48,7 +48,9 @@
                         <td th:text="${coupon.getAmount()}"></td>
                         <td>
                             <button class="btn btn-outline-primary" th:id="${coupon.getCouponId()}"
-                                    onclick="showPointCouponConvertPopup(this.getAttribute('id'))">전환하기
+                                    th:value="${coupon.getOrderCouponId()}"
+                                    onclick="showPointCouponConvertPopup(this.getAttribute('id'), this.getAttribute('value'))">
+                                전환하기
                             </button>
                         </td>
                     </tr>
