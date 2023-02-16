@@ -30,10 +30,10 @@
           <form method="post"
                 th:action="@{/admin/product/tag/connection/update/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${currentPage})}">
             <input name="id" type="number" th:value="${tag.id}" hidden/>
-            <input name="name" class="name-input" type="text" th:value="${tag.name}"
+            <input name="name" class="name-input tag-content" type="text" th:value="${tag.name}"
                    disabled="disabled"/>
             <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
-            <span class="btn btn-outline-primary update-button">수정</span>
+            <span class="btn btn-outline-primary update-button" >수정</span>
           </form>
         </td>
         <td>
@@ -71,18 +71,48 @@
   <h3>새 테그 등록</h3>
   <form method="post"
         th:action="@{/admin/product/tag/connection/create/{productNo}/{pageNum}(productNo=${productNo}, pageNum=${totalPage})}"/>
-  <p>테그명 : <input type="text" name="name">
+  <p>테그명 : <input id="tag-content" type="text" name="name">
     <input class="btn btn-outline-primary" type="submit" value="등록"/></p>
   </form>
 
 
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <script>
+    $(document).ready(function() {
+      $("#tag-content").focusout(function(){
+        const tag = document.querySelector('#tag-content').value;
+        //중복검사
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          data:`{"name":${tag}}`,
+          url: `/admin/product/tag/${tag}`, /// url
+          success: function(data){
+            if(data == true){
+              alert("증복된 테그입니다.");
+            }
+          },
+          error: function(){ alert("증복된 테그입니다."); }
+        });
+
+      });//focusout()
+    }); // ready()
+
     const updateBtns = document.querySelectorAll('.update-button');
     updateBtns.forEach(function (item) {
       item.addEventListener('click', function () { // 클릭 이벤트 발생시,
+        console.log(this);
         var form1 = this.closest('form'); // 클릭 이벤트가 발생한 버튼에 제일 가까운 폼을 찾고,
         form1.querySelector('.name-input').toggleAttribute('disabled')
         form1.querySelector('.submit-btn').toggleAttribute('hidden')
+        const spanForChange = this.closest('span')
+        console.log(spanForChange.textContent);
+        if(spanForChange.textContent === '수정') {
+          spanForChange.innerHTML = "취소";
+        }
+        else {
+          spanForChange.innerHTML = "수정";
+        }
       });
     });
   </script>
