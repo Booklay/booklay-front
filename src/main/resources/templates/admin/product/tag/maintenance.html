@@ -88,20 +88,21 @@
   <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
   <script>
     $(document).ready(function() {
-
-      $("#tag-btn").keyup(function(){
-        var tag = document.querySelector('#tag-content').value;
-        var tagCheck = 0;
-
+      // console.log("진입 확인");
+      $("#tag-content").focusout(function(){
+        const tag = document.querySelector('#tag-content').value;
+        console.log("진입 확인");
         //중복검사
-        var tagList;
         $.ajax({
           type: "POST",
           dataType: "json",
-          data:'{"name":'+ tag+'}',
-          url: ".jsp", /// url
+          data:`{"name":${tag}}`,
+          url: `/admin/product/tag/${tag}`, /// url
           success: function(data){
-            tagList = data;
+            console.log(data)
+            if(data == true){
+              alert("증복된 테그입니다.");
+            }
           },
           error: function(){ alert("증복된 테그입니다."); }
         });
