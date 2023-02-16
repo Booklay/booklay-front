@@ -51,7 +51,6 @@ public class CouponZoneService {
                 throw new CouponZoneException("발급 대상이 아닙니다.");
             }
         }
-
     }
 
     public ApiEntity<CouponIssueResponse> issueCouponAtZone(Long couponId, Long memberNo) {
@@ -62,6 +61,5 @@ public class CouponZoneService {
 
         return restService.post(requestToShopUrl.toString(), map, new ParameterizedTypeReference<>() {});
     }
-
 
 }
