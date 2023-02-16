@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{thymeleaf/layout/blank}">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<th:block layout:fragment="content">
+
+    <div class="card container container-tight py-4">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">완료</h2>
+
+                <div class="mb-3">
+                    <label class="form-label">완료되었습니다</label>
+                    <button class="btn btn-outline-primary" onclick="window.close()">
+                        닫기
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</th:block>
+</html>

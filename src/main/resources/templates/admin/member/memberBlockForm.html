@@ -7,16 +7,6 @@
     <title>회원 차단하기</title>
 </head>
 <th:block layout:fragment="content">
-    <!--<div>-->
-    <!--    <h3>회원 차단하기</h3><br>-->
-    <!--    <form th:action="@{/admin/members/block/{memberNo}(memberNo=${member.getMemberNo()})}" method="post"-->
-    <!--          name="MemberBlockRequest">-->
-    <!--        <b>회원 ID</b>: <span th:text="${member.getMemberId()}"></span><br>-->
-    <!--        <b>회원 이름</b>: <span th:text="${member.getName()}"></span><br>-->
-    <!--        <b>사유</b>: <textarea name="reason"></textarea><br>-->
-    <!--        <input type="submit" value="차단하기"/>-->
-    <!--    </form>-->
-    <!--</div>-->
 
     <div class="card container container-tight py-4">
         <div class="card-header">
@@ -24,9 +14,6 @@
         <div class="card-body">
             <h2 class="card-title text-center mb-4">회원 차단하기</h2>
             <form th:action="@{/admin/members/block/{memberNo}(memberNo=${member.getMemberNo()})}" method="post">
-
-                <!--                <b>회원 ID</b>: <span th:text="${member.getMemberId()}"></span><br>-->
-                <!--                <b>회원 이름</b>: <span th:text="${member.getName()}"></span><br>-->
 
                 <div class="mb-3">
                     <label class="form-label">회원 ID</label>
@@ -40,7 +27,6 @@
                 <br>
                 <div class="mb-3">
                     <label class="form-label">사유</label>
-                    <!--                    <textarea name="reason"></textarea>-->
                     <textarea class="form-control" name="reason" rows="6" placeholder="사유입력"></textarea>
                 </div>
 

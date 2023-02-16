@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>포인트 쿠폰 내역</title>
+    <script src="/js/member/pointCouponPopup.js"></script>
 </head>
 
 <th:block layout:fragment="content">
@@ -25,10 +26,10 @@
                     <tr>
                         <td th:text="${couponStat.count}"></td>
                         <td th:text="${coupon.getName()}"></td>
-                        <td th:text="${coupon.getAmount()}">p</td>
+                        <td th:text="${coupon.getAmount()}"></td>
                         <td>
-                            <button><a
-                                    th:href="@{/point/{memberNo}/{couponId}(memberNo=${memberNo}, couponId=${coupon.getCouponId()})}">전환하기</a>
+                            <button class="btn btn-outline-primary" th:id="${coupon.getCouponId()}"
+                                    onclick="showPointCouponConvertPopup(this.getAttribute('id'))">전환하기
                             </button>
                         </td>
                     </tr>
