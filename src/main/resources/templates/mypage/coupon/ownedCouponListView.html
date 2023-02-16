@@ -3,25 +3,21 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
-
     <title>북레이 -  쿠폰함</title>
-    <script src="/js/member/addressCUPopup.js"></script>
     <link href="/css/coupon/couponStyle.css" rel="stylesheet">
 </head>
 
 <th:block layout:fragment="content">
-                    <!-- Page Header -->
+    <!-- Page Header -->
     <div class="page-header">
+        <div class="col">
+            <a th:href="@{/member/profile}">Home</a>
+            <span> > </span>
+            <a th:href="@{/mypage/coupon}">쿠폰함</a>
+        </div>
         <div class="row g-2 align-items-center">
             <div class="col">
                 <h2 class="page-title">쿠폰함</h2>
-            </div>
-            <div class="col align-items-center">
-                <div class="text-end">
-                    <a th:href="@{/member/profile}">Home</a>
-                    <span> > </span>
-                    <a th:href="@{/mypage/coupon}">쿠폰함</a>
-                </div>
             </div>
         </div>
     </div>

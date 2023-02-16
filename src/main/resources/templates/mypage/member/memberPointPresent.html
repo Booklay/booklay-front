@@ -4,10 +4,25 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <meta charset="UTF-8">
-    <title>포인트 선물</title>
+    <title>북레이 - 포인트 선물</title>
 </head>
 
 <th:block layout:fragment="content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="col">
+            <a th:href="@{/member/profile}">Home</a>
+            <span> > </span>
+            <a th:href="@{/member/profile/address}">포인트 선물하기</a>
+        </div>
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">포인트 선물하기</h2>
+            </div>
+        </div>
+    </div>
+
     <div class="card container container-tight py-4">
         <div class="card-header">
         </div>
