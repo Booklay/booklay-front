@@ -13,3 +13,6 @@ booklay:
     port: 6379
     database: 4
     password: "*N2vya7H@muDTwdNMR!"
+logging:
+  level:
+    root: debug

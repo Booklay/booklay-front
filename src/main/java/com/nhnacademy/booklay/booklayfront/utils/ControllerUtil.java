@@ -1,27 +1,23 @@
 package com.nhnacademy.booklay.booklayfront.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
+import com.nhnacademy.booklay.booklayfront.dto.common.PageData;
 import com.nhnacademy.booklay.booklayfront.dto.search.response.SearchPageResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
+import java.util.Map;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Component
 @SuppressWarnings("unchecked")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ControllerUtil {
-    private static ObjectMapper objectMapper;
-
-    @Autowired
-    private ControllerUtil(ObjectMapper objectMapper) {
-        ControllerUtil.objectMapper = objectMapper;
-    }
+    public static final Integer DEFAULT_PAGE_SIZE = 20;
 
     public static String buildString(String... strings) {
         StringBuilder builder = new StringBuilder();
@@ -31,12 +27,18 @@ public class ControllerUtil {
         return builder.toString();
     }
 
-    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, Integer size) {
-        return getDefaultPageMap(pageNum, size, new MemberInfo());
+    public static MultiValueMap<String, String> getDefaultPageMap(PageData pageData) {
+        return getDefaultPageMap(pageData.getPage(), pageData.getSize(), new MemberInfo());
+    }
+    public static MultiValueMap<String, String> getDefaultPageMap(PageData pageData, MemberInfo memberInfo) {
+        return getDefaultPageMap(pageData.getPage(), pageData.getSize(), memberInfo);
     }
 
     public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum) {
         return getDefaultPageMap(pageNum, 20);
+    }
+    public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, Integer size) {
+        return getDefaultPageMap(pageNum, size, new MemberInfo());
     }
 
     public static MultiValueMap<String, String> getDefaultPageMap(Integer pageNum, MemberInfo memberInfo){

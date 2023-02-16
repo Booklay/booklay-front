@@ -37,5 +37,7 @@ public class OrderSheet {
 
     @Setter
     private Long orderNo;
-
+    private String orderTitle;
+    @Setter
+    private Integer pointAccumulate;
 }

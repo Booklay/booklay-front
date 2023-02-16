@@ -43,7 +43,15 @@ window.onload = function() {
     const paymentButton = document.getElementById('toPayment') // 결제하기 버튼
 
     paymentButton.addEventListener('click', function () {
-        orderValidCheckAndToss()
+        if(checkRequired()){
+            orderValidCheckAndToss()
+        }
+    })
+
+    destinationList.forEach((value, index, array) => {
+        if(value.isDefaultDestination){
+            destinationRadioList.item(index).dispatchEvent(new Event("click"));
+        }
     })
 };
 const couponDataPrefix = {
@@ -58,12 +66,12 @@ const couponDataPrefix = {
 };
 function showCouponPopup(productNo, isDuplicable) {
     let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
-    window.open("/admin/coupons/popup/coupon/"+productNo.slice(6)+"?isDuplicable="+isDuplicable, "couponPopup", option);
+    window.open("/order/popup/coupon/"+productNo.slice(6)+"?isDuplicable="+isDuplicable, "couponPopup", option);
 }
 
 function showOrderCouponPopup(isDuplicable){
     let option = "width = 700, height = 500, top = 100, left = 200, scrollbars = yes, location = no"
-    window.open("/admin/coupons/popup/coupon/order?isDuplicable="+isDuplicable, "couponPopup", option);
+    window.open("/order/popup/coupon/order?isDuplicable="+isDuplicable, "couponPopup", option);
 }
 function setCouponData(couponCode, productNo, duplicable){
     let httpResult;
@@ -105,13 +113,11 @@ function updatePoint(){
     if (usingPointAmount<0){
         usingPoint.value = 0;
     }
-    if (userPointAmount< usingPointAmount){
-        usingPoint.value = userPointAmount;
-    }
     let orderData = couponSettingData[couponSettingData.length-1];
     let paymentAmount = orderData.discountedAmount + parseInt((orderData.orderTotalProductAmount>30000?0:3000).toString());
-    if (paymentAmount<usingPointAmount){
-        usingPoint.value = paymentAmount;
+    let maxPointAmount = Math.min(parseInt(userPointAmount.toString()), paymentAmount)
+    if (maxPointAmount<usingPointAmount){
+        usingPoint.value = maxPointAmount;
     }
     drawOrderSummary();
 }
@@ -408,24 +414,20 @@ function destinationClickEvent(e) {
     let targetId = e.target.id;
     let targetNo = parseInt(targetId.toString().slice("destination".length));
     let destinationData = destinationList[targetNo];
-    // document.getElementById("destination_name").innerText = destinationData.name;
     document.getElementById("destination_zipCode").value = destinationData.zipCode;
     document.getElementById("destination_address").value = destinationData.address;
     document.getElementById("destination_receiver").value = destinationData.receiver;
     let receiverPhoneNoList = destinationData.receiverPhoneNo.split("-");
-    let phoneNoOptions = document.getElementById("destination_receiverPhoneNo1");
-    // for(let i=0; i<phoneNoOptions.length; i++){
-    //     if (phoneNoOptions.options[i].value  === parseInt(receiverPhoneNoList[0])){
-    //         phoneNoOptions.options[i].selected = true;
-    //     }
-    // }
-    for (phoneNo of phoneNoOptions){
-        if (phoneNo.value === receiverPhoneNoList[0]){
-            phoneNo.selected = true;
+    if (receiverPhoneNoList.length === 1){
+        if (receiverPhoneNoList[0].length ===10){
+            receiverPhoneNoList = [receiverPhoneNoList[0].slice(0, 3), receiverPhoneNoList[0].slice(3, 6),receiverPhoneNoList[0].slice(6, 10)];
+        }else {
+            receiverPhoneNoList = [receiverPhoneNoList[0].slice(0, 3), receiverPhoneNoList[0].slice(3, 7),receiverPhoneNoList[0].slice(7, 11)];
         }
     }
-    document.getElementById("destination_receiverPhoneNo2").value = parseInt(receiverPhoneNoList[1]);
-    document.getElementById("destination_receiverPhoneNo3").value = parseInt(receiverPhoneNoList[2]);
+    document.getElementById("destination_receiverPhoneNo1").value = receiverPhoneNoList[0];
+    document.getElementById("destination_receiverPhoneNo2").value = receiverPhoneNoList[1];
+    document.getElementById("destination_receiverPhoneNo3").value = receiverPhoneNoList[2];
 
 }
 
@@ -447,7 +449,7 @@ function orderValidCheckAndToss(){
                 }
 
             } else {
-                alert('결제 정보중 유효하지 않은 정보가 포함되어 있습니다.');
+                alert(httpResult.response.reason);
             }
         }
     };
@@ -483,17 +485,66 @@ function orderValidCheckAndToss(){
         "discountPrice" : orderData.orderTotalDiscount,
         "paymentMethod" : 1,
         "sender" : document.getElementById("destination_sender").value,
-        "senderPhoneNo" : document.getElementById("destination_senderPhoneNo1").value,
+        "senderPhoneNo" : `${document.getElementById("destination_senderPhoneNo1").value}-
+        ${document.getElementById("destination_senderPhoneNo2").value}-
+        ${document.getElementById("destination_senderPhoneNo3").value}`,
         "name" : document.getElementById("destination_receiver").value,
         "zipCode" : document.getElementById("destination_zipCode").value,
         "address" : document.getElementById("destination_address").value + document.getElementById("detailAddress").value,
         "isDefaultDestination" : false,
         "receiver" : document.getElementById("destination_receiver").value,
-        "receiverPhoneNo" : document.getElementById("destination_receiverPhoneNo1").value,
+        "receiverPhoneNo" : `${document.getElementById("destination_receiverPhoneNo1").value}-
+        ${document.getElementById("destination_receiverPhoneNo2").value}-
+        ${document.getElementById("destination_receiverPhoneNo3").value}`,
         "memo" : document.getElementById("deliveryMemo").value,
+        "orderTitle": cartData[0].productName + cartData.length>1?`외 ${cartData.length-1}종`:""
     };
     httpRequest.open('POST', '/rest/order/check');
     httpRequest.responseType = "json";
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.send(JSON.stringify(body));
+}
+
+function checkRequired() {
+    if ( document.getElementById("destination_sender").value === ""){
+        document.getElementById("destination_sender").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_senderPhoneNo1").value === ""){
+        document.getElementById("destination_senderPhoneNo1").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_senderPhoneNo2").value === ""){
+        document.getElementById("destination_senderPhoneNo2").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_senderPhoneNo3").value === ""){
+        document.getElementById("destination_senderPhoneNo3").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_zipCode").value === ""){
+        document.getElementById("destination_zipCode").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_address").value === ""){
+        document.getElementById("destination_address").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_receiver").value === ""){
+        document.getElementById("destination_receiver").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_receiverPhoneNo1").value === ""){
+        document.getElementById("destination_receiverPhoneNo1").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_receiverPhoneNo2").value === ""){
+        document.getElementById("destination_receiverPhoneNo2").focus();
+        return false;
+    }
+    if ( document.getElementById("destination_receiverPhoneNo3").value === ""){
+        document.getElementById("destination_receiverPhoneNo3").focus();
+        return false;
+    }
+    return true;
 }

@@ -9,4 +9,6 @@ public class OrderCheckResponse {
     private String orderId;
     private Boolean valid;
     private Integer paymentAmount;
+    private String reason;
+    private Integer reasonType;
 }
