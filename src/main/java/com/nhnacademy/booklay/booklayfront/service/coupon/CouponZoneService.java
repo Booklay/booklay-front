@@ -45,7 +45,6 @@ public class CouponZoneService {
         }
 
         String grade = response.getGrade();
-        log.info("target grade : {} , member grade : {}", grade, memberGrade);
         if(!grade.equals(Grade.ANY.getKorGrade())) {
             if(!grade.equals(memberGrade)) {
                 throw new CouponZoneException("발급 대상이 아닙니다.");
