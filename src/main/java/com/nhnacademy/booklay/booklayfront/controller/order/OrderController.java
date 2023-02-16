@@ -10,6 +10,7 @@ import com.nhnacademy.booklay.booklayfront.dto.order.*;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
+import io.micrometer.core.lang.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,9 +58,13 @@ public class OrderController {
                                  Optional<Cookie> optionalCookie){
         return optionalCookie.map(Cookie::getValue).orElse(null);
     }
+    @GetMapping("/page")
+    public String orderPageGetMapping(){
+        return "redirect:/cart/list";
+    }
     @PostMapping("/page")
     public String orderPage(@ModelAttribute(STRING_CART_ID)String cartId
-            ,@ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
+            , @Nullable @ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
             , Model model){
 
         List<CartObject> cartObjectList = productRestApiModelSettingService.setProductObjectListToModelByProductNoList(
@@ -92,7 +97,8 @@ public class OrderController {
     }
 
     @RequestMapping("/success")
-    public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto, Model model, MemberInfo memberInfo){
+    public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto
+            , Model model, MemberInfo memberInfo, @CookieValue(name = STRING_CART_ID, required = false) String cookie){
         //상품 주문서 받아오기
         String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
         ApiEntity<OrderSheet> orderSheetApiEntity = restService.get(orderSheetUrl, null, OrderSheet.class);
@@ -128,12 +134,13 @@ public class OrderController {
             //주문 영수증 저장
             String receiptSaveUrl = buildString( gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/", tossPaymentConfirmDto.getOrderId());
             ApiEntity<Long> orderNoApiEntity = restService.post(receiptSaveUrl, null, Long.class);
-            String cartBuyUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
 
             //장바구니에서 물건 삭제
             MultiValueMap<String, String> cartDeleteMap = new LinkedMultiValueMap<>();
             cartDeleteMap.setAll(getMemberInfoMap(memberInfo));
-            cartDeleteMap.put("productNo",orderSheet.getCartDtoList().stream().map(cartDto -> cartDto.getProductNo().toString()).collect(Collectors.toList()));
+            cartDeleteMap.add("cartId", cookie);
+            cartDeleteMap.put("productNoList",orderSheet.getCartDtoList().stream().map(cartDto -> cartDto.getProductNo().toString()).collect(Collectors.toList()));
+            String cartBuyUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
             restService.delete(cartBuyUrl, cartDeleteMap);
 
             return "redirect:/order/receipt/"+orderNoApiEntity.getBody();
