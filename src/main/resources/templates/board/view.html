@@ -34,17 +34,18 @@
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
              style="text-align: right;">
           <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
-            <button class="btn btn-outline-primary" style="margin-right: 1rem;">답글</button>
+            <button class="btn btn-outline-primary" style="margin-right: 0.5rem;">답글</button>
           </a>
-          <form th:if="${post.depth == 0}" method="post" th:action="@{/board/confirm}">
+          <form th:if="${post.depth == 0}" method="post" th:action="@{/board/confirm}"
+                style="display: inline">
             <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
             <input type="number" name="postId" th:value="${commentAuth}" hidden="hidden">
-            <input class="btn btn-outline-lime" style="margin-right: 1rem;" type="submit"
+            <input class="btn btn-outline-lime" style="margin-right: 0.5rem;" type="submit"
                    value="답변 완료">
           </form>
           <span th:if="${post.memberNo == memberInfo.memberNo}" id="btn-var">
             <a th:href="@{/board/edit/{postId} (postId = ${post.postId})}"
-               style="margin-right: 1rem;">
+               style="margin-right: 0.5rem;">
               <button class="btn btn-outline-primary">수정</button>
             </a>
             <!--            삭제 요청 시작-->
@@ -68,11 +69,16 @@
         <div id="comment-section">
 
           <th:block th:each="comment : ${commentList}">
-            <div style="display: flex">
+            <div style="display: flex; border: lightgrey solid 1px; border-radius: 5px; padding: 5px; margin-bottom: 5px;">
               <div style="flex: 4;">
-                <div><span th:text="${comment.name}"></span></div>
-                <div th:text="${comment.content}"></div>
-                <div><span th:text="${comment.createdAt}"></span></div>
+                <div th:if="${!comment.deleted}">
+                  <div><span th:text="${comment.name}"></span></div>
+                  <div th:text="${comment.content}"></div>
+                  <div><span th:text="${comment.createdAt}"></span></div>
+                </div>
+                <div th:if="${comment.deleted}">
+                  삭제된 댓글 입니다.
+                </div>
               </div>
               <div style="flex:1;">
                 <!--                <div>-->
@@ -85,7 +91,8 @@
                 <!--                    <input class="btn-outline-primary btn h-3" type="submit" value="수정">-->
                 <!--                  </form>-->
                 <!--                </div>-->
-                <div>
+                <!--                삭제버튼 시작 -->
+                <div th:if="${!comment.deleted}">
                   <form th:if="${comment.memberNo == memberInfo.memberNo}"
                         method="post" th:action="@{/comment}">
                     <input type="hidden" name="_method" value="DELETE"/>
@@ -97,6 +104,7 @@
                     <input class="btn-outline-danger btn h-4" type="submit" value="삭제">
                   </form>
                 </div>
+                <!--                삭제버튼 종료 -->
                 <!--                <div>-->
                 <!--                  <button class="btn btn-outline-primary h-3">답 댓글</button>-->
                 <!--                </div>-->
@@ -112,6 +120,7 @@
             <!--            <input name="content" type="text" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">-->
             <!--            <input class="btn btn-outline-primary" type="submit" value="등록">-->
             <!--          </form>-->
+<!--            <hr style="margin-top:5px; margin-bottom: 5px;">-->
           </th:block>
           <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
 
