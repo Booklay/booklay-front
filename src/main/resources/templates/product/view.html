@@ -4,12 +4,8 @@
   <title th:text="${product.info.title}"></title>
 
   <script src="/js/product/productDetailForCart.js"></script>
+  <link href="/css/pointStar.css" rel="stylesheet">
   <link href="/css/product/elipse-style.css" rel="stylesheet">
-
-  <script th:if="${reviewError} != null">
-    var error = '[[${reviewError}]]';
-    alert( error )
-  </script>
 
 </head>
 <!---->
@@ -301,13 +297,14 @@
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
-                  <div class="card-body-scrollable">
-                    <th:block th:replace="product/fragment/reviewList :: review_list">
+                  <div class="card-body-scrollable" >
+                    <th:block th:replace="product/fragments/reviewList :: review_list">
                     </th:block>
                   </div>
                   <div class="card-body">
-                    <th:block th:replace="product/fragment/reviewRegister :: review_form">
-                    </th:block>              </div>
+                    <th:block th:replace="product/fragments/reviewRegister :: review_form">
+                    </th:block>
+                  </div>
             </div>
             <!--탭 내용 종료-->
           </div>
@@ -349,7 +346,7 @@
                       </div>
                     </div>
                     <div class="ms-auto">
-                      <a href="#" class="text-muted">
+                      <a href="#" class="text-muted" >
                         <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                              height="24"
@@ -389,6 +386,7 @@
         <button class="btn btn-outline-primary" onclick="history.back()">뒤로가기</button>
       </div>
     </div>
+  </div>
   </div>
   </div>
 </th:block>
