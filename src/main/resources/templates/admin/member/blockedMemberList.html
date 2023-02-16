@@ -40,8 +40,9 @@
                                     onclick="showMemberBlockHistoryPopup(this.getAttribute('id'))">상세보기</button>
                         </td>
                         <td>
-                            <button class="btn btn-outline-primary" th:id="${member.getId()}"
-                                    onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">차단해제</button>
+                            <button class="btn btn-outline-danger" th:id="${member.getId()}"
+                                    onclick="showMemberBlockCancelPopup(this.getAttribute('id'))">차단해제
+                            </button>
                         </td>
                         <td>
                             <button class="btn btn-outline-primary" th:id="${member.getMemberNo()}"

@@ -226,7 +226,7 @@ public class MemberAdminController {
         restService.post(uri.toString(), objectMapper.convertValue(request, Map.class),
             Void.class);
 
-        return "redirect:/admin/members";
+        return "complete";
     }
 
     @GetMapping("/block/cancel/process/{blockedMemberDetailId}")
