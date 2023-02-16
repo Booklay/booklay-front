@@ -9,7 +9,6 @@ import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentRequest;
-import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointCouponRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
@@ -74,7 +73,7 @@ public class PointHistoryController {
             model.addAttribute("totalPage", response.getBody().getTotalPages());
             model.addAttribute("currentPage", response.getBody().getPageNumber());
 
-            return "mypage/member/memberPointList";
+            return "admin/member/adminMemberPointList";
         } else {
             return "/";
         }
@@ -181,11 +180,6 @@ public class PointHistoryController {
     public String convertPointCoupon(MemberInfo memberInfo,
                                      @PathVariable Long couponId,
                                      Model model) {
-//        URI uri = URI.create(
-//            redirectGatewayPrefix + "/coupon/" + memberInfo.getMemberNo() + "/" + couponId);
-//
-//        restService.post(uri.toString(), null, Void.class);
-
         pointHistoryService.convertPointCoupon(memberInfo.getMemberNo(), couponId);
 
         return "complete";

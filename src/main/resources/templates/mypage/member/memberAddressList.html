@@ -10,7 +10,6 @@
 </head>
 
 <th:block layout:fragment="content">
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="row g-2 align-items-center">
@@ -82,15 +81,11 @@
                             <button class="btn btn-outline-primary" th:id="${address.getId()}"
                                     onclick="showAddressUpdatePopup(this.getAttribute('id'))">수정하기
                             </button>
-
                         </td>
                         <td>
-
                             <a th:href="@{/member/profile/address/delete/{addressNo}(addressNo=${address.getId()})}">
                                 <button class="btn btn-outline-danger">삭제하기</button>
                             </a>
-
-
                         </td>
                     </tr>
                     </tbody>
