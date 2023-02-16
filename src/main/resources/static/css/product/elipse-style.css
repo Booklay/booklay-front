@@ -1,3 +1,12 @@
+
+.ellipsis-text-1{
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .ellipsis-text-2{
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -6,9 +15,9 @@
   text-overflow: ellipsis;
 }
 
-.ellipsis-text-1{
+.ellipsis-text-5{
   display: -webkit-box;
-  -webkit-line-clamp: 1;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;

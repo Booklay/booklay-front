@@ -5,9 +5,10 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurren
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.AnswerConfirmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostCreateRequest;
-import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostDeleteRequest;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.CommentResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
@@ -45,6 +46,10 @@ public class BoardController {
   private final RestService restService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  private static final Integer POST_TYPE_PRODUCT = 2;
+  private static final Integer POST_TYPE_NOTICE = 5;
+
+
   /**
    * 게시글 조회
    *
@@ -60,21 +65,24 @@ public class BoardController {
     ApiEntity<PostResponse> response = restService.get(uri.toString(), null, PostResponse.class);
     PostResponse post = response.getBody();
 
-    boolean commentAuth = commentAuthCheck(memberInfo, post);
+    if (!post.getDeleted()) {
+      boolean commentAuth = commentAuthCheck(memberInfo, post);
 
-    model.addAttribute("post", post);
-    model.addAttribute("memberInfo", memberInfo);
-    model.addAttribute("commentAuth", commentAuth);
+      model.addAttribute("post", post);
+      model.addAttribute("memberInfo", memberInfo);
+      model.addAttribute("commentAuth", commentAuth);
 
-    URI commentUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/"+ postId);
-    ApiEntity<PageResponse<CommentResponse>> commentResponse = restService.get(
-        commentUri.toString(), null,
-        new ParameterizedTypeReference<PageResponse<CommentResponse>>() {
-        });
+      URI commentUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/" + postId);
+      ApiEntity<PageResponse<CommentResponse>> commentResponse = restService.get(
+          commentUri.toString(), null,
+          new ParameterizedTypeReference<PageResponse<CommentResponse>>() {
+          });
 
-    model.addAttribute("commentList", commentResponse.getBody().getData());
-    setCurrentPageAndMaxPageToModel(model, commentResponse.getBody());
-    return "board/view";
+      model.addAttribute("commentList", commentResponse.getBody().getData());
+      setCurrentPageAndMaxPageToModel(model, commentResponse.getBody());
+      return "board/view";
+    }
+    return "redirect:/index";
   }
 
   /**
@@ -181,7 +189,25 @@ public class BoardController {
   }
 
   /**
+   * 상품 문의 게시글 답변 수락
+   *
+   * @param request
+   * @param memberInfo
+   * @return
+   */
+  @PostMapping("/confirm")
+  public String confirmAnswer(@ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo) {
+    if (request.getCommentAuth() || memberInfo.getAuthority().getValue().equals("ROLE_ADMIN")) {
+      URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/confirm/" + request.getPostId());
+
+      restService.put(uri.toString(), null, Long.class);
+    }
+    return "redirect:/board/" + request.getPostId();
+  }
+
+  /**
    * 게시글 삭제 요청
+   *
    * @param memberInfo
    * @param request
    * @return
@@ -190,7 +216,7 @@ public class BoardController {
   public String deletePost(MemberInfo memberInfo,
       @Valid @ModelAttribute BoardPostDeleteRequest request) {
     //삭제 권한 확인
-    if (memberInfo.getMemberNo() == request.getMemberNo()) {
+    if (memberInfo.getMemberNo().equals(request.getMemberNo())) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + request.getPostId());
 
       MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -199,14 +225,16 @@ public class BoardController {
       restService.delete(uri.toString(), map);
 
       //상품 문의는 상품 상세로
-      if(Objects.nonNull(request.getProductId())){
+      if (Objects.nonNull(request.getProductId())) {
         return "redirect:/product/view/" + request.getProductId();
       }
     }
 
     //TODO : 에러페이지 가도록 수정
-    return "redirect:/";
+    return "redirect:/index";
   }
+
+
 
   /**
    * 게시글 조회 권한 확인
@@ -217,11 +245,9 @@ public class BoardController {
    */
   private boolean commentAuthCheck(MemberInfo memberInfo, PostResponse post) {
     boolean commentAuth = false;
-    if (memberInfo.getMemberNo() != null) {
-      if (post.getMemberNo() == memberInfo.getMemberNo() || post.commentAuth(
-          memberInfo.getMemberNo())) {
-        commentAuth = true;
-      }
+    if (memberInfo.getMemberNo() != null && post.getMemberNo().equals(memberInfo.getMemberNo())
+        || memberInfo.getMemberNo() != null && post.commentAuth(memberInfo.getMemberNo())) {
+      commentAuth = true;
     }
     return commentAuth;
   }

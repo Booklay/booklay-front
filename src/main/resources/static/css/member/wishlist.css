@@ -37,3 +37,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.right-btns{
+  text-align: center;
+}
