@@ -52,8 +52,8 @@ public class ControllerUtil {
     }
 
     public static Map<String, String> getMemberInfoMap(MemberInfo memberInfo){
+        Map<String, String> map = new HashMap<>();
         if (memberInfo.getMemberNo() == null) {
-            Map<String, String> map = new HashMap<>();
             String nullChangeText = "\u0000";
             map.put("member_info_memberNo", nullChangeText);
             map.put("member_info_gender", nullChangeText);
@@ -63,10 +63,17 @@ public class ControllerUtil {
             map.put("member_info_birthday", nullChangeText);
             map.put("member_info_phoneNo", nullChangeText);
             map.put("member_info_email", nullChangeText);
-            return map;
         }else {
-            return objectMapper.convertValue(memberInfo, Map.class);
+            map.put("member_info_memberNo", memberInfo.getMemberNo().toString());
+            map.put("member_info_gender", memberInfo.getGender());
+            map.put("member_info_memberId", memberInfo.getMemberId());
+            map.put("member_info_nickname", memberInfo.getNickname());
+            map.put("member_info_name", memberInfo.getName());
+            map.put("member_info_birthday", memberInfo.getBirthday().toString());
+            map.put("member_info_phoneNo", memberInfo.getPhoneNo());
+            map.put("member_info_email", memberInfo.getEmail());
         }
+        return map;
     }
 
     public static MultiValueMap<String, String> getMemberInfoMultiValueMap(MemberInfo memberInfo){
