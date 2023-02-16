@@ -16,9 +16,11 @@
 
             <div class="mb-3">
                 <label class="form-label" style="font-size: 15px;">포인트로 전환하시겠습니까?</label>
-                <button class="btn btn-outline-blue" style="margin-top: 1rem;">
-                    <a th:href="@{/member/profile/point/coupon/{couponId}/{orderCouponId}(couponId=${couponId}, orderCouponId=${orderCouponId})}">전환</a>
-                </button>
+                <a th:href="@{/member/profile/point/coupon/{couponId}/{orderCouponId}(couponId=${couponId}, orderCouponId=${orderCouponId})}">
+                    <button class="btn btn-outline-blue" style="margin-top: 1rem;">
+                        전환
+                    </button>
+                </a>
                 <button class="btn btn-outline-danger" style="margin-top: 1rem;" onclick="window.close()">취소</button>
             </div>
 
