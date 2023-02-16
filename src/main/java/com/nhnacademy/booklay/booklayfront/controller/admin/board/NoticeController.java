@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * @Author : 최규태
+ */
 @Slf4j
 @Controller
 @RequestMapping("/admin/board/notice")
