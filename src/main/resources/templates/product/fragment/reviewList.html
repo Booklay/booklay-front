@@ -35,7 +35,7 @@
               <div class="dropdown font-weight-medium" th:text="${item.writerName}"></div>
             </td>
             <td>
-              <div class="dropdown" th:classappend="${thisMember.memberNo != item.writerNo} ? invisible" >
+              <div class="dropdown" th:classappend="${memberInfo.memberNo != item.writerNo} ? invisible" >
                 <button class="btn dropdown-toggle align-text-top" data-bs-toggle="dropdown">
                   Actions
                 </button>

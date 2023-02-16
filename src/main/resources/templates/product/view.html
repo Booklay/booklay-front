@@ -95,12 +95,12 @@
             </p>
 
             <!--            wishlist, alarm-->
-            <th:block th:if="${thisMember.memberNo != null}">
+            <th:block th:if="${memberInfo.memberNo != null}">
               <div style="display: flex;">
                 <!--              위시리스트 등록-->
                 <form style="margin-right: 10px;" th:if="${!memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/connect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}"
                          hidden>
                   <label class="btn btn-outline-primary">
@@ -123,7 +123,7 @@
                 <!--              위시리스트 삭제-->
                 <form style="margin-right: 10px;" th:if="${memberProduct.wishlist}" method="post"
                       th:action="@{/product/wishlist/disconnect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-primary">
                     <input type="submit" hidden>
@@ -145,7 +145,7 @@
                 <!--              알람 등록-->
                 <form th:if="${!memberProduct.alarm and !product.info.selling}" method="post"
                       th:action="@{/product/alarm/connect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-outline-primary">
                     <input type="submit" hidden>
@@ -167,7 +167,7 @@
                 <!--              알람 삭제-->
                 <form th:if="${memberProduct.alarm}" method="post"
                       th:action="@{/product/alarm/disconnect}">
-                  <input name="memberNo" type="number" th:value="${thisMember.memberNo}" hidden>
+                  <input name="memberNo" type="number" th:value="${memberInfo.memberNo}" hidden>
                   <input name="productId" type="number" th:value="${product.info.id}" hidden>
                   <label class="btn btn-primary">
                     <input type="submit" hidden>
@@ -297,7 +297,7 @@
                 </div>
                 <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
-                  <th:block th:replace="product/fragments/board::product_board"></th:block>
+                  <th:block th:replace="product/fragment/board::product_board"></th:block>
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
