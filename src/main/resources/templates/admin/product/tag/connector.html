@@ -32,7 +32,7 @@
             <input name="id" type="number" th:value="${tag.id}" hidden/>
             <input name="name" class="name-input tag-content" type="text" th:value="${tag.name}"
                    disabled="disabled"/>
-            <input class="submit-btn" type="submit" value="수정 제출" hidden="hidden"/>
+            <input class="submit-btn btn btn-outline-lime " type="submit" value="수정 제출" hidden="hidden"/>
             <span class="btn btn-outline-primary update-button" >수정</span>
           </form>
         </td>
@@ -40,7 +40,7 @@
           <form method="post"
                 th:action="@{/admin/product/tag/connection/delete/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${currentPage})}">
             <input name="id" type="number" th:value="${tag.id}" hidden/>
-            <input class="btn btn-outline-primary submit-btn" type="submit" value="삭제"/>
+            <input class="btn btn-outline-danger submit-btn" type="submit" value="삭제"/>
           </form>
         </td>
         <td>
@@ -48,7 +48,7 @@
                 th:action="@{/admin/product/tag/connection/disconnect/{productNo}/{pageNum} (productNo=${productNo}, pageNum=${currentPage})}">
             <input name="tagId" type="number" th:value="${tag.id}" hidden="hidden"/>
             <input name="productNo" type="number" th:value="${productNo}" hidden="hidden"/>
-            <input class="btn btn-outline-primary w-5" type="submit" value="등록 취소">
+            <input class="btn btn-outline-danger w-5" type="submit" value="등록 취소">
           </form>
 
           <form th:if="${tag.isRegistered()==false}" method="post"
