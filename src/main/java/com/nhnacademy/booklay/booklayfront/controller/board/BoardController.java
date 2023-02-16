@@ -1,10 +1,12 @@
 package com.nhnacademy.booklay.booklayfront.controller.board;
 
+import static com.nhnacademy.booklay.booklayfront.auth.constant.Roles.ROLE_ADMIN;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.AnswerConfirmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostDeleteRequest;
@@ -60,21 +62,24 @@ public class BoardController {
     ApiEntity<PostResponse> response = restService.get(uri.toString(), null, PostResponse.class);
     PostResponse post = response.getBody();
 
-    boolean commentAuth = commentAuthCheck(memberInfo, post);
+    if(!post.getDeleted()) {
+      boolean commentAuth = commentAuthCheck(memberInfo, post);
 
-    model.addAttribute("post", post);
-    model.addAttribute("memberInfo", memberInfo);
-    model.addAttribute("commentAuth", commentAuth);
+      model.addAttribute("post", post);
+      model.addAttribute("memberInfo", memberInfo);
+      model.addAttribute("commentAuth", commentAuth);
 
-    URI commentUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/"+ postId);
-    ApiEntity<PageResponse<CommentResponse>> commentResponse = restService.get(
-        commentUri.toString(), null,
-        new ParameterizedTypeReference<PageResponse<CommentResponse>>() {
-        });
+      URI commentUri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/" + postId);
+      ApiEntity<PageResponse<CommentResponse>> commentResponse = restService.get(
+          commentUri.toString(), null,
+          new ParameterizedTypeReference<PageResponse<CommentResponse>>() {
+          });
 
-    model.addAttribute("commentList", commentResponse.getBody().getData());
-    setCurrentPageAndMaxPageToModel(model, commentResponse.getBody());
-    return "board/view";
+      model.addAttribute("commentList", commentResponse.getBody().getData());
+      setCurrentPageAndMaxPageToModel(model, commentResponse.getBody());
+      return "board/view";
+    }
+    return "redirect:/index";
   }
 
   /**
@@ -181,6 +186,22 @@ public class BoardController {
   }
 
   /**
+   * 상품 문의 게시글 답변 수락
+   * @param request
+   * @param memberInfo
+   * @return
+   */
+  @PostMapping("/confirm")
+  public String confirmAnswer(@ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo){
+    if(request.getCommentAuth() || memberInfo.getAuthority().getValue().equals(ROLE_ADMIN)){
+      URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/confirm/" + request.getPostId());
+
+      restService.put(uri.toString(), null, Long.class);
+    }
+    return "redirect:/board/" + request.getPostId();
+  }
+
+  /**
    * 게시글 삭제 요청
    * @param memberInfo
    * @param request
@@ -205,7 +226,7 @@ public class BoardController {
     }
 
     //TODO : 에러페이지 가도록 수정
-    return "redirect:/";
+    return "redirect:/index";
   }
 
   /**
