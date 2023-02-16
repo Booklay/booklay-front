@@ -4,7 +4,7 @@ import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponIssueResponse;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.response.CouponMemberResponse;
-import com.nhnacademy.booklay.booklayfront.exception.CouponZoneTimeException;
+import com.nhnacademy.booklay.booklayfront.exception.CouponZoneException;
 import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.coupon.CouponZoneService;
@@ -43,9 +43,8 @@ public class CouponZoneRestController {
         Long memberNo = memberInfo.getMemberNo();
         if(Objects.isNull(memberNo)) throw new LoginEssentialException("로그인이 필요한 서비스입니다.");
 
-        if(!couponZoneService.checkTimeAtZone(couponId)) {
-            throw new CouponZoneTimeException("발급 유효 시간이 아닙니다.");
-        }
+        couponZoneService.checkTimeAndGrade(couponId, memberInfo.getMemberGrade());
+
         ApiEntity<CouponIssueResponse> response = couponZoneService.issueCouponAtZone(couponId, memberNo);
 
         return response.getSuccessResponse();

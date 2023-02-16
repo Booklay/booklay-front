@@ -80,6 +80,9 @@ public class MemberController extends BaseController {
 
     @GetMapping(value = {"", "/", "/profile"})
     public String mypageIndex(Model model, MemberInfo memberInfo) {
+        Long memberNo = memberInfo.getMemberNo();
+        URI memberUri = URI.create(redirectGatewayPrefix + "/" + memberNo);
+
 
         ApiEntity<MemberMainRetrieveResponse> memberMainResponse =
             memberService.retrieveMemberMain(memberInfo.getMemberNo());
@@ -92,7 +95,7 @@ public class MemberController extends BaseController {
 
         URI wishlistUri =
             URI.create(gatewayIp + DOMAIN_PREFIX_SHOP + "/mypage/product/index/wishlist/"
-                + memberInfo.getMemberNo());
+                + memberNo);
 
         ApiEntity<List<RetrieveProductResponse>> wishlistResponse =
             restService.get(wishlistUri.toString(),
@@ -102,6 +105,13 @@ public class MemberController extends BaseController {
         if (wishlistResponse.isSuccess()) {
             model.addAttribute("wishlist", wishlistResponse.getBody());
         }
+
+        URI couponCountUri = URI.create(gatewayIp + DOMAIN_PREFIX_COUPON + "/members/" + memberNo + "/coupons/count");
+        ApiEntity<Map<String, Integer>> couponCountResponse = restService.get(
+            couponCountUri.toString(), null,
+            new ParameterizedTypeReference<>() {});
+
+        model.addAttribute("couponCount", couponCountResponse.getBody().get("couponCount"));
 
         return "mypage/profile/main";
     }

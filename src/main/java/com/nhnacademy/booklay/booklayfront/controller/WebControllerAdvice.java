@@ -2,7 +2,7 @@ package com.nhnacademy.booklay.booklayfront.controller;
 
 import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
-import com.nhnacademy.booklay.booklayfront.exception.CouponZoneTimeException;
+import com.nhnacademy.booklay.booklayfront.exception.CouponZoneException;
 import com.nhnacademy.booklay.booklayfront.exception.LoginEssentialException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class WebControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(CouponZoneTimeException.class)
+    @ExceptionHandler(CouponZoneException.class)
     public ResponseEntity<Object> handleCouponZoneTimeException(Exception ex) {
         Map<String, Object> result = new HashMap<>();
         result.put("message", ex.getMessage());

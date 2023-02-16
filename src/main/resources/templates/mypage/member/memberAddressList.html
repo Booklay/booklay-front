@@ -13,32 +13,26 @@
 
     <!-- Page Header -->
     <div class="page-header">
+        <div class="col">
+            <a th:href="@{/member/profile}">Home</a>
+            <span> > </span>
+            <a th:href="@{/member/profile/address}">배송지 등록 · 관리</a>
+        </div>
         <div class="row g-2 align-items-center">
             <div class="col">
                 <h2 class="page-title">배송지 목록</h2>
             </div>
             <div class="col">
-                <div class="text-end">
-                    <a th:href="@{/member/profile}">Home</a>
-                    <span> > </span>
-                    <a th:href="@{/member/profile/address}">배송지 목록</a>
-                </div>
-            </div>
-        </div>
-        <div class="row align-items-center">
-            <div class="text-end">
-                <div class="card-actions">
-                    <button class="btn btn-primary" onclick="showAddressCreatePopup()">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M12 5l0 14"></path>
-                            <path d="M5 12l14 0"></path>
-                        </svg>
-                        배송지 추가하기
-                    </button>
+                <div class="row align-items-center">
+                    <div class="text-end">
+                        <div class="card-actions">
+                            <button class="btn btn-primary" onclick="showAddressCreatePopup()">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                                배송지 추가하기
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
