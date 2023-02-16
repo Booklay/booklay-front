@@ -4,6 +4,7 @@
 <head>
     <title>북레이 - 마이페이지</title>
     <link href="/css/mypage-main.css" rel="stylesheet">
+    <script src="/js/member/memberUDPopup.js"></script>
 </head>
 <th:block layout:fragment="content">
     <div class="card card-sm">
@@ -74,9 +75,18 @@
                         </table>
 
                         <button class="btn btn-outline-primary"
-                                style="float: right; margin-top: 1rem; margin-bottom: 1rem;">
+                                style="float: left; margin-top: 1rem; margin-bottom: 1rem;">
                             <a th:href="@{/member/profile/address}">배송지 정보관리</a>
                         </button>
+
+
+                        <button class="btn btn-outline-danger"
+                                style="float: right; margin-top: 1rem; margin-bottom: 1rem;"
+                                onclick="showMemberDropPopup()"> 탈퇴하기</button>
+
+                        <button class="btn btn-outline-primary"
+                                style="float: right;  margin-right: 0.5rem; margin-top: 1rem; margin-bottom: 1rem;"
+                                onclick="showMemberUpdatePopup()"> 수정하기</button>
                     </div>
                 </div>
             </div>
