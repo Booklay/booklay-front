@@ -6,26 +6,23 @@
     <script src="/js/coupon/couponIssue.js"></script>
 </head>
 <th:block layout:fragment="content">
-    <div class="container-xl">
-        <div class="row row-cards">
-            <div class="col-12">
-                <div class="card card-md">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h2 class="h3">쿠폰 존</h2>
-                                <p class="m-0 text-muted">현재 발급 받을 수 있는 쿠폰들을 확인할 수 있습니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+    <ul class="nav nav-bordered mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">이달의 쿠폰</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">등급 · 무제한 쿠폰</a>
+        </li>
+    </ul>
+
+    <div class="container-xl text-center">
+        <div class="row row-cards">
             <div class="text-uppercase text-muted h1">이달의 쿠폰</div>
+
             <th:block th:each="item : ${limitedList}">
 
-
-                <div class="col-sm-6 col-lg-3" >
+                <div class="col-sm-6 col-lg-3 m-auto">
                     <div class="card card-md">
                         <div class="card-body text-center" >
                             <span th:if="${item.fileId != null}">
@@ -58,6 +55,7 @@
             </th:block>
 
             <div class="text-uppercase text-muted h1">등급별 쿠폰</div>
+
             <th:block th:each="item : ${gradedList}">
                 <div class="col-sm-6 col-lg-3" >
                     <div class="card card-md">
