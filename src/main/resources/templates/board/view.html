@@ -33,10 +33,10 @@
         <!--        버튼 div 시작-->
         <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}"
              style="text-align: right;">
-          <a th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
+          <a th:if="${post.postTypeNo != 5}" th:href="@{/board/reply/{postId} (postId= ${post.postId})}">
             <button class="btn btn-outline-primary" style="margin-right: 0.5rem;">답글</button>
           </a>
-          <form th:if="${post.depth == 0}" method="post" th:action="@{/board/confirm}"
+          <form th:if="${post.depth == 0 and post.postTypeNo == 2}" method="post" th:action="@{/board/confirm}"
                 style="display: inline">
             <input type="number" name="postId" th:value="${post.postId}" hidden="hidden">
             <input type="number" name="postId" th:value="${commentAuth}" hidden="hidden">
@@ -66,7 +66,7 @@
         <hr style="margin-top: 1rem; margin-bottom: 1rem;">
 
         <!--        댓글 부분 시작-->
-        <div id="comment-section">
+        <div th:if="${post.postTypeNo != 5}" id="comment-section">
 
           <th:block th:each="comment : ${commentList}">
             <div style="display: flex; border: lightgrey solid 1px; border-radius: 5px; padding: 5px; margin-bottom: 5px;">

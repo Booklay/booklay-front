@@ -1,6 +1,5 @@
 package com.nhnacademy.booklay.booklayfront.controller.board;
 
-import static com.nhnacademy.booklay.booklayfront.auth.constant.Roles.ROLE_ADMIN;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
@@ -8,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.AnswerConfirmRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostCreateRequest;
-import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostDeleteRequest;
+import com.nhnacademy.booklay.booklayfront.dto.board.request.BoardPostUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.CommentResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
@@ -47,6 +46,10 @@ public class BoardController {
   private final RestService restService;
   private final ObjectMapper objectMapper = new ObjectMapper();
 
+  private static final Integer POST_TYPE_PRODUCT = 2;
+  private static final Integer POST_TYPE_NOTICE = 5;
+
+
   /**
    * 게시글 조회
    *
@@ -62,7 +65,7 @@ public class BoardController {
     ApiEntity<PostResponse> response = restService.get(uri.toString(), null, PostResponse.class);
     PostResponse post = response.getBody();
 
-    if(!post.getDeleted()) {
+    if (!post.getDeleted()) {
       boolean commentAuth = commentAuthCheck(memberInfo, post);
 
       model.addAttribute("post", post);
@@ -187,13 +190,14 @@ public class BoardController {
 
   /**
    * 상품 문의 게시글 답변 수락
+   *
    * @param request
    * @param memberInfo
    * @return
    */
   @PostMapping("/confirm")
-  public String confirmAnswer(@ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo){
-    if(request.getCommentAuth() || memberInfo.getAuthority().getValue().equals(ROLE_ADMIN)){
+  public String confirmAnswer(@ModelAttribute AnswerConfirmRequest request, MemberInfo memberInfo) {
+    if (request.getCommentAuth() || memberInfo.getAuthority().getValue().equals("ROLE_ADMIN")) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/confirm/" + request.getPostId());
 
       restService.put(uri.toString(), null, Long.class);
@@ -203,6 +207,7 @@ public class BoardController {
 
   /**
    * 게시글 삭제 요청
+   *
    * @param memberInfo
    * @param request
    * @return
@@ -211,7 +216,7 @@ public class BoardController {
   public String deletePost(MemberInfo memberInfo,
       @Valid @ModelAttribute BoardPostDeleteRequest request) {
     //삭제 권한 확인
-    if (memberInfo.getMemberNo() == request.getMemberNo()) {
+    if (memberInfo.getMemberNo().equals(request.getMemberNo())) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + request.getPostId());
 
       MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -220,7 +225,7 @@ public class BoardController {
       restService.delete(uri.toString(), map);
 
       //상품 문의는 상품 상세로
-      if(Objects.nonNull(request.getProductId())){
+      if (Objects.nonNull(request.getProductId())) {
         return "redirect:/product/view/" + request.getProductId();
       }
     }
@@ -228,6 +233,8 @@ public class BoardController {
     //TODO : 에러페이지 가도록 수정
     return "redirect:/index";
   }
+
+
 
   /**
    * 게시글 조회 권한 확인
@@ -238,11 +245,9 @@ public class BoardController {
    */
   private boolean commentAuthCheck(MemberInfo memberInfo, PostResponse post) {
     boolean commentAuth = false;
-    if (memberInfo.getMemberNo() != null) {
-      if (post.getMemberNo() == memberInfo.getMemberNo() || post.commentAuth(
-          memberInfo.getMemberNo())) {
-        commentAuth = true;
-      }
+    if (memberInfo.getMemberNo() != null && post.getMemberNo().equals(memberInfo.getMemberNo())
+        || memberInfo.getMemberNo() != null && post.commentAuth(memberInfo.getMemberNo())) {
+      commentAuth = true;
     }
     return commentAuth;
   }
