@@ -41,7 +41,7 @@
                                 </span>
               </th:block>
             </td>
-            <td><span th:text="${post.createdAt}"/></td>
+            <td><span th:text="${#temporals.format(post.updatedAt, 'yyyy.MM.dd. HH:mm')}"/></td>
           </tr>
           <!--          삭제된 경우 시작-->
           <tr th:if="${post.deleted}">

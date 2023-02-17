@@ -80,7 +80,7 @@
                 <div th:if="${!comment.deleted}">
                   <div><span th:text="${comment.name}"></span></div>
                   <div th:text="${comment.content}"></div>
-                  <div><span th:text="${comment.createdAt}"></span></div>
+                  <div><span th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd. HH:mm')}"></span></div>
                 </div>
                 <div th:if="${comment.deleted}">
                   삭제된 댓글 입니다.
