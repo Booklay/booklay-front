@@ -4,7 +4,6 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <title>북레이 -  주문기록</title>
-    <link href="/css/coupon/couponStyle.css" rel="stylesheet">
 </head>
 
 <th:block layout:fragment="content">
@@ -30,13 +29,9 @@
                     <tbody th:each="receipt : ${receiptList}">
                     <tr>
                         <td><a th:href="@{'/order/receipt/'+${receipt.orderNo}}" th:text="${receipt.orderTitle}"></a></td>
-                        <td class="fl-right">가격 : </td>
-                        <td th:text="${receipt.productPriceSum + '원'}" class="text-decoration-line-through"></td>
-                    </tr>
-                    <tr>
                         <td th:text="${receipt.orderStatusName}"></td>
+                        <td class="fl-right">결재금액 : <span th:text="${receipt.paymentPrice + '원'}"></span></td>
                         <td >적립 포인트 : <span th:text="${receipt.pointAccumulate}"></span></td>
-                        <td th:text="${receipt.paymentPrice + '원'}"></td>
                     </tr>
                     </tbody>
                 </table>
