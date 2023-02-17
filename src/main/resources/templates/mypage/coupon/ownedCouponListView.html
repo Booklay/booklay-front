@@ -23,43 +23,45 @@
     </div>
 
     <!-- Page Body -->
-        <div class="card-header">
-            <ul class="nav nav-tabs card-header-tabs form-selectgroup-pills" data-bs-toggle="tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a href="#tabs-home-7" class="form-selectgroup-label active" data-bs-toggle="tab" aria-selected="true" role="tab">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bread" width="24"
-                             height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M17 5a3 3 0 0 1 2 5.235v6.765a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6.764a3 3 0 0 1 1.824 -5.231l.176 0h10z"></path>
-                        </svg>
-                        &nbsp 사용 가능</a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a href="#tabs-profile-7" class="form-selectgroup-label" data-bs-toggle="tab" aria-selected="false" role="tab"
-                       tabindex="-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bread-off"
-                             width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"
-                             fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M18.415 18.414a2 2 0 0 1 -1.415 .586h-10a2 2 0 0 1 -2 -2v-6.764a3 3 0 0 1 .435 -4.795m3.565 -.441h8a3 3 0 0 1 2 5.235v4.765"></path>
-                            <path d="M3 3l18 18"></path>
-                        </svg>
-                        &nbsp 사용 불가</a>
-                </li>
-            </ul>
-        </div>
-        <div class="card-body">
-            <div class="tab-content">
-                <div class="tab-pane active show" id="tabs-home-7" role="tabpanel">
-                    <div th:if="${#lists.isEmpty(unusedList)}">
-                        <div>
-                            <div>소유한 쿠폰이 없습니다.</div>
-                            <a href="/coupon-zone">쿠폰 받으러 가기</a>
-                        </div>
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a href="#tabs-home-7" class="form-selectgroup-label active" data-bs-toggle="tab" aria-selected="true"
+                   role="tab">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bread" width="24"
+                         height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M17 5a3 3 0 0 1 2 5.235v6.765a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6.764a3 3 0 0 1 1.824 -5.231l.176 0h10z"></path>
+                    </svg>
+                    &nbsp 사용 가능</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="#tabs-profile-7" class="form-selectgroup-label" data-bs-toggle="tab" aria-selected="false"
+                   role="tab"
+                   tabindex="-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bread-off"
+                         width="24" height="24" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor"
+                         fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M18.415 18.414a2 2 0 0 1 -1.415 .586h-10a2 2 0 0 1 -2 -2v-6.764a3 3 0 0 1 .435 -4.795m3.565 -.441h8a3 3 0 0 1 2 5.235v4.765"></path>
+                        <path d="M3 3l18 18"></path>
+                    </svg>
+                    &nbsp 사용 불가</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane active show" id="tabs-home-7" role="tabpanel">
+                <div th:if="${#lists.isEmpty(unusedList)}">
+                    <div>
+                        <div>소유한 쿠폰이 없습니다.</div>
+                        <a href="/coupon-zone">쿠폰 받으러 가기</a>
                     </div>
+                </div>
 
-                    <div class="row row-cards">
+                <div class="row row-cards">
                     <th:block th:unless="${#lists.isEmpty(unusedList)}">
                         <th:block th:each="item, itemStat : ${unusedList}">
                             <div class="col-sm-5 col-lg-4">
@@ -139,95 +141,99 @@
                         </th:block>
                     </th:block>
                 </div>
-                </div>
-                <div class="tab-pane" id="tabs-profile-7" role="tabpanel">
-                    <div th:if="${#lists.isEmpty(usedList)}">
-                        <div>
-                            <div>사용 불가능한 쿠폰은 없습니다.</div>
-                            <a href="/coupon-zone">쿠폰 받으러 가기</a>
-                        </div>
-                    </div>
+            </div>
 
+
+            <div class="tab-pane" id="tabs-profile-7" role="tabpanel">
+                <div th:if="${#lists.isEmpty(usedList)}">
+                    <div>
+                        <div>사용 불가능한 쿠폰은 없습니다.</div>
+                        <a href="/coupon-zone">쿠폰 받으러 가기</a>
+                    </div>
+                </div>
+
+                <div class="row row-cards">
                     <th:block th:unless="${#lists.isEmpty(usedList)}">
                         <th:block th:each="item, itemStat : ${usedList}">
-                            <div class="wrapper">
-                                <div class="card">
+                            <div class="col-sm-5 col-lg-4">
+                                <div class="card card-sm">
                                     <div class="cross-bg">
-                                        <!--                            구분 시작-->
-                                        <div class="content">
-                                            <div class="logo text-right">
-                                                <img src="/img/booklay-contrast.png" width="80">
-                                            </div>
+                                    </div>
+                                    <div class="content">
+                                        <div class="logo text-right">
+                                            <img src="/img/booklay-contrast.png" width="80">
+                                        </div>
 
-                                            <div class="text-center text-uppercase text-white off">
-                                                <span th:text="${item.name}"></span>
-                                                <h1 class="mt-0">
-                                                    <span th:if="${#strings.contains(item.couponType, '정률')}">
-                                                        <span th:text="${#strings.concat(item.amount, '%')}"></span>
-                                                    </span>
-                                                    <span th:unless="${#strings.contains(item.couponType, '정률')}">
-                                                        <span th:text="${#strings.concat(item.amount, '₩')}"></span>
-                                                    </span>
-                                                </h1>
-                                            </div>
-
-                                            <span th:unless="${#strings.contains(item.couponType, '포인트')}">
-                                                <div class="text-center text-uppercase text-white">
-                                                <h3 class="m-0">
-                                                    <span th:if="${item.expiredAt == null}">
-                                                    기간 무제한
-                                                    </span>
-                                                    <span th:if="${item.expiredAt != null}">
-                                                    <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
-                                                    <span>까지</span>
-                                                </span>
-                                                </h3>
-                                                <h3 class="m-0">
-                                                    <span>최대 할인 금액 : </span>
-                                                    <span th:text="${item.maximumDiscountAmount}"></span>
-                                                    <span>원</span>
-                                                </h3>
-                                                <h3 class="m-0">
-                                                    <span>최소 사용 금액 : </span>
-                                                    <span th:text="${item.minimumUseAmount}"></span>
-                                                    <span>원</span>
-                                                </h3>
-                                                </div>
+                                        <div class="text-center text-uppercase text-white off">
+                                            <span th:text="${item.name}"></span>
+                                            <h1 class="mt-0">
+                                            <span th:if="${#strings.contains(item.couponType, '정률')}">
+                                                <span th:text="${#strings.concat(item.amount, '%')}"></span>
                                             </span>
-
-                                            <span th:if="${#strings.contains(item.couponType, '포인트')}">
-                                                <div class="text-center text-uppercase text-white">
-                                                <h3 class="m-0">
-                                                    <span th:if="${item.expiredAt == null}">
-                                                    기간 무제한
-                                                    </span>
-                                                    <span th:if="${item.expiredAt != null}">
-                                                    <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
-                                                    <span>까지</span>
-                                                </span>
-                                                </h3>
-                                                <h3 class="m-0">
-                                                    <span>[내 포인트] - [포인트 충전소]</span>
-                                                </h3>
-                                                <h3 class="m-0">
-                                                    <span>포인트로 전환할 수 있습니다.</span>
-                                                </h3>
-                                                </div>
+                                                <span th:unless="${#strings.contains(item.couponType, '정률')}">
+                                                <span th:text="${#strings.concat(item.amount, '₩')}"></span>
                                             </span>
+                                            </h1>
+                                        </div>
 
-                                            <div class="px-5 mb-3">
-                                                <div class="code text-center mt-4">
-                                                    <strong><a class="disable" th:text="${item.reason}"></a></strong>
-                                                </div>
+                                        <span th:unless="${#strings.contains(item.couponType, '포인트')}">
+                                        <div class="text-center text-uppercase text-white">
+                                        <h3 class="m-0">
+                                            <span th:if="${item.expiredAt == null}">
+                                            기간 무제한
+                                            </span>
+                                            <span th:if="${item.expiredAt != null}">
+                                            <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
+                                            <span>까지</span>
+                                        </span>
+                                        </h3>
+                                        <h3 class="m-0">
+                                            <span>최대 할인 금액 : </span>
+                                            <span th:text="${item.maximumDiscountAmount}"></span>
+                                            <span>원</span>
+                                        </h3>
+                                        <h3 class="m-0">
+                                            <span>최소 사용 금액 : </span>
+                                            <span th:text="${item.minimumUseAmount}"></span>
+                                            <span>원</span>
+                                        </h3>
+                                        </div>
+                                    </span>
+
+                                        <span th:if="${#strings.contains(item.couponType, '포인트')}">
+                                        <div class="text-center text-uppercase text-white">
+                                        <h3 class="m-0">
+                                            <span th:if="${item.expiredAt == null}">
+                                            기간 무제한
+                                            </span>
+                                            <span th:if="${item.expiredAt != null}">
+                                            <span th:text="${#temporals.format(item.expiredAt, 'yyyy년 MM월 dd일 HH:mm:ss')}"></span>
+                                            <span>까지</span>
+                                        </span>
+                                        </h3>
+                                        <h3 class="m-0">
+                                            <span>[내 포인트] - [포인트 충전소]</span>
+                                        </h3>
+                                        <h3 class="m-0">
+                                            <span>포인트로 전환할 수 있습니다.</span>
+                                        </h3>
+                                        </div>
+                                    </span>
+
+                                        <div class="px-5 mb-3">
+                                            <div class="code text-center mt-4">
+                                                <strong th:text="${item.reason}" class="text-muted"></strong>
                                             </div>
                                         </div>
-                                        <!--                            구분 종료-->
                                     </div>
                                 </div>
                             </div>
                         </th:block>
                     </th:block>
                 </div>
+
+
             </div>
         </div>
+    </div>
 </th:block>
