@@ -8,7 +8,6 @@ import com.nhnacademy.booklay.booklayfront.auth.handler.CustomLoginSuccessHandle
 import com.nhnacademy.booklay.booklayfront.auth.handler.OAuth2LoginSuccessHandler;
 import com.nhnacademy.booklay.booklayfront.auth.jwt.TokenUtils;
 import com.nhnacademy.booklay.booklayfront.event.MemberEventPublisher;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,6 +63,7 @@ public class SecurityConfig {
             .passwordParameter("password")
             .successHandler(new CustomLoginSuccessHandler(memberEventPublisher(null)))
             .failureHandler(customLoginFailureHandler())
+            .failureForwardUrl("/member/login")
             .and()
             .logout().logoutUrl("/member/logout")
             .deleteCookies("SESSION_ID")

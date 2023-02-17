@@ -36,8 +36,8 @@
                         <span class="avatar avatar-sm"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path></svg></span>
                         <div class="d-none d-xl-block ps-2">
                             <div sec:authorize="!isAuthenticated()">로그인해주세요</div>
-<!--                            <div><span sec:authorize="isAuthenticated()" th:text="${memberInfo.nickname}"></span></div>-->
-<!--                            <div><span sec:authorize="isAuthenticated()" th:text="${memberInfo.memberGrade}"></span></div>-->
+                            <div><span class="strong text-center" sec:authorize="isAuthenticated()" th:text="${memberInfo.nickname}"></span></div>
+                            <div><span class="text-muted" sec:authorize="isAuthenticated()" th:text="${memberInfo.memberGrade}"></span></div>
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

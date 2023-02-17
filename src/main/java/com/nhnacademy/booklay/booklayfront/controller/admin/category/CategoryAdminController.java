@@ -2,7 +2,6 @@ package com.nhnacademy.booklay.booklayfront.controller.admin.category;
 
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryUpdateRequest;
@@ -11,7 +10,6 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.category.CategoryService;
 import java.net.URI;
-import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -36,17 +34,15 @@ public class CategoryAdminController {
 
   private final String redirectGatewayPrefix;
   private final RestService restService;
-  private final ObjectMapper objectMapper;
   private final CategoryService categoryService;
   private static final String REDIRECT_PREFIX = "redirect:/admin/categories";
 
 
   public CategoryAdminController(RestService restService,
-                                 String gateway, ObjectMapper objectMapper,
+                                 String gateway,
                                  CategoryService categoryService) {
     this.redirectGatewayPrefix = gateway + "/shop/v1" + "/admin/categories";
     this.restService = restService;
-    this.objectMapper = objectMapper;
     this.categoryService = categoryService;
   }
 
@@ -151,13 +147,9 @@ public class CategoryAdminController {
   public String updateCategory(@Valid @ModelAttribute CategoryUpdateRequest request,
       @PathVariable("categoryId") Long id) {
 
-    URI uri = URI.create(redirectGatewayPrefix + "/" + id);
+    Optional<CategoryResponse> categoryResponse = categoryService.updateCategory(request, id);
 
-    ApiEntity<CategoryResponse> categoryResponse =
-        restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
-            CategoryResponse.class);
-
-    if (categoryResponse.isSuccess()) {
+    if (categoryResponse.isPresent()) {
       return REDIRECT_PREFIX;
     }
 
@@ -177,9 +169,7 @@ public class CategoryAdminController {
 
     String query = "?page=" + page;
 
-    URI uri = URI.create(redirectGatewayPrefix + "/" + id);
-
-    restService.delete(uri.toString());
+    categoryService.deleteCategory(id);
 
     return REDIRECT_PREFIX + query;
   }
