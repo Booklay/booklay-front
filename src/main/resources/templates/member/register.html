@@ -35,7 +35,9 @@
 
                 <div class="mb-3">
                     <label class="form-label required">ID</label>
-                    <input type="text" id="member-id" name="memberId" class="form-control" placeholder="Enter ID" required>
+                    <input type="text" id="member-id" name="memberId" class="form-control" placeholder="Enter ID"
+                           required>
+                    <div id="id_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -58,7 +60,9 @@
 
                 <div class="mb-3">
                     <label class="form-label required">NickName</label>
-                    <input type="text" id="nick-name" name="nickname" class="form-control" placeholder="Enter NickName" required>
+                    <input type="text" id="nick-name" name="nickname" class="form-control" placeholder="Enter NickName"
+                           required>
+                    <div id="nickName_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -97,7 +101,9 @@
 
                 <div class="mb-3">
                     <label class="form-label required">이메일</label>
-                    <input type="email" id="e-mail" name="email" class="form-control" placeholder="Enter email" required>
+                    <input type="email" id="e-mail" name="email" class="form-control" placeholder="Enter email"
+                           required>
+                    <div id="email_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -119,40 +125,51 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#member-id").focusout(function(){
+        $(document).ready(function () {
+            $("#member-id").focusout(function () {
                 const memberId = document.querySelector('#member-id').value;
                 //중복검사
                 $.ajax({
                     type: "POST",
                     url: `/member/exist/${memberId}`, /// url
-                    success: function(data){
-                        if(data == true){
-                            alert("중복된 ID입니다.");
+                    success: function (data) {
+                        if (data == true) {
+                            // alert("중복된 ID입니다.");
+                            $('#id_div').html('<a style="color: red;">사용불가능한 ID입니다.</a>');
+                        } else {
+                            $('#id_div').html('<a>사용가능한 ID입니다.</a>');
                         }
                     },
-                    error: function(){ alert("중복된 ID입니다."); }
+                    error: function () {
+                        alert("중복된 ID입니다.");
+                    }
                 });
 
             });//focusout()
         }); // ready()
     </script>
 
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#nick-name").focusout(function(){
+        $(document).ready(function () {
+            $("#nick-name").focusout(function () {
                 const nickName = document.querySelector('#nick-name').value;
                 //중복검사
                 $.ajax({
                     type: "POST",
                     url: `/member/exist/nickName/${nickName}`, /// url
-                    success: function(data){
-                        if(data == true){
-                            alert("중복된 닉네임입니다.");
+                    success: function (data) {
+                        if (data == true) {
+                            $('#nickName_div').html('<a style="color: red;">사용불가능한 닉네임입니다.</a>');
+                        } else {
+                            $('#nickName_div').html('<a>사용가능한 닉네임입니다.</a>');
                         }
                     },
-                    error: function(){ alert("중복된 닉네임입니다."); }
+                    error: function () {
+                        alert("중복된 닉네임입니다.");
+                    }
                 });
 
             });//focusout()
@@ -161,23 +178,28 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#e-mail").focusout(function(){
+        $(document).ready(function () {
+            $("#e-mail").focusout(function () {
                 const EMail = document.querySelector('#e-mail').value;
                 //중복검사
                 $.ajax({
                     type: "POST",
                     url: `/member/exist/eMail/${EMail}`, /// url
-                    success: function(data){
-                        if(data == true){
-                            alert("중복된 이메일입니다.");
+                    success: function (data) {
+                        if (data == true) {
+                            $('#email_div').html('<a style="color: red;">사용불가능한 이메일입니다.</a>');
+                        } else {
+                            $('#email_div').html('<a>사용가능한 이메일입니다.</a>');
                         }
                     },
-                    error: function(){ alert("중복된 이메일입니다."); }
+                    error: function () {
+                        alert("중복된 이메일입니다.");
+                    }
                 });
 
             });//focusout()
         }); // ready()
     </script>
+
 </th:block>
 </html>

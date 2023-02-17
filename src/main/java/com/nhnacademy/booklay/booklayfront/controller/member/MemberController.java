@@ -54,7 +54,13 @@ public class MemberController extends BaseController {
         redirectGatewayPrefix = gateway + DOMAIN_PREFIX_SHOP + "/members";
     }
 
-
+    /**
+     * 회원가입 시 회원 생성하고 웰컴쿠폰 지급하는 메소드
+     *
+     * @param memberCreateRequest
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/register")
     public String createMember(@Valid @ModelAttribute MemberCreateRequest memberCreateRequest,
                                BindingResult bindingResult) {
