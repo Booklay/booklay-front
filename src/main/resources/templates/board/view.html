@@ -78,9 +78,9 @@
                 style="display: flex; border: lightgrey solid 1px; border-radius: 5px; padding: 5px; margin-bottom: 5px;">
               <div style="flex: 4;">
                 <div th:if="${!comment.deleted}">
-                  <div><span th:text="${comment.name}"></span></div>
-                  <div th:text="${comment.content}"></div>
-                  <div><span th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd. HH:mm')}"></span></div>
+                  <div><span style="font-weight: bold;" th:text="${comment.name}"></span></div>
+                  <pre style="border: 0; margin-bottom: 0px; background: none; padding: 0px;" th:text="${comment.content}"/>
+                  <div><span style="font-weight: lighter" th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd. HH:mm')}"></span></div>
                 </div>
                 <div th:if="${comment.deleted}">
                   삭제된 댓글 입니다.
@@ -98,7 +98,7 @@
                 <!--                  </form>-->
                 <!--                </div>-->
                 <!--                삭제버튼 시작 -->
-                <div th:if="${!comment.deleted}">
+                <div th:if="${!comment.deleted}" style="text-align: right">
                   <form th:if="${comment.memberNo == memberInfo.memberNo}"
                         method="post" th:action="@{/comment}">
                     <input type="hidden" name="_method" value="DELETE"/>
@@ -107,7 +107,7 @@
                            hidden="hidden">
                     <input type="number" name="memberNo" th:value="${comment.memberNo}"
                            hidden="hidden">
-                    <input class="btn-outline-danger btn h-4" type="submit" value="삭제">
+                    <input class="btn-outline-danger btn p-0 w-5" type="submit" value="삭제">
                   </form>
                 </div>
                 <!--                삭제버튼 종료 -->
@@ -129,7 +129,6 @@
             <!--            <hr style="margin-top:5px; margin-bottom: 5px;">-->
           </th:block>
           <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
-
           <!--새 댓글-->
           <th:block th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or commentAuth}">
             <form method="post" th:action="@{/comment}">
@@ -139,8 +138,7 @@
               <input name="groupOrder" type="number" th:value="0" hidden="hidden">
               <input name="depth" type="number" th:value="0" hidden="hidden">
               <p style="display: flex">
-                <input class="form-control" name="content" type="text"
-                       placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다.">
+                <textarea class="form-control" name="content" placeholder="북레이가 더 훈훈해지는 댓글 부탁드립니다."></textarea>
                 <input class="btn btn-outline-primary" style="margin-left: 1rem;" type="submit"
                        value="등록">
               </p>
