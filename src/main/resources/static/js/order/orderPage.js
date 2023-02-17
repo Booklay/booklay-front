@@ -485,17 +485,13 @@ function orderValidCheckAndToss(){
         "discountPrice" : orderData.orderTotalDiscount,
         "paymentMethod" : 1,
         "sender" : document.getElementById("destination_sender").value,
-        "senderPhoneNo" : `${document.getElementById("destination_senderPhoneNo1").value}-
-        ${document.getElementById("destination_senderPhoneNo2").value}-
-        ${document.getElementById("destination_senderPhoneNo3").value}`,
+        "senderPhoneNo" : `${document.getElementById("destination_senderPhoneNo1").value}-${document.getElementById("destination_senderPhoneNo2").value}-${document.getElementById("destination_senderPhoneNo3").value}`,
         "name" : document.getElementById("destination_receiver").value,
         "zipCode" : document.getElementById("destination_zipCode").value,
         "address" : document.getElementById("destination_address").value + document.getElementById("detailAddress").value,
         "isDefaultDestination" : false,
         "receiver" : document.getElementById("destination_receiver").value,
-        "receiverPhoneNo" : `${document.getElementById("destination_receiverPhoneNo1").value}-
-        ${document.getElementById("destination_receiverPhoneNo2").value}-
-        ${document.getElementById("destination_receiverPhoneNo3").value}`,
+        "receiverPhoneNo" : `${document.getElementById("destination_receiverPhoneNo1").value}-${document.getElementById("destination_receiverPhoneNo2").value}-${document.getElementById("destination_receiverPhoneNo3").value}`,
         "memo" : document.getElementById("deliveryMemo").value,
         "orderTitle": cartData[0].productName + cartData.length>1?`외 ${cartData.length-1}종`:""
     };

@@ -72,6 +72,9 @@ public class OrderController {
             , @Nullable @ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
             , Model model){
 
+        if (cartToOrderPageRequest == null || cartToOrderPageRequest.getProductNo() == null || cartToOrderPageRequest.getProductNo().isEmpty()){
+            return "redirect:/cart/list";
+        }
         List<CartObject> cartObjectList = productRestApiModelSettingService.setProductObjectListToModelByProductNoList(
                 cartToOrderPageRequest.getProductNo(), model);
         // 카트에서 넘어온 수량을 적용해줌
