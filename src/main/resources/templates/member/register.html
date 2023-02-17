@@ -35,7 +35,8 @@
 
                 <div class="mb-3">
                     <label class="form-label required">ID</label>
-                    <input type="text" id="member-id" name="memberId" class="form-control" placeholder="Enter ID" required>
+                    <input type="text" id="member-id" name="memberId" class="form-control " placeholder="Enter ID"
+                           required>
                 </div>
 
                 <div class="mb-3">
@@ -169,15 +170,22 @@
                     type: "POST",
                     url: `/member/exist/eMail/${EMail}`, /// url
                     success: function(data){
-                        if(data == true){
+                        if (data == true) {
                             alert("중복된 이메일입니다.");
                         }
                     },
-                    error: function(){ alert("중복된 이메일입니다."); }
+                    error: function () {
+                        alert("중복된 이메일입니다.");
+                    }
                 });
 
             });//focusout()
         }); // ready()
+    </script>
+
+    <script type="text/javascript">
+
+
     </script>
 </th:block>
 </html>
