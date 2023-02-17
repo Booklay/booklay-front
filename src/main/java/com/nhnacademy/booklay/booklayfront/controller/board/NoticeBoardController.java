@@ -6,6 +6,7 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurren
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
 import com.nhnacademy.booklay.booklayfront.dto.board.response.PostResponse;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -35,7 +36,7 @@ public class NoticeBoardController {
   private static final Integer SIZE = 20;
 
   @GetMapping
-  public String viewNoticeBoard(Model model,
+  public String viewNoticeBoard(Model model, MemberInfo memberInfo,
       @RequestParam(value = "page", defaultValue = "0") int page) {
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/notice");
 
