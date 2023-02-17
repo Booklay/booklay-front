@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.service.category;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryCreateRequest;
+import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryUpdateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,7 @@ public class CategoryService {
         return  categories.get(0).getCategories().get(0).getId();
     }
 
+    @CacheEvict(value = "categoryStep", allEntries = true)
     public Optional<CategoryResponse> createCategory(CategoryCreateRequest createRequest) {
         URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI);
 
@@ -67,6 +70,31 @@ public class CategoryService {
             return Optional.of(response.getBody());
         }
 
+        return Optional.empty();
+    }
+
+    @CacheEvict(value = "categoryStep", allEntries = true)
+    public void deleteCategory(Long id) {
+
+        URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI + "/" + id);
+
+        restService.delete(uri.toString());
+
+    }
+
+    @CacheEvict(value = "categoryStep", allEntries = true)
+    public Optional<CategoryResponse> updateCategory(CategoryUpdateRequest request,
+                                                    Long id) {
+
+        URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI + "/" + id);
+
+        ApiEntity<CategoryResponse> categoryResponse =
+            restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
+                CategoryResponse.class);
+
+        if (categoryResponse.isSuccess()){
+            return  Optional.of(categoryResponse.getBody());
+        }
         return Optional.empty();
     }
 }

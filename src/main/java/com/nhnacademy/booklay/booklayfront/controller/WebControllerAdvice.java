@@ -24,16 +24,7 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleCouponZoneTimeException(Exception ex) {
         Map<String, Object> result = new HashMap<>();
         result.put("message", ex.getMessage());
-
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(result);
-    }
-
-    @ExceptionHandler(BooklayClientException.class)
-    public String handelBooklayClientException(BooklayClientException e, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("alertMessage", e.getMessage());
-
-        return "redirect:" + request.getHeader("Referer");
-
     }
 
     @ExceptionHandler(MethodNotAllowedException.class)
@@ -42,14 +33,26 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
         return "redirect:/index";
     }
 
+    @ExceptionHandler(BooklayClientException.class)
+    public String handelBooklayClientException(BooklayClientException e, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("alertMessage", e.getMessage());
 
+        return "redirect:" + request.getHeader("Referer");
+    }
 
     @ExceptionHandler(BooklayServerException.class)
     public String handelBooklayServerException(HttpServletRequest request, BooklayServerException e, RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("alertMessage" ,"잠시 뒤에 시도해주세요. 문제가 계속되면 사이트 소유자에게 문의하세요");
+        redirectAttributes.addFlashAttribute("alertMessage" ,"INTERNAL_SERVER_ERROR. 문제가 계속되면 사이트 소유자에게 문의하세요");
 
-        return "redirect:" + request.getHeader("Referer");
+        return "redirect:/index";
+    }
 
+    @ExceptionHandler(Exception.class)
+    public String handleUnhandledException(HttpServletRequest request, Exception e, RedirectAttributes redirectAttributes){
+
+        redirectAttributes.addFlashAttribute("alertMessage" ,"알 수 없는 예외가 발생하였습니다.");
+
+        return "redirect:/index";
     }
 }
