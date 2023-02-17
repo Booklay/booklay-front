@@ -79,7 +79,7 @@
               </th:block>
             </p>
 
-            <p style="line-height: 5px">
+            <p>
               <span class="text-info">태그</span>
               <span th:unless="${product.tags == null}"
                     th:text="${#strings.arrayJoin(product.getTagList(), ', ')}"></span>
@@ -235,12 +235,12 @@
             </div>
             <th:block th:each="item : ${recommendProducts}">
               <div class="col-sm-4 col-lg-2">
-                <div class="card card-sm" style="height: 330px;">
+                <div class="card card-sm" style="height: 350px;">
                   <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                      class="d-block">
                     <div class="text-center" style="min-height: 180px;">
                       <img class="product-img"
-                           style="max-height: 413px; width: 95%; margin-top:10px; overflow: auto;"
+                           style="max-height: 195px; width: auto; margin-top:10px; overflow: auto;"
                            th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
                     </div>
                   </a>
@@ -293,16 +293,16 @@
                 </div>
                 <!--상품 문의-->
                 <div class="tab-pane" id="tabs-qna-7">
-                  <th:block th:replace="product/fragment/board::product_board"></th:block>
+                  <th:block th:replace="product/fragments/board::product_board"></th:block>
                 </div>
                 <!--상품 리뷰-->
                 <div class="tab-pane" id="tabs-review-7">
                   <div class="card-body-scrollable">
-                    <th:block th:replace="product/fragment/reviewList :: review_list">
+                    <th:block th:replace="product/fragments/reviewList :: review_list">
                     </th:block>
                   </div>
                   <div class="card-body">
-                    <th:block th:replace="product/fragment/reviewRegister :: review_form">
+                    <th:block th:replace="product/fragments/reviewRegister :: review_form">
                     </th:block>
                   </div>
                 </div>
@@ -319,13 +319,13 @@
                 </div>
                 <th:block th:each="item : ${booksAtSubscribe}">
                   <div class="col-sm-4 col-lg-2">
-                    <div class="card card-sm">
+                    <div class="card card-sm" style="height: 350px;">
                       <a th:href="@{/product/view/{productId} (productId = ${item.productId})}"
                          class="d-block">
                         <div class="text-center"
                              style="width:auto; min-height:200px; margin: auto;">
                           <img class="product-img"
-                               style="max-height: 413px; width: 95%; margin-top:10px;"
+                               style="max-height: 195px; width: auto; margin-top:10px; overflow: auto;"
                                th:src="@{/storage/{objectFileId} (objectFileId = ${item.objectFileId})}"/>
                         </div>
                       </a>
@@ -361,6 +361,7 @@
         </div>
       </div>
     </div>
+  </div>
 </th:block>
 <!---->
 </html>

@@ -77,7 +77,7 @@
               </th:block>
             </p>
 
-            <p style="line-height: 5px">
+            <p>
               <span class="text-info">태그</span>
               <span th:unless="${product.tags == null}"
                     th:text="${#strings.arrayJoin(product.getTagList(), ', ')}"></span>
@@ -252,7 +252,7 @@
   <script>
     function showTagRegisterPopup(productNo) {
       window.open("/admin/product/tag/connection/" + productNo, "a",
-          "width=450, height=700, left=100, top=50");
+          "width=555, height=700, left=100, top=50");
     }
 
     function showBookSubscribeRegisterPopup(subscribeId) {

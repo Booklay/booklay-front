@@ -16,24 +16,11 @@
             <div style="margin-top: 1rem;">
                 <a id="release-btn"
                    th:href="@{/admin/members/block/cancel/process/{blockedMemberDetailId}(blockedMemberDetailId=${blockedMemberDetailId})}">
-                    <button class="btn btn-outline-danger">
-                        해제
-                    </button>
+                    <button class="btn btn-outline-danger">해제</button>
                 </a>
                 <button class="btn btn-outline-primary" onclick="window.close()">취소</button>
             </div>
         </div>
     </div>
-
-    <!--    <script>-->
-
-    <!--        const releaseButton = document.getElementById('release-btn');-->
-
-    <!--        releaseButton.addEventListener('click', function(){-->
-    <!--            opener.location.reload();-->
-
-    <!--            window.close();-->
-    <!--        });-->
-    <!--    </script>-->
 </th:block>
 </html>

@@ -47,7 +47,7 @@ public class WebControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(BooklayServerException.class)
     public String handelBooklayServerException(HttpServletRequest request, BooklayServerException e, RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("alertMessage" , "잠시 뒤에 시도해주세요. 문제가 계속되면 사이트 소유자에게 문의하세요");
+        redirectAttributes.addFlashAttribute("alertMessage" ,"잠시 뒤에 시도해주세요. 문제가 계속되면 사이트 소유자에게 문의하세요");
 
         return "redirect:" + request.getHeader("Referer");
 

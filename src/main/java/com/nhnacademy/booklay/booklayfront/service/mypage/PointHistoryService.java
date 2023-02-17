@@ -8,5 +8,5 @@ public interface PointHistoryService {
     ApiEntity<PageResponse<PointHistoryRetrieveResponse>> retrievePointHistory(Long memberNo,
                                                                                int page);
 
-    void convertPointCoupon(Long memberNo, Long couponId);
+    void convertPointCoupon(Long memberNo, Long couponId, Long orderCouponId);
 }

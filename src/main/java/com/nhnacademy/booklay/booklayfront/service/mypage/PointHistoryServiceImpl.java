@@ -55,7 +55,7 @@ public class PointHistoryServiceImpl implements PointHistoryService {
      * @param couponId 사용할 포인트 쿠폰 ID
      */
     @Override
-    public void convertPointCoupon(Long memberNo, Long couponId) {
+    public void convertPointCoupon(Long memberNo, Long couponId, Long orderCouponId) {
         URI couponUri = URI.create(redirectGatewayPrefixCoupon + "/admin/coupons/" + couponId);
         ApiEntity<CouponDetailRetrieveResponse> response =
             restService.get(couponUri
@@ -71,6 +71,9 @@ public class PointHistoryServiceImpl implements PointHistoryService {
             objectMapper.convertValue(new PointHistoryCreateRequest(memberNo, point, "포인트 쿠폰 전환"),
                 Map.class), Void.class);
 
-        //TODO : 쿠폰 사용 후 삭제하기 구현
+        URI couponDeleteUri = URI.create(
+            redirectGatewayPrefixCoupon + "/members/" + memberNo + "/coupons/point/" +
+                orderCouponId);
+        restService.post(couponDeleteUri.toString(), null, Void.class);
     }
 }
