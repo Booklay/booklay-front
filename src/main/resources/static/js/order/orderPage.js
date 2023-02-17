@@ -493,7 +493,7 @@ function orderValidCheckAndToss(){
         "receiver" : document.getElementById("destination_receiver").value,
         "receiverPhoneNo" : `${document.getElementById("destination_receiverPhoneNo1").value}-${document.getElementById("destination_receiverPhoneNo2").value}-${document.getElementById("destination_receiverPhoneNo3").value}`,
         "memo" : document.getElementById("deliveryMemo").value,
-        "orderTitle": cartData[0].productName + cartData.length>1?`외 ${cartData.length-1}종`:""
+        "orderTitle": cartData[0].productName + (cartData.length>1?`외 ${cartData.length-1}종`:"")
     };
     httpRequest.open('POST', '/rest/order/check');
     httpRequest.responseType = "json";
