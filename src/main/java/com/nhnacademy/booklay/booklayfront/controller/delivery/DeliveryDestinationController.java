@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.delivery.request.DeliveryDestinationCURequest;
 import com.nhnacademy.booklay.booklayfront.dto.delivery.response.DeliveryDestinationRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -55,9 +56,12 @@ public class DeliveryDestinationController {
             new RequestEntity<>(objectMapper.writeValueAsString(requestDto), headers,
                 HttpMethod.POST, uri);
 
-        ResponseEntity<Void> response =
-            restTemplate.exchange(requestEntity, Void.class);
-
+        try {
+            ResponseEntity<Void> response =
+                restTemplate.exchange(requestEntity, Void.class);
+        } catch (BooklayClientException e) {
+            throw new BooklayClientException("배송지는 10개를 넘을 수 없습니다.");
+        }
         return "complete";
     }
 
