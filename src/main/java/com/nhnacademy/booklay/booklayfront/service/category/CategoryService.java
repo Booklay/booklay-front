@@ -6,6 +6,7 @@ import com.nhnacademy.booklay.booklayfront.dto.category.request.CategoryUpdateRe
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategoryResponse;
 import com.nhnacademy.booklay.booklayfront.dto.category.response.CategorySteps;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
+import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
 import java.util.List;
@@ -62,15 +63,23 @@ public class CategoryService {
     public Optional<CategoryResponse> createCategory(CategoryCreateRequest createRequest) {
         URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI);
 
-        ApiEntity<CategoryResponse> response =
-            restService.post(uri.toString(), objectMapper.convertValue(createRequest, Map.class),
-                CategoryResponse.class);
 
-        if (response.isSuccess()){
-            return Optional.of(response.getBody());
+        try {
+            ApiEntity<CategoryResponse> response =
+                restService.post(uri.toString(),
+                    objectMapper.convertValue(createRequest, Map.class),
+                    CategoryResponse.class);
+
+            if (response.isSuccess()) {
+                return Optional.of(response.getBody());
+            }
+
+            return Optional.empty();
+
+        }catch (BooklayClientException e) {
+
+            throw new BooklayClientException("요청 정보가 잘못되어 처리에 실패하였습니다.");
         }
-
-        return Optional.empty();
     }
 
     @CacheEvict(value = "categoryStep", allEntries = true)
@@ -88,13 +97,23 @@ public class CategoryService {
 
         URI uri = URI.create(gatewayIp + CATEGORY_ADMIN_API_URI + "/" + id);
 
-        ApiEntity<CategoryResponse> categoryResponse =
-            restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
-                CategoryResponse.class);
+        try {
+            ApiEntity<CategoryResponse> categoryResponse =
+                restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
+                    CategoryResponse.class);
 
-        if (categoryResponse.isSuccess()){
-            return  Optional.of(categoryResponse.getBody());
+
+            if (categoryResponse.isSuccess()){
+                return  Optional.of(categoryResponse.getBody());
+            }
+
+            return Optional.empty();
+
+        }catch (BooklayClientException e) {
+
+            throw new BooklayClientException("요청 정보가 잘못되어 처리에 실패하였습니다.");
+
         }
-        return Optional.empty();
+
     }
 }
