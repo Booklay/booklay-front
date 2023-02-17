@@ -16,11 +16,11 @@
 </head>
 
 <body>
-    <div th:if="${#lists.isEmpty(list)}">
-        <div>등록된 쿠폰이 없습니다.</div>
-    </div>
+<div th:if="${#lists.isEmpty(list)}">
+    <div>등록된 쿠폰이 없습니다.</div>
+</div>
 
-    <div class="card" th:unless="${#lists.isEmpty(list)}">
+<div class="card" th:unless="${#lists.isEmpty(list)}">
     <div class="card-table table-responsive">
         <table class="table table-vcenter card-table">
             <thead>
@@ -50,12 +50,13 @@
                 <p th:unless="${coupon.isLimited}">X</p>
             </td>
             <td>
-                <input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}" th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))">
+                <input type="button" value="선택" th:id="${coupon.id}" th:name="${coupon.name}"
+                       th:onclick="setParentText(this.getAttribute('id'), this.getAttribute('name'))">
             </td>
             </tbody>
         </table>
         <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
     </div>
-    </div>
+</div>
 </body>
 </html>
