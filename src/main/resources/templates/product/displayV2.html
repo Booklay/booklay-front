@@ -2,6 +2,7 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
   <title>북레이 - 조회</title>
+  <link href="/css/product/elipse-style.css" rel="stylesheet">
 </head>
 <th:block layout:fragment="content">
   <div class="container-xl">
@@ -12,7 +13,7 @@
 
       <div th:if="${#arrays.isEmpty(productList)}" class="card-body">
         <div class="d-flex align-items-center">
-          <h3> 조회 가능한 상품이 존재하지 않습니다. </h3>
+          <h3> 조회 가능한 상품이 존재하지 않습니다.</h3>
         </div>
       </div>
 
@@ -28,25 +29,15 @@
             <div class="card-body">
               <div class="d-flex align-items-center">
                 <div>
-                  <div><a th:text="${item.title}" th:href="@{/product/view/{productId} (productId = ${item.id})}" ></a></div>
-                  <div th:each=" author : ${item.authors}">
+                  <div><a class="ellipsis-text-2" th:text="${item.title}" th:href="@{/product/view/{productId} (productId = ${item.id})}" ></a></div>
+                  <div class="ellipsis-text-1" th:each=" author : ${item.authors}">
                     <a th:href="@{/search/products(classification = 'authors', id = ${author.id})}" th:text="${author.name}"></a>
                   </div>
                   <div class="text-muted" th:text="${#numbers.formatCurrency(item.price)}"></div>
-                  <div class="text-muted" th:text="${item.publisher}"></div>
+                  <div class="text-muted ellipsis-text-1" th:text="${item.publisher}"></div>
                 </div>
               </div>
               <div class="ms-auto">
-                <a href="#" class="text-muted">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                  467
-                </a>
-                <a href="#" class="ms-3 text-muted">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"></path></svg>
-                  67
-                </a>
                 <span th:if="${!item.selling}" class="btn btn-danger w-5 h-2">품절</span>
               </div>
 

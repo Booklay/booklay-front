@@ -76,17 +76,17 @@
           <th:block th:each="comment : ${commentList}">
             <div
                 style="display: flex; border: lightgrey solid 1px; border-radius: 5px; padding: 5px; margin-bottom: 5px;">
-              <div style="flex: 4;">
+              <div style="flex: 4; margin-left: 1rem;">
                 <div th:if="${!comment.deleted}">
                   <div><span style="font-weight: bold;" th:text="${comment.name}"></span></div>
                   <pre style="border: 0; margin-bottom: 0px; background: none; padding: 0px;" th:text="${comment.content}"/>
-                  <div><span style="font-weight: lighter" th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd. HH:mm')}"></span></div>
+                  <div><span style="font-weight: lighter; font-size: 12px;" th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd. HH:mm')}"></span></div>
                 </div>
                 <div th:if="${comment.deleted}">
                   삭제된 댓글 입니다.
                 </div>
               </div>
-              <div style="flex:1;">
+              <div style="flex:1; margin-right: 1rem;">
                 <!--                <div>-->
                 <!--                  <form th:if="${comment.memberNo == memberInfo.memberNo}"-->
                 <!--                        method="post" th:action="@{/comment}">-->
