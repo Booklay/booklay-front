@@ -38,7 +38,8 @@
                 <div class="mb-3">
                     <label class="form-label" style="display: inline">선물할 포인트</label>
                     (현재 보유 포인트: <span th:text="${totalPoint.getTotalPoint()}"></span>p)
-                    <input type="text" name="targetPoint" class="form-control" placeholder="숫자만 입력" required>
+                    <input id="point-input" type="text" name="targetPoint" class="form-control" placeholder="숫자만 입력"
+                           required>
                 </div>
 
                 <div class="form-footer">
@@ -47,5 +48,18 @@
             </form>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquety-3.4.1.js"></script>
+    <!--    <script>-->
+
+    <!--            console.log("진입확인")-->
+    <!--            document.getElementById('point-input').focusout(function (){-->
+    <!--                const point = document.querySelector('#point-input').value()-->
+    <!--                console.log(point)-->
+    <!--                if(point <= 0) {-->
+    <!--                    alert("잘못된 포인트 입력입니다. 1원 이상을 입력해 주세요");-->
+    <!--                }-->
+    <!--            });-->
+    <!--    </script>-->
 </th:block>
 </html>

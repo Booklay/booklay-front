@@ -12,6 +12,7 @@ import com.nhnacademy.booklay.booklayfront.dto.member.request.PointPresentReques
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointCouponRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.PointHistoryRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.TotalPointRetrieveResponse;
+import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.mypage.PointHistoryService;
 import java.net.URI;
@@ -175,8 +176,11 @@ public class PointHistoryController {
             new RequestEntity<>(objectMapper.writeValueAsString(pointPresentRequest), headers,
                 HttpMethod.POST, uri);
 
-        restTemplate.exchange(requestEntity, Void.class);
-
+        try {
+            restTemplate.exchange(requestEntity, Void.class);
+        } catch (BooklayClientException e) {
+            throw new BooklayClientException("유효한 포인트를 입력해주세요.");
+        }
         return "redirect:/member/profile/point/";
     }
 
