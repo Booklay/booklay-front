@@ -67,14 +67,16 @@ window.onload = function() {
     if (result.length>0){
         document.getElementById(result[0].productNo+"count").dispatchEvent(new Event("change"));
     }
-
-    document.getElementById("allProductCheck").addEventListener("change",
+    let allProductCheck = document.getElementById("allProductCheck");
+    allProductCheck.addEventListener("change",
         function (){
         let allProductCheck = document.getElementById("allProductCheck");
         result.forEach(value => {
             document.getElementById(value.productNo+"check").checked = allProductCheck.checked;
         });
     });
+    allProductCheck.checked = true;
+    allProductCheck.dispatchEvent(new Event("change"));
 
     $('.quantity button').on('click', function () {
         let newVal;
@@ -93,5 +95,7 @@ window.onload = function() {
         button.parent().parent().find('input').val(newVal);
         button.parent().parent().find('input').get(0).dispatchEvent(new Event("change"));
     });
+
+
 };
 

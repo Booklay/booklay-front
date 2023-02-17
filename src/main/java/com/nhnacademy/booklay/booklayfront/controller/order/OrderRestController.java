@@ -35,11 +35,17 @@ public class OrderRestController {
         String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "check");
         Map<String, Object> map = objectMapper.convertValue(orderSheet, Map.class);
         map.putAll(getMemberInfoMap(memberInfo));
+
+        // 4~500번대가 돌아올경우 서버간의 문제, 200은 처리를 하여 유효하지 않음, 201은 유효한정보라 redis에 임시 저장을 함
         ApiEntity<OrderCheckResponse> apiEntity = restService.post(url, map, OrderCheckResponse.class);
-        if (apiEntity.getBody() == null){
-            return ResponseEntity.badRequest().build();
+        
+        if (apiEntity.getBody() == null || Integer.valueOf(5).equals(apiEntity.getBody().getReasonType())){
+            return ResponseEntity.internalServerError().build();
+        }else if (Boolean.TRUE.equals(apiEntity.getBody().getValid())){
+            return ResponseEntity.ok(apiEntity.getBody());
+        } else {
+            return ResponseEntity.badRequest().body(apiEntity.getBody());
         }
-        return ResponseEntity.ok(apiEntity.getBody());
     }
 
 }
