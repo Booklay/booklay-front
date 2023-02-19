@@ -3,7 +3,6 @@ package com.nhnacademy.booklay.booklayfront.controller.board;
 import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.board.request.CommentChangeRequest;
 import com.nhnacademy.booklay.booklayfront.dto.board.request.CommentRequest;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -71,7 +70,7 @@ public class CommentController {
    * @return
    */
   @DeleteMapping()
-  public String deleteComment(@Valid @ModelAttribute CommentChangeRequest request, MemberInfo memberInfo) {
+  public String deleteComment(@Valid @ModelAttribute CommentRequest request, MemberInfo memberInfo) {
     if(request.getMemberNo().equals(memberInfo.getMemberNo())) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/comment/" + request.getCommentId());
 
