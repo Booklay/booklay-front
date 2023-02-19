@@ -22,10 +22,15 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>임시 하드 코딩 제목</td>
-            <td>관리자는 누가 공지 썼는지 알아야 하니까</td>
-            <td>2023.02.17</td>
+          <tr th:each="post : ${noticeList}">
+            <td>
+              <span th:text="${post.title}"/></td>
+            <td>
+              <span th:text="${post.writer}"/>
+            </td>
+            <td>
+              <span th:text="${post.createdAt}"/>
+            </td>
           </tr>
           </tbody>
         </table>
