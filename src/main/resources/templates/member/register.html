@@ -4,6 +4,7 @@
       layout:decorate="~{thymeleaf/layout/default}">
 <head>
     <title>북레이 - 회원가입</title>
+    <script src="/js/login.js"></script>
 
     <script>
         // @formatter:off
@@ -30,7 +31,7 @@
 
                 <div class="mb-3">
                     <label class="form-label required">Name</label>
-                    <input type="text" name="name" class="form-control" placeholder="Enter name" required>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter name" required>
                 </div>
 
                 <div class="mb-3">
@@ -48,14 +49,16 @@
                                placeholder="영문자+숫자+특수문자 포함 8~25자리"
                                autocomplete="off" required>
                         <span class="input-group-text">
-                      <a href="#" class="link-secondary" data-bs-toggle="tooltip" aria-label="Show password"
-                         data-bs-original-title="Show password"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                             stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
-                                d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path><path
-                                d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path></svg>
-                      </a>
+                            <a class="link-secondary" title="Show password" data-bs-toggle="tooltip"
+                               onclick="showPasswordRegister()"><!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"
+                                                                                      fill="none"/><circle cx="12"
+                                                                                                           cy="12"
+                                                                                                           r="2"/><path
+                                    d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/></svg>
+                          </a>
                     </span>
                     </div>
                     <div id="pwd_div"></div>
@@ -113,6 +116,7 @@
                     <label class="form-label required">전화번호</label>
                     <input type="number" id="phone_no" name="phoneNo" class="form-control" placeholder="01012345678"
                            required>
+                    <div id="phone_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -145,14 +149,17 @@
             $("#member-id").focusout(function () {
                 const memberId = document.querySelector('#member-id').value;
 
-                if (memberId.length == 0) {
+                if (memberId.length == 0 || memberId == '') {
                     $('#id_div').html('<a style="color: red;">아이디를 입력하세요.</a>');
                     document.querySelector('#member-id').focus();
                     return false;
                 }
 
-                if (memberId.length < 5) {
-                    $('#id_div').html('<a style="color: red;">아이디는 5글자 이상 영문+숫자 조합으로 입력하세요.</a>');
+                // 조합 체크
+                const idCheckValue = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,30}$/;
+
+                if (!idCheckValue.test(memberId)) {
+                    $('#id_div').html('<a style="color: red;">아이디는 5~30자 이내로 입력하세요.</a>');
                     document.querySelector('#member-id').focus();
                     return false;
                 }
@@ -185,10 +192,49 @@
             $("#pwd").focusout(function () {
                 const pwd = document.querySelector('#pwd').value;
 
-                if (pwd.length == 0) {
+                if (pwd.length == 0 || pwd  == '') {
                     $('#pwd_div').html('<a style="color: red;">비밀번호를 입력하세요.</a>');
                     document.querySelector('#pwd').focus();
                     return false;
+                }
+
+                const pwdCheckValue = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+                if(!pwdCheckValue.test(pwd)) {
+                    $('#pwd_div').html('<a style="color: red;">비밀번호는 영문자+숫자+특수문자 포함 8~25자리이여야 합니다.</a>');
+                    document.querySelector('#pwd').focus();
+                    return false;
+                }
+
+                else {
+                    $('#pwd_div').html('<a style="color: green;">사용가능한 비밀번호입니다.</a>');
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#check-pwd").focusout(function () {
+                const checkPwd = document.querySelector('#check-pwd').value;
+
+                if (checkPwd.length == 0 || checkPwd == '') {
+                    $('#checkPwd_div').html('<a style="color: red;">비밀번호를 한 번 더 입력해주세요.</a>');
+                    return false;
+                }
+
+                if(document.querySelector('#pwd').value != checkPwd) {
+                    document.getElementById('check-pwd').setCustomValidity('비밀번호 불일치');
+                    $('#checkPwd_div').html('<a style="color: red;">비밀번호가 일치하지 않습니다.</a>');
+                    return false;
+                }
+
+                else {
+                    document.getElementById('check-pwd').setCustomValidity('');
+                    $('#checkPwd_div').html('<a style="color: green;">비밀번호 인증 성공</a>');
                 }
 
             });//focusout()
@@ -203,7 +249,7 @@
             $("#nick-name").focusout(function () {
                 const nickName = document.querySelector('#nick-name').value;
 
-                if (nickName == '') {
+                if (nickName == '' || nickName.length == 0) {
                     $('#nickName_div').html('<a style="color: red;">닉네임을 입력하세요.</a>');
                     document.querySelector('#nick-name').focus();
                     return false;
@@ -233,10 +279,40 @@
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <script>
         $(document).ready(function () {
+            $("#phone_no").focusout(function () {
+                const phoneNo = document.querySelector('#phone_no').value;
+                const phoneNoCheck = /^[0-9]+/g;
+
+                if(phoneNo.length == 0 || phoneNo == '') {
+                    $('#phone_div').html('<a style="color: red;">전화번호를 입력해주세요.</a>');
+                    document.querySelector('#phone_no').focus();
+                    return false;
+                }
+
+                if(!phoneNoCheck.test(phoneNo)) {
+                    $('#phone_div').html('<a style="color: red;">전화번호는 숫자만 입력할 수 있습니다.</a>');
+                    document.querySelector('#phone_no').focus();
+                    return false;
+                }
+
+                else {
+                    $('#phone_div').html('<a style="color: green;">사용가능한 전화번호입니다.</a>');
+                    return false;
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function () {
             $("#e-mail").focusout(function () {
                 const EMail = document.querySelector('#e-mail').value;
 
-                if (EMail.length == 0) {
+                if (EMail.length == 0 || EMail == '') {
                     $('#id_div').html('<a style="color: red;">이메일을 입력하세요.</a>');
                     document.querySelector('#e-mail').focus();
                     return false;
