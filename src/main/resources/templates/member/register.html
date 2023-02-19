@@ -37,7 +37,7 @@
                 <div class="mb-3">
                     <label class="form-label required">ID</label>
                     <input type="text" id="member-id" name="memberId" class="form-control"
-                           placeholder="영문자+숫자 포함 5~30자리"
+                           placeholder="5~30자리 이내로 입력"
                            required>
                     <div id="id_div"></div>
                 </div>
@@ -156,9 +156,9 @@
                 }
 
                 // 조합 체크
-                const idCheckValue = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,30}$/;
+                // const idCheckValue = /^(?=.*[a-zA-Z])(?=.*[0-9]).{5,30}$/;
 
-                if (!idCheckValue.test(memberId)) {
+                if (memberId.length < 5 || memberId.length > 30) {
                     $('#id_div').html('<a style="color: red;">아이디는 5~30자 이내로 입력하세요.</a>');
                     document.querySelector('#member-id').focus();
                     return false;
