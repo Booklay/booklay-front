@@ -20,6 +20,7 @@ public class BoardPostCreateRequest {
   private String title;
   @NotNull
   private String content;
+  @NotNull
   private Boolean viewPublic;
   private Boolean answered;
 }
