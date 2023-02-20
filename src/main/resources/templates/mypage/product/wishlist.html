@@ -16,14 +16,18 @@
 
   <th:block th:each="product : ${productList}">
     <div class="product-div" style="display: flex; margin-bottom: 1rem;">
+      <!--이미지-->
       <div class="ww-2 image common-table" style="text-align: center;">
         <img class="product-img"
              style="max-height: 210px; width: auto;"
              th:src="@{/storage/{objectFileId} (objectFileId = ${product.objectFileId})}"/>
       </div>
+      <!--이미지 종료-->
+      <!--내용-->
       <div class="ww-6 common-table">
         <div class="product-title">
-          <a th:href="@{/product/view/{productId} (productId=${product.productId})}" class="product-strong" th:text="${product.title}"/></div>
+          <a th:href="@{/product/view/{productId} (productId=${product.productId})}"
+             class="product-strong" th:text="${product.title}"/></div>
         <div>
           <th:block th:if="${product.authors!=null}">
             <th:block th:each="author: ${product.authors}">
@@ -37,29 +41,32 @@
         <div><span class="product-strong">할인가 자리</span> 원</div>
         <div><span class="ellipsis-text-5" th:utext="${product.shortDescription}"/></div>
       </div>
+      <!--내용 종료-->
+      <!--구매 버튼들-->
       <div class="ww-2 common-table">
         <div class="right-btns">
-<!--          수량 버튼-->
+          <!--          수량 버튼-->
           <div class="input-group quantity mx-auto" style="width: 100px;">
             <div class="input-group-btn">
               <button class="btn btn-sm btn-primary btn-minus" style="height:1.8rem;">
                 <i class="fa fa-minus"></i>
               </button>
             </div>
-            <input th:id="${product.productId+'count'}" type="text" class="form-control form-control-sm text-center" th:value=1>
+            <input th:id="${product.productId+'count'}" type="text"
+                   class="form-control form-control-sm text-center" th:value=1>
             <div class="input-group-btn">
               <button class="btn btn-sm btn-primary btn-plus" style="height:1.8rem;">
                 <i class="fa fa-plus"></i>
               </button>
             </div>
           </div>
-<!--          수량 버튼 끝-->
+          <!--          수량 버튼 끝-->
         </div>
         <div class="right-btns">
-          <button class="btn btn-outline-primary" style="width: 7rem">바로 구매</button>
+          <button class="btn btn-outline-primary direct-buy" style="width: 7rem">바로 구매</button>
         </div>
         <div class="right-btns">
-          <button class="btn btn-outline-primary" style="width: 7rem">카트에 담기</button>
+          <button class="btn btn-outline-primary cart-btn" style="width: 7rem">카트에 담기</button>
         </div>
         <div class="right-btns">
           <form method="post" th:action="@{/mypage/product/wishlist/disconnect}">
@@ -84,17 +91,33 @@
           </form>
         </div>
       </div>
-
+      <!--구매 버튼들 종료-->
     </div>
   </th:block>
 
-  <th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
+
+  <script>
+    window.onload = function () {
+      console.log("진입확인");
+      let directBuy = document.querySelectorAll('.direct-buy');
+      directBuy.forEach(function (item) {
+        item.addEventListener('click', function () { // 클릭 이벤트 발생시,
+          console.log(this);
+          let rightDiv = this.closest('div').parentElement
+          let quantity = rightDiv.getElementsByClassName('product.productId'+'count');
+          console.log(rightDiv);
+          console.log(quantity);
+        })
+      })
+    }
+  </script>
+
 
 </th:block>
 
-<script>
+<th:block th:replace="thymeleaf/fragments/pagination :: pagination"></th:block>
 
-</script>
+</th:block>
 
 
 </html>
