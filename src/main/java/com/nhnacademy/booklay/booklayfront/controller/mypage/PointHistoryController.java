@@ -165,6 +165,10 @@ public class PointHistoryController {
     public String pointPresent(@Valid @ModelAttribute PointPresentRequest pointPresentRequest,
                                BindingResult bindingResult,
                                MemberInfo memberInfo) throws JsonProcessingException {
+        if (pointPresentRequest.getTargetPoint() <= 0) {
+            throw new BooklayClientException("유효하지 않은 포인트는 적립할 수 없습니다.");
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
@@ -204,6 +208,15 @@ public class PointHistoryController {
         return "mypage/member/pointCouponConvertForm";
     }
 
+    /**
+     * 포인트 쿠폰을 포인트로 전환하는 메소드
+     *
+     * @param memberInfo
+     * @param couponId
+     * @param orderCouponId
+     * @param model
+     * @return
+     */
     @GetMapping("/coupon/{couponId}/{orderCouponId}")
     public String convertPointCoupon(MemberInfo memberInfo,
                                      @PathVariable Long couponId,
