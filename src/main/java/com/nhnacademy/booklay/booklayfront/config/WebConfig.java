@@ -2,6 +2,7 @@ package com.nhnacademy.booklay.booklayfront.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.nhnacademy.booklay.booklayfront.auth.interceptor.JwtAddInterceptor;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayClientException;
 import com.nhnacademy.booklay.booklayfront.exception.BooklayServerException;
@@ -108,4 +109,12 @@ public class WebConfig {
         };
     }
 
+    @Bean
+    public FilterRegistrationBean<XssEscapeServletFilter> filterRegistrationBean() {
+        FilterRegistrationBean<XssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
+        filterRegistration.setFilter(new XssEscapeServletFilter());
+        filterRegistration.setOrder(1);
+        filterRegistration.addUrlPatterns("/*");
+        return filterRegistration;
+    }
 }
