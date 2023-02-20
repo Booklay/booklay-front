@@ -20,6 +20,6 @@ server:
   tomcat:
     use-relative-redirects: true
 
-logging:
-  level:
-    root: debug
+#logging:
+#  level:
+#    root: debug
