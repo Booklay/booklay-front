@@ -9,4 +9,6 @@ public interface PointHistoryService {
                                                                                int page);
 
     void convertPointCoupon(Long memberNo, Long couponId, Long orderCouponId);
+
+    boolean checkUsedPointCoupon(Long memberNo, Long couponId);
 }

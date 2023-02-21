@@ -200,6 +200,9 @@ public class PointHistoryController {
                                          @PathVariable Long couponId,
                                          @PathVariable Long orderCouponId,
                                          Model model) {
+        if (!pointHistoryService.checkUsedPointCoupon(memberInfo.getMemberNo(), orderCouponId)) {
+            throw new BooklayClientException("이미 사용된 쿠폰입니다.");
+        }
 
         model.addAttribute("couponId", couponId);
         model.addAttribute("orderCouponId", orderCouponId);

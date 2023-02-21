@@ -61,8 +61,6 @@ public class PointHistoryServiceImpl implements PointHistoryService {
             restService.get(couponUri
                 .toString(), null, CouponDetailRetrieveResponse.class);
 
-        log.error(response.getBody().toString());
-
         Integer point = response.getBody().getAmount();
 
         URI pointUri = URI.create(redirectGatewayPrefixPoint);
@@ -75,5 +73,17 @@ public class PointHistoryServiceImpl implements PointHistoryService {
             redirectGatewayPrefixCoupon + "/members/" + memberNo + "/coupons/point/" +
                 orderCouponId);
         restService.post(couponDeleteUri.toString(), null, Void.class);
+    }
+
+    @Override
+    public boolean checkUsedPointCoupon(Long memberNo, Long orderCouponId) {
+        URI uri = URI.create(
+            redirectGatewayPrefixCoupon + "/members/" + memberNo + "/coupons/point/used/" +
+                orderCouponId);
+
+        ApiEntity<Boolean> response =
+            restService.get(uri.toString(), null, Boolean.class);
+
+        return response.getBody();
     }
 }

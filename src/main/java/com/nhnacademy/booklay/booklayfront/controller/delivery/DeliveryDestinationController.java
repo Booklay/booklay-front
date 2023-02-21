@@ -50,15 +50,14 @@ public class DeliveryDestinationController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        URI uri = URI.create(redirectGatewayPrefix + "/create/" + memberInfo.getMemberNo());
+        URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
         RequestEntity<String> requestEntity =
             new RequestEntity<>(objectMapper.writeValueAsString(requestDto), headers,
                 HttpMethod.POST, uri);
 
         try {
-            ResponseEntity<Void> response =
-                restTemplate.exchange(requestEntity, Void.class);
+            restTemplate.exchange(requestEntity, Void.class);
         } catch (BooklayClientException e) {
             throw new BooklayClientException("배송지는 10개를 넘을 수 없습니다.");
         }
@@ -146,7 +145,7 @@ public class DeliveryDestinationController {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         URI uri = URI.create(
-            redirectGatewayPrefix + "/delete/" + memberInfo.getMemberNo() + "/" + addressNo);
+            redirectGatewayPrefix + "/" + memberInfo.getMemberNo() + "/" + addressNo);
 
         RequestEntity<Void> requestEntity =
             new RequestEntity<>(headers, HttpMethod.DELETE, uri);
