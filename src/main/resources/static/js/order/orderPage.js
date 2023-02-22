@@ -432,27 +432,30 @@ function destinationClickEvent(e) {
 }
 
 
-function orderValidCheckAndToss(){
-    let httpResult = null;
-    let httpRequest = new XMLHttpRequest();
-    // const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq';
+async function orderValidCheckAndToss(){
+    // let httpResult = null;
+    // let httpRequest = new XMLHttpRequest();
     const clientKey = 'test_ck_ODnyRpQWGrNOORG1g0B8Kwv1M9EN';
-    httpRequest.onreadystatechange = () => {
-        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-            if (httpRequest.status === 200) {
-                httpResult = httpRequest.response;
-                if (httpResult.valid === true){
-                    paymentData.orderId = httpResult.orderId;
-                    paymentData.amount = httpResult.paymentAmount;
-                    let tossPayments = TossPayments(clientKey);
-                    tossPayments.requestPayment('카드', paymentData);
-                }
 
-            } else {
-                alert(httpResult.response.reason);
-            }
-        }
-    };
+    // httpRequest.onreadystatechange = () => {
+    //     if (httpRequest.readyState === XMLHttpRequest.DONE) {
+    //         if (httpRequest.status === 200) {
+    //             httpResult = httpRequest.response;
+    //             if (httpResult.valid === true){
+    //                 if(parseInt(httpRequest.paymentAmount) === 0){
+    //                     location.replace(`/success?orderId=${httpRequest.orderId}&paymentKey=null&amount=${httpRequest.paymentAmount}`);
+    //                 }
+    //                 paymentData.orderId = httpResult.orderId;
+    //                 paymentData.amount = httpResult.paymentAmount;
+    //                 let tossPayments = TossPayments(clientKey);
+    //                 tossPayments.requestPayment('카드', paymentData);
+    //             }
+    //
+    //         } else {
+    //             alert(httpResult.response.reason);
+    //         }
+    //     }
+    // };
 
     let couponCodeList = [];
     couponSettingData.forEach(function (value){
@@ -495,10 +498,39 @@ function orderValidCheckAndToss(){
         "memo" : document.getElementById("deliveryMemo").value,
         "orderTitle": cartData[0].productName + (cartData.length>1?`외 ${cartData.length-1}종`:"")
     };
-    httpRequest.open('POST', '/rest/order/check');
-    httpRequest.responseType = "json";
-    httpRequest.setRequestHeader("Content-Type", "application/json");
-    httpRequest.send(JSON.stringify(body));
+    let headers = {
+            'Content-Type': 'application/json',
+            'Response-Type' : 'application/json'
+        };
+    let httpResponse = await fetch('/rest/order/check', {
+        method: 'POST',
+        mode: 'same-origin',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers:headers,
+        body:JSON.stringify(body)
+    })  .then((response) => response.json())
+        .then((httpResult) => {
+            if (httpResult.valid === true){
+                if(parseInt(httpResult.paymentAmount) === 0){
+                    location.href = `/order/success?orderId=${httpResult.orderId}&paymentKey=null&amount=${httpResult.paymentAmount}`;
+                }
+                paymentData.orderId = httpResult.orderId;
+                paymentData.amount = httpResult.paymentAmount;
+                let tossPayments = TossPayments(clientKey);
+                tossPayments.requestPayment('카드', paymentData);
+            }
+
+        });;
+    // console.log(headers);
+    // console.log(JSON.stringify(body));
+    // httpResult = httpResponse.json();
+    // console.log(JSON.stringify(httpResult));
+
+    // httpRequest.open('POST', '/rest/order/check');
+    // httpRequest.responseType = "json";
+    // httpRequest.setRequestHeader("Content-Type", "application/json");
+    // httpRequest.send(JSON.stringify(body));
 }
 
 function checkRequired() {

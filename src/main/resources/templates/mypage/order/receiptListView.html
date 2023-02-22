@@ -4,6 +4,7 @@
       layout:decorate="~{thymeleaf/layout/profile}">
 <head>
     <title>북레이 -  주문기록</title>
+    <script src="/js/order/receiptListView.js"></script>
 </head>
 
 <th:block layout:fragment="content">
@@ -26,12 +27,13 @@
         <div class="card">
             <div class="table-responsive">
                 <table class="table table-vcenter card-table">
-                    <tbody th:each="receipt : ${receiptList}">
-                    <tr>
+                    <tbody>
+                    <tr style="height: 55px;"  th:each="receipt : ${receiptList}">
                         <td><a th:href="@{'/order/receipt/'+${receipt.orderNo}}" th:text="${receipt.orderTitle}"></a></td>
                         <td th:text="${receipt.orderStatusName}"></td>
                         <td class="fl-right">결재금액 : <span th:text="${receipt.paymentPrice + '원'}"></span></td>
                         <td >적립 포인트 : <span th:text="${receipt.pointAccumulate}"></span></td>
+                        <td><span class="btn btn-primary confirm-button" th:if="${receipt.orderStatusCodeNo != 4}" th:id="${'confirm_'+receipt.orderNo}">구매확정하기</span></td>
                     </tr>
                     </tbody>
                 </table>

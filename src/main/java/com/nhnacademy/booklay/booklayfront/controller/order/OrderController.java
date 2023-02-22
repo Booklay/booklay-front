@@ -35,11 +35,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getDefaultPageMap;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMultiValueMap;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.setCurrentPageAndMaxPageToModel;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
 @Slf4j
 @SuppressWarnings("unchecked")
@@ -64,10 +60,6 @@ public class OrderController {
         return optionalCookie.map(Cookie::getValue).orElse(null);
     }
     @GetMapping("/page")
-    public String orderPageGetMapping(){
-        return "redirect:/cart/list";
-    }
-    @PostMapping("/page")
     public String orderPage(@ModelAttribute(STRING_CART_ID)String cartId
             , @Nullable @ModelAttribute CartToOrderPageRequest cartToOrderPageRequest, MemberInfo memberInfo
             , Model model){
@@ -108,7 +100,7 @@ public class OrderController {
 
     @RequestMapping("/success")
     public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto
-            , Model model, MemberInfo memberInfo, @CookieValue(name = STRING_CART_ID, required = false) String cookie){
+            , Model model, MemberInfo memberInfo, @CookieValue(name = STRING_CART_ID, required = false) String cookie) throws InterruptedException{
         String errorReason = null;
         //상품 주문서 받아오기
         String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
@@ -119,14 +111,19 @@ public class OrderController {
         }
 
         String storageDownUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "storage/down");
+        String storageUpUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "storage/up");
         OrderSheet orderSheet = orderSheetApiEntity.getBody();
         Map<String, Object> storageObjectMap = new HashMap<>();
         storageObjectMap.put("cartDtoList", orderSheet.getCartDtoList());
         ApiEntity<Boolean> storageDownApiEntity = restService.post(storageDownUrl, storageObjectMap, Boolean.class);
-        //재고 숫자 감소  todo 미구현
 
-        if (Boolean.TRUE.equals(storageDownApiEntity.getBody())) {
+        if (Boolean.FALSE.equals(storageDownApiEntity.getBody())) {
+            //재고 부족
+            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "재고가 부족하여 결제에 실패했습니다.");
+            return RETURN_PAGE_ORDER_ERROR;
+        }
         //결제 승인
+        if(tossPaymentConfirmDto.getAmount()!=0){
             try {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
@@ -136,42 +133,39 @@ public class OrderController {
                         .build();
                 HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
                 log.info("toss response => {}",response.body());
-            }catch (IOException | InterruptedException e){
-                //todo 감소한 재고 복구
+            }catch (IOException e){
+                restService.post(storageUpUrl, storageObjectMap, Boolean.class);
                 model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "결제 인증에 실패했습니다.");
                 return RETURN_PAGE_ORDER_ERROR;
             }
-            try {
-                //주문 영수증 저장
-                errorReason = "주문영수증 저장에 실패하였습니다.";
-                String receiptSaveUrl =
-                    buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/",
-                        tossPaymentConfirmDto.getOrderId());
-                ApiEntity<Long> orderNoApiEntity =
-                    restService.post(receiptSaveUrl, null, Long.class);
-
-
-                //장바구니에서 물건 삭제
-                errorReason = "장바구니에서 구매한 물건의 삭제에 실패하였습니다.";
-                MultiValueMap<String, String> cartDeleteMap =
-                    getMemberInfoMultiValueMap(memberInfo);
-                cartDeleteMap.add("cartId", cookie);
-                cartDeleteMap.put("productNoList", orderSheet.getCartDtoList().stream()
-                    .map(cartDto -> cartDto.getProductNo().toString())
-                    .collect(Collectors.toList()));
-                String cartBuyUrl =
-                    buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
-                restService.delete(cartBuyUrl, cartDeleteMap);
-                return "redirect:/order/receipt/"+orderNoApiEntity.getBody();
-            }catch (Exception e){
-                model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, errorReason);
-                return RETURN_PAGE_ORDER_ERROR;
-            }
-        }else {
-            //재고 부족
-             model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "재고가 부족하여 결제에 실패했습니다.");
-             return RETURN_PAGE_ORDER_ERROR;
         }
+        try {
+            //주문 영수증 저장
+            errorReason = "주문영수증 저장에 실패하였습니다.";
+            String receiptSaveUrl =
+                buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/",
+                    tossPaymentConfirmDto.getOrderId());
+            ApiEntity<Long> orderNoApiEntity =
+                restService.post(receiptSaveUrl, null, Long.class);
+
+            //장바구니에서 물건 삭제
+            errorReason = "장바구니에서 구매한 물건의 삭제에 실패하였습니다.";
+            MultiValueMap<String, String> cartDeleteMap =
+                getMemberInfoMultiValueMap(memberInfo);
+            cartDeleteMap.add("cartId", cookie);
+            cartDeleteMap.put("productNoList", orderSheet.getCartDtoList().stream()
+                .map(cartDto -> cartDto.getProductNo().toString())
+                .collect(Collectors.toList()));
+            String cartBuyUrl =
+                buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
+            restService.delete(cartBuyUrl, cartDeleteMap);
+            return "redirect:/order/receipt/"+orderNoApiEntity.getBody();
+        }catch (Exception e){
+            restService.post(storageUpUrl, storageObjectMap, Boolean.class);
+            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, errorReason);
+            return RETURN_PAGE_ORDER_ERROR;
+        }
+
 
     }
 

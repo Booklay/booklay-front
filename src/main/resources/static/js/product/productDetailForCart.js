@@ -37,7 +37,7 @@ window.onload = function () {
         });
 
         let formElement = document.createElement('form');
-        formElement.setAttribute('method', 'post');
+        formElement.setAttribute('method', 'get');
         formElement.setAttribute('action', '/order/page');
         for (let i = 0; i < cartDtoArray.length; i++) {
           let inputElementProductNo = document.createElement("input");
