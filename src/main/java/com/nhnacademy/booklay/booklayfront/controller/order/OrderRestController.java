@@ -8,17 +8,13 @@ import com.nhnacademy.booklay.booklayfront.dto.order.OrderSheet;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
 import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ORDER_REST_PREFIX;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 
 @SuppressWarnings("unchecked")
 @RestController
@@ -45,6 +41,18 @@ public class OrderRestController {
             return ResponseEntity.ok(apiEntity.getBody());
         } else {
             return ResponseEntity.badRequest().body(apiEntity.getBody());
+        }
+    }
+
+    @GetMapping("confirm/{orderNo}")
+    public ResponseEntity<Boolean> orderConfirm(@PathVariable String orderNo, MemberInfo memberInfo){
+
+        String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "confirm/", orderNo);
+        ApiEntity<Boolean> apiEntity = restService.get(url, getMemberInfoMultiValueMap(memberInfo), Boolean.class);
+        if (Boolean.TRUE.equals(apiEntity.getBody())){
+            return ResponseEntity.accepted().body(Boolean.TRUE);
+        }else {
+            return ResponseEntity.badRequest().body(Boolean.FALSE);
         }
     }
 
