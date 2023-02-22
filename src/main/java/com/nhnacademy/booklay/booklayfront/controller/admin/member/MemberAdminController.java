@@ -234,7 +234,7 @@ public class MemberAdminController {
                                     Model model) {
         URI uri = URI.create(adminRedirectGatewayPrefix + "/block/cancel/" + blockedMemberDetailId);
 
-        restService.get(uri.toString(), null, Void.class);
+        restService.post(uri.toString(), null, Void.class);
 
         return "complete";
     }

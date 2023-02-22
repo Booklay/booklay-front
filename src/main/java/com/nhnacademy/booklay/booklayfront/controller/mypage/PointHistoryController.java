@@ -168,6 +168,9 @@ public class PointHistoryController {
         if (pointPresentRequest.getTargetPoint() <= 0) {
             throw new BooklayClientException("유효하지 않은 포인트는 적립할 수 없습니다.");
         }
+        if (memberInfo.getMemberId().equals(pointPresentRequest.getTargetMemberId())) {
+            throw new BooklayClientException("본인에게 포인트를 선물할 수 없습니다.");
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
 

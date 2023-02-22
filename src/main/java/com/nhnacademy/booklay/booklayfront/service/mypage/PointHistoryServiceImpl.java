@@ -46,9 +46,9 @@ public class PointHistoryServiceImpl implements PointHistoryService {
 
     /**
      * 포인트 쿠폰을 포인트로 전환하는 메소드
-     *
+     * <p>
      * 쿠폰 정보 불러와서
-     * 포인트 적립한 다음
+     * 포인트 적립하고
      * 쿠폰 사용 여부 표시
      *
      * @param memberNo 쿠폰 사용하는 사용자 번호
