@@ -56,7 +56,7 @@ public class CouponZoneRestController {
     @GetMapping("/member/response/{requestId}")
     public ResponseEntity<CouponMemberResponse> couponZoneIssue(@PathVariable String requestId) {
         URI requestToShopUrl = URI.create(gatewayIp + SHOP_DOMAIN_PREFIX + "/member/coupon-zone/" + requestId);
-        log.info(requestId + " + come!!");
+        log.debug(requestId + " + come!!");
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("requestId", requestId);
 
@@ -73,7 +73,7 @@ public class CouponZoneRestController {
     public ResponseEntity<CouponIssueResponse> couponZoneIssueNoLimit(@PathVariable Long couponId, MemberInfo memberInfo) {
         Long memberNo = memberInfo.getMemberNo();
 
-        log.info(memberInfo.getMemberGrade());
+        log.debug(memberInfo.getMemberGrade());
         couponZoneService.checkTimeAndGrade(couponId, memberInfo.getMemberGrade());
 
         ApiEntity<CouponIssueResponse> response = couponZoneService.issueNoLimitCouponAtZone(couponId, memberNo);

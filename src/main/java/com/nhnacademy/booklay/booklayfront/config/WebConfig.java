@@ -91,7 +91,7 @@ public class WebConfig {
                         String.valueOf(HttpStatus.METHOD_NOT_ALLOWED), null);
                 }
 
-                if(response.getStatusCode().equals(HttpStatus.FORBIDDEN)) {
+                if(response.getStatusCode().equals(HttpStatus.NOT_ACCEPTABLE)) {
                     String messageString = IOUtils.toString(response.getBody());
                     Map<String, String> map = objectMapper().readValue(messageString, Map.class);
 
