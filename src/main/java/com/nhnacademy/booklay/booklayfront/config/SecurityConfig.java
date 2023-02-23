@@ -54,8 +54,6 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-        log.error("clientId : {} ", clientId );
-
         http.formLogin()
             .loginPage("/member/login")
             .loginProcessingUrl("/login")
@@ -89,7 +87,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() throws Exception {
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
                          .antMatchers("/resources/**", "/static/**", "/webjars/**", "/img/**", "/css/**", "/js/**",
                                       "/scss/**", "/plugins/**", "/mail/**");
