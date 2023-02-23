@@ -169,3 +169,14 @@ jobs:
           port: ${{ secrets.SSH_PORT_2 }}
           script_stop: true
           script: "./health_check.sh"
+
+      - name: Deploy failed
+        if: ${{ failure() }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_ID }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: "./unhealth.sh"
