@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/health")
 public class HealthController {
@@ -14,16 +15,21 @@ public class HealthController {
     @GetMapping
     public ResponseEntity<String> healthCheck() {
         if (healthStatus) {
-            return ResponseEntity.ok("OK");
+            return ResponseEntity.ok("OK\n");
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("BAD_REQUEST");
+            .body("BAD_REQUEST\n");
     }
 
     @GetMapping("/deploy/ready")
     public void makeHealthCheckFail() {
         this.healthStatus = false;
+    }
+
+    @GetMapping("/recover")
+    public void makeHealthCheckSuccess() {
+        this.healthStatus = true;
     }
 
 }
