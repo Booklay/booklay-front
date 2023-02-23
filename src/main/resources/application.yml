@@ -8,18 +8,3 @@ spring:
   config:
     import: "optional:configserver:http://133.186.218.11:8888"
 
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-
-  thymeleaf:
-    cache: false
-
-server:
-  tomcat:
-    use-relative-redirects: true
-
-logging:
-  level:
-    root: debug
