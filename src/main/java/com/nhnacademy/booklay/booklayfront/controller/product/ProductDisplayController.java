@@ -77,8 +77,6 @@ public class ProductDisplayController extends BaseController {
 
     CategorySteps currentCategory = categoryService.getCurrentCategory(categorySteps, cid);
 
-    log.error(" currentCategory : {}", currentCategory);
-
     URI uri = URI.create(
         gatewayIp + SHOP_PRE_FIX);
 
