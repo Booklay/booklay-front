@@ -306,7 +306,7 @@ public class AdminProductController extends BaseController {
   //책 수정 페이지 조회
   @GetMapping("/update/books/{productId}")
   public String getProductBookUpdateForm(Model model, @PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/books/" + productId);
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/edit/" + productId);
 
     ApiEntity<ProductAllInOneResponse> productData = restService.get(uri.toString(),
         null, new ParameterizedTypeReference<>() {
@@ -413,7 +413,8 @@ public class AdminProductController extends BaseController {
    */
   @GetMapping("/update/subscribes/{productId}")
   public String getProductSubscribeUpdateForm(Model model, @PathVariable Long productId) {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/subscribes/" + productId);
+
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/edit/" + productId);
 
     ApiEntity<ProductAllInOneResponse> productData = restService.get(uri.toString(),
         null, new ParameterizedTypeReference<>() {
@@ -436,7 +437,7 @@ public class AdminProductController extends BaseController {
   public String updateProductSubscribe(@Valid @ModelAttribute UpdateProductSubscribeRequest request,
       MultipartFile image)
       throws IOException {
-    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/subscribes");
+    URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + PRE_FIX + "/edit");
 
     ByteArrayResource contentsAsResource = new ByteArrayResource(image.getBytes()) {
       @Override
