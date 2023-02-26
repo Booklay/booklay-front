@@ -215,6 +215,7 @@ public class BoardController {
   @DeleteMapping()
   public String deletePost(MemberInfo memberInfo,
       @Valid @ModelAttribute BoardPostDeleteRequest request) {
+    log.info("진입 확인");
     //삭제 권한 확인
     if (memberInfo.getMemberNo().equals(request.getMemberNo())) {
       URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + "/board/" + request.getPostId());

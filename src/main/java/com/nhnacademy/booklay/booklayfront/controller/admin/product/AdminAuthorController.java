@@ -154,6 +154,7 @@ public class AdminAuthorController {
   @PostMapping("/popup/delete/{pageNum}")
   public String deleteAuthorFromPopup(@Valid @ModelAttribute DeleteByIdRequest request,
       @PathVariable Long pageNum) {
+    log.info("진입 확인");
     URI uri = URI.create(gatewayIp + SHOP_PRE_FIX + AUTHOR_PRE_FIX);
 
     restService.delete(uri.toString(), objectMapper.convertValue(request, Map.class));
