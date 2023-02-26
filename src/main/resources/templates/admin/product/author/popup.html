@@ -59,13 +59,14 @@
                 <span th:if="${author.member != null}" th:text="${author.member.memberId}"/>
               </td>
               <td>
-                <div class="btn btn-outline-primary" th:id="${author.authorNo}" onclick="showAuthorEdit(id)">
-                  수정
-                </div>
+                <button class="btn btn-outline-primary" th:id="${author.authorNo}" onclick="showAuthorEdit(id)">
+                  수정</button>
               </td>
               <td>
-                <form method="post" th:action="@{/admin/product/author/popup/delete/{pageNum} (pageNum = ${currentPage})}">
-                  <input name="id" type="number" th:value="${author.authorNo}" hidden="hidden"/>
+                <form method="post"
+                      th:action="@{/admin/product/author/popup/delete/{pageNum} (pageNum=${currentPage})}">
+                  <input name="id" type="number" th:value="${author.authorNo}"
+                         hidden="hidden"/>
                   <input class="btn btn-outline-danger" type="submit" value="삭제"/>
                 </form>
               </td>
