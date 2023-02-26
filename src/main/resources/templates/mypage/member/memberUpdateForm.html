@@ -18,12 +18,16 @@
 
                 <div class="mb-3">
                     <label class="form-label">닉네임</label>
-                    <input type="text" name="nickname" class="form-control" th:value="${member.getNickname()}">
+                    <input type="text" id="nick-name" name="nickname" class="form-control"
+                           th:value="${member.getNickname()}" required>
+                    <div id="nickName_div"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">이름</label>
-                    <input type="text" name="name" class="form-control" th:value="${member.getName()}">
+                    <input type="text" id="name" name="name" class="form-control" th:value="${member.getName()}"
+                           required>
+                    <div id="name_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -34,22 +38,33 @@
 
                 <div class="mb-3">
                     <label class="form-label">비밀번호</label>
-                    <input type="password" class="form-control" name="password">
+                    <input type="password" id="pwd" class="form-control" name="password" required>
+                    <div id="pwd_div"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">비밀번호 확인</label>
+                    <input type="password" id="check-pwd" class="form-control" name="password" required>
+                    <div id="checkPwd_div"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">전화번호</label>
-                    <input type="text" name="phoneNo" class="form-control" th:value="${member.getPhoneNo()}">
+                    <input type="text" id="phone_no" name="phoneNo" class="form-control"
+                           th:value="${member.getPhoneNo()}" required>
+                    <div id="phone_div"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">이메일 주소</label>
-                    <input type="text" name="email" class="form-control" th:value="${member.getEmail()}">
+                    <input type="email" id="e-mail" name="email" class="form-control" th:value="${member.getEmail()}"
+                           required>
+                    <div id="email_div"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">생년월일</label>
-                    <input type="date" name="birthday" class="form-control" th:value="${member.getBirthday()}">
+                    <input type="date" name="birthday" class="form-control" th:value="${member.getBirthday()}" required>
                 </div>
 
                 <div class="form-footer">
@@ -58,5 +73,176 @@
             </form>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#name").focusout(function () {
+                const name = document.querySelector('#name').value;
+
+                if (name.length == 0 || name == '') {
+                    document.getElementById('name').setCustomValidity('이름 입력');
+                    $('#name_div').html('<a style="color: red;">이름을 입력하세요.</a>');
+                    return false;
+                } else {
+                    document.getElementById('name').setCustomValidity('');
+                    $('#name_div').html('<a></a>');
+                }
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#pwd").focusout(function () {
+                const pwd = document.querySelector('#pwd').value;
+
+                if (pwd.length == 0 || pwd == '') {
+                    $('#pwd_div').html('<a style="color: red;">비밀번호를 입력하세요.</a>');
+                    document.getElementById('pwd').setCustomValidity('비밀번호 입력');
+                    // document.querySelector('#pwd').focus();
+                    return false;
+                }
+
+                const pwdCheckValue = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+                if (!pwdCheckValue.test(pwd)) {
+                    document.getElementById('pwd').setCustomValidity('비밀번호 형식 오류');
+                    $('#pwd_div').html('<a style="color: red;">비밀번호는 영문자+숫자+특수문자 포함 8~25자리이여야 합니다.</a>');
+                    return false;
+                } else {
+                    document.getElementById('pwd').setCustomValidity('');
+                    $('#pwd_div').html('<a style="color: green;">사용가능한 비밀번호입니다.</a>');
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#check-pwd").focusout(function () {
+                const checkPwd = document.querySelector('#check-pwd').value;
+
+                if (checkPwd.length == 0 || checkPwd == '') {
+                    document.getElementById('check-pwd').setCustomValidity('비밀번호 확인 입력');
+                    $('#checkPwd_div').html('<a style="color: red;">비밀번호를 한 번 더 입력해주세요.</a>');
+                    return false;
+                }
+
+                if (document.querySelector('#pwd').value != checkPwd) {
+                    document.getElementById('check-pwd').setCustomValidity('비밀번호 불일치');
+                    $('#checkPwd_div').html('<a style="color: red;">비밀번호가 일치하지 않습니다.</a>');
+                    return false;
+                } else {
+                    document.getElementById('check-pwd').setCustomValidity('');
+                    $('#checkPwd_div').html('<a style="color: green;">비밀번호 인증 성공</a>');
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#nick-name").focusout(function () {
+                const nickName = document.querySelector('#nick-name').value;
+
+                if (nickName == '' || nickName.length == 0) {
+                    document.getElementById('nick-name').setCustomValidity('닉네임 입력');
+                    $('#nickName_div').html('<a style="color: red;">닉네임을 입력하세요.</a>');
+                    return false;
+                }
+                ;
+
+                //중복검사
+                $.ajax({
+                    type: "POST",
+                    url: `/member/exist/update/nickName/${nickName}`, /// url
+                    success: function (data) {
+                        if (data == true) {
+                            document.getElementById('nick-name').setCustomValidity('닉네임 중복');
+                            $('#nickName_div').html('<a style="color: red;">이미 존재하는 닉네임입니다.</a>');
+                        } else {
+                            document.getElementById('nick-name').setCustomValidity('');
+                            $('#nickName_div').html('<a style="color: green;">사용가능한 닉네임입니다.</a>');
+                        }
+                    },
+                    error: function () {
+                        alert("통신 오류");
+                    }
+                });
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#phone_no").focusout(function () {
+                const phoneNo = document.querySelector('#phone_no').value;
+
+                if (phoneNo.length == 0 || phoneNo == '') {
+                    document.getElementById('phone_no').setCustomValidity('전화번호 입력');
+                    $('#phone_div').html('<a style="color: red;">전화번호를 입력해주세요.</a>');
+                    document.querySelector('#phone_no').focus();
+                    return false;
+                }
+
+                const phoneNoCheck = /^[0-9]+/g;
+                if (!phoneNoCheck.test(phoneNo)) {
+                    document.getElementById('phone_no').setCustomValidity('숫자만 입력');
+                    $('#phone_div').html('<a style="color: red;">전화번호는 숫자만 입력할 수 있습니다.</a>');
+                    document.querySelector('#phone_no').focus();
+                    return false;
+                } else {
+                    document.getElementById('phone_no').setCustomValidity('');
+                    $('#phone_div').html('<a style="color: green;">사용가능한 전화번호입니다.</a>');
+                    return false;
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#e-mail").focusout(function () {
+                const EMail = document.querySelector('#e-mail').value;
+
+                if (EMail.length == 0 || EMail == '') {
+                    document.getElementById('e-mail').setCustomValidity('이메일 입력');
+                    $('#email_div').html('<a style="color: red;">이메일을 입력하세요.</a>');
+                    return false;
+                }
+
+                const valid_email = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+                if (!valid_email.test(EMail)) {
+                    document.getElementById('e-mail').setCustomValidity('이메일 형식으로 입력');
+                    $('#email_div').html('<a style="color: red;">이메일 형식에 맞게 입력하세요.</a>');
+                    return false;
+                }
+
+                //중복검사
+                $.ajax({
+                    type: "POST",
+                    url: `/member/exist/update/eMail/${EMail}`, /// url
+                    success: function (data) {
+                        if (data == true) {
+                            document.getElementById('e-mail').setCustomValidity('이메일 중복');
+                            $('#email_div').html('<a style="color: red;">이미 존재하는 이메일입니다.</a>');
+                        } else {
+                            document.getElementById('e-mail').setCustomValidity('');
+                            $('#email_div').html('<a style="color: green;">사용가능한 이메일입니다.</a>');
+                        }
+                    },
+                    error: function () {
+                        alert("통신 오류");
+                    }
+                });
+
+            });//focusout()
+        }); // ready()
+    </script>
+
 </th:block>
 </html>
