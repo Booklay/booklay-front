@@ -109,12 +109,4 @@ public class WebConfig {
         };
     }
 
-    @Bean
-    public FilterRegistrationBean<XssEscapeServletFilter> filterRegistrationBean() {
-        FilterRegistrationBean<XssEscapeServletFilter> filterRegistration = new FilterRegistrationBean<>();
-        filterRegistration.setFilter(new XssEscapeServletFilter());
-        filterRegistration.setOrder(1);
-        filterRegistration.addUrlPatterns("/*");
-        return filterRegistration;
-    }
 }
