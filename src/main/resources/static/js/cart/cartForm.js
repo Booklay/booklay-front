@@ -1,7 +1,10 @@
+let totalPay;
+let allProductTotal;
+let shippingFee;
 window.onload = function() {
-    let totalPay = document.getElementById("totalPay");
-    let allProductTotal = document.getElementById("allProductTotal");
-    let shippingFee = document.getElementById("shippingFee");
+    totalPay = document.getElementById("totalPay");
+    allProductTotal = document.getElementById("allProductTotal");
+    shippingFee = document.getElementById("shippingFee");
     result.forEach(function (value) {
         document.getElementById(value.productNo+"update").addEventListener('click',
             function (){
@@ -11,28 +14,29 @@ window.onload = function() {
                     "productNo":value.productNo,
                     "count":parseInt(productCount)
                 };
+                httpRequest.onreadystatechange = () => {
+                    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                        if (httpRequest.status === 200) {
+                            alert("수정 성공");
+                        } else {
+                            alert("수정 실패");
+                        }
+                    }
+                };
                 httpRequest.open('POST', '/cart');
                 httpRequest.responseType = "json";
                 httpRequest.setRequestHeader("Content-Type", "application/json");
                 httpRequest.send(JSON.stringify(body));
             });
 
+
+
         document.getElementById(value.productNo+"count").addEventListener('change',
             function (){
                 let productCount = this.value;
                 let productTotal = document.getElementById(value.productNo+"total");
                 productTotal.innerText= productCount * value.productPrice;
-                let sum = 0;
-                result.forEach(function (value) {
-                    sum += parseInt(document.getElementById(value.productNo+"total").innerText);
-                });
-                allProductTotal.innerText = sum;
-                if (sum >= 20000){
-                    shippingFee.innerText = 0;
-                }else {
-                    shippingFee.innerText = 3000;
-                }
-                totalPay.innerText = sum + parseInt(shippingFee.innerText);
+                redrawSummary();
             });
     });
 
@@ -64,20 +68,6 @@ window.onload = function() {
             document.body.appendChild(formElement);
             formElement.submit();
         });
-    if (result.length>0){
-        document.getElementById(result[0].productNo+"count").dispatchEvent(new Event("change"));
-    }
-    let allProductCheck = document.getElementById("allProductCheck");
-    allProductCheck.addEventListener("change",
-        function (){
-        let allProductCheck = document.getElementById("allProductCheck");
-        result.forEach(value => {
-            document.getElementById(value.productNo+"check").checked = allProductCheck.checked;
-        });
-    });
-    allProductCheck.checked = true;
-    allProductCheck.dispatchEvent(new Event("change"));
-
     $('.quantity button').on('click', function () {
         let newVal;
         let button = $(this);
@@ -96,6 +86,39 @@ window.onload = function() {
         button.parent().parent().find('input').get(0).dispatchEvent(new Event("change"));
     });
 
+    let allProductCheck = document.getElementById("allProductCheck");
+    allProductCheck.addEventListener("change",
+        function (){
+            let allProductCheck = document.getElementById("allProductCheck");
+            result.forEach(value => {
+                document.getElementById(value.productNo+"check").checked = allProductCheck.checked;
+            });
+            redrawSummary();
+        });
+    result.forEach(value => {
+        document.getElementById(value.productNo+"check").addEventListener("change", redrawSummary)
+    });
+    allProductCheck.checked = true;
+    allProductCheck.dispatchEvent(new Event("change"));
+    if (result.length>0){
+        document.getElementById(result[0].productNo+"count").dispatchEvent(new Event("change"));
+    }
+
 
 };
 
+function redrawSummary() {
+    let sum = 0;
+    result.forEach(function (value) {
+        if (document.getElementById(value.productNo + 'check').checked) {
+            sum += parseInt(document.getElementById(value.productNo + "total").innerText);
+        }
+    });
+    allProductTotal.innerText = sum;
+    if (sum >= 20000) {
+        shippingFee.innerText = 0;
+    } else {
+        shippingFee.innerText = 3000;
+    }
+    totalPay.innerText = sum + parseInt(shippingFee.innerText);
+}
