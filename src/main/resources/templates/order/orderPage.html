@@ -143,7 +143,6 @@
                                 </tr>
                                 </thead>
                                 <tbody class="align-middle">
-
                                 <!--     반복 -->
                                 <!-- cartList 시작-->
                                 <th:block th:each="cart : ${cartObjectList}">
@@ -153,8 +152,8 @@
                                         <td class="align-middle" th:text="${cart.productPrice}"></td>
                                         <td class="align-middle" th:id="${cart.productNo+'count'}" th:text="${cart.productCount}"></td>
                                         <td class="align-middle productTotal" th:id="${cart.productNo+'total'}" th:text="${cart.productPrice * cart.productCount}"></td>
-                                        <td><button th:id="${'coupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'false')">상품 쿠폰 적용</button></td>
-                                        <td><button th:id="${'doupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'true')">중복 쿠폰 적용</button></td>
+                                        <td><button th:id="${'coupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'false')" th:if="${memberInfo!=null && memberInfo.memberNo != null}">상품 쿠폰 적용</button></td>
+                                        <td><button th:id="${'doupon'+cart.productNo}" class="btn btn-outline-primary" onclick="showCouponPopup(id, 'true')" th:if="${memberInfo!=null && memberInfo.memberNo != null}">중복 쿠폰 적용</button></td>
                                     </tr>
                                     <tr th:id="${cart.productNo+'couponTr'}" hidden>
                                     </tr>
@@ -172,8 +171,8 @@
                         <div class="card">
                             <div id="orderCouponDiv" class="text-center mb-0">
                                 <table class="table table-bordered text-center mb-0">
-                                    <tr><td><button id="ordercouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(false)">주문 쿠폰 적용</button>
-                                        <button id="orderDouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(true)">중복 쿠폰 적용</button></td></tr>
+                                    <tr><td><button id="ordercouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(false)" th:if="${memberInfo!=null && memberInfo.memberNo != null}">주문 쿠폰 적용</button>
+                                        <button id="orderDouponButton" class="btn btn-outline-primary" onclick="showOrderCouponPopup(true)" th:if="${memberInfo!=null && memberInfo.memberNo != null}">중복 쿠폰 적용</button></td></tr>
                                     <tr id="orderCouponTr" hidden>
                                     </tr>
                                     <tr id="orderDouponTr" hidden>
@@ -183,7 +182,13 @@
                             </div>
                         </div>
                         <br/>
-                        <div class="card">
+                        <div class="card"  th:if="${memberInfo!=null && memberInfo.memberNo != null}">
+                            <div id="pointUseDiv" class="text-center mb-0">
+                                보유 포인트 : <span th:text="${point}"></span><br/>
+                                <input id="usePoint" type="number" min="0" value="0" th:max="${point}">
+                            </div>
+                        </div>
+                        <div class="card"  th:if="${memberInfo==null || memberInfo.memberNo == null}" style="display: none;">
                             <div id="pointUseDiv" class="text-center mb-0">
                                 보유 포인트 : <span th:text="${point}"></span><br/>
                                 <input id="usePoint" type="number" min="0" value="0" th:max="${point}">

@@ -50,8 +50,7 @@ public class CartController {
         }
         String sessionId = getRandomUUID();
         Cookie cookie = new Cookie(STRING_CART_ID, sessionId);
-        cookie.setHttpOnly(true);
-        cookie.setDomain("");
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
         return sessionId;
