@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.JwtException;
-import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,6 +43,10 @@ public class AuthenticationServerProxy {
     }
 
     public JwtInfo attemptGithubOauth2Authentication(String gitId, String email) {
+        restTemplate.getForObject(gatewayIp + SHOP_PREFIX
+            + "/ouath/checked/user?id=" + gitId
+            + "&email=" + email, Void.class);
+
         String url = gatewayIp + AUTH_PREFIX + "/members/login/oauth2/github";
 
         var loginRequest = new LoginRequest(GITHUB_PREFIX_ID + gitId, email);
