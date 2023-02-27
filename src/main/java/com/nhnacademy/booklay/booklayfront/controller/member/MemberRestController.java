@@ -1,6 +1,6 @@
 package com.nhnacademy.booklay.booklayfront.controller.member;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import java.net.URI;
@@ -60,13 +60,62 @@ public class MemberRestController {
   }
 
   /**
+   * 닉네임 수정 시 중복검사를 위한 호출
+   *
+   * @param nickName 중복검사 할 닉네임
+   * @return
+   */
+  @PostMapping("/exist/update/nickName/{nickName}")
+  public Boolean existNickNameUpdate(MemberInfo memberInfo,
+                                     @PathVariable String nickName) {
+    if (nickName != null) {
+      if (nickName.equals(memberInfo.getNickname())) {
+        return false;
+      }
+      URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX + "/exist/nickName/" + nickName);
+
+      ApiEntity<Boolean> result = restService.get(uri.toString(), null
+          , Boolean.class);
+
+      log.info("결과 출력 " + result.getBody());
+      return result.getBody();
+    }
+    return false;
+  }
+
+  /**
    * 이메일 중복검사를 위한 호출
-   * @param eMail
+   *
+   * @param eMail 중복검사 할 이메일
    * @return
    */
   @PostMapping("/exist/eMail/{eMail}")
   public Boolean existEMail(@PathVariable String eMail) {
     if (eMail != null) {
+      URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX + "/exist/eMail/" + eMail);
+
+      ApiEntity<Boolean> result = restService.get(uri.toString(), null
+          , Boolean.class);
+
+      log.info("결과 출력 " + result.getBody());
+      return result.getBody();
+    }
+    return false;
+  }
+
+  /**
+   * 이메일 수정 시 중복검사를 위한 호출
+   *
+   * @param eMail 중복검사 할 이메일
+   * @return
+   */
+  @PostMapping("/exist/update/eMail/{eMail}")
+  public Boolean existEMailUpdate(MemberInfo memberInfo,
+                                  @PathVariable String eMail) {
+    if (eMail != null) {
+      if (eMail.equals(memberInfo.getEmail())) {
+        return false;
+      }
       URI uri = URI.create(gatewayIp + SHOP_URI_PRE_FIX + "/exist/eMail/" + eMail);
 
       ApiEntity<Boolean> result = restService.get(uri.toString(), null

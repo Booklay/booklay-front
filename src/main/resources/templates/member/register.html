@@ -213,7 +213,6 @@
                 if (pwd.length == 0 || pwd  == '') {
                     $('#pwd_div').html('<a style="color: red;">비밀번호를 입력하세요.</a>');
                     document.getElementById('pwd').setCustomValidity('비밀번호 입력');
-                    // document.querySelector('#pwd').focus();
                     return false;
                 }
 
@@ -302,7 +301,6 @@
                 if (phoneNo.length == 0 || phoneNo == '') {
                     document.getElementById('phone_no').setCustomValidity('전화번호 입력');
                     $('#phone_div').html('<a style="color: red;">전화번호를 입력해주세요.</a>');
-                    document.querySelector('#phone_no').focus();
                     return false;
                 }
 
@@ -310,7 +308,6 @@
                 if (!phoneNoCheck.test(phoneNo)) {
                     document.getElementById('phone_no').setCustomValidity('숫자만 입력');
                     $('#phone_div').html('<a style="color: red;">전화번호는 숫자만 입력할 수 있습니다.</a>');
-                    document.querySelector('#phone_no').focus();
                     return false;
                 } else {
                     document.getElementById('phone_no').setCustomValidity('');
@@ -328,14 +325,14 @@
                 const EMail = document.querySelector('#e-mail').value;
 
                 if (EMail.length == 0 || EMail == '') {
-                    document.getElementById('email').setCustomValidity('이메일 입력');
+                    document.getElementById('e-mail').setCustomValidity('이메일 입력');
                     $('#email_div').html('<a style="color: red;">이메일을 입력하세요.</a>');
                     return false;
                 }
 
                 const valid_email = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
                 if (!valid_email.test(EMail)) {
-                    document.getElementById('email').setCustomValidity('이메일 형식으로 입력');
+                    document.getElementById('e-mail').setCustomValidity('이메일 형식으로 입력');
                     $('#email_div').html('<a style="color: red;">이메일 형식에 맞게 입력하세요.</a>');
                     return false;
                 }
@@ -346,10 +343,10 @@
                     url: `/member/exist/eMail/${EMail}`, /// url
                     success: function (data) {
                         if (data == true) {
-                            document.getElementById('email').setCustomValidity('이메일 중복');
+                            document.getElementById('e-mail').setCustomValidity('이메일 중복');
                             $('#email_div').html('<a style="color: red;">이미 존재하는 이메일입니다.</a>');
                         } else {
-                            document.getElementById('email').setCustomValidity('');
+                            document.getElementById('e-mail').setCustomValidity('');
                             $('#email_div').html('<a style="color: green;">사용가능한 이메일입니다.</a>');
                         }
                     },
@@ -361,6 +358,5 @@
             });//focusout()
         }); // ready()
     </script>
-
 </th:block>
 </html>
