@@ -57,7 +57,7 @@ public class MemberController extends BaseController {
     /**
      * 회원가입 시 회원 생성하고 웰컴쿠폰 지급하는 메소드
      *
-     * @param memberCreateRequest
+     * @param memberCreateRequest 생성할 회원 정보
      * @param bindingResult
      * @return
      */
@@ -66,9 +66,11 @@ public class MemberController extends BaseController {
                                BindingResult bindingResult) {
         URI uri = URI.create(redirectGatewayPrefix);
 
-        //TODO 2: 에러처리
+        memberCreateRequest.setPassword(
+            memberService.alterPassword(memberCreateRequest.getPassword()));
+
         ApiEntity<Map<String, Integer>> response = restService.post(uri.toString(),
-            objectMapper.convertValue(memberService.alterPassword(memberCreateRequest), Map.class),
+            objectMapper.convertValue(memberCreateRequest, Map.class),
             new ParameterizedTypeReference<>() {
             });
 
@@ -206,10 +208,12 @@ public class MemberController extends BaseController {
 
         URI uri = URI.create(redirectGatewayPrefix + "/" + memberInfo.getMemberNo());
 
+        request.setPassword(memberService.alterPassword(request.getPassword()));
+
         restService.put(uri.toString(), objectMapper.convertValue(request, Map.class),
             Void.class);
 
-        return "redirect:/member/" + memberInfo.getMemberNo();
+        return "complete";
     }
 
     @GetMapping("/drop")

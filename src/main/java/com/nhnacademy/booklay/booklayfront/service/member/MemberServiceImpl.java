@@ -5,7 +5,6 @@ import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.D
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.member.request.MemberCreateRequest;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberAuthorityRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.dto.member.response.MemberMainRetrieveResponse;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
@@ -33,9 +32,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberCreateRequest alterPassword(MemberCreateRequest request) {
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
-        return request;
+    public String alterPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     @Override
