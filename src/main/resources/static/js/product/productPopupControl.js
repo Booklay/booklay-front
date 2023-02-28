@@ -14,6 +14,7 @@ document.addEventListener('categorySelected', function (e) {
     categoryInput.setAttribute('type', 'number')
     categoryInput.setAttribute('name', 'categoryIds[' + (catNo - 1) + ']')
     categoryInput.setAttribute('value', id);
+    categoryInput.setAttribute('class', "categoryInput");
     categoryInput.setAttribute('min', 0);
     categoryInput.hidden = true;
 
@@ -67,6 +68,7 @@ document.addEventListener('authorSelected', function (e) {
 
     const authorInput = document.createElement("input")
     authorInput.setAttribute('type', 'number')
+    authorInput.setAttribute('class', 'authorInput');
     authorInput.setAttribute('name', 'authorIds[' + (authorNo - 1) + ']')
     authorInput.setAttribute('value', id)
     authorInput.hidden=true;
