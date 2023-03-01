@@ -38,7 +38,10 @@
                                     <span th:text="${item.description}"></span>
                                 </li>
                                 <li>
-                                    <strong th:text="${#temporals.format(item.issuanceDeadlineAt,'MM-dd HH:mm:ss')}+'까지 발급'"></strong>
+                                    <strong th:text="${#temporals.format(item.openedAt,'MM-dd HH:mm')}+'부터'"></strong>
+                                </li>
+                                <li>
+                                    <strong th:text="${#temporals.format(item.issuanceDeadlineAt,'MM-dd HH:mm')}+'까지 발급'"></strong>
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
@@ -69,10 +72,10 @@
                                     <span th:text="${item.description}"></span>
                                 </li>
                                 <li>
-                                    <span th:text="${#temporals.format(item.openedAt,'yyyy-MM-dd')}"></span>
+                                    <strong th:text="${#temporals.format(item.openedAt,'MM-dd HH:mm')}+'부터'"></strong>
                                 </li>
                                 <li>
-                                    <span th:text="${#temporals.format(item.issuanceDeadlineAt,'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    <strong th:text="${#temporals.format(item.issuanceDeadlineAt,'MM-dd HH:mm')}+'까지 발급'"></strong>
                                 </li>
                             </ul>
                             <div class="text-center mt-4">
