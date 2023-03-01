@@ -4,8 +4,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
   categoryButtons.forEach(
       button => button.addEventListener('click', function (e) {
-        const {id, name, data} = e.target
-        const event = new CustomEvent('categoryReselected', {
+          const {id, name} = e.target
+          let data = document.getElementById(id).getAttribute("data-location");
+          const event = new CustomEvent('categoryReselected', {
           detail: {
             category: { id, name , data}
           }

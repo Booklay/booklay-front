@@ -115,7 +115,7 @@ function redrawSummary() {
         }
     });
     allProductTotal.innerText = sum;
-    if (sum >= 20000) {
+    if (sum > 30000) {
         shippingFee.innerText = 0;
     } else {
         shippingFee.innerText = 3000;

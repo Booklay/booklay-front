@@ -5,7 +5,7 @@ function showCategory() {
 
 function showAuthor() {
   window.open("/admin/product/author/popup", "a",
-      "width=1000, height=750, left=100, top=50");
+      "width=1150, height=750, left=100, top=50");
 }
 
 

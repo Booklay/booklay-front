@@ -79,7 +79,7 @@ public class AdminAuthorController {
    */
   @GetMapping("/popup")
   public String authorPopup(
-      @RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+      @RequestParam(value = "page", defaultValue = "0") int page, Model model, @RequestParam(required = false) String inputId) {
 
     PageResponse<RetrieveAuthorResponse> authorPage = retrieveAuthors(page);
 
@@ -88,6 +88,7 @@ public class AdminAuthorController {
     setCurrentPageAndMaxPageToModel(model, authorPage);
     model.addAttribute("authorList", authorList);
     model.addAttribute(TARGET_VIEW, "product/adminAuthor");
+    model.addAttribute("inputId", inputId);
 
     return "admin/product/author/popup";
 
