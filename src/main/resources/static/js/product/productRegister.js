@@ -8,6 +8,20 @@ function showAuthor() {
       "width=1150, height=750, left=100, top=50");
 }
 
+function validCheck(){
+  let categoryCount = document.getElementsByClassName("categoryInput").length;
+  if (categoryCount === 0){
+    alert("카테고리를 하나이상 지정해주세요")
+    return false;
+  }
+  let authorCount = document.getElementsByClassName("authorInput").length;
+  if (authorCount === 0){
+    alert("작가를 한명 이상 지정해주세요")
+    return false;
+  }
+  return true;
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const Editor = toastui.Editor;

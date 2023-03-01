@@ -15,6 +15,7 @@ document.addEventListener('categorySelected', function (e) {
     categoryInput.setAttribute('name', 'categoryIds[' + (catNo - 1) + ']')
     categoryInput.setAttribute('id', 'categoryIds[' + (catNo - 1) + ']')
     categoryInput.setAttribute('value', id);
+    categoryInput.setAttribute('class', "categoryInput");
     categoryInput.setAttribute('min', 0);
     categoryInput.hidden = true;
 
@@ -61,12 +62,13 @@ document.addEventListener('authorSelected', function (e) {
   const innerAuthorSpan = "작가" + authorNo + " : "
   authorSpan.innerText = innerAuthorSpan;
 
-  const authorInput = document.createElement("input")
-  authorInput.setAttribute('type', 'number')
-  authorInput.setAttribute('name', 'authorIds[' + (authorNo - 1) + ']')
+    const authorInput = document.createElement("input")
+    authorInput.setAttribute('type', 'number')
+    authorInput.setAttribute('class', 'authorInput');
+    authorInput.setAttribute('name', 'authorIds[' + (authorNo - 1) + ']')
+    authorInput.setAttribute('value', id)
+    authorInput.hidden=true;
   authorInput.setAttribute('id', 'authorIds[' + (authorNo - 1) + ']')
-  authorInput.setAttribute('value', id)
-  authorInput.hidden=true;
 
   const authorDisplay = document.createElement("span")
   authorDisplay.setAttribute('id', "authorSpanNo"+(authorNo-1))
