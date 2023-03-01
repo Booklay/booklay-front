@@ -9,6 +9,7 @@ import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -59,6 +60,10 @@ public class CartController {
     @GetMapping("list")
     public String cartListForm(@ModelAttribute(STRING_CART_ID)String cartId,
                                Model model, MemberInfo memberInfo){
+        if (memberInfo.getMemberNo()!=null){
+            String url = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "move/", cartId);
+            restService.get(url, null, new ParameterizedTypeReference<>() {});
+        }
         productRestApiModelSettingService.setProductObjectListToModelByCartId(
                 cartId, memberInfo, model);
         return "cart/cartForm";
