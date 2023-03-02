@@ -33,6 +33,7 @@
                             <div class="btn btn-outline-primary" onclick="sample6_execDaumPostcode()"> 우편번호 찾기
                             </div>
                         </div>
+                        <div id="zipCode_div"></div>
                     </div>
                 </div>
 
@@ -62,7 +63,8 @@
 
                 <div class="mb-3">
                     <label class="form-label">수령인 전화번호</label>
-                    <input type="text" name="receiverPhoneNo" placeholder="숫자만 입력" class="form-control" required>
+                    <input type="text" id="phone_no" name="receiverPhoneNo" placeholder="숫자만 입력" class="form-control" required>
+                    <div id="phone_div"></div>
                 </div>
 
                 <div class="mb-3">
@@ -79,6 +81,59 @@
 
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#sample6_postcode").focusout(function () {
+                const zipCode = document.querySelector('#sample6_postcode').value;
+                const zipCodeCheck = /^[0-9]+/g;
+
+                if (!zipCodeCheck.test(zipCode)) {
+                    document.getElementById('sample6_postcode').setCustomValidity('숫자만 입력');
+                    $('#zipCode_div').html('<a style="color: red;">우편번호는 숫자만 입력할 수 있습니다.</a>');
+                    return false;
+                }
+                else if (zipCode.length != 5) {
+                    document.getElementById('sample6_postcode').setCustomValidity('우편번호는 5자로 입력하세요.');
+                    $('#zipCode_div').html('<a style="color: red;">우편번호는 5자로 입력하세요.</a>');
+                    return false;
+                } else {
+                    document.getElementById('sample6_postcode').setCustomValidity('');
+                    $('#zipCode_div').html('<a></a>');
+                    return false;
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#phone_no").focusout(function () {
+                const phoneNo = document.querySelector('#phone_no').value;
+
+                if (phoneNo.length == 0 || phoneNo == '') {
+                    document.getElementById('phone_no').setCustomValidity('전화번호 입력');
+                    $('#phone_div').html('<a style="color: red;">전화번호를 입력해주세요.</a>');
+                    return false;
+                }
+
+                const phoneNoCheck = /^[0-9]+/g;
+                if (!phoneNoCheck.test(phoneNo)) {
+                    document.getElementById('phone_no').setCustomValidity('숫자만 입력');
+                    $('#phone_div').html('<a style="color: red;">전화번호는 숫자만 입력할 수 있습니다.</a>');
+                    return false;
+                } else {
+                    document.getElementById('phone_no').setCustomValidity('');
+                    $('#phone_div').html('<a></a>');
+                    return false;
+                }
+
+            });//focusout()
+        }); // ready()
+    </script>
+
 
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
