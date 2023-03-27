@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.order;
+package com.nhnacademy.booklay.booklayfront.dto.order.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

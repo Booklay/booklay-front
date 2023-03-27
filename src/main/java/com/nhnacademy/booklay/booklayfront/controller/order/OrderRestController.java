@@ -3,7 +3,7 @@ package com.nhnacademy.booklay.booklayfront.controller.order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.order.OrderCheckResponse;
+import com.nhnacademy.booklay.booklayfront.dto.order.response.OrderCheckResponse;
 import com.nhnacademy.booklay.booklayfront.dto.order.OrderSheet;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
 import lombok.RequiredArgsConstructor;

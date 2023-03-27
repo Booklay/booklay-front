@@ -1,41 +1,41 @@
 package com.nhnacademy.booklay.booklayfront.controller.order;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nhnacademy.booklay.booklayfront.dto.PageResponse;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.DOMAIN_PREFIX_SHOP;
+import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.ORDER_REST_PREFIX;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.buildString;
+import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.getMemberInfoMap;
+
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartObject;
 import com.nhnacademy.booklay.booklayfront.dto.common.MemberInfo;
-import com.nhnacademy.booklay.booklayfront.dto.common.PageData;
 import com.nhnacademy.booklay.booklayfront.dto.coupon.ApiEntity;
-import com.nhnacademy.booklay.booklayfront.dto.order.*;
+import com.nhnacademy.booklay.booklayfront.dto.order.OrderReceipt;
+import com.nhnacademy.booklay.booklayfront.dto.order.request.CartToOrderPageRequest;
+import com.nhnacademy.booklay.booklayfront.dto.order.request.TossPaymentConfirmDto;
+import com.nhnacademy.booklay.booklayfront.dto.order.response.OrderSheetSaveResponse;
+import com.nhnacademy.booklay.booklayfront.exception.TossPaymentException;
 import com.nhnacademy.booklay.booklayfront.service.RestService;
+import com.nhnacademy.booklay.booklayfront.service.cart.CartService;
+import com.nhnacademy.booklay.booklayfront.service.order.OrderService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.MemberRestApiModelSettingService;
 import com.nhnacademy.booklay.booklayfront.service.restapimodelsetting.ProductRestApiModelSettingService;
 import io.micrometer.core.lang.Nullable;
+import java.util.List;
+import java.util.Optional;
+import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static com.nhnacademy.booklay.booklayfront.dto.coupon.ControllerStrings.*;
-import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @SuppressWarnings("unchecked")
@@ -45,8 +45,9 @@ import static com.nhnacademy.booklay.booklayfront.utils.ControllerUtil.*;
 public class OrderController {
     private final ProductRestApiModelSettingService productRestApiModelSettingService;
     private final MemberRestApiModelSettingService memberRestApiModelSettingService;
+    private final OrderService orderService;
+    private final CartService cartService;
     private final RestService restService;
-    private final ObjectMapper objectMapper;
     private static final String STRING_CART_ID = "CART_ID";
     private static final String ATTRIBUTE_NAME_ERROR_MESSAGE = "errorMessage";
     private static final String RETURN_PAGE_ORDER_ERROR = "order/orderError";
@@ -72,11 +73,11 @@ public class OrderController {
         // 카트에서 넘어온 수량을 적용해줌
         for (CartObject cartObject : cartObjectList) {
             cartObject.setProductCount(
-                    cartToOrderPageRequest.getCount().get(
-                            cartToOrderPageRequest.getProductNo().indexOf(
-                                    cartObject.getProductNo()
-                            )
+                cartToOrderPageRequest.getCount().get(
+                    cartToOrderPageRequest.getProductNo().indexOf(
+                        cartObject.getProductNo()
                     )
+                )
             );
         }
         model.addAttribute("point", 0);
@@ -99,74 +100,16 @@ public class OrderController {
     }
 
     @RequestMapping("/success")
-    public String saveOrderReceiptAndRedirect(@ModelAttribute TossPaymentConfirmDto tossPaymentConfirmDto
-            , Model model, MemberInfo memberInfo, @CookieValue(name = STRING_CART_ID, required = false) String cookie) throws InterruptedException{
-        String errorReason = null;
+    public String saveOrderReceiptAndRedirect(@ModelAttribute
+                                              TossPaymentConfirmDto tossPaymentConfirmDto
+            , @CookieValue(name = STRING_CART_ID, required = false) String cartId)
+        throws InterruptedException {
         //상품 주문서 받아오기
-        String orderSheetUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "sheet/", tossPaymentConfirmDto.getOrderId());
-        ApiEntity<OrderSheet> orderSheetApiEntity = restService.get(orderSheetUrl, null, OrderSheet.class);
-        if (!orderSheetApiEntity.isSuccess() || orderSheetApiEntity.getBody() == null){
-            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "만료된 요청입니다.");
-            return RETURN_PAGE_ORDER_ERROR;
-        }
+        OrderSheetSaveResponse orderSheetSaveResponse = orderService.saveOrder(tossPaymentConfirmDto);
+        orderService.tossPayment(tossPaymentConfirmDto);
+        cartService.deletePurchasedProductList( orderSheetSaveResponse.getCartDtoList(), cartId);
 
-        String storageDownUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "storage/down");
-        String storageUpUrl = buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "storage/up");
-        OrderSheet orderSheet = orderSheetApiEntity.getBody();
-        Map<String, Object> storageObjectMap = new HashMap<>();
-        storageObjectMap.put("cartDtoList", orderSheet.getCartDtoList());
-        ApiEntity<Boolean> storageDownApiEntity = restService.post(storageDownUrl, storageObjectMap, Boolean.class);
-
-        if (Boolean.FALSE.equals(storageDownApiEntity.getBody())) {
-            //재고 부족
-            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "재고가 부족하여 결제에 실패했습니다.");
-            return RETURN_PAGE_ORDER_ERROR;
-        }
-        //결제 승인
-        if(tossPaymentConfirmDto.getAmount()!=0){
-            try {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("https://api.tosspayments.com/v1/payments/confirm"))
-                        .header("Authorization", "Basic dGVzdF9za19MZXg2QkpHUU9WRGpqcUVHUmVuOFc0dzJ6TmJnOg==")
-                        .header("Content-Type", "application/json")
-                        .method("POST", HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(tossPaymentConfirmDto)))
-                        .build();
-                HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-                log.info("toss response => {}",response.body());
-            }catch (IOException e){
-                restService.post(storageUpUrl, storageObjectMap, Boolean.class);
-                model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "결제 인증에 실패했습니다.");
-                return RETURN_PAGE_ORDER_ERROR;
-            }
-        }
-        try {
-            //주문 영수증 저장
-            errorReason = "주문영수증 저장에 실패하였습니다.";
-            String receiptSaveUrl =
-                buildString(gatewayIp, DOMAIN_PREFIX_SHOP, ORDER_REST_PREFIX, "receipt/",
-                    tossPaymentConfirmDto.getOrderId());
-            ApiEntity<Long> orderNoApiEntity =
-                restService.post(receiptSaveUrl, null, Long.class);
-
-            //장바구니에서 물건 삭제
-            errorReason = "장바구니에서 구매한 물건의 삭제에 실패하였습니다.";
-            MultiValueMap<String, String> cartDeleteMap =
-                getMemberInfoMultiValueMap(memberInfo);
-            cartDeleteMap.add("cartId", cookie);
-            cartDeleteMap.put("productNoList", orderSheet.getCartDtoList().stream()
-                .map(cartDto -> cartDto.getProductNo().toString())
-                .collect(Collectors.toList()));
-            String cartBuyUrl =
-                buildString(gatewayIp, DOMAIN_PREFIX_SHOP, CART_REST_PREFIX, "buy");
-            restService.delete(cartBuyUrl, cartDeleteMap);
-            return "redirect:/order/receipt/"+orderNoApiEntity.getBody();
-        }catch (Exception e){
-            restService.post(storageUpUrl, storageObjectMap, Boolean.class);
-            model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, errorReason);
-            return RETURN_PAGE_ORDER_ERROR;
-        }
-
-
+        return "redirect:/order/receipt/"+orderSheetSaveResponse.getOrderId();
     }
 
     @GetMapping("fail")
@@ -186,5 +129,11 @@ public class OrderController {
         return "order/receipt";
     }
 
+
+    @ExceptionHandler(TossPaymentException.class)
+    public String tossPaymentException(Model model){
+        model.addAttribute(ATTRIBUTE_NAME_ERROR_MESSAGE, "토스 페이먼츠 결제 중 오류가 발생했습니다.");
+        return RETURN_PAGE_ORDER_ERROR;
+    }
 
 }

@@ -95,13 +95,6 @@ function setCouponData(couponCode, productNo, duplicable){
             }
         }
     };
-    /*
-    List<String> couponCodeList;
-    List<CartDto> cartDtoList;
-    Integer usingPoint;
-    Integer giftWrappingPrice;
-    Integer paymentAmount;
-     */
     httpRequest.open('GET', '/rest/coupons/code/?couponCode='+couponCode);
     httpRequest.responseType = "json";
     httpRequest.send();
@@ -253,10 +246,8 @@ function calculateOrderCouponDiscountAmount(couponData){
     let totalDiscount = 0;
     couponSettingData.filter((value, index) => index !== couponSettingData.length - 1).forEach(function (value){
         if(isCategoryContains(getCategoryNoList(cartData[value.cartDataNo].categoryNoList), categoryNo)){
-            // categoryTotalAmount += cartData[value.cartDataNo].productTotal;
             categoryTotalAmount += value.discountedAmount;
         }
-        // totalAmount += cartData[value.cartDataNo].productTotal;
         totalAmount += value.discountedAmount;
         if (value.coupon !==null){
             totalDiscount += value.coupon.discountAmount;
@@ -267,7 +258,6 @@ function calculateOrderCouponDiscountAmount(couponData){
     });
 
     //상품 쿠폰 적용 후 가격과 카테고리 가격합계중 작은 값
-    // let maxDiscount = totalAmount-totalDiscount>categoryTotalAmount?categoryTotalAmount:totalAmount-totalDiscount;
     let maxDiscount = totalAmount>categoryTotalAmount?categoryTotalAmount:totalAmount;
     if (couponData.typeName === "정률쿠폰"){
         discount = Math.floor(categoryTotalAmount*parseInt(couponData.amount)/100);
@@ -379,29 +369,12 @@ function sample6_execDaumPostcode() {
     new daum.Postcode({
         oncomplete: function (data) {
             let addr = '';
-            // let extraAddr = '';
 
             if (data.userSelectedType === 'R') {
                 addr = data.roadAddress;
             } else {
                 addr = data.jibunAddress;
             }
-
-            // if(data.userSelectedType === 'R'){
-            //     if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-            //         extraAddr += data.bname;
-            //     }
-            //     if(data.buildingName !== '' && data.apartment === 'Y'){
-            //         extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            //     }
-            //     if(extraAddr !== ''){
-            //         extraAddr = ' (' + extraAddr + ')';
-            //     }
-            //     document.getElementById("extraAddress").value = extraAddr;
-            //
-            // } else {
-            //     document.getElementById("extraAddress").value = '';
-            // }
 
             document.getElementById("destination_zipCode").value = data.zonecode;
             document.getElementById("destination_address").value = addr;
@@ -433,29 +406,7 @@ function destinationClickEvent(e) {
 
 
 async function orderValidCheckAndToss(){
-    // let httpResult = null;
-    // let httpRequest = new XMLHttpRequest();
     const clientKey = 'test_ck_ODnyRpQWGrNOORG1g0B8Kwv1M9EN';
-
-    // httpRequest.onreadystatechange = () => {
-    //     if (httpRequest.readyState === XMLHttpRequest.DONE) {
-    //         if (httpRequest.status === 200) {
-    //             httpResult = httpRequest.response;
-    //             if (httpResult.valid === true){
-    //                 if(parseInt(httpRequest.paymentAmount) === 0){
-    //                     location.replace(`/success?orderId=${httpRequest.orderId}&paymentKey=null&amount=${httpRequest.paymentAmount}`);
-    //                 }
-    //                 paymentData.orderId = httpResult.orderId;
-    //                 paymentData.amount = httpResult.paymentAmount;
-    //                 let tossPayments = TossPayments(clientKey);
-    //                 tossPayments.requestPayment('카드', paymentData);
-    //             }
-    //
-    //         } else {
-    //             alert(httpResult.response.reason);
-    //         }
-    //     }
-    // };
 
     let couponCodeList = [];
     couponSettingData.forEach(function (value){
@@ -521,16 +472,7 @@ async function orderValidCheckAndToss(){
                 tossPayments.requestPayment('카드', paymentData);
             }
 
-        });;
-    // console.log(headers);
-    // console.log(JSON.stringify(body));
-    // httpResult = httpResponse.json();
-    // console.log(JSON.stringify(httpResult));
-
-    // httpRequest.open('POST', '/rest/order/check');
-    // httpRequest.responseType = "json";
-    // httpRequest.setRequestHeader("Content-Type", "application/json");
-    // httpRequest.send(JSON.stringify(body));
+        });
 }
 
 function checkRequired() {

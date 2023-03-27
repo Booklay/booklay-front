@@ -1,5 +1,6 @@
-package com.nhnacademy.booklay.booklayfront.dto.order;
+package com.nhnacademy.booklay.booklayfront.dto.order.response;
 
+import com.nhnacademy.booklay.booklayfront.dto.order.OrderSheet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.nhnacademy.booklay.booklayfront.dto.order;
+package com.nhnacademy.booklay.booklayfront.dto.order.request;
 
 import com.nhnacademy.booklay.booklayfront.dto.cart.CartDto;
 import java.util.List;
